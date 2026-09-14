@@ -15,6 +15,7 @@ from __future__ import annotations
 import io
 from pathlib import Path
 
+import numpy
 from PIL import Image
 
 from .geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW, subject_height_px
@@ -57,7 +58,23 @@ def cutout(src: Path | str) -> Image.Image:
     destination = Quartz.CGImageDestinationCreateWithData(data, "public.png", 1, None)
     Quartz.CGImageDestinationAddImage(destination, cg_image, None)
     Quartz.CGImageDestinationFinalize(destination)
-    return Image.open(io.BytesIO(bytes(data))).convert("RGBA")
+    return despill(Image.open(io.BytesIO(bytes(data))).convert("RGBA"))
+
+
+def despill(image: Image.Image) -> Image.Image:
+    """Neutralise magenta picked up from the backdrop along the subject's edge.
+
+    Only semi-transparent pixels are touched. Those are the blended edge, where
+    the backdrop bled in; an opaque pixel that reads magenta is the character's
+    own colour and is left alone.
+    """
+    pixels = numpy.array(image, dtype=numpy.int16)
+    edge = (pixels[:, :, 3] > 0) & (pixels[:, :, 3] < 255)
+    red, green, blue = pixels[:, :, 0], pixels[:, :, 1], pixels[:, :, 2]
+    cast = numpy.where(edge, numpy.minimum(red, blue) - green, 0).clip(min=0)
+    pixels[:, :, 0] = (red - cast).clip(0, 255)
+    pixels[:, :, 2] = (blue - cast).clip(0, 255)
+    return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
 
 
 def subject_box(image: Image.Image) -> tuple[int, int, int, int]:

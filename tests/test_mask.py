@@ -3,7 +3,7 @@ import pytest
 from PIL import Image
 
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW
-from cag.mask import MaskError, key_art_scale, register, subject_box
+from cag.mask import MaskError, despill, key_art_scale, register, subject_box
 
 
 def figure(size=(100, 200), box=(40, 20, 60, 180)):
@@ -64,3 +64,16 @@ def test_register_preserves_soft_edges():
     assert alpha.max() == 255
     soft = alpha[(alpha > 0) & (alpha < 255)]
     assert soft.size and 30 <= soft.min() <= 50  # not squared down to ~6
+
+
+def test_despill_clears_magenta_from_the_blended_edge():
+    image = Image.new("RGBA", (4, 1))
+    image.putpixel((0, 0), (255, 0, 255, 40))    # pure backdrop bleed
+    image.putpixel((1, 0), (140, 45, 140, 120))  # jacket blended with backdrop
+    image.putpixel((2, 0), (222, 169, 133, 200)) # skin: warmer than the backdrop
+    image.putpixel((3, 0), (255, 0, 255, 255))   # opaque: the character's own colour
+    out = despill(image)
+    assert out.getpixel((0, 0)) == (0, 0, 0, 40)
+    assert out.getpixel((1, 0)) == (45, 45, 45, 120)
+    assert out.getpixel((2, 0)) == (222, 169, 133, 200)
+    assert out.getpixel((3, 0)) == (255, 0, 255, 255)
