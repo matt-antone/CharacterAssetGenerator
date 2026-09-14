@@ -1,15 +1,23 @@
 # CharacterAssetGenerator
 
 Turns a short character brief into game-ready sprite assets: a projection sheet
-of static views and a masked, looping animation set drawn from a
-[MotionArtist](https://github.com/matt-antone/MotionArtist) motion sheet.
+of static views, and a masked animation set per animation the brief names.
 
 ```bash
-cag build specs/velvet-lou.json --motion ../MotionArtist/work/sample/motion.json --set dance
+cag build specs/belter.json --jobs 4
 ```
 
-That writes `outputs/velvet-lou/`: four projection cells, a sprite sheet, a
-looping GIF proof, and a gallery page.
+That writes `outputs/belter/`: four projection cells under `views/`, then a
+sprite sheet and a GIF proof for each of the brief's seven sets, and a gallery
+page tying them together. Sets render across `--jobs` lanes, and one that fails
+does not take the others down with it.
+
+A single set, against a traced [MotionArtist](https://github.com/matt-antone/MotionArtist)
+sheet instead of a written one:
+
+```bash
+cag build specs/velvet-lou.json --set dance --motion ../MotionArtist/work/sample/motion.json
+```
 
 ## How it runs
 
@@ -18,38 +26,71 @@ references what it locks:
 
 | Step | What it does |
 | --- | --- |
-| `bible` | One model call turns the brief into a locked visual description. Every later prompt quotes it verbatim, so identity cannot drift. |
+| `bible` | One model call turns the brief into a locked visual description. Every later prompt quotes it verbatim, so identity cannot drift. Saved to `work/<slug>/bible.txt`, so a later run can pin the same identity instead of writing a fresh description and accepting the drift. |
 | `key_art` | Draws the front-left three-quarter reference on a magenta backdrop. |
 | `scale` | Measures the character's crown-to-heel span off the key art. Read once, reused forever. |
 | `projection` | Draws front, back and profile, each with the key art attached as a reference image. |
 | `mask` | Cuts every view out and registers it into the cell. |
 
-Then the animation set, drawn the way a studio draws one:
+Each set needs a motion sheet first. MotionArtist traces those from real
+footage, but only some sets have footage — so for the rest a motion director
+writes the frame plan from the brief's prose intent (`cag/motion_writer.py`),
+in the same shape MotionArtist emits. The graph below cannot tell where a
+sheet came from, with one exception noted in `poses`.
+
+Then each animation set, drawn the way a studio draws one:
 
 | Role | What it does |
 | --- | --- |
-| `poses` | Draws each frame's pose as a stick figure from the sheet's landmarks. A generator flattens a written pose back towards neutral; it cannot argue with a picture. |
+| `poses` | Draws each frame's pose as a stick figure from the sheet's landmarks. A generator flattens a written pose back towards neutral; it cannot argue with a picture. Only traced sheets carry landmarks, so a written set gets no skeleton — the one real quality difference between the two. |
 | `direct` | The motion director binds the motion source to this character: prop hand, how the costume moves, what must not change. |
 | `keyframe` | The keyframer draws the frames the sheet marks `key` and `pilot` — the extremes and the fastest transitions. |
 | `tween` | The tweener fills each in-between from its two locked neighbours, wrapping across the loop seam. Drawn, never interpolated. |
 | `mask` | Every frame cut out and registered at the key art's scale. |
+
+Frame count, fps, view and playback come from the set's plan in `cag/sets.py`,
+not from the brief: `dance` and `sing` loop, `flinch`, `guard`, `entrance`,
+`victory` and `ko` run once. All seven are eight frames at four fps.
 
 ## Constraints this was built under
 
 - **No OpenAI API.** Both the model calls and the image generation go through
   the local `codex` CLI on a ChatGPT subscription. `cag.chat_codex.ChatCodex` is
   a LangChain `BaseChatModel` that shells out to `codex exec`.
-- **macOS only.** The cutout is Apple's Vision framework
+- **macOS only.** The cutout's fallback path is Apple's Vision framework
   (`VNGenerateForegroundInstanceMaskRequest`) through pyobjc.
 
-## Why magenta, and why Vision
+## The look
+
+Mid-1990s 32-bit arcade sprite art — the Street Fighter Alpha and Marvel vs
+Capcom generation, at detail level 10. The 16-bit contract this started from is
+kept as `SIXTEEN_BIT` in `cag/style.py`. Both hold the same load-bearing rules —
+visible pixel grid, hard nearest-neighbour edges, no gradients, a two-pixel
+black outline — and differ only in palette depth: four to six banded tones per
+material with rim light and reflected colour in the shadows, against the 16-bit
+era's two or three flat ones.
+
+## Why magenta, and how the rim comes off
 
 Sources render on a full-canvas magenta backdrop and stay that way until one
-masking pass at the end. Vision segments the foreground subject rather than
-keying a colour, so a magenta-family costume cannot be keyed away with the
-background. Two small passes clean up after it: backdrop trapped inside the
-subject (the gap inside a hand holding a microphone) is cleared, and magenta
-that bled into the antialiased outline is neutralised.
+masking pass at the end. That pass is a chroma key, with Vision behind it for a
+render the key cannot read — Vision segments the subject semantically, so it
+survives a backdrop the character happens to share a colour with.
+
+The key measures the backdrop by the **spread between its strong and weak
+channels**, not by RGB distance. Darkening does not change that spread, so a
+half-magenta rim pixel reads as the half backdrop it is, while a crimson jacket
+scores 0.05 and stays whole.
+
+Both paths then produce a hard in-or-out matte and **cut one pixel into the
+outline**. Where the two-pixel black outline was antialiased against magenta,
+the rim pixel is a genuine blend of the two, and no threshold can separate it
+from costume in the same hue — "backdrop darkened by the outline" and "costume
+in the backdrop's hue" are the same colour. So it is discarded by position
+rather than judged by colour. `STYLE` mandates an outline about two pixels wide
+precisely so there is one to spare; renders measure 4-6 source pixels of it.
+**An outline thinner than two pixels would be eaten** — that is the dependency
+this buys the clean edge with.
 
 ## Geometry
 
@@ -74,8 +115,9 @@ Art is never mirrored.
 }
 ```
 
-Name, height, description, prose intent per animation. Frame counts, fps,
-paths, geometry and QA belong to the pipeline, not to the designer's file.
+Name, height, description, prose intent per animation. Each animation key must
+name a set `cag/sets.py` has a plan for. Frame counts, fps, paths, geometry and
+QA belong to the pipeline, not to the designer's file.
 
 ## Install
 
