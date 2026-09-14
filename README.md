@@ -28,6 +28,7 @@ Then the animation set, drawn the way a studio draws one:
 
 | Role | What it does |
 | --- | --- |
+| `poses` | Draws each frame's pose as a stick figure from the sheet's landmarks. A generator flattens a written pose back towards neutral; it cannot argue with a picture. |
 | `direct` | The motion director binds the motion source to this character: prop hand, how the costume moves, what must not change. |
 | `keyframe` | The keyframer draws the frames the sheet marks `key` and `pilot` — the extremes and the fastest transitions. |
 | `tween` | The tweener fills each in-between from its two locked neighbours, wrapping across the loop seam. Drawn, never interpolated. |

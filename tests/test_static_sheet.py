@@ -52,8 +52,17 @@ def test_draws_key_art_before_the_projection_views(run):
 
 def test_projection_views_reference_the_key_art(run):
     key_art = fake_draw.calls[0]["out"]
-    assert all(call["refs"] == [key_art] for call in fake_draw.calls[1:])
-    assert fake_draw.calls[0]["refs"] == []
+    assert all(call["refs"][0] == key_art for call in fake_draw.calls[1:])
+    # The key art has no key art to follow, only the detail sample.
+    assert [Path(p).name for p in fake_draw.calls[0]["refs"]] == ["detail-level-04.png"]
+
+
+def test_every_view_carries_the_detail_sample_and_the_arcade_style(run):
+    for call in fake_draw.calls:
+        assert Path(call["refs"][-1]).name == "detail-level-04.png"
+        assert "detail level 4" in call["prompt"]
+        assert "Capcom Street Fighter 2" in call["prompt"]
+        assert "character-left and character-right" in call["prompt"]
 
 
 def test_every_prompt_quotes_the_locked_bible(run):

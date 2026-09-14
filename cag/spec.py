@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from .geometry import parse_height
+from .style import DEFAULT_DETAIL_LEVEL, DETAIL_LEVELS
 
 HEIGHT_PATTERN = re.compile(r"^\d+'(\s*\d+\")?$")
 
@@ -29,6 +30,8 @@ class CharacterSpec:
     description: str
     #: Animation name -> prose intent, e.g. {"dance": "Relaxed two-step loop."}
     animations: dict[str, str] = field(default_factory=dict)
+    #: Rendering density on the ten-step scale. Nothing else about the look.
+    detail_level: int = DEFAULT_DETAIL_LEVEL
 
     @property
     def slug(self) -> str:
@@ -49,7 +52,7 @@ def load_spec(path: Path | str) -> CharacterSpec:
     if not isinstance(data, dict):
         raise SpecError(f"{path} must contain a JSON object")
 
-    unknown = set(data) - {"name", "height", "description", "animations"}
+    unknown = set(data) - {"name", "height", "description", "animations", "detail_level"}
     if unknown:
         raise SpecError(f"{path} has unknown fields: {', '.join(sorted(unknown))}")
 
@@ -67,7 +70,13 @@ def load_spec(path: Path | str) -> CharacterSpec:
     ):
         raise SpecError(f"{path} animations must map a name to a non-empty description")
 
-    spec = CharacterSpec(data["name"].strip(), height, data["description"].strip(), animations)
+    detail_level = data.get("detail_level", DEFAULT_DETAIL_LEVEL)
+    if detail_level not in DETAIL_LEVELS:
+        raise SpecError(f"{path} detail_level must be an integer 1-10, not {detail_level!r}")
+
+    spec = CharacterSpec(
+        data["name"].strip(), height, data["description"].strip(), animations, detail_level
+    )
     if not spec.slug:
         raise SpecError(f"{path} name has no usable characters")
     return spec

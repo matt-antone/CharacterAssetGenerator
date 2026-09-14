@@ -80,3 +80,20 @@ def test_draw_rejects_unreadable_output(monkeypatch, tmp_path):
     monkeypatch.setattr(subprocess, "run", writes_junk)
     with pytest.raises(DrawError, match="not a readable image"):
         draw("a singer", tmp_path / "art.png")
+
+
+def test_draw_records_the_prompt_and_references_it_sent(monkeypatch, tmp_path):
+    reference = tmp_path / "key.png"
+    Image.new("RGB", (4, 4)).save(reference)
+    monkeypatch.setattr(subprocess, "run", _writes())
+    draw("a singer in green", tmp_path / "art.png", references=[reference])
+    record = (tmp_path / "art.txt").read_text()
+    assert "a singer in green" in record
+    assert "#FF00FF" in record
+    assert str(reference.resolve()) in record
+
+
+def test_the_record_says_so_when_nothing_was_referenced(monkeypatch, tmp_path):
+    monkeypatch.setattr(subprocess, "run", _writes())
+    draw("a singer", tmp_path / "art.png")
+    assert "(none)" in (tmp_path / "art.txt").read_text()

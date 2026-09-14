@@ -21,6 +21,7 @@ from .mask import mask_to_cell
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt
 from .skeleton import write_skeletons
+from .style import detail_frame
 from .spec import CharacterSpec
 
 
@@ -90,19 +91,23 @@ def _draw_frame(
     references: list[Path],
     draw_fn: Callable[..., Path],
 ) -> Path:
+    spec = state["spec"]
     cue = f"{frame.cue} {frame.note}".strip()
     pose = state.get("poses", {}).get(frame.index)
+    detail = detail_frame(spec.detail_level)
     prompt = frame_prompt(
-        state["spec"],
+        spec,
         state["bible"],
         state["set_note"],
         view_clause(state),
         cue,
         frame.role,
         pose_reference=pose is not None,
+        detail_level=spec.detail_level,
+        detail_reference=detail is not None,
     )
     # The pose goes last, because the prompt calls it "the last reference image".
-    references = [*references, pose] if pose else references
+    references = [*references, *( [detail] if detail else [] ), *([pose] if pose else [])]
     return draw_fn(prompt, frame_path(state, "source", frame.index), references=references)
 
 

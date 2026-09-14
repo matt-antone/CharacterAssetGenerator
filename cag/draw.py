@@ -69,6 +69,16 @@ def draw(
     argv.append("-")
 
     full_prompt = f"{prompt}\n\n{INSTRUCTIONS.format(filename=out_path.name)}"
+
+    # Written before the call, so a frame that comes back wrong can be read back
+    # against what was actually asked for.
+    out_path.with_suffix(".txt").write_text(
+        full_prompt
+        + "\n\n--- references, in the order attached ---\n"
+        + ("\n".join(str(Path(r).resolve()) for r in references) or "(none)")
+        + "\n"
+    )
+
     last_error = ""
     for _ in range(attempts):
         try:

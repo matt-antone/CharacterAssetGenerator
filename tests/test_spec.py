@@ -54,3 +54,11 @@ def test_rejects_broken_json(tmp_path):
     path.write_text("{nope")
     with pytest.raises(SpecError, match="not valid JSON"):
         load_spec(path)
+
+
+def test_detail_level_defaults_and_validates(tmp_path):
+    assert load_spec("specs/velvet-lou.json").detail_level == 4
+    assert load_spec(write(tmp_path, detail_level=7)).detail_level == 7
+    for bad in (0, 11, "four", 4.5):
+        with pytest.raises(SpecError, match="detail_level must be"):
+            load_spec(write(tmp_path, detail_level=bad))

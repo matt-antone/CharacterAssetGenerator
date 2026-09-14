@@ -19,6 +19,7 @@ from langgraph.graph import END, START, StateGraph
 from .draw import draw
 from .mask import cutout, key_art_scale, mask_to_cell
 from .prompts import BIBLE_SYSTEM, KEY_VIEW, VIEWS, bible_request, view_prompt
+from .style import detail_frame
 from .spec import CharacterSpec
 
 PROJECTION_VIEWS = [view for view in VIEWS if view != KEY_VIEW]
@@ -53,8 +54,18 @@ def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
 
 
 def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
+    spec = state["spec"]
+    detail = detail_frame(spec.detail_level)
     path = draw_fn(
-        view_prompt(state["spec"], state["bible"], KEY_VIEW), source_path(state, KEY_VIEW)
+        view_prompt(
+            spec,
+            state["bible"],
+            KEY_VIEW,
+            detail_level=spec.detail_level,
+            detail_reference=detail is not None,
+        ),
+        source_path(state, KEY_VIEW),
+        references=[detail] if detail else [],
     )
     return {"sources": {KEY_VIEW: path}}
 
@@ -66,13 +77,21 @@ def measure_scale(state: StaticState) -> StaticState:
 
 
 def draw_projection(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
+    spec = state["spec"]
     key_art = state["sources"][KEY_VIEW]
+    detail = detail_frame(spec.detail_level)
     sources = dict(state["sources"])
     for view in PROJECTION_VIEWS:
         sources[view] = draw_fn(
-            view_prompt(state["spec"], state["bible"], view),
+            view_prompt(
+                spec,
+                state["bible"],
+                view,
+                detail_level=spec.detail_level,
+                detail_reference=detail is not None,
+            ),
             source_path(state, view),
-            references=[key_art],
+            references=[key_art, detail] if detail else [key_art],
         )
     return {"sources": sources}
 

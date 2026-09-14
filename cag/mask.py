@@ -123,7 +123,9 @@ def register(image: Image.Image, scale: float) -> Image.Image:
     subject = image.crop((left, top, right, bottom))
     width = max(1, round(subject.width * scale))
     height = max(1, round(subject.height * scale))
-    subject = subject.resize((width, height), Image.LANCZOS)
+    # Nearest neighbour, per the rendering contract: smooth resampling would
+    # blur the pixel grid that makes this arcade art rather than a cartoon.
+    subject = subject.resize((width, height), Image.NEAREST)
 
     # Resampling softens the edges, so measure the subject again and place it by
     # what is actually visible rather than by the resized canvas.

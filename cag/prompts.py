@@ -11,6 +11,14 @@ Two rules the old project learned the hard way and this one keeps:
 from __future__ import annotations
 
 from .spec import CharacterSpec
+from .style import (
+    DEFAULT_DETAIL_LEVEL,
+    DETAIL_REFERENCE,
+    SIDE_LANGUAGE,
+    STANDING,
+    STYLE,
+    detail_clause,
+)
 
 #: Locked visual description, written once per character and quoted verbatim
 #: into every later prompt so identity cannot drift between renders.
@@ -24,12 +32,6 @@ own side for anything asymmetric, using the words "character-left" and "characte
 
 Do not describe background, lighting, mood, camera, pose, action, or art style. Do not invent \
 a name or backstory. Output the paragraph and nothing else."""
-
-STYLE = (
-    "Flat cel-shaded cartoon game sprite with a clean solid black outline of even weight. "
-    "Full body, head to feet, nothing cropped. Feet flat on an implied floor with the whole "
-    "figure standing upright in frame."
-)
 
 VIEWS = {
     "key": "Front-left three-quarter view, the character's body angled so they face screen-left.",
@@ -77,7 +79,14 @@ def bible_request(spec: CharacterSpec) -> str:
     )
 
 
-def view_prompt(spec: CharacterSpec, bible: str, view: str, pose: str | None = None) -> str:
+def view_prompt(
+    spec: CharacterSpec,
+    bible: str,
+    view: str,
+    pose: str | None = None,
+    detail_level: int = DEFAULT_DETAIL_LEVEL,
+    detail_reference: bool = False,
+) -> str:
     """Prompt for one static view of the character."""
     if view not in VIEWS:
         raise KeyError(f"unknown view {view!r}")
@@ -89,15 +98,18 @@ def view_prompt(spec: CharacterSpec, bible: str, view: str, pose: str | None = N
         "feet, arms hanging clear of the torso, so the views can be compared."
     )
     return "\n\n".join(
-        [
+        part for part in [
             f"Draw {spec.name}, who is {spec.height} tall.",
             bible,
             VIEWS[view],
             stance,
-            STYLE,
+            f"{STYLE} {STANDING}",
+            detail_clause(detail_level),
+            DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
+            SIDE_LANGUAGE,
             "Keep every detail of the description above exactly as written, including which of "
             "the character's own hands holds any prop. Do not mirror the figure.",
-        ]
+        ] if part
     )
 
 
@@ -117,6 +129,8 @@ def frame_prompt(
     cue: str,
     role: str,
     pose_reference: bool = False,
+    detail_level: int = DEFAULT_DETAIL_LEVEL,
+    detail_reference: bool = False,
 ) -> str:
     """Prompt for one animation frame."""
     return "\n\n".join(
@@ -127,7 +141,10 @@ def frame_prompt(
             view_clause,
             f"Pose for this frame ({role}): {cue}",
             STYLE,
+            detail_clause(detail_level),
+            DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_REFERENCE if pose_reference else "",
+            SIDE_LANGUAGE,
             "Match the reference images for identity, costume, colour, proportion and prop hand "
             "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
             "mirror the figure and do not move the prop to the other hand.",
