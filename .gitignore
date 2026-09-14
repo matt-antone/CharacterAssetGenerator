@@ -5,3 +5,4 @@ work/
 outputs/
 .omc/
 .pytest_cache/
+.DS_Store
