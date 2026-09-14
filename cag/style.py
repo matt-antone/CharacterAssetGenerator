@@ -20,22 +20,24 @@ STYLE = (
     "around the whole figure. Full body, head to feet, nothing cropped."
 )
 
-#: The arcade style pulls hard towards the genre convention of a sprite on a
-#: black stage with a spotlight. It must not: the whole mask path is built on a
-#: flat magenta backdrop, and against black both despill and backdrop removal
-#: do nothing.
-BACKGROUND_OVERRIDE = (
-    "This is a sprite sheet source, not a game screenshot. Ignore the arcade convention of a dark "
-    "stage: there is no stage, no spotlight, no glow, no vignette, no gradient and no scenery. The "
-    "character floats alone on one flat unshaded magenta field."
+#: The silhouette outline colour the style mandates. The backdrop must stay
+#: well clear of it: where backdrop and outline are the same colour, nothing can
+#: tell them apart, and masking eats the outline.
+OUTLINE = (0, 0, 0)
+
+#: Verbatim from KaraokeParty-Graphics' magenta-background reference, which
+#: says to include it in every cutout prompt. Paraphrasing it lost: the arcade
+#: style pulls the character onto a dark stage, and only naming the actual
+#: failure modes — scene, vignette, cast shadow — holds it off.
+BACKDROP = (
+    "Magenta or magenta-like background must fill 100% of all non-character space, including "
+    "gaps between hair, limbs, and props, up to every canvas boundary. No borders, frames, "
+    "differently colored margins, or rounded corners. Prefer #FF00FF; nearby magenta values "
+    "and generated variation are accepted. No checkerboard, scene, backdrop texture, vignette, "
+    "or cast shadow."
 )
 
-#: Repeated as the final line of every prompt. The style pull towards a dark
-#: stage is strong enough that saying this once, early, loses.
-BACKGROUND_LAST_WORD = (
-    "Check before you finish: every pixel that is not the character must be the same flat magenta, "
-    "right out to all four edges and into every gap. Not black. Not a stage. Not a gradient."
-)
+
 
 #: Put in every generation prompt, word for word, exactly as the old profile
 #: required. It is the one clause that keeps a prop in the right hand.

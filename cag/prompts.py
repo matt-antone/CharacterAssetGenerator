@@ -12,8 +12,7 @@ from __future__ import annotations
 
 from .spec import CharacterSpec
 from .style import (
-    BACKGROUND_LAST_WORD,
-    BACKGROUND_OVERRIDE,
+    BACKDROP,
     DEFAULT_DETAIL_LEVEL,
     DETAIL_REFERENCE,
     SIDE_LANGUAGE,
@@ -108,13 +107,12 @@ def view_prompt(
             VIEWS[view],
             stance,
             f"{STYLE} {STANDING}",
-            BACKGROUND_OVERRIDE,
+            BACKDROP,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             SIDE_LANGUAGE,
             "Keep every detail of the description above exactly as written, including which of "
             "the character's own hands holds any prop. Do not mirror the figure.",
-            BACKGROUND_LAST_WORD,
         ] if part
     )
 
@@ -147,7 +145,7 @@ def frame_prompt(
             view_clause,
             f"Pose for this frame ({role}): {cue}",
             STYLE,
-            BACKGROUND_OVERRIDE,
+            BACKDROP,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_REFERENCE if pose_reference else "",
@@ -155,6 +153,5 @@ def frame_prompt(
             "Match the reference images for identity, costume, colour, proportion and prop hand "
             "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
             "mirror the figure and do not move the prop to the other hand.",
-            BACKGROUND_LAST_WORD,
         ] if part
     )

@@ -14,23 +14,25 @@ from typing import Sequence
 import numpy
 from PIL import Image
 
-from .geometry import MAGENTA
+from .style import OUTLINE
 
-INSTRUCTIONS = f"""Generate exactly one image with your built-in image generation tool and \
-save it to {{filename}} in the working directory.
 
-The whole background must be flat {MAGENTA} magenta, edge to edge, with no border, frame, \
-vignette, drop shadow, rounded corner or ground shadow. Nothing but the subject sits on \
-the magenta. Portrait orientation.
+INSTRUCTIONS = """Generate exactly one image with your built-in image generation tool and \
+save it to {filename} in the working directory.
 
 Write no other file. Reply with the filename and nothing else."""
 
 
 #: How much the border may vary and still count as one flat backdrop, as a
-#: per-channel spread across the sampled band. The colour itself does not
-#: matter — Vision segments the subject, not a chroma key — but a busy border
-#: means the generator drew scenery, which is what breaks the cutout.
+#: per-channel spread across the sampled band. Scenery behind the character
+#: breaks the cutout.
 BACKDROP_SPREAD = 32
+
+#: How far the backdrop must sit from the outline colour. Vision does not chroma
+#: key, so the exact hue is free — but a backdrop that matches the mandatory
+#: black outline cannot be told apart from it, and masking removes the outline
+#: along with the background.
+OUTLINE_CLEARANCE = 96
 
 #: Border band sampled when checking the backdrop.
 BORDER_PIXELS = 8
@@ -40,8 +42,8 @@ class DrawError(RuntimeError):
     """Raised when image generation produced no usable PNG."""
 
 
-def backdrop_is_flat(image: Image.Image) -> bool:
-    """Is the character alone on one flat backdrop, whatever colour it is?"""
+def backdrop_is_usable(image: Image.Image) -> tuple[bool, str]:
+    """Can this render be masked? Returns the verdict and, if not, why not."""
     pixels = numpy.array(image.convert("RGB"), dtype=numpy.int16)
     band = numpy.concatenate(
         [
@@ -52,7 +54,17 @@ def backdrop_is_flat(image: Image.Image) -> bool:
         ]
     )
     spread = numpy.percentile(band, 95, axis=0) - numpy.percentile(band, 5, axis=0)
-    return bool(numpy.max(spread) <= BACKDROP_SPREAD)
+    if numpy.max(spread) > BACKDROP_SPREAD:
+        return False, "there is scenery behind the character, not a flat backdrop"
+
+    backdrop = numpy.median(band, axis=0)
+    clearance = numpy.max(numpy.abs(backdrop - numpy.array(OUTLINE, dtype=numpy.int16)))
+    if clearance < OUTLINE_CLEARANCE:
+        return False, (
+            f"the backdrop {[int(v) for v in backdrop]} is too close to the black outline, so "
+            "masking cannot tell them apart"
+        )
+    return True, ""
 
 
 def draw(
@@ -135,9 +147,9 @@ def _verify(path: Path) -> Path:
         with Image.open(path) as image:
             image.verify()
         with Image.open(path) as image:
-            flat_backdrop = backdrop_is_flat(image)
+            usable, why_not = backdrop_is_usable(image)
     except Exception as exc:  # PIL raises a grab-bag of types here
         raise DrawError(f"{path.name} is not a readable image: {exc}") from exc
-    if not flat_backdrop:
-        raise DrawError(f"{path.name} has scenery behind the character, not a flat backdrop")
+    if not usable:
+        raise DrawError(f"{path.name}: {why_not}")
     return path

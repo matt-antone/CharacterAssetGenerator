@@ -1,6 +1,7 @@
 import pytest
 
 from cag.style import (
+    BACKDROP,
     DEFAULT_DETAIL_LEVEL,
     DETAIL_LEVELS,
     SIDE_LANGUAGE,
@@ -42,3 +43,21 @@ def test_only_the_level_with_a_shipped_frame_returns_one():
 def test_side_language_is_the_clause_the_old_profile_required():
     assert SIDE_LANGUAGE.startswith("Mandatory character-side convention:")
     assert "Never use stage-left or stage-right" in SIDE_LANGUAGE
+
+
+def test_the_backdrop_clause_names_the_failure_modes_that_actually_happen():
+    """Paraphrasing this lost four renders to a black stage with a vignette."""
+    for named in ("scene", "vignette", "cast shadow", "checkerboard", "rounded corners"):
+        assert named in BACKDROP, named
+    assert "100% of all non-character space" in BACKDROP
+    assert "gaps between hair, limbs, and props" in BACKDROP
+    assert "#FF00FF" in BACKDROP
+
+
+def test_every_generation_prompt_carries_the_backdrop_clause():
+    from cag.prompts import FRAME_VIEWS, frame_prompt, view_prompt
+    from cag.spec import load_spec
+
+    spec = load_spec("specs/belter.json")
+    assert BACKDROP in view_prompt(spec, "B", "front")
+    assert BACKDROP in frame_prompt(spec, "B", "N", FRAME_VIEWS["front"], "a cue", "key")

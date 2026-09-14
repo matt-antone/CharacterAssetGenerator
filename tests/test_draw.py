@@ -40,7 +40,8 @@ def test_draw_attaches_references(monkeypatch, tmp_path):
     monkeypatch.setattr(subprocess, "run", capture)
     draw("a singer", tmp_path / "art.png", references=[reference])
     assert ["--image", str(reference.resolve())] == seen["argv"][-3:-1]
-    assert "#FF00FF" in seen["prompt"] and "art.png" in seen["prompt"]
+    # draw only handles the file; the look and the backdrop belong to the prompt.
+    assert "a singer" in seen["prompt"] and "art.png" in seen["prompt"]
 
 
 def test_draw_retries_then_fails_when_no_file(monkeypatch, tmp_path):
@@ -91,7 +92,7 @@ def test_draw_records_the_prompt_and_references_it_sent(monkeypatch, tmp_path):
     draw("a singer in green", tmp_path / "art.png", references=[reference])
     record = (tmp_path / "art.txt").read_text()
     assert "a singer in green" in record
-    assert "#FF00FF" in record
+    assert "art.png" in record
     assert str(reference.resolve()) in record
 
 
@@ -135,9 +136,27 @@ def test_verification_never_deletes_an_existing_render(tmp_path):
     assert existing.exists()
 
 
-def test_any_flat_backdrop_passes_because_vision_does_not_chroma_key():
-    from cag.draw import backdrop_is_flat
+def test_the_hue_is_free_but_the_backdrop_must_clear_the_outline():
+    """Vision does not chroma key, so any colour works — except the outline's."""
+    from cag.draw import backdrop_is_usable
 
-    for colour in ((255, 0, 255), (0, 0, 0), (236, 18, 222), (18, 20, 24)):
-        assert backdrop_is_flat(Image.new("RGB", (64, 64), colour)), colour
-    assert not backdrop_is_flat(scenery())
+    for colour in ((255, 0, 255), (236, 18, 222), (0, 200, 0), (90, 140, 255)):
+        assert backdrop_is_usable(Image.new("RGB", (64, 64), colour))[0], colour
+
+
+def test_a_backdrop_the_colour_of_the_outline_is_refused():
+    """Black backdrop plus black outline is unmaskable: they are one colour."""
+    from cag.draw import backdrop_is_usable
+
+    for colour in ((0, 0, 0), (18, 20, 24)):
+        usable, why_not = backdrop_is_usable(Image.new("RGB", (64, 64), colour))
+        assert not usable
+        assert "too close to the black outline" in why_not
+
+
+def test_scenery_is_refused_separately_from_colour():
+    from cag.draw import backdrop_is_usable
+
+    usable, why_not = backdrop_is_usable(scenery())
+    assert not usable
+    assert "scenery behind the character" in why_not
