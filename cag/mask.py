@@ -1,8 +1,15 @@
 """Cut the character off the magenta backdrop and register it into the cell.
 
-The cutout is Apple's Vision framework, not a chroma key: it segments the
-foreground subject directly, so a magenta-ish costume colour cannot eat a limb.
-macOS only.
+The cutout is a chroma key, with Apple's Vision framework behind it for a render
+the key cannot read — Vision segments the subject semantically, so it survives a
+backdrop the character happens to share a colour with. macOS only.
+
+Both paths produce a hard matte and then cut one pixel into the character's
+outline. The pixel where that outline was antialiased against the backdrop is a
+real blend of the two and no threshold can separate it from costume in the same
+hue, so it is thrown away rather than judged — `STYLE` mandates an outline about
+two pixels wide so there is one to spare. That is what keeps magenta off the
+outline; see `CUT_IN`.
 
 Scale is deliberately *not* derived per frame. A crouching pose has a shorter
 bounding box than a standing one, so fitting every frame to the same box would
@@ -23,29 +30,25 @@ from .geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW, subject_height_px
 #: Alpha at or below this counts as background when measuring the subject.
 ALPHA_FLOOR = 8
 
-#: How close a pixel must sit to the measured backdrop colour to be read as
-#: backdrop rather than costume, as a max per-channel difference.
-BACKDROP_TOLERANCE = 24
-
 #: Width of the border band the backdrop colour is measured from.
 BORDER_PIXELS = 8
 
-#: Alpha this high is rounded up to solid. A sprite should not come out faintly
-#: transparent throughout.
-ALPHA_CEILING = 250
+#: Backdrop share above which a pixel counts as backdrop rather than character.
+#: The matte is a straight in-or-out decision. This art has hard pixel edges by
+#: contract and `register` resamples nearest-neighbour, so a soft alpha ramp is
+#: mostly thrown away at the downscale anyway — and a ramp is what let the
+#: half-magenta rim through as solid costume in the first place.
+KEY_THRESHOLD = 0.5
 
-#: Colour distance from the backdrop at which a pixel counts as fully subject.
-#: Between the tolerance and this, alpha ramps, which keeps antialiased edges
-#: soft rather than jagged.
+#: How far into the outline the matte is cut back, in source pixels.
 #:
-#: ponytail: a fixed threshold, because the obvious alternative is worse.
-#: Scaling the ramp to the image's own contrast made almost the whole subject
-#: semi-transparent — 478k partial pixels against 2.5k. The ceiling is that an
-#: edge pixel half covered by a high-contrast colour is already past this
-#: distance, so it reads as solid and keeps a little backdrop tint. On pixel art
-#: with hard edges that is a couple of thousand pixels and invisible; on soft
-#: painterly art it would need real chroma maths keyed to the backdrop hue.
-SUBJECT_DISTANCE = 72
+#: The pixel where the outline was antialiased against the backdrop is a genuine
+#: blend of the two. No threshold can clean it, because "backdrop darkened by the
+#: outline" and "costume in the backdrop's hue" are the same colour — so it is
+#: discarded rather than judged. `STYLE` mandates an outline about two pixels
+#: wide precisely so there is one to spare; renders measure 4-6 source pixels of
+#: it, well clear of this. An outline thinner than this would be eaten.
+CUT_IN = 1
 
 #: A key that keeps less than this share of the canvas found no character, so
 #: the render falls back to Vision.
@@ -73,26 +76,71 @@ def cutout(src: Path | str) -> Image.Image:
     return vision_cutout(src)
 
 
-def key_out(image: Image.Image, backdrop: numpy.ndarray) -> Image.Image:
-    """Remove a flat backdrop by colour, and divide its share back out."""
-    rgb = numpy.array(image.convert("RGB"), dtype=numpy.float64)
-    distance = numpy.max(numpy.abs(rgb - backdrop), axis=2)
-    alpha = numpy.clip(
-        (distance - BACKDROP_TOLERANCE) / (SUBJECT_DISTANCE - BACKDROP_TOLERANCE), 0, 1
-    )
-    alpha[alpha * 255 >= ALPHA_CEILING] = 1.0
+def backdrop_share(rgb: numpy.ndarray, backdrop: numpy.ndarray) -> numpy.ndarray:
+    """How much of each pixel is backdrop, as a 0..1 map.
 
-    subject = numpy.divide(
-        rgb - (1 - alpha[:, :, None]) * backdrop,
-        alpha[:, :, None],
-        out=numpy.zeros_like(rgb),
-        where=alpha[:, :, None] > 0,
-    )
-    pixels = numpy.concatenate(
-        [numpy.clip(subject, 0, 255), (alpha * 255)[:, :, None]], axis=2
-    )
-    pixels[alpha == 0] = 0
+    Measured as how far the backdrop's two strong channels run ahead of its weak
+    one, not as an RGB distance. That distinction is the whole point: where the
+    character's black outline was antialiased against the backdrop, a rim pixel
+    is literally half backdrop, but in plain RGB it sits ~95 away from magenta
+    and read as solid costume. Darkening a colour does not change how far its
+    channels are spread, so this sees that pixel for the half backdrop it is.
+
+    Taking the *minimum* of the strong channels is what keeps costume out of it.
+    A crimson jacket is bright in red but not in blue, so it scores 0.05 here,
+    where projecting onto the backdrop's colour axis called it 0.37 backdrop and
+    would have made the whole jacket translucent.
+
+    A backdrop with no colour to it scores nothing anywhere; `keyable` is the
+    guard for that case, not this.
+    """
+    weak, strong, spread = _channels(backdrop)
+    if spread <= 0:
+        return numpy.zeros(rgb.shape[:2])
+    return numpy.clip((rgb[:, :, strong].min(axis=2) - rgb[:, :, weak]) / spread, 0, 1)
+
+
+def keyable(backdrop: numpy.ndarray) -> bool:
+    """Whether this backdrop has enough colour in it to key against at all.
+
+    Black, white and grey have none: there is no channel spread to separate them
+    from a subject, so keying would keep the whole canvas. `cutout` hands those
+    to Vision instead.
+    """
+    return _channels(backdrop)[2] > 0
+
+
+def _channels(backdrop: numpy.ndarray) -> tuple[int, list[int], float]:
+    """The backdrop's weak channel, its two strong ones, and the gap between."""
+    weak = int(numpy.argmin(backdrop))
+    strong = [channel for channel in range(3) if channel != weak]
+    return weak, strong, float(backdrop[strong].min() - backdrop[weak])
+
+
+def cut_in(keep: numpy.ndarray, depth: int = CUT_IN) -> numpy.ndarray:
+    """`keep` shrunk by `depth` pixels, taking the blended rim off with it."""
+    for _ in range(depth):
+        padded = numpy.pad(keep, 1, constant_values=False)
+        keep = (
+            padded[:-2, 1:-1] & padded[2:, 1:-1] & padded[1:-1, :-2] & padded[1:-1, 2:] & keep
+        )
+    return keep
+
+
+def matte(rgb: numpy.ndarray, keep: numpy.ndarray) -> Image.Image:
+    """`rgb` as RGBA: opaque where `keep`, fully transparent everywhere else."""
+    pixels = numpy.concatenate([rgb, (keep * 255)[:, :, None]], axis=2)
+    pixels[~keep] = 0
     return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
+
+
+def key_out(image: Image.Image, backdrop: numpy.ndarray) -> Image.Image:
+    """Remove a flat backdrop by colour, cutting one pixel into the outline."""
+    rgb = numpy.array(image.convert("RGB"), dtype=numpy.float64)
+    if not keyable(backdrop):
+        # Nothing to key against, so key nothing and let `cutout` reach Vision.
+        return Image.new("RGBA", image.size, (0, 0, 0, 0))
+    return matte(rgb, cut_in(backdrop_share(rgb, backdrop) < KEY_THRESHOLD))
 
 
 def vision_cutout(src: Path | str) -> Image.Image:
@@ -127,7 +175,7 @@ def vision_cutout(src: Path | str) -> Image.Image:
     Quartz.CGImageDestinationFinalize(destination)
     masked = Image.open(io.BytesIO(bytes(data))).convert("RGBA")
     with Image.open(src) as source:
-        return unmix(masked, backdrop_colour(source))
+        return trim_matte(masked, backdrop_colour(source))
 
 
 def backdrop_colour(image: Image.Image) -> numpy.ndarray:
@@ -149,37 +197,21 @@ def backdrop_colour(image: Image.Image) -> numpy.ndarray:
     return numpy.median(band, axis=0)
 
 
-def unmix(image: Image.Image, backdrop: numpy.ndarray) -> Image.Image:
-    """Remove the backdrop's contribution to the cutout.
+def trim_matte(image: Image.Image, backdrop: numpy.ndarray) -> Image.Image:
+    """Clean up Vision's matte the same way the colour key cleans its own.
 
-    Three things, in order. Any pixel still the backdrop colour is background
-    Vision enclosed inside the subject — the gap inside a hand holding a
-    microphone — so it goes fully transparent. Every remaining partial pixel is
-    a blend of subject over backdrop, so the backdrop's share is divided back
-    out, which is what clears the coloured fringe along the outline. Finally
-    near-solid alpha is rounded up, so the sprite is not faintly see-through.
+    Vision segments the subject but traces it a pixel wide, so the rim it hands
+    back is the same backdrop-over-outline blend the colour key leaves behind,
+    and it also encloses background the subject wraps around — the gap inside a
+    hand holding a microphone. Both go the same way: anything still backdrop
+    coloured is out, then one pixel is cut off the edge.
     """
     pixels = numpy.array(image, dtype=numpy.float64)
     rgb, alpha = pixels[:, :, :3], pixels[:, :, 3]
-
-    is_backdrop = numpy.max(numpy.abs(rgb - backdrop), axis=2) <= BACKDROP_TOLERANCE
-    alpha[is_backdrop] = 0
-
-    share = (alpha / 255)[:, :, None]
-    subject = numpy.divide(
-        rgb - (1 - share) * backdrop,
-        share,
-        out=numpy.zeros_like(rgb),
-        where=share > 0,
-    )
-
-    alpha[alpha >= ALPHA_CEILING] = 255
-    pixels[:, :, :3] = numpy.clip(subject, 0, 255)
-    pixels[:, :, 3] = alpha
-    pixels[alpha == 0] = 0
-    return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
-
-
+    keep = alpha > ALPHA_FLOOR
+    if keyable(backdrop):
+        keep &= backdrop_share(rgb, backdrop) < KEY_THRESHOLD
+    return matte(rgb, cut_in(keep))
 
 
 def subject_box(image: Image.Image) -> tuple[int, int, int, int]:
