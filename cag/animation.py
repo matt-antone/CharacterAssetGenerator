@@ -20,6 +20,7 @@ from .draw import draw
 from .mask import mask_to_cell
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt
+from .skeleton import write_skeletons
 from .spec import CharacterSpec
 
 
@@ -34,6 +35,8 @@ class AnimationState(TypedDict, total=False):
     work_dir: Path
     #: Standing instruction for every frame in this set.
     set_note: str
+    #: Stick-figure pose reference per frame index, when the sheet carries poses.
+    poses: dict[int, Path]
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Masked frames registered into the cell, by frame index.
@@ -49,6 +52,20 @@ def view_clause(state: AnimationState) -> str:
     if view not in FRAME_VIEWS:
         raise KeyError(f"motion sheet asks for an unknown view {view!r}")
     return FRAME_VIEWS[view]
+
+
+def pose_sheets(state: AnimationState) -> AnimationState:
+    """Draw the motion sheet's poses, so each frame is shown its pose, not told it."""
+    motion = state["motion"]
+    if not motion.has_poses:
+        return {"poses": {}}
+    paths = write_skeletons(
+        [frame.pts for frame in motion.frames],
+        motion.floor_y,
+        motion.body_h,
+        state["work_dir"] / "poses" / state["set_name"],
+    )
+    return {"poses": dict(enumerate(paths))}
 
 
 def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
@@ -74,9 +91,18 @@ def _draw_frame(
     draw_fn: Callable[..., Path],
 ) -> Path:
     cue = f"{frame.cue} {frame.note}".strip()
+    pose = state.get("poses", {}).get(frame.index)
     prompt = frame_prompt(
-        state["spec"], state["bible"], state["set_note"], view_clause(state), cue, frame.role
+        state["spec"],
+        state["bible"],
+        state["set_note"],
+        view_clause(state),
+        cue,
+        frame.role,
+        pose_reference=pose is not None,
     )
+    # The pose goes last, because the prompt calls it "the last reference image".
+    references = [*references, pose] if pose else references
     return draw_fn(prompt, frame_path(state, "source", frame.index), references=references)
 
 
@@ -115,11 +141,13 @@ def build_animation_graph(model: BaseChatModel, draw_fn: Callable[..., Path] | N
     # Resolved here, not as a default, so the module attribute stays swappable.
     draw_fn = draw_fn or draw
     graph = StateGraph(AnimationState)
+    graph.add_node("poses", pose_sheets)
     graph.add_node("direct", partial(direct, model=model))
     graph.add_node("keyframe", partial(keyframe, draw_fn=draw_fn))
     graph.add_node("tween", partial(tween, draw_fn=draw_fn))
     graph.add_node("mask", mask_frames)
-    graph.add_edge(START, "direct")
+    graph.add_edge(START, "poses")
+    graph.add_edge("poses", "direct")
     graph.add_edge("direct", "keyframe")
     graph.add_edge("keyframe", "tween")
     graph.add_edge("tween", "mask")

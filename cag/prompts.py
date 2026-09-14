@@ -101,20 +101,35 @@ def view_prompt(spec: CharacterSpec, bible: str, view: str, pose: str | None = N
     )
 
 
+POSE_REFERENCE = (
+    "The last reference image is a stick-figure skeleton of this exact pose, with the floor "
+    "drawn as a grey line and hollow rings on the character-right wrist and ankle. Copy the "
+    "pose from it: limb angles, which knee is bent, how the weight sits, which way the head "
+    "turns. It carries no identity, costume or style — take none of its look."
+)
+
+
 def frame_prompt(
-    spec: CharacterSpec, bible: str, set_note: str, view_clause: str, cue: str, role: str
+    spec: CharacterSpec,
+    bible: str,
+    set_note: str,
+    view_clause: str,
+    cue: str,
+    role: str,
+    pose_reference: bool = False,
 ) -> str:
     """Prompt for one animation frame."""
     return "\n\n".join(
-        [
+        part for part in [
             f"Draw one animation frame of {spec.name}, who is {spec.height} tall.",
             bible,
             set_note,
             view_clause,
             f"Pose for this frame ({role}): {cue}",
             STYLE,
+            POSE_REFERENCE if pose_reference else "",
             "Match the reference images for identity, costume, colour, proportion and prop hand "
             "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
             "mirror the figure and do not move the prop to the other hand.",
-        ]
+        ] if part
     )

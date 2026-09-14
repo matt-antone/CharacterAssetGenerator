@@ -59,23 +59,72 @@ def test_keys_and_pilots_are_drawn_before_any_inbetween(run):
     assert sorted(drawn) == list(range(16))
 
 
-def test_keyframes_reference_only_the_key_art(run):
+def sources(call):
+    """Frame indices the call referenced, ignoring the key art and the pose."""
+    return order([{"out": Path(p)} for p in call["refs"][1:-1]])
+
+
+def test_keyframes_reference_the_key_art_and_their_own_pose(run):
     key_art = fake_draw.calls[0]["refs"][0]
     for call in fake_draw.calls[:6]:
-        assert call["refs"] == [key_art]
+        assert call["refs"][0] == key_art
+        assert sources(call) == []
+        assert call["refs"][-1].parent.name == "dance"  # the pose sheet
+        assert call["refs"][-1].stem == call["out"].stem
 
 
 def test_inbetweens_reference_the_key_art_and_both_neighbours(run):
     by_index = {int(c["out"].stem): c for c in fake_draw.calls}
     # Frame 1 sits between locked frames 0 and 2.
-    assert order([{"out": Path(p)} for p in by_index[1]["refs"][1:]]) == [0, 2]
+    assert sources(by_index[1]) == [0, 2]
     # Frame 8 follows locked frame 7 and runs up to pilot frame 9.
-    assert order([{"out": Path(p)} for p in by_index[8]["refs"][1:]]) == [7, 9]
+    assert sources(by_index[8]) == [7, 9]
 
 
 def test_the_last_inbetween_closes_onto_frame_zero(run):
     by_index = {int(c["out"].stem): c for c in fake_draw.calls}
-    assert order([{"out": Path(p)} for p in by_index[15]["refs"][1:]]) == [14, 0]
+    assert sources(by_index[15]) == [14, 0]
+
+
+def test_the_pose_skeleton_is_always_the_last_reference(run):
+    for call in fake_draw.calls:
+        assert call["refs"][-1].parts[-3] == "poses"
+        assert call["refs"][-1].stem == call["out"].stem
+        assert "stick-figure skeleton" in call["prompt"]
+
+
+def test_a_sheet_without_poses_draws_without_one(tmp_path, monkeypatch):
+    """An older motion.json has no landmarks; the set still renders."""
+    import json
+
+    from cag import animation as animation_module
+    from cag.motion import load_motion
+
+    raw = json.loads(Path(SAMPLE).read_text())
+    for frame in raw["frames"]:
+        frame.pop("pts", None)
+    stripped = tmp_path / "motion.json"
+    stripped.write_text(json.dumps(raw))
+
+    fake_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    animation_module.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw
+    ).invoke(
+        {
+            "spec": load_spec("specs/velvet-lou.json"),
+            "bible": "A lounge performer.",
+            "key_art": key_art,
+            "scale": 2.875,
+            "motion": load_motion(stripped),
+            "set_name": "dance",
+            "work_dir": tmp_path / "lou",
+        }
+    )
+    assert len(fake_draw.calls) == 16
+    assert all("stick-figure skeleton" not in c["prompt"] for c in fake_draw.calls)
 
 
 def test_every_frame_prompt_carries_the_directors_note_and_view(run):

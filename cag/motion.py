@@ -11,7 +11,7 @@ Produced by https://github.com/matt-antone/MotionArtist —
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 #: Drawn first, by the keyframer. Everything else is a tweener's in-between.
@@ -29,6 +29,8 @@ class Frame:
     pace: str
     cue: str
     note: str = ""
+    #: MediaPipe landmark positions for this pose, keyed by joint name.
+    pts: dict[str, list[float]] = field(default_factory=dict)
 
     @property
     def is_locked(self) -> bool:
@@ -43,6 +45,13 @@ class MotionSheet:
     playback: str
     arc: str
     frames: tuple[Frame, ...]
+    #: Where the performer's floor sits, and their body height, both normalised.
+    floor_y: float = 0.0
+    body_h: float = 0.0
+
+    @property
+    def has_poses(self) -> bool:
+        return all(frame.pts for frame in self.frames)
 
     @property
     def loops(self) -> bool:
@@ -87,6 +96,7 @@ def load_motion(path: Path | str) -> MotionSheet:
             pace=raw.get("pace", ""),
             cue=raw["cue"].strip(),
             note=raw.get("note", "").strip(),
+            pts=raw.get("pts", {}),
         )
         for raw in data["frames"]
     )
@@ -104,4 +114,6 @@ def load_motion(path: Path | str) -> MotionSheet:
         playback=data["playback"],
         arc=data.get("arc", "").strip(),
         frames=frames,
+        floor_y=float(data.get("floor_y", 0.0)),
+        body_h=float(data.get("body_h", 0.0)),
     )
