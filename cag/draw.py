@@ -20,6 +20,12 @@ from .style import OUTLINE
 INSTRUCTIONS = """Generate exactly one image with your built-in image generation tool and \
 save it to {filename} in the working directory.
 
+Then view {filename} and check the background. Every pixel that is not the character must be \
+magenta, out to all four canvas edges and inside every gap between hair, limbs and props. If any \
+of it came out black, dark, a stage, a spotlight, a vignette or a cast shadow, generate the image \
+again until the background is magenta. The arcade style applies to the character only, never to \
+the space around it.
+
 Write no other file. Reply with the filename and nothing else."""
 
 
