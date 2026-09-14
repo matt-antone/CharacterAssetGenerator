@@ -30,6 +30,13 @@ BACKGROUND_OVERRIDE = (
     "character floats alone on one flat unshaded magenta field."
 )
 
+#: Repeated as the final line of every prompt. The style pull towards a dark
+#: stage is strong enough that saying this once, early, loses.
+BACKGROUND_LAST_WORD = (
+    "Check before you finish: every pixel that is not the character must be the same flat magenta, "
+    "right out to all four edges and into every gap. Not black. Not a stage. Not a gradient."
+)
+
 #: Put in every generation prompt, word for word, exactly as the old profile
 #: required. It is the one clause that keeps a prop in the right hand.
 SIDE_LANGUAGE = (
@@ -67,9 +74,10 @@ def detail_frame(level: int) -> Path | None:
 
 #: Ships with the repo: the approved level-4 frame from the old project.
 DETAIL_REFERENCE = (
-    "One reference image is a detail-level sample at detail level {level}. Match its rendering "
-    "density and pixel-art construction only. Take nothing else from it — not identity, face, "
-    "costume, palette, pose, anatomy, scale or prop hand."
+    "One reference image is a detail-level sample at detail level {level}. Match two things from "
+    "it and only two: its rendering density and pixel-art construction, and its flat magenta "
+    "backdrop with the figure alone on it. Take nothing else — not identity, face, costume, "
+    "palette, pose, anatomy, scale or prop hand."
 )
 
 

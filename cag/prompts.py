@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from .spec import CharacterSpec
 from .style import (
+    BACKGROUND_LAST_WORD,
     BACKGROUND_OVERRIDE,
     DEFAULT_DETAIL_LEVEL,
     DETAIL_REFERENCE,
@@ -92,8 +93,10 @@ def view_prompt(
     if view not in VIEWS:
         raise KeyError(f"unknown view {view!r}")
     stance = pose or (
-        "A relaxed character-specific ready stance, weight settled, arms readable and clear of "
-        "the torso."
+        # Deliberately defers to the description. Inventing a stance here
+        # overrode characters whose brief specified their own.
+        "Use the character's own ready stance exactly as described above. If the description does "
+        "not give one, a relaxed stance with the arms readable and clear of the torso."
         if view == KEY_VIEW
         else "The same neutral standing stance in every projection view: weight even on both "
         "feet, arms hanging clear of the torso, so the views can be compared."
@@ -111,6 +114,7 @@ def view_prompt(
             SIDE_LANGUAGE,
             "Keep every detail of the description above exactly as written, including which of "
             "the character's own hands holds any prop. Do not mirror the figure.",
+            BACKGROUND_LAST_WORD,
         ] if part
     )
 
@@ -151,5 +155,6 @@ def frame_prompt(
             "Match the reference images for identity, costume, colour, proportion and prop hand "
             "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
             "mirror the figure and do not move the prop to the other hand.",
+            BACKGROUND_LAST_WORD,
         ] if part
     )

@@ -3,7 +3,14 @@ import pytest
 from PIL import Image
 
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW
-from cag.mask import MaskError, despill, drop_backdrop, key_art_scale, register, subject_box
+from cag.mask import (
+    MaskError,
+    backdrop_colour,
+    key_art_scale,
+    register,
+    subject_box,
+    unmix,
+)
 
 
 def figure(size=(100, 200), box=(40, 20, 60, 180)):
@@ -66,27 +73,51 @@ def test_register_preserves_soft_edges():
     assert soft.size and 30 <= soft.min() <= 50  # not squared down to ~6
 
 
-def test_despill_clears_magenta_from_the_blended_edge():
-    image = Image.new("RGBA", (4, 1))
-    image.putpixel((0, 0), (255, 0, 255, 40))    # pure backdrop bleed
-    image.putpixel((1, 0), (140, 45, 140, 120))  # jacket blended with backdrop
-    image.putpixel((2, 0), (222, 169, 133, 200)) # skin: warmer than the backdrop
-    image.putpixel((3, 0), (255, 0, 255, 255))   # opaque: the character's own colour
-    out = despill(image)
-    assert out.getpixel((0, 0)) == (0, 0, 0, 40)
-    assert out.getpixel((1, 0)) == (45, 45, 45, 120)
-    assert out.getpixel((2, 0)) == (222, 169, 133, 200)
-    assert out.getpixel((3, 0)) == (255, 0, 255, 255)
+MAGENTA = numpy.array([255.0, 0.0, 255.0])
+BLACK = numpy.array([0.0, 0.0, 0.0])
 
 
-def test_drop_backdrop_clears_enclosed_magenta_but_keeps_costume():
-    image = Image.new("RGBA", (4, 1))
-    image.putpixel((0, 0), (255, 0, 255, 255))    # backdrop trapped inside a hand
-    image.putpixel((1, 0), (240, 40, 235, 255))   # still unmistakably backdrop
-    image.putpixel((2, 0), (216, 80, 160, 255))   # a hot pink costume: kept
-    image.putpixel((3, 0), (222, 169, 133, 255))  # skin: kept
-    out = drop_backdrop(image)
+def test_backdrop_colour_is_measured_from_the_border_not_assumed():
+    image = Image.new("RGB", (40, 40), (12, 10, 14))
+    image.paste((200, 40, 40), (10, 10, 30, 30))  # a subject in the middle
+    assert list(backdrop_colour(image)) == [12, 10, 14]
+
+
+def test_unmix_clears_backdrop_the_subject_encloses():
+    """The gap inside a hand holding a microphone comes back opaque."""
+    image = Image.new("RGBA", (2, 1))
+    image.putpixel((0, 0), (255, 0, 255, 255))    # trapped backdrop
+    image.putpixel((1, 0), (216, 80, 160, 255))   # hot pink costume, kept
+    out = unmix(image, MAGENTA)
     assert out.getpixel((0, 0)) == (0, 0, 0, 0)
-    assert out.getpixel((1, 0)) == (0, 0, 0, 0)
-    assert out.getpixel((2, 0)) == (216, 80, 160, 255)
-    assert out.getpixel((3, 0)) == (222, 169, 133, 255)
+    assert out.getpixel((1, 0))[3] == 255
+
+
+def test_unmix_divides_the_backdrop_back_out_of_a_blended_edge():
+    """A half-covered edge pixel must recover the subject's own colour."""
+    subject = numpy.array([0.0, 0.0, 0.0])  # a black outline
+    blended = 0.5 * subject + 0.5 * MAGENTA
+    image = Image.new("RGBA", (1, 1))
+    image.putpixel((0, 0), (*[int(v) for v in blended], 128))
+    red, green, blue, alpha = unmix(image, MAGENTA).getpixel((0, 0))
+    assert max(red, green, blue) <= 4  # the magenta share is gone
+    assert alpha == 128
+
+
+def test_unmix_works_the_same_against_a_black_backdrop():
+    """Vision segments the subject, so the backdrop colour is incidental."""
+    subject = numpy.array([200.0, 40.0, 40.0])
+    blended = 0.5 * subject + 0.5 * BLACK
+    image = Image.new("RGBA", (1, 1))
+    image.putpixel((0, 0), (*[int(v) for v in blended], 128))
+    red, green, blue, _ = unmix(image, BLACK).getpixel((0, 0))
+    assert abs(red - 200) <= 2 and abs(green - 40) <= 2 and abs(blue - 40) <= 2
+
+
+def test_unmix_rounds_a_near_solid_subject_up_to_opaque():
+    image = Image.new("RGBA", (2, 1))
+    image.putpixel((0, 0), (200, 40, 40, 254))
+    image.putpixel((1, 0), (200, 40, 40, 120))
+    out = unmix(image, BLACK)
+    assert out.getpixel((0, 0))[3] == 255
+    assert out.getpixel((1, 0))[3] == 120

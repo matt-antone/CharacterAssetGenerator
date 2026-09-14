@@ -23,10 +23,16 @@ from .geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW, subject_height_px
 #: Alpha at or below this counts as background when measuring the subject.
 ALPHA_FLOOR = 8
 
-#: How far a pixel must lean magenta before it is read as leftover backdrop
-#: rather than costume. Pure #FF00FF scores 255; skin and green velvet score
-#: below zero.
-BACKDROP_CAST = 150
+#: How close a pixel must sit to the measured backdrop colour to be read as
+#: backdrop rather than costume, as a max per-channel difference.
+BACKDROP_TOLERANCE = 24
+
+#: Width of the border band the backdrop colour is measured from.
+BORDER_PIXELS = 8
+
+#: Alpha this high is rounded up to solid. Vision returns a subject that peaks
+#: around 254, and a sprite should not be faintly transparent throughout.
+ALPHA_CEILING = 250
 
 
 class MaskError(RuntimeError):
@@ -63,37 +69,61 @@ def cutout(src: Path | str) -> Image.Image:
     destination = Quartz.CGImageDestinationCreateWithData(data, "public.png", 1, None)
     Quartz.CGImageDestinationAddImage(destination, cg_image, None)
     Quartz.CGImageDestinationFinalize(destination)
-    return despill(drop_backdrop(Image.open(io.BytesIO(bytes(data))).convert("RGBA")))
+    masked = Image.open(io.BytesIO(bytes(data))).convert("RGBA")
+    with Image.open(src) as source:
+        return unmix(masked, backdrop_colour(source))
 
 
-def drop_backdrop(image: Image.Image) -> Image.Image:
-    """Clear backdrop that Vision enclosed inside the subject.
+def backdrop_colour(image: Image.Image) -> numpy.ndarray:
+    """The backdrop the character was drawn on, read off the source border.
 
-    A gap the subject wraps around — between an arm and the torso, or inside
-    the hand holding a prop — comes back opaque and still magenta. Only
-    near-pure backdrop is cleared, so real costume colour survives; a costume
-    this close to the backdrop could not be shot against it anyway.
+    Measured rather than assumed. The old project keyed on magenta because its
+    masker was a chroma key; Vision segments the subject instead, so the
+    backdrop can be any colour and this only needs to know which.
     """
-    pixels = numpy.array(image, dtype=numpy.int16)
-    red, green, blue = pixels[:, :, 0], pixels[:, :, 1], pixels[:, :, 2]
-    pixels[numpy.minimum(red, blue) - green > BACKDROP_CAST] = 0
+    pixels = numpy.array(image.convert("RGB"), dtype=numpy.int16)
+    band = numpy.concatenate(
+        [
+            pixels[:BORDER_PIXELS].reshape(-1, 3),
+            pixels[-BORDER_PIXELS:].reshape(-1, 3),
+            pixels[:, :BORDER_PIXELS].reshape(-1, 3),
+            pixels[:, -BORDER_PIXELS:].reshape(-1, 3),
+        ]
+    )
+    return numpy.median(band, axis=0)
+
+
+def unmix(image: Image.Image, backdrop: numpy.ndarray) -> Image.Image:
+    """Remove the backdrop's contribution to the cutout.
+
+    Three things, in order. Any pixel still the backdrop colour is background
+    Vision enclosed inside the subject — the gap inside a hand holding a
+    microphone — so it goes fully transparent. Every remaining partial pixel is
+    a blend of subject over backdrop, so the backdrop's share is divided back
+    out, which is what clears the coloured fringe along the outline. Finally
+    near-solid alpha is rounded up, so the sprite is not faintly see-through.
+    """
+    pixels = numpy.array(image, dtype=numpy.float64)
+    rgb, alpha = pixels[:, :, :3], pixels[:, :, 3]
+
+    is_backdrop = numpy.max(numpy.abs(rgb - backdrop), axis=2) <= BACKDROP_TOLERANCE
+    alpha[is_backdrop] = 0
+
+    share = (alpha / 255)[:, :, None]
+    subject = numpy.divide(
+        rgb - (1 - share) * backdrop,
+        share,
+        out=numpy.zeros_like(rgb),
+        where=share > 0,
+    )
+
+    alpha[alpha >= ALPHA_CEILING] = 255
+    pixels[:, :, :3] = numpy.clip(subject, 0, 255)
+    pixels[:, :, 3] = alpha
+    pixels[alpha == 0] = 0
     return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
 
 
-def despill(image: Image.Image) -> Image.Image:
-    """Neutralise magenta picked up from the backdrop along the subject's edge.
-
-    Only semi-transparent pixels are touched. Those are the blended edge, where
-    the backdrop bled in; an opaque pixel that reads magenta is the character's
-    own colour and is left alone.
-    """
-    pixels = numpy.array(image, dtype=numpy.int16)
-    edge = (pixels[:, :, 3] > 0) & (pixels[:, :, 3] < 255)
-    red, green, blue = pixels[:, :, 0], pixels[:, :, 1], pixels[:, :, 2]
-    cast = numpy.where(edge, numpy.minimum(red, blue) - green, 0).clip(min=0)
-    pixels[:, :, 0] = (red - cast).clip(0, 255)
-    pixels[:, :, 2] = (blue - cast).clip(0, 255)
-    return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
 
 
 def subject_box(image: Image.Image) -> tuple[int, int, int, int]:

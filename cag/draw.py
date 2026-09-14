@@ -26,9 +26,11 @@ the magenta. Portrait orientation.
 Write no other file. Reply with the filename and nothing else."""
 
 
-#: How strongly the border must lean magenta to count as the backdrop. Matches
-#: the dominance test the old project keyed its extraction on.
-BACKDROP_DOMINANCE = 80
+#: How much the border may vary and still count as one flat backdrop, as a
+#: per-channel spread across the sampled band. The colour itself does not
+#: matter — Vision segments the subject, not a chroma key — but a busy border
+#: means the generator drew scenery, which is what breaks the cutout.
+BACKDROP_SPREAD = 32
 
 #: Border band sampled when checking the backdrop.
 BORDER_PIXELS = 8
@@ -38,8 +40,8 @@ class DrawError(RuntimeError):
     """Raised when image generation produced no usable PNG."""
 
 
-def backdrop_is_magenta(image: Image.Image) -> bool:
-    """Is this render actually on the magenta backdrop the masker expects?"""
+def backdrop_is_flat(image: Image.Image) -> bool:
+    """Is the character alone on one flat backdrop, whatever colour it is?"""
     pixels = numpy.array(image.convert("RGB"), dtype=numpy.int16)
     band = numpy.concatenate(
         [
@@ -49,8 +51,8 @@ def backdrop_is_magenta(image: Image.Image) -> bool:
             pixels[:, -BORDER_PIXELS:].reshape(-1, 3),
         ]
     )
-    red, green, blue = numpy.median(band, axis=0)
-    return min(red, blue) - green >= BACKDROP_DOMINANCE
+    spread = numpy.percentile(band, 95, axis=0) - numpy.percentile(band, 5, axis=0)
+    return bool(numpy.max(spread) <= BACKDROP_SPREAD)
 
 
 def draw(
@@ -133,9 +135,9 @@ def _verify(path: Path) -> Path:
         with Image.open(path) as image:
             image.verify()
         with Image.open(path) as image:
-            on_magenta = backdrop_is_magenta(image)
+            flat_backdrop = backdrop_is_flat(image)
     except Exception as exc:  # PIL raises a grab-bag of types here
         raise DrawError(f"{path.name} is not a readable image: {exc}") from exc
-    if not on_magenta:
-        raise DrawError(f"{path.name} was not drawn on the magenta backdrop")
+    if not flat_backdrop:
+        raise DrawError(f"{path.name} has scenery behind the character, not a flat backdrop")
     return path

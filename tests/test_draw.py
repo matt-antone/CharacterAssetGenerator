@@ -1,6 +1,8 @@
 import subprocess
 from pathlib import Path
 
+import numpy
+
 import pytest
 from PIL import Image
 
@@ -99,18 +101,24 @@ def test_the_record_says_so_when_nothing_was_referenced(monkeypatch, tmp_path):
     assert "(none)" in (tmp_path / "art.txt").read_text()
 
 
-def test_a_render_on_the_wrong_backdrop_is_redrawn_not_kept(monkeypatch, tmp_path):
-    """The arcade style pulls towards a black stage; that render is unusable."""
+def scenery(size=(64, 64)):
+    """A render with a busy background instead of a flat backdrop."""
+    pixels = numpy.tile(
+        numpy.linspace(0, 255, size[0], dtype=numpy.uint8)[None, :, None], (size[1], 1, 3)
+    )
+    return Image.fromarray(pixels, "RGB")
+
+
+def test_a_render_with_scenery_behind_it_is_redrawn_not_kept(monkeypatch, tmp_path):
     attempts = []
 
-    def draws_black(argv, **kwargs):
+    def draws_scenery(argv, **kwargs):
         attempts.append(argv)
-        out = Path(argv[argv.index("--cd") + 1]) / "art.png"
-        Image.new("RGB", (8, 8), (0, 0, 0)).save(out)
+        scenery().save(Path(argv[argv.index("--cd") + 1]) / "art.png")
         return subprocess.CompletedProcess(argv, 0, "", "")
 
-    monkeypatch.setattr(subprocess, "run", draws_black)
-    with pytest.raises(DrawError, match="not drawn on the magenta backdrop"):
+    monkeypatch.setattr(subprocess, "run", draws_scenery)
+    with pytest.raises(DrawError, match="scenery behind the character"):
         draw("a singer", tmp_path / "art.png")
     assert len(attempts) == 2
     assert not (tmp_path / "art.png").exists()
@@ -121,15 +129,15 @@ def test_verification_never_deletes_an_existing_render(tmp_path):
     from cag.draw import _verify
 
     existing = tmp_path / "art.png"
-    Image.new("RGB", (8, 8), (0, 0, 0)).save(existing)
+    scenery().save(existing)
     with pytest.raises(DrawError):
         _verify(existing)
     assert existing.exists()
 
 
-def test_backdrop_check_accepts_off_exact_magenta(tmp_path):
-    """The old profile never gated on an exact RGB, and neither does this."""
-    from cag.draw import backdrop_is_magenta
+def test_any_flat_backdrop_passes_because_vision_does_not_chroma_key():
+    from cag.draw import backdrop_is_flat
 
-    assert backdrop_is_magenta(Image.new("RGB", (8, 8), (236, 18, 222)))
-    assert not backdrop_is_magenta(Image.new("RGB", (8, 8), (120, 40, 90)))
+    for colour in ((255, 0, 255), (0, 0, 0), (236, 18, 222), (18, 20, 24)):
+        assert backdrop_is_flat(Image.new("RGB", (64, 64), colour)), colour
+    assert not backdrop_is_flat(scenery())
