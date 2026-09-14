@@ -20,6 +20,16 @@ STYLE = (
     "around the whole figure. Full body, head to feet, nothing cropped."
 )
 
+#: The arcade style pulls hard towards the genre convention of a sprite on a
+#: black stage with a spotlight. It must not: the whole mask path is built on a
+#: flat magenta backdrop, and against black both despill and backdrop removal
+#: do nothing.
+BACKGROUND_OVERRIDE = (
+    "This is a sprite sheet source, not a game screenshot. Ignore the arcade convention of a dark "
+    "stage: there is no stage, no spotlight, no glow, no vignette, no gradient and no scenery. The "
+    "character floats alone on one flat unshaded magenta field."
+)
+
 #: Put in every generation prompt, word for word, exactly as the old profile
 #: required. It is the one clause that keeps a prop in the right hand.
 SIDE_LANGUAGE = (

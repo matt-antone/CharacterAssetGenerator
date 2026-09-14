@@ -56,7 +56,7 @@ def test_draw_retries_then_fails_when_no_file(monkeypatch, tmp_path):
 
 def test_draw_reuses_a_finished_render_so_a_run_can_resume(monkeypatch, tmp_path):
     existing = tmp_path / "art.png"
-    Image.new("RGB", (8, 8)).save(existing)
+    Image.new("RGB", (8, 8), (255, 0, 255)).save(existing)
 
     def explode(*args, **kwargs):
         raise AssertionError("an existing render must not be drawn again")
@@ -67,7 +67,7 @@ def test_draw_reuses_a_finished_render_so_a_run_can_resume(monkeypatch, tmp_path
 
 def test_draw_refuses_to_overwrite_when_reuse_is_off(tmp_path):
     existing = tmp_path / "art.png"
-    Image.new("RGB", (8, 8)).save(existing)
+    Image.new("RGB", (8, 8), (255, 0, 255)).save(existing)
     with pytest.raises(DrawError, match="refusing to overwrite"):
         draw("a singer", existing, reuse=False)
 
@@ -97,3 +97,39 @@ def test_the_record_says_so_when_nothing_was_referenced(monkeypatch, tmp_path):
     monkeypatch.setattr(subprocess, "run", _writes())
     draw("a singer", tmp_path / "art.png")
     assert "(none)" in (tmp_path / "art.txt").read_text()
+
+
+def test_a_render_on_the_wrong_backdrop_is_redrawn_not_kept(monkeypatch, tmp_path):
+    """The arcade style pulls towards a black stage; that render is unusable."""
+    attempts = []
+
+    def draws_black(argv, **kwargs):
+        attempts.append(argv)
+        out = Path(argv[argv.index("--cd") + 1]) / "art.png"
+        Image.new("RGB", (8, 8), (0, 0, 0)).save(out)
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(subprocess, "run", draws_black)
+    with pytest.raises(DrawError, match="not drawn on the magenta backdrop"):
+        draw("a singer", tmp_path / "art.png")
+    assert len(attempts) == 2
+    assert not (tmp_path / "art.png").exists()
+
+
+def test_verification_never_deletes_an_existing_render(tmp_path):
+    """A resume must not destroy work it decides it cannot use."""
+    from cag.draw import _verify
+
+    existing = tmp_path / "art.png"
+    Image.new("RGB", (8, 8), (0, 0, 0)).save(existing)
+    with pytest.raises(DrawError):
+        _verify(existing)
+    assert existing.exists()
+
+
+def test_backdrop_check_accepts_off_exact_magenta(tmp_path):
+    """The old profile never gated on an exact RGB, and neither does this."""
+    from cag.draw import backdrop_is_magenta
+
+    assert backdrop_is_magenta(Image.new("RGB", (8, 8), (236, 18, 222)))
+    assert not backdrop_is_magenta(Image.new("RGB", (8, 8), (120, 40, 90)))

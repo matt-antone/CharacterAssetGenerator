@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from .spec import CharacterSpec
 from .style import (
+    BACKGROUND_OVERRIDE,
     DEFAULT_DETAIL_LEVEL,
     DETAIL_REFERENCE,
     SIDE_LANGUAGE,
@@ -104,6 +105,7 @@ def view_prompt(
             VIEWS[view],
             stance,
             f"{STYLE} {STANDING}",
+            BACKGROUND_OVERRIDE,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             SIDE_LANGUAGE,
@@ -141,6 +143,7 @@ def frame_prompt(
             view_clause,
             f"Pose for this frame ({role}): {cue}",
             STYLE,
+            BACKGROUND_OVERRIDE,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_REFERENCE if pose_reference else "",

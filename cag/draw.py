@@ -11,6 +11,7 @@ import subprocess
 from pathlib import Path
 from typing import Sequence
 
+import numpy
 from PIL import Image
 
 from .geometry import MAGENTA
@@ -25,8 +26,31 @@ the magenta. Portrait orientation.
 Write no other file. Reply with the filename and nothing else."""
 
 
+#: How strongly the border must lean magenta to count as the backdrop. Matches
+#: the dominance test the old project keyed its extraction on.
+BACKDROP_DOMINANCE = 80
+
+#: Border band sampled when checking the backdrop.
+BORDER_PIXELS = 8
+
+
 class DrawError(RuntimeError):
     """Raised when image generation produced no usable PNG."""
+
+
+def backdrop_is_magenta(image: Image.Image) -> bool:
+    """Is this render actually on the magenta backdrop the masker expects?"""
+    pixels = numpy.array(image.convert("RGB"), dtype=numpy.int16)
+    band = numpy.concatenate(
+        [
+            pixels[:BORDER_PIXELS].reshape(-1, 3),
+            pixels[-BORDER_PIXELS:].reshape(-1, 3),
+            pixels[:, :BORDER_PIXELS].reshape(-1, 3),
+            pixels[:, -BORDER_PIXELS:].reshape(-1, 3),
+        ]
+    )
+    red, green, blue = numpy.median(band, axis=0)
+    return min(red, blue) - green >= BACKDROP_DOMINANCE
 
 
 def draw(
@@ -92,16 +116,26 @@ def draw(
             last_error = result.stderr.strip()[-2000:]
             continue
         if out_path.exists():
-            return _verify(out_path)
+            try:
+                return _verify(out_path)
+            except DrawError as error:
+                # This attempt is unusable, so clear it and draw again.
+                out_path.unlink(missing_ok=True)
+                last_error = str(error)
+                continue
         last_error = "codex reported success but wrote no file"
     raise DrawError(f"could not draw {out_path.name}: {last_error}")
 
 
 def _verify(path: Path) -> Path:
+    """Check a render is usable. Never deletes — the caller decides that."""
     try:
         with Image.open(path) as image:
             image.verify()
+        with Image.open(path) as image:
+            on_magenta = backdrop_is_magenta(image)
     except Exception as exc:  # PIL raises a grab-bag of types here
-        path.unlink(missing_ok=True)
         raise DrawError(f"{path.name} is not a readable image: {exc}") from exc
+    if not on_magenta:
+        raise DrawError(f"{path.name} was not drawn on the magenta backdrop")
     return path

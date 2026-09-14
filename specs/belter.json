@@ -1,0 +1,9 @@
+{
+  "name": "Belter",
+  "height": "5' 7\"",
+  "detail_level": 4,
+  "description": "A power-ballad singer in her forties with a muscular, low, braced arcade build and commanding performance energy. Physically fit: strong torso, hips and thighs, low centre of gravity, planted weight; never narrow, dainty or elongated. Her recognition cue is that her wavy auburn hair mass is visibly wider than her shoulders — a large shoulder-clearing mass of thick wavy auburn hair with a high crown and wide side volume, no hat or headwear. She wears a structured crimson performance jacket with angular lapels over a dark fitted top, high-waisted blue mom jeans, a crimson waist accent, and chunky dark ankle boots. She holds one wireless handheld microphone upright in her character-right hand; no cord, no stand. Her ready stance has flexed knees, torso braced over a low centre, feet planted, and the free hand compact and relaxed. Palette, as base/shadow/highlight per material: crimson #C01723 / #7A0D17 / #F0444E; blue denim #4B576F / #2F374A / #8B98B1; skin #B96B4F / #794333 / #DB9372; hair #593029 / #2D1815 / #8A4A3F; microphone #6F747C / #34383E / #B5BAC0; eye white #F3E8D8; eye dark #251713; lip #8E2633; tooth highlight #F4E9D7. Never draw: a hair mass equal to or narrower than the shoulders; slim upright fashion-pose proportions; a youth-coded or elderly caricature; the microphone in the character-left hand; a microphone cord, stand or duplicate microphone; a gown or skirt silhouette; logos, text or real brands.",
+  "animations": {
+    "dance": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow. The microphone in the character-right hand does not need to point at the face, and the character-right hand and arm are free to move."
+  }
+}
