@@ -12,10 +12,21 @@ from cag.style import (
 
 
 def test_the_style_is_the_arcade_contract_not_a_cartoon():
-    assert "Capcom Street Fighter 2 style arcade pixel art" in STYLE
-    assert "two or three discrete tones" in STYLE.lower()
-    for softener in ("cel-shaded", "cartoon", "smooth", "gradient shading"):
-        assert softener not in STYLE.lower().replace("no antialiasing, gradients", "")
+    assert "32-bit arcade sprite art" in STYLE
+    assert "four to six discrete banded tones" in STYLE
+    for softener in ("cel-shaded", "cartoon"):
+        assert softener not in STYLE.lower()
+
+
+def test_both_eras_keep_what_the_masker_and_the_style_depend_on():
+    """Palette depth is the only difference; the rest is load-bearing."""
+    from cag.style import SIXTEEN_BIT
+
+    for look in (STYLE, SIXTEEN_BIT):
+        assert "visible pixel grid" in look
+        assert "black silhouette outline about two pixels wide" in look
+        assert "no soft glow" in look or "or soft glow" in look
+        assert "Full body, head to feet, nothing cropped." in look
 
 
 def test_the_ten_step_scale_is_complete():
@@ -24,9 +35,9 @@ def test_the_ten_step_scale_is_complete():
 
 
 def test_detail_clause_names_the_level_and_its_description():
-    clause = detail_clause(4)
-    assert clause.startswith("Render at detail level 4.")
-    assert "two-to-three-tone shading" in clause
+    clause = detail_clause(DEFAULT_DETAIL_LEVEL)
+    assert clause.startswith(f"Render at detail level {DEFAULT_DETAIL_LEVEL}.")
+    assert DETAIL_LEVELS[DEFAULT_DETAIL_LEVEL] in clause
 
 
 def test_detail_clause_rejects_an_off_scale_level():

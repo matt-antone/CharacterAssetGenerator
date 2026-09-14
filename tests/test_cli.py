@@ -29,12 +29,10 @@ def built(tmp_path, monkeypatch):
         [
             "build",
             "specs/velvet-lou.json",
-            "--motion",
-            SAMPLE,
-            "--work",
-            str(tmp_path / "work"),
-            "--out",
-            str(tmp_path / "out"),
+            "--set", "dance",
+            "--motion", SAMPLE,
+            "--work", str(tmp_path / "work"),
+            "--out", str(tmp_path / "out"),
         ]
     )
     return tmp_path / "out" / "velvet-lou"
@@ -74,10 +72,12 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
         "ChatCodex",
         lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
     )
+    monkeypatch.setattr(cli, "write_motion", lambda *a, **kw: pytest.fail("no sheet needed"))
     cli.main(
-        ["build", "specs/velvet-lou.json", "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")]
+        ["build", "specs/no-animations.json", "--work", str(tmp_path / "w"),
+         "--out", str(tmp_path / "o")]
     )
-    out = tmp_path / "o" / "velvet-lou"
+    out = tmp_path / "o" / "no-one"
     assert (out / "index.html").exists()
     assert not list(out.glob("*.gif"))
     assert len(fake_draw.calls) == 4

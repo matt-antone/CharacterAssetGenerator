@@ -6,3 +6,4 @@ outputs/
 .omc/
 .pytest_cache/
 .DS_Store
+.fallow/churn.bin

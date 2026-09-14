@@ -101,13 +101,17 @@ def test_the_pose_skeleton_is_always_the_last_reference(run):
         assert "stick-figure skeleton" in call["prompt"]
 
 
-def test_every_frame_carries_the_detail_sample_before_the_pose(run):
+def test_every_frame_names_its_detail_level_and_style(run):
+    from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
+
+    sample = detail_frame(DEFAULT_DETAIL_LEVEL)
     for call in fake_draw.calls:
+        assert f"detail level {DEFAULT_DETAIL_LEVEL}" in call["prompt"]
+        assert "32-bit arcade sprite art" in call["prompt"]
         names = [Path(p).name for p in call["refs"]]
-        assert "detail-level-04.png" in names
-        assert names.index("detail-level-04.png") == len(names) - 2
-        assert "detail level 4" in call["prompt"]
-        assert "Capcom Street Fighter 2" in call["prompt"]
+        if sample:
+            # The pose must stay last, so the sample sits just before it.
+            assert names.index(sample.name) == len(names) - 2
 
 
 def test_a_sheet_without_poses_draws_without_one(tmp_path, monkeypatch):

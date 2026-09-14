@@ -1,0 +1,15 @@
+{
+  "name": "The Belter",
+  "height": "5' 7\"",
+  "detail_level": 5,
+  "description": "A sample power-ballad singer in her forties with a broad, low, braced arcade build and a confident performance-ready expression without aggression. Her recognition cue is that her wavy auburn hair mass is visibly wider than her shoulders; no hat or headwear. She wears a structured crimson performance jacket, a dark fitted top, high-waisted dark trousers, a crimson waist accent, and chunky dark ankle boots. She holds one wireless handheld microphone upright in her character-right hand; no cord, no stand. Her ready stance has flexed knees, a broad torso braced over a low centre, feet planted, and the free hand compact and relaxed. Never draw: slim, upright, dainty, youth-coded, or elderly-caricature proportions; microphone in the character-left hand, duplicated, corded, or on a stand.",
+  "animations": {
+    "dance": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow, then return to the low braced opening stance with the microphone upright in the character-right hand.",
+    "sing": "Planted power-ballad vocal loop: brace through the legs, bring the microphone in the character-right hand toward the mouth for a sustained phrase, use one compact free-hand emphasis, then settle back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+    "flinch": "Brief room-sound surprise: shoulders and wide hair lift, torso draws back slightly, then she regains her broad composed stance. No opponent, strike, or physical contact.",
+    "guard": "One-shot stage self-protection: lower into a compact braced stance, keep the microphone upright in the character-right hand, shield the torso with the free arm, then hold a stable grounded finish. Not combat.",
+    "entrance": "One-shot entrance: step in with low confident weight, square the crimson jacket toward the room, lift the microphone once, then land in her broad performance-ready stance.",
+    "victory": "One-shot song-finish celebration: plant both boots, lift the free hand and chin in a proud acknowledgement, let the hair settle, then hold a commanding balanced pose.",
+    "ko": "Non-contact performance exhaustion: the low braced posture softens, knees fold safely, and she settles into a supported low final hold. Do not imply impact, injury, or an opponent."
+  }
+}
