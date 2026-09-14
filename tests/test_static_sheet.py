@@ -53,16 +53,25 @@ def test_draws_key_art_before_the_projection_views(run):
 def test_projection_views_reference_the_key_art(run):
     key_art = fake_draw.calls[0]["out"]
     assert all(call["refs"][0] == key_art for call in fake_draw.calls[1:])
-    # The key art has no key art to follow, only the detail sample.
-    assert [Path(p).name for p in fake_draw.calls[0]["refs"]] == ["detail-level-04.png"]
 
 
-def test_every_view_carries_the_detail_sample_and_the_arcade_style(run):
+def test_every_view_names_its_detail_level_and_the_arcade_style(run):
+    from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
+
     for call in fake_draw.calls:
-        assert Path(call["refs"][-1]).name == "detail-level-04.png"
-        assert "detail level 4" in call["prompt"]
-        assert "Capcom Street Fighter 2" in call["prompt"]
+        assert f"detail level {DEFAULT_DETAIL_LEVEL}" in call["prompt"]
+        assert "32-bit arcade sprite art" in call["prompt"]
         assert "character-left and character-right" in call["prompt"]
+
+
+def test_the_detail_sample_rides_along_only_when_the_level_has_one(run):
+    """Only level 4 ships a frame; other levels get the words alone."""
+    from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
+
+    sample = detail_frame(DEFAULT_DETAIL_LEVEL)
+    for call in fake_draw.calls:
+        names = [Path(p).name for p in call["refs"]]
+        assert (sample.name in names) if sample else (not any("detail-level" in n for n in names))
 
 
 def test_every_prompt_quotes_the_locked_bible(run):

@@ -57,7 +57,9 @@ def test_rejects_broken_json(tmp_path):
 
 
 def test_detail_level_defaults_and_validates(tmp_path):
-    assert load_spec("specs/velvet-lou.json").detail_level == 4
+    from cag.style import DEFAULT_DETAIL_LEVEL
+
+    assert load_spec("specs/velvet-lou.json").detail_level == DEFAULT_DETAIL_LEVEL
     assert load_spec(write(tmp_path, detail_level=7)).detail_level == 7
     for bad in (0, 11, "four", 4.5):
         with pytest.raises(SpecError, match="detail_level must be"):

@@ -10,10 +10,24 @@ from __future__ import annotations
 from pathlib import Path
 
 #: How the art looks. True of every render, static or animated.
-#: Ported verbatim from KaraokeParty-Graphics' `rendering_output_contract`,
-#: which produced the look that worked. Do not soften it into "cartoon" or
-#: "cel-shaded" — those give a modern vector sprite, not an arcade one.
+#:
+#: The 16-bit original, ported from KaraokeParty-Graphics' rendering contract,
+#: is kept below as SIXTEEN_BIT. Everything load-bearing is the same in both:
+#: the pixel grid, the hard edges, no gradients, the two-pixel black outline.
+#: Only the palette depth changes. Do not soften either into "cartoon" or
+#: "cel-shaded" — that gives a modern vector sprite, not an arcade one.
 STYLE = (
+    "Mid-1990s 32-bit arcade sprite art, the Capcom Street Fighter Alpha and Marvel vs Capcom "
+    "generation rather than Street Fighter 2. A visible pixel grid and hard nearest-neighbour "
+    "edges, with no antialiasing, no gradients, no airbrushing and no soft glow — but a far "
+    "richer palette than the 16-bit era: four to six discrete banded tones per material, with "
+    "deliberate rim light along the lit edge and reflected colour inside the shadows. A solid "
+    "black silhouette outline about two pixels wide around the whole figure. Full body, head to "
+    "feet, nothing cropped."
+)
+
+#: The 16-bit look this started from. Two or three flat tones per material.
+SIXTEEN_BIT = (
     "Capcom Street Fighter 2 style arcade pixel art. A visible pixel grid, hard nearest-neighbour "
     "edges, and no antialiasing, gradients, airbrushing or soft glow. Two or three discrete tones "
     "per material and nothing in between. A solid black silhouette outline about two pixels wide "
@@ -63,7 +77,7 @@ DETAIL_LEVELS = {
     10: "Illustrative realism: maximum anatomy, texture, lighting and dimensional material rendering, still readable as arcade construction.",
 }
 
-DEFAULT_DETAIL_LEVEL = 4
+DEFAULT_DETAIL_LEVEL = 10
 
 #: The one approved detail sample that survived the old repo. Levels without a
 #: frame of their own still get their written description.
