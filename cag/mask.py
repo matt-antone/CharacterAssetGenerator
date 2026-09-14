@@ -23,6 +23,11 @@ from .geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW, subject_height_px
 #: Alpha at or below this counts as background when measuring the subject.
 ALPHA_FLOOR = 8
 
+#: How far a pixel must lean magenta before it is read as leftover backdrop
+#: rather than costume. Pure #FF00FF scores 255; skin and green velvet score
+#: below zero.
+BACKDROP_CAST = 150
+
 
 class MaskError(RuntimeError):
     """Raised when no subject could be separated from the background."""
@@ -58,7 +63,21 @@ def cutout(src: Path | str) -> Image.Image:
     destination = Quartz.CGImageDestinationCreateWithData(data, "public.png", 1, None)
     Quartz.CGImageDestinationAddImage(destination, cg_image, None)
     Quartz.CGImageDestinationFinalize(destination)
-    return despill(Image.open(io.BytesIO(bytes(data))).convert("RGBA"))
+    return despill(drop_backdrop(Image.open(io.BytesIO(bytes(data))).convert("RGBA")))
+
+
+def drop_backdrop(image: Image.Image) -> Image.Image:
+    """Clear backdrop that Vision enclosed inside the subject.
+
+    A gap the subject wraps around — between an arm and the torso, or inside
+    the hand holding a prop — comes back opaque and still magenta. Only
+    near-pure backdrop is cleared, so real costume colour survives; a costume
+    this close to the backdrop could not be shot against it anyway.
+    """
+    pixels = numpy.array(image, dtype=numpy.int16)
+    red, green, blue = pixels[:, :, 0], pixels[:, :, 1], pixels[:, :, 2]
+    pixels[numpy.minimum(red, blue) - green > BACKDROP_CAST] = 0
+    return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
 
 
 def despill(image: Image.Image) -> Image.Image:

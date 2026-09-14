@@ -3,7 +3,7 @@ import pytest
 from PIL import Image
 
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW
-from cag.mask import MaskError, despill, key_art_scale, register, subject_box
+from cag.mask import MaskError, despill, drop_backdrop, key_art_scale, register, subject_box
 
 
 def figure(size=(100, 200), box=(40, 20, 60, 180)):
@@ -77,3 +77,16 @@ def test_despill_clears_magenta_from_the_blended_edge():
     assert out.getpixel((1, 0)) == (45, 45, 45, 120)
     assert out.getpixel((2, 0)) == (222, 169, 133, 200)
     assert out.getpixel((3, 0)) == (255, 0, 255, 255)
+
+
+def test_drop_backdrop_clears_enclosed_magenta_but_keeps_costume():
+    image = Image.new("RGBA", (4, 1))
+    image.putpixel((0, 0), (255, 0, 255, 255))    # backdrop trapped inside a hand
+    image.putpixel((1, 0), (240, 40, 235, 255))   # still unmistakably backdrop
+    image.putpixel((2, 0), (216, 80, 160, 255))   # a hot pink costume: kept
+    image.putpixel((3, 0), (222, 169, 133, 255))  # skin: kept
+    out = drop_backdrop(image)
+    assert out.getpixel((0, 0)) == (0, 0, 0, 0)
+    assert out.getpixel((1, 0)) == (0, 0, 0, 0)
+    assert out.getpixel((2, 0)) == (216, 80, 160, 255)
+    assert out.getpixel((3, 0)) == (222, 169, 133, 255)
