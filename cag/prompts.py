@@ -117,6 +117,17 @@ def view_prompt(
     )
 
 
+#: The pose cue names arm positions and the skeleton draws bare joints, so
+#: between them a frame reads as an empty hand and the prop quietly disappears
+#: mid-set. Neither is describing what the character is holding.
+PROP_CONTINUITY = (
+    "The pose cue and the pose skeleton describe limb positions only. Neither one shows what the "
+    "character is holding: the skeleton has no props, and its rings mark joints, not empty hands. "
+    "Anything the description above says the character holds is still in that same hand in this "
+    "frame, drawn in full and clearly readable. Never replace a held prop with a bare fist or an "
+    "open hand, in any frame, whatever the arm is doing."
+)
+
 POSE_REFERENCE = (
     "The last reference image is a stick-figure skeleton of this exact pose, with the floor "
     "drawn as a grey line and hollow rings on the character-right wrist and ankle. Copy the "
@@ -149,6 +160,7 @@ def frame_prompt(
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_REFERENCE if pose_reference else "",
+            PROP_CONTINUITY,
             SIDE_LANGUAGE,
             "Match the reference images for identity, costume, colour, proportion and prop hand "
             "exactly; only the pose changes. The supporting heel stays on the floor. Do not "

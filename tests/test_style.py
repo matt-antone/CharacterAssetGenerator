@@ -61,3 +61,21 @@ def test_every_generation_prompt_carries_the_backdrop_clause():
     spec = load_spec("specs/belter.json")
     assert BACKDROP in view_prompt(spec, "B", "front")
     assert BACKDROP in frame_prompt(spec, "B", "N", FRAME_VIEWS["front"], "a cue", "key")
+
+
+def test_every_frame_prompt_defends_the_prop_against_the_pose_cue():
+    """The cue names arms and the skeleton draws bare joints; the mic vanished."""
+    from cag.prompts import FRAME_VIEWS, frame_prompt
+    from cag.spec import load_spec
+
+    prompt = frame_prompt(
+        load_spec("specs/belter.json"),
+        "B",
+        "N",
+        FRAME_VIEWS["front"],
+        "character-right arm at chest height, elbow bent ~90 degrees.",
+        "key",
+        pose_reference=True,
+    )
+    assert "still in that same hand" in prompt
+    assert "bare fist" in prompt
