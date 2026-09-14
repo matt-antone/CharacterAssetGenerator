@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KaraokeParty character",
+  "description": "A designer's character brief. Production settings and evidence are generated separately.",
+  "type": "object",
+  "required": [
+    "name",
+    "description",
+    "height",
+    "animations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "$ref": "#/$defs/text"
+    },
+    "description": {
+      "$ref": "#/$defs/text"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "age": {
+      "$ref": "#/$defs/text"
+    },
+    "height": {
+      "type": "string",
+      "pattern": "^\\s*([1-9][0-9]*)\\s*(?:'|′|ft)\\s*((?:[0-9]|1[01])(?:\\.[0-9]+)?)\\s*(?:\"|″|in)\\s*$",
+      "description": "Standing barefoot supporting-heel-to-skull-crown physical height in feet and inches; exclude hair, headwear, footwear and props. Production preserves this anatomical scale across every angle. Example: 5 ft 9 in."
+    },
+    "build": {
+      "$ref": "#/$defs/text"
+    },
+    "face": {
+      "$ref": "#/$defs/text"
+    },
+    "hair": {
+      "$ref": "#/$defs/text"
+    },
+    "outfit": {
+      "$ref": "#/$defs/text"
+    },
+    "prop": {
+      "$ref": "#/$defs/text"
+    },
+    "personality": {
+      "$ref": "#/$defs/text"
+    },
+    "performance_style": {
+      "$ref": "#/$defs/text"
+    },
+    "detail_level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 4,
+      "description": "Requested visual detail level. Each integer from 1 (least possible detail) through 10 (Illustrative Realism) selects one pinned single-frame detail reference."
+    },
+    "animations": {
+      "$ref": "#/$defs/animationDescriptions"
+    },
+    "palette": {
+      "$ref": "#/$defs/textList"
+    },
+    "recognition_cues": {
+      "$ref": "#/$defs/textList"
+    },
+    "avoid": {
+      "$ref": "#/$defs/textList"
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "textList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    },
+    "animationDescriptions": {
+      "type": "object",
+      "description": "Required character-specific performance intent for every supported animation. Values are normal prose, not identifiers.",
+      "required": ["dance", "sing", "flinch", "guard", "entrance", "victory", "ko"],
+      "additionalProperties": false,
+      "properties": {
+        "dance": { "$ref": "#/$defs/text" },
+        "sing": { "$ref": "#/$defs/text" },
+        "flinch": { "$ref": "#/$defs/text" },
+        "guard": { "$ref": "#/$defs/text" },
+        "entrance": { "$ref": "#/$defs/text" },
+        "victory": { "$ref": "#/$defs/text" },
+        "ko": { "$ref": "#/$defs/text" }
+      }
+    }
+  }
+}

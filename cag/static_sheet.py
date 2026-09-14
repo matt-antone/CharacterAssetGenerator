@@ -50,7 +50,13 @@ def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
     reply = model.invoke(
         [SystemMessage(BIBLE_SYSTEM), HumanMessage(bible_request(state["spec"]))]
     )
-    return {"bible": str(reply.content).strip()}
+    bible = str(reply.content).strip()
+    # Saved so a later run, or a different set, can pin the same identity
+    # instead of writing a fresh description of the same character.
+    record = state["work_dir"] / "bible.txt"
+    record.parent.mkdir(parents=True, exist_ok=True)
+    record.write_text(bible + "\n")
+    return {"bible": bible}
 
 
 def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
