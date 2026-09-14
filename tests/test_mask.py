@@ -6,6 +6,7 @@ from cag.geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW
 from cag.mask import (
     MaskError,
     backdrop_colour,
+    key_out,
     key_art_scale,
     register,
     subject_box,
@@ -121,3 +122,74 @@ def test_unmix_rounds_a_near_solid_subject_up_to_opaque():
     out = unmix(image, BLACK)
     assert out.getpixel((0, 0))[3] == 255
     assert out.getpixel((1, 0))[3] == 120
+
+
+def belter_ish(size=(60, 80), backdrop=(247, 4, 248)):
+    """A sprite-like figure on a sampled-magenta backdrop."""
+    image = Image.new("RGB", size, backdrop)
+    image.paste((192, 23, 35), (20, 20, 40, 45))   # crimson jacket
+    image.paste((75, 87, 111), (22, 45, 38, 70))   # denim
+    for x in range(19, 41):                         # black outline along the top
+        image.putpixel((x, 19), (0, 0, 0))
+    return image
+
+
+def test_key_out_removes_the_backdrop_and_keeps_the_black_outline():
+    image = belter_ish()
+    out = key_out(image, backdrop_colour(image))
+    assert out.getpixel((0, 0)) == (0, 0, 0, 0)          # backdrop cleared
+    assert out.getpixel((30, 30)) == (192, 23, 35, 255)  # jacket untouched
+    assert out.getpixel((30, 19)) == (0, 0, 0, 255)      # outline survives
+
+
+def test_key_out_pulls_a_faint_edge_back_towards_the_subject_colour():
+    """The ramp estimates coverage rather than solving it, so this is a move in
+    the right direction, not an exact recovery. It is what stops the fringe."""
+    backdrop = numpy.array([247.0, 4.0, 248.0])
+    jacket = numpy.array([192.0, 23.0, 35.0])
+    blend = 0.25 * jacket + 0.75 * backdrop
+    image = Image.new("RGB", (1, 1), tuple(int(v) for v in blend))
+    red, green, blue, alpha = key_out(image, backdrop).getpixel((0, 0))
+
+    before = numpy.max(numpy.abs(blend - jacket))
+    after = numpy.max(numpy.abs(numpy.array([red, green, blue]) - jacket))
+    assert 0 < alpha < 255
+    assert after < before  # measured: about a fifth of the backdrop share comes off
+
+
+def test_a_half_covered_high_contrast_edge_reads_as_solid():
+    """The documented ceiling of a fixed ramp — see SUBJECT_DISTANCE."""
+    backdrop = numpy.array([247.0, 4.0, 248.0])
+    blend = 0.5 * numpy.array([192.0, 23.0, 35.0]) + 0.5 * backdrop
+    image = Image.new("RGB", (1, 1), tuple(int(v) for v in blend))
+    assert key_out(image, backdrop).getpixel((0, 0))[3] == 255
+
+
+def test_key_out_leaves_far_fewer_soft_pixels_than_a_semantic_mask():
+    """Pixel art has hard edges; a colour key preserves them."""
+    out = numpy.array(key_out(belter_ish(), numpy.array([247.0, 4.0, 248.0])))
+    alpha = out[:, :, 3]
+    soft = int(((alpha > 0) & (alpha < 255)).sum())
+    assert soft < int((alpha == 255).sum()) // 10
+
+
+def test_cutout_falls_back_to_vision_when_the_key_finds_nothing(tmp_path, monkeypatch):
+    """An all-backdrop render keys to nothing, so the semantic mask takes over."""
+    from cag import mask as mask_module
+
+    blank = tmp_path / "blank.png"
+    Image.new("RGB", (40, 40), (247, 4, 248)).save(blank)
+    sentinel = Image.new("RGBA", (40, 40), (1, 2, 3, 255))
+    monkeypatch.setattr(mask_module, "vision_cutout", lambda src: sentinel)
+    assert mask_module.cutout(blank) is sentinel
+
+
+def test_cutout_uses_the_key_when_it_finds_a_subject(tmp_path, monkeypatch):
+    from cag import mask as mask_module
+
+    path = tmp_path / "figure.png"
+    belter_ish().save(path)
+    monkeypatch.setattr(
+        mask_module, "vision_cutout", lambda src: pytest.fail("should not need Vision")
+    )
+    assert numpy.array(mask_module.cutout(path))[:, :, 3].max() == 255

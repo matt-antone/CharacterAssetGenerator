@@ -30,9 +30,26 @@ BACKDROP_TOLERANCE = 24
 #: Width of the border band the backdrop colour is measured from.
 BORDER_PIXELS = 8
 
-#: Alpha this high is rounded up to solid. Vision returns a subject that peaks
-#: around 254, and a sprite should not be faintly transparent throughout.
+#: Alpha this high is rounded up to solid. A sprite should not come out faintly
+#: transparent throughout.
 ALPHA_CEILING = 250
+
+#: Colour distance from the backdrop at which a pixel counts as fully subject.
+#: Between the tolerance and this, alpha ramps, which keeps antialiased edges
+#: soft rather than jagged.
+#:
+#: ponytail: a fixed threshold, because the obvious alternative is worse.
+#: Scaling the ramp to the image's own contrast made almost the whole subject
+#: semi-transparent — 478k partial pixels against 2.5k. The ceiling is that an
+#: edge pixel half covered by a high-contrast colour is already past this
+#: distance, so it reads as solid and keeps a little backdrop tint. On pixel art
+#: with hard edges that is a couple of thousand pixels and invisible; on soft
+#: painterly art it would need real chroma maths keyed to the backdrop hue.
+SUBJECT_DISTANCE = 72
+
+#: A key that keeps less than this share of the canvas found no character, so
+#: the render falls back to Vision.
+MIN_SUBJECT_SHARE = 0.02
 
 
 class MaskError(RuntimeError):
@@ -40,7 +57,46 @@ class MaskError(RuntimeError):
 
 
 def cutout(src: Path | str) -> Image.Image:
-    """Return `src` as RGBA with everything but the foreground subject removed."""
+    """Return `src` as RGBA with the background removed.
+
+    Keys out the backdrop sampled from the border, the way the old project did
+    and with no cleanup afterwards. Vision is the fallback for a render the key
+    cannot read — it segments the subject semantically, so it survives a
+    backdrop the character happens to share a colour with.
+    """
+    with Image.open(src) as image:
+        source = image.convert("RGB")
+        keyed = key_out(source, backdrop_colour(source))
+    share = numpy.count_nonzero(numpy.array(keyed)[:, :, 3]) / (keyed.width * keyed.height)
+    if share >= MIN_SUBJECT_SHARE:
+        return keyed
+    return vision_cutout(src)
+
+
+def key_out(image: Image.Image, backdrop: numpy.ndarray) -> Image.Image:
+    """Remove a flat backdrop by colour, and divide its share back out."""
+    rgb = numpy.array(image.convert("RGB"), dtype=numpy.float64)
+    distance = numpy.max(numpy.abs(rgb - backdrop), axis=2)
+    alpha = numpy.clip(
+        (distance - BACKDROP_TOLERANCE) / (SUBJECT_DISTANCE - BACKDROP_TOLERANCE), 0, 1
+    )
+    alpha[alpha * 255 >= ALPHA_CEILING] = 1.0
+
+    subject = numpy.divide(
+        rgb - (1 - alpha[:, :, None]) * backdrop,
+        alpha[:, :, None],
+        out=numpy.zeros_like(rgb),
+        where=alpha[:, :, None] > 0,
+    )
+    pixels = numpy.concatenate(
+        [numpy.clip(subject, 0, 255), (alpha * 255)[:, :, None]], axis=2
+    )
+    pixels[alpha == 0] = 0
+    return Image.fromarray(pixels.astype(numpy.uint8), "RGBA")
+
+
+def vision_cutout(src: Path | str) -> Image.Image:
+    """Segment the subject with Apple Vision. macOS only."""
     import Quartz  # noqa: PLC0415 - macOS frameworks, imported at call time
     import Vision
     from Foundation import NSURL
