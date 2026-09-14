@@ -54,11 +54,22 @@ def test_draw_retries_then_fails_when_no_file(monkeypatch, tmp_path):
     assert len(calls) == 2
 
 
-def test_draw_refuses_to_overwrite(tmp_path):
+def test_draw_reuses_a_finished_render_so_a_run_can_resume(monkeypatch, tmp_path):
     existing = tmp_path / "art.png"
-    existing.write_bytes(b"x")
+    Image.new("RGB", (8, 8)).save(existing)
+
+    def explode(*args, **kwargs):
+        raise AssertionError("an existing render must not be drawn again")
+
+    monkeypatch.setattr(subprocess, "run", explode)
+    assert draw("a singer", existing) == existing
+
+
+def test_draw_refuses_to_overwrite_when_reuse_is_off(tmp_path):
+    existing = tmp_path / "art.png"
+    Image.new("RGB", (8, 8)).save(existing)
     with pytest.raises(DrawError, match="refusing to overwrite"):
-        draw("a singer", existing)
+        draw("a singer", existing, reuse=False)
 
 
 def test_draw_rejects_unreadable_output(monkeypatch, tmp_path):

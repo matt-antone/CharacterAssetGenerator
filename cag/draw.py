@@ -35,15 +35,22 @@ def draw(
     references: Sequence[Path | str] = (),
     timeout: int = 900,
     attempts: int = 2,
+    reuse: bool = True,
 ) -> Path:
     """Generate one image for `prompt` and save it at `out_path`.
 
     `references` are attached to the prompt as reference images — the approved
     key art, a neighbouring frame, whatever locks identity for this render.
+
+    A render that already exists is kept, never redrawn and never overwritten,
+    so a run interrupted at frame twelve resumes at frame twelve. Delete the
+    file to force a redraw, or pass `reuse=False` to make its presence an error.
     """
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if out_path.exists():
+        if reuse:
+            return _verify(out_path)
         raise DrawError(f"{out_path} already exists; refusing to overwrite a source")
 
     argv = [
