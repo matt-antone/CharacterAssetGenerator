@@ -120,15 +120,22 @@ def keyframe(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationSt
 
 
 def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
-    """Fill the in-betweens in order, each from the frames either side of it."""
+    """Fill the in-betweens in order, each continuing from the frame before it.
+
+    Only the previous frame comes along, not the locked frame ahead. Both ends
+    used to be attached, and between them and the key art the pose skeleton was
+    outvoted three to one by references showing a character standing still —
+    the set came back barely moving.
+    """
     motion = state["motion"]
     sources = dict(state["sources"])
     for frame in motion.frames:
         if frame.is_locked:
             continue
-        before, after = motion.neighbours(frame)
+        before, _ = motion.neighbours(frame)
         references = [state["key_art"]]
-        references += [sources[i] for i in (before, after) if i in sources]
+        if before in sources:
+            references.append(sources[before])
         sources[frame.index] = _draw_frame(state, frame, references, draw_fn)
     return {"sources": sources}
 

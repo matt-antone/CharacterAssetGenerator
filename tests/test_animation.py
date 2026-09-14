@@ -81,17 +81,17 @@ def test_keyframes_reference_the_key_art_and_their_own_pose(run):
         assert pose_ref(call).stem == call["out"].stem
 
 
-def test_inbetweens_reference_the_key_art_and_both_neighbours(run):
+def test_inbetweens_continue_from_the_frame_before_them_only(run):
+    """The frame ahead is left off so it cannot vote against the pose."""
     by_index = {int(c["out"].stem): c for c in fake_draw.calls}
-    # Frame 1 sits between locked frames 0 and 2.
-    assert sources(by_index[1]) == [0, 2]
-    # Frame 8 follows locked frame 7 and runs up to pilot frame 9.
-    assert sources(by_index[8]) == [7, 9]
+    assert sources(by_index[1]) == [0]
+    assert sources(by_index[8]) == [7]
+    assert sources(by_index[15]) == [14]
 
 
-def test_the_last_inbetween_closes_onto_frame_zero(run):
-    by_index = {int(c["out"].stem): c for c in fake_draw.calls}
-    assert sources(by_index[15]) == [14, 0]
+def test_no_inbetween_carries_more_than_one_neighbour(run):
+    for call in fake_draw.calls:
+        assert len(sources(call)) <= 1
 
 
 def test_the_pose_skeleton_is_always_the_last_reference(run):
