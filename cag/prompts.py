@@ -187,6 +187,7 @@ def sheet_prompt(
     pose_reference: bool = False,
     detail_level: int = DEFAULT_DETAIL_LEVEL,
     detail_reference: bool = False,
+    per_row: int = 4,
 ) -> str:
     """Prompt for one render holding a whole animation sequence.
 
@@ -195,6 +196,14 @@ def sheet_prompt(
     side the same size without being asked, and that is what the sheet is for.
     """
     poses = "\n".join(f"{n} ({role}): {cue}" for n, (role, cue) in enumerate(cues, 1))
+    # Naming the grid costs nothing — the generator already lays sheets out this way — and it
+    # keeps the prompt saying what the pose reference beside it shows.
+    rows = -(-len(cues) // per_row)
+    layout = (
+        f"Arrange the figures in one row of {len(cues)}"
+        if rows == 1
+        else f"Arrange the figures in {rows} rows of {per_row}"
+    )
     return "\n\n".join(
         part for part in [
             f"Draw {spec.name} {len(cues)} times in one image, as the consecutive frames of one "
@@ -202,9 +211,10 @@ def sheet_prompt(
             bible,
             set_note,
             view_clause,
-            "Arrange the figures in reading order, left to right and then the next row down, with "
-            "clear background between every figure. No figure touches another figure or the canvas "
-            "edge. No numbers, labels, frame lines or grid lines: only the figures on the backdrop.",
+            f"Draw this on a wide landscape canvas, wider than it is tall. {layout} in "
+            "reading order, left to right and then the next row down, with clear background "
+            "between every figure. No figure touches another figure or the canvas edge. No "
+            "numbers, labels, frame lines or grid lines: only the figures on the backdrop.",
             "Every figure is the same character at the same size and the same distance from the "
             f"viewer; only the pose changes from one to the next:\n{poses}",
             STYLE,

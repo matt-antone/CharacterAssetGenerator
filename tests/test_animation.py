@@ -295,7 +295,14 @@ def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
         prompt = call["prompt"]
         assert f"{animation.SHEET_FRAMES} times in one image" in prompt
         assert "same size" in prompt
-        assert "tall" not in prompt and "px" not in prompt and "480" not in prompt
+        # The canvas shape and the grid are told, because the generator picks both otherwise and
+        # a tall canvas crowds eight figures into each other. Neither is a measurement: no size
+        # for the figures, and no ratio for the canvas.
+        assert "wider than it is tall" in prompt
+        rows = -(-animation.SHEET_FRAMES // animation.FIGURES_PER_ROW)
+        assert f"{rows} rows of {animation.FIGURES_PER_ROW}" in prompt
+        assert "px" not in prompt and "480" not in prompt
+        assert "pixels tall" not in prompt
         assert "stick-figure skeleton" in prompt
         grid = Path(call["refs"][-1])
         assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")

@@ -150,6 +150,9 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
 SHEET_FRAMES = 8
 FIGURES_PER_ROW = 4
 
+#: Draws allowed per sheet before the set is given up on.
+SHEET_ATTEMPTS = 4
+
 
 def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
     """Draw the set as one image of every frame, then slice it into sources.
@@ -186,12 +189,16 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
             pose_reference=pose_grid is not None,
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
+            per_row=FIGURES_PER_ROW,
         )
         references = [state["key_art"], *([detail] if detail else []), *([pose_grid] if pose_grid else [])]
         path = state["work_dir"] / "source" / state["set_name"] / f"sheet-{start:02d}.png"
-        # Two tries: a sheet with the wrong figure count cannot be salvaged frame by frame.
-        # The reject is kept beside the prompt, so what came back can be read against it.
-        for attempt in range(2):
+        # A sheet with the wrong figure count cannot be salvaged frame by frame, so it is drawn
+        # again. Each draw is an independent roll: at the rate measured over a full eight-character
+        # run, two tries lost about one set in six and four lose closer to one in forty. Only a
+        # failure costs the extra call. The reject is kept beside the prompt, so what came back can
+        # be read against it.
+        for attempt in range(SHEET_ATTEMPTS):
             drawn = draw_fn(prompt, path, references=references)
             try:
                 cells = slice_sheet(drawn, len(chunk))
