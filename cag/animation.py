@@ -16,11 +16,12 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 
-from .draw import draw
+from .assemble import sprite_sheet
+from .draw import DrawError, draw
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
-from .mask import pose_to_cell
+from .mask import MaskError, pose_to_cell, set_to_cells, slice_sheet
 from .motion import Frame, MotionSheet
-from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt
+from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, sheet_prompt
 from .skeleton import write_skeletons
 from .style import detail_frame
 from .spec import CharacterSpec
@@ -41,6 +42,8 @@ class AnimationState(TypedDict, total=False):
     poses: dict[int, Path]
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
+    #: Frame indices drawn together on one render, per render, in sheet mode.
+    sheets: list[list[int]]
     #: Masked frames registered into the cell, by frame index.
     cells: dict[int, Path]
 
@@ -141,8 +144,75 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     return {"sources": sources}
 
 
-def mask_frames(state: AnimationState) -> AnimationState:
+#: Figures per render in sheet mode. The whole set in one image when it fits,
+#: so every figure is drawn at one size against its neighbours.
+# ponytail: 8 fills a 4x2 grid; drop to 4 if the outline comes back thinner than CUT_IN can spare.
+SHEET_FRAMES = 8
+FIGURES_PER_ROW = 4
+
+
+def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
+    """Draw the set as one image of every frame, then slice it into sources.
+
+    The generator is shown all the poses at once and told nothing about size:
+    it cannot follow a measurement, but it keeps figures it can see side by
+    side the same size unasked. Layout is found afterwards by the backdrop
+    between figures, never assumed, so a sheet that came back with the wrong
+    number of figures is thrown away and drawn again.
+    """
+    spec = state["spec"]
+    motion = state["motion"]
+    poses = state.get("poses", {})
+    detail = detail_frame(spec.detail_level)
+    sources = {}
+    sheets = []
+    for start in range(0, len(motion.frames), SHEET_FRAMES):
+        chunk = motion.frames[start : start + SHEET_FRAMES]
+        sheets.append([frame.index for frame in chunk])
+        cues = [(frame.role, f"{frame.cue} {frame.note}".strip()) for frame in chunk]
+        pose_grid = None
+        if poses:
+            pose_grid = sprite_sheet(
+                [poses[frame.index] for frame in chunk],
+                state["work_dir"] / "poses" / state["set_name"] / f"sheet-{start:02d}.png",
+                columns=FIGURES_PER_ROW,
+            )
+        prompt = sheet_prompt(
+            spec,
+            state["bible"],
+            state["set_note"],
+            view_clause(state),
+            cues,
+            pose_reference=pose_grid is not None,
+            detail_level=spec.detail_level,
+            detail_reference=detail is not None,
+        )
+        references = [state["key_art"], *([detail] if detail else []), *([pose_grid] if pose_grid else [])]
+        path = state["work_dir"] / "source" / state["set_name"] / f"sheet-{start:02d}.png"
+        # Two tries: a sheet with the wrong figure count cannot be salvaged frame by frame.
+        # The reject is kept beside the prompt, so what came back can be read against it.
+        for attempt in range(2):
+            drawn = draw_fn(prompt, path, references=references)
+            try:
+                cells = slice_sheet(drawn, len(chunk))
+                break
+            except MaskError as error:
+                drawn.rename(path.with_name(f"{path.stem}.rejected-{attempt}.png"))
+                last_error = error
+        else:
+            raise DrawError(f"could not draw {path.name}: {last_error}")
+        for frame, cell in zip(chunk, cells):
+            source = frame_path(state, "source", frame.index)
+            cell.save(source, format="PNG")
+            sources[frame.index] = source
+    return {"sources": sources, "sheets": sheets}
+
+
+def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationState:
     """Register every frame at the scale its own pose asks for.
+
+    `single_scale` is for frames drawn together on one sheet: one factor for
+    all of them, measured across the set. See `set_to_cells`.
 
     The static sheet's scale only comes along as a fallback. It is pixels per
     source pixel, read off one standing key art and calibrated to the 7' static
@@ -153,6 +223,18 @@ def mask_frames(state: AnimationState) -> AnimationState:
     motion = state["motion"]
     fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
     poses = {frame.index: frame.pts for frame in motion.frames}
+    if single_scale:
+        return {
+            "cells": set_to_cells(
+                state["sources"],
+                partial(frame_path, state, "cells"),
+                poses,
+                motion.floor_y,
+                motion.body_h,
+                state["spec"].height_inches,
+                state.get("sheets"),
+            )
+        }
     return {
         "cells": {
             index: pose_to_cell(
@@ -169,19 +251,27 @@ def mask_frames(state: AnimationState) -> AnimationState:
     }
 
 
-def build_animation_graph(model: BaseChatModel, draw_fn: Callable[..., Path] | None = None):
+def build_animation_graph(
+    model: BaseChatModel, draw_fn: Callable[..., Path] | None = None, sheet_mode: bool = True
+):
+    """Sheet mode draws the whole set in one render; off, it draws a frame at a time."""
     # Resolved here, not as a default, so the module attribute stays swappable.
     draw_fn = draw_fn or draw
     graph = StateGraph(AnimationState)
     graph.add_node("poses", pose_sheets)
     graph.add_node("direct", partial(direct, model=model))
-    graph.add_node("keyframe", partial(keyframe, draw_fn=draw_fn))
-    graph.add_node("tween", partial(tween, draw_fn=draw_fn))
-    graph.add_node("mask", mask_frames)
+    graph.add_node("mask", partial(mask_frames, single_scale=sheet_mode))
     graph.add_edge(START, "poses")
     graph.add_edge("poses", "direct")
-    graph.add_edge("direct", "keyframe")
-    graph.add_edge("keyframe", "tween")
-    graph.add_edge("tween", "mask")
+    if sheet_mode:
+        graph.add_node("sheet", partial(sheet, draw_fn=draw_fn))
+        graph.add_edge("direct", "sheet")
+        graph.add_edge("sheet", "mask")
+    else:
+        graph.add_node("keyframe", partial(keyframe, draw_fn=draw_fn))
+        graph.add_node("tween", partial(tween, draw_fn=draw_fn))
+        graph.add_edge("direct", "keyframe")
+        graph.add_edge("keyframe", "tween")
+        graph.add_edge("tween", "mask")
     graph.add_edge("mask", END)
     return graph.compile()

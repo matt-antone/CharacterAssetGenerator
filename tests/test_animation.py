@@ -35,7 +35,7 @@ def run(tmp_path, monkeypatch):
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     graph = animation.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, sheet_mode=False
     )
     return graph.invoke(
         {
@@ -134,7 +134,7 @@ def test_a_sheet_without_poses_draws_without_one(tmp_path, monkeypatch):
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     animation_module.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, sheet_mode=False
     ).invoke(
         {
             "spec": load_spec("specs/velvet-lou.json"),
@@ -187,3 +187,153 @@ def test_each_cell_is_scaled_by_the_pose_of_its_own_frame(run):
         assert height == pytest.approx(target * stretch, abs=2)
         heights.append(height)
     assert len(set(heights)) > 1  # the poses really are telling them apart
+
+
+def fake_sheet_draw(prompt, out_path, references=(), **kwargs):
+    """One render of SHEET_FRAMES figures in a 4-wide grid, each a different shade."""
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    per_row = animation.FIGURES_PER_ROW
+    rows = -(-animation.SHEET_FRAMES // per_row)
+    # Each later sheet comes back at a different magnification, as real ones do.
+    m = 1 + 0.5 * (int(out_path.stem.split("-")[1]) // animation.SHEET_FRAMES)
+    image = Image.new("RGB", (int(per_row * 120 * m), int(rows * 220 * m)), (255, 0, 255))
+    for n in range(animation.SHEET_FRAMES):
+        x, y = int(((n % per_row) * 120 + 40) * m), int(((n // per_row) * 220 + 20) * m)
+        image.paste((20 + 10 * n,) * 3, (x, y, x + int(20 * m), y + int(160 * m)))
+    image.save(out_path)
+    fake_sheet_draw.calls.append({"prompt": prompt, "out": out_path, "refs": list(references)})
+    return out_path
+
+
+@pytest.fixture
+def sheet_run(tmp_path, monkeypatch):
+    fake_sheet_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    graph = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_sheet_draw, sheet_mode=True
+    )
+    return graph.invoke(
+        {
+            "spec": load_spec("specs/velvet-lou.json"),
+            "bible": "A lounge performer.",
+            "key_art": key_art,
+            "scale": 2.875,
+            "motion": load_motion(SAMPLE),
+            "set_name": "dance",
+            "work_dir": tmp_path / "lou",
+        }
+    )
+
+
+def test_sheet_mode_draws_the_set_in_as_few_renders_as_it_fits(sheet_run):
+    assert len(fake_sheet_draw.calls) == -(-16 // animation.SHEET_FRAMES)
+    assert sorted(sheet_run["sources"]) == list(range(16))
+    assert sorted(sheet_run["cells"]) == list(range(16))
+
+
+def test_sheet_mode_slices_figures_back_in_frame_order(sheet_run):
+    # Shade rises with position on the sheet, so frame order follows reading order.
+    shades = []
+    for index in range(16):
+        with Image.open(sheet_run["sources"][index]) as source:
+            shades.append(source.getpixel((source.width // 2, source.height // 2))[0])
+    assert shades == [20 + 10 * (i % animation.SHEET_FRAMES) for i in range(16)]
+
+
+def test_sheet_mode_registers_every_frame_at_one_scale(sheet_run):
+    """Same size on a sheet means same size in the cell — and across sheets too,
+    though the fake draws the second one half again as large."""
+    assert sheet_run["sheets"] == [list(range(8)), list(range(8, 16))]
+    heights = set()
+    for index in range(16):
+        with Image.open(sheet_run["cells"][index]) as cell:
+            assert cell.size == (480, 560)
+            heights.add(mask.subject_box(cell)[3] - mask.subject_box(cell)[1])
+    # Nearest-neighbour rounding from two source sizes; a missed sheet would be ~200px off.
+    assert max(heights) - min(heights) <= 2
+
+
+def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkeypatch):
+    """No skeleton means no per-pose reading; the sheet's own figures set the scale."""
+    import json
+
+    raw = json.loads(Path(SAMPLE).read_text())
+    for frame in raw["frames"]:
+        frame.pop("pts", None)
+    stripped = tmp_path / "motion.json"
+    stripped.write_text(json.dumps(raw))
+    fake_sheet_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    result = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_sheet_draw, sheet_mode=True
+    ).invoke(
+        {
+            "spec": load_spec("specs/velvet-lou.json"),
+            "bible": "A lounge performer.",
+            "key_art": key_art,
+            "scale": 2.875,  # would put a 160px figure at 460px; the sheet must not use it
+            "motion": load_motion(stripped),
+            "set_name": "dance",
+            "work_dir": tmp_path / "lou",
+        }
+    )
+    for call in fake_sheet_draw.calls:
+        assert "stick-figure" not in call["prompt"]
+    for index in range(16):
+        with Image.open(result["cells"][index]) as cell:
+            top, bottom = mask.subject_box(cell)[1], mask.subject_box(cell)[3]
+            assert abs((bottom - top) - anim_subject_height_px(69)) <= 2
+
+
+def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
+    for call in fake_sheet_draw.calls:
+        prompt = call["prompt"]
+        assert f"{animation.SHEET_FRAMES} times in one image" in prompt
+        assert "same size" in prompt
+        assert "tall" not in prompt and "px" not in prompt and "480" not in prompt
+        assert "stick-figure skeleton" in prompt
+        grid = Path(call["refs"][-1])
+        assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")
+        with Image.open(grid) as image:
+            assert image.size == (480 * animation.FIGURES_PER_ROW, 560 * 2)
+
+
+def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monkeypatch):
+    def flaky(prompt, out_path, references=(), **kwargs):
+        if not flaky.calls:
+            out_path = Path(out_path)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            image = Image.new("RGB", (400, 200), (255, 0, 255))
+            image.paste((40, 40, 40), (40, 20, 60, 180))
+            image.paste((80, 80, 80), (200, 20, 220, 180))
+            image.save(out_path)
+            flaky.calls.append(out_path)
+            return out_path
+        return fake_sheet_draw(prompt, out_path, references, **kwargs)
+
+    flaky.calls = []
+    fake_sheet_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    result = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=flaky, sheet_mode=True
+    ).invoke(
+        {
+            "spec": load_spec("specs/velvet-lou.json"),
+            "bible": "A lounge performer.",
+            "key_art": key_art,
+            "scale": 2.875,
+            "motion": load_motion(SAMPLE),
+            "set_name": "dance",
+            "work_dir": tmp_path / "lou",
+        }
+    )
+    assert sorted(result["cells"]) == list(range(16))
+    assert (tmp_path / "lou/source/dance/sheet-00.rejected-0.png").exists()
+    assert (tmp_path / "lou/source/dance/sheet-00.png").exists()

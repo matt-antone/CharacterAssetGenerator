@@ -44,12 +44,17 @@ def motion_for(spec: CharacterSpec, set_name: str, work_dir: Path, supplied: Pat
 
 
 def render_set(
-    spec: CharacterSpec, set_name: str, static: dict, work_dir: Path, supplied: Path | None
+    spec: CharacterSpec,
+    set_name: str,
+    static: dict,
+    work_dir: Path,
+    supplied: Path | None,
+    sheet_mode: bool = True,
 ) -> dict:
     """Draw and mask one animation set. Safe to run alongside other sets."""
     motion = motion_for(spec, set_name, work_dir, supplied)
     log(f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, {motion.view} view")
-    animated = build_animation_graph(ChatCodex()).invoke(
+    animated = build_animation_graph(ChatCodex(), sheet_mode=sheet_mode).invoke(
         {
             "spec": spec,
             "bible": static["bible"],
@@ -71,6 +76,7 @@ def build(
     work_root: Path,
     out_root: Path,
     jobs: int = 1,
+    sheet_mode: bool = True,
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -94,7 +100,9 @@ def build(
         log(f"[sets] {', '.join(chosen)} across {min(jobs, len(chosen))} lane(s)")
         with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
             futures = {
-                name: pool.submit(render_set, spec, name, static, work_dir, motion_path)
+                name: pool.submit(
+                    render_set, spec, name, static, work_dir, motion_path, sheet_mode
+                )
                 for name in chosen
             }
             for name, future in futures.items():
@@ -148,11 +156,17 @@ def main(argv: list[str] | None = None) -> int:
     build_parser.add_argument(
         "--jobs", type=int, default=1, help="sets to render at once (default 1)"
     )
+    build_parser.add_argument(
+        "--per-frame",
+        dest="sheet_mode",
+        action="store_false",
+        help="draw one render per frame instead of one sheet per set",
+    )
     build_parser.add_argument("--work", type=Path, default=Path("work"))
     build_parser.add_argument("--out", type=Path, default=Path("outputs"))
 
     args = parser.parse_args(argv)
-    build(args.spec, args.motion, args.set_names, args.work, args.out, args.jobs)
+    build(args.spec, args.motion, args.set_names, args.work, args.out, args.jobs, args.sheet_mode)
     return 0
 
 

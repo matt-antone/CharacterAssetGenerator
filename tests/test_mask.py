@@ -252,3 +252,41 @@ def test_animation_frames_stand_on_the_animation_contact_row():
     cell = register(figure(), key_art_scale(figure(), 69), ANIM_CONTACT_ROW)
     assert subject_box(cell)[3] - 1 == ANIM_CONTACT_ROW
     assert ANIM_CONTACT_ROW < CONTACT_ROW  # further up: the frame keeps a margin
+
+
+def figure_sheet(path, boxes, size=(400, 300)):
+    """A magenta sheet with one flat grey figure per box, shade rising in list order."""
+    sheet = Image.new("RGB", size, (255, 0, 255))
+    for n, box in enumerate(boxes):
+        sheet.paste((30 + 20 * n,) * 3, box)
+    sheet.save(path)
+    return path
+
+
+def test_slice_sheet_finds_figures_in_reading_order(tmp_path):
+    from cag.mask import slice_sheet
+
+    # Two rows of two, the second row shifted so a fixed grid would miss it.
+    boxes = [(20, 20, 80, 130), (150, 30, 220, 130), (40, 170, 90, 280), (250, 160, 330, 280)]
+    cells = slice_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 4)
+    shades = [cell.getpixel((cell.width // 2, cell.height // 2))[0] for cell in cells]
+    assert shades == [30, 50, 70, 90]
+    for cell, (l, t, r, b) in zip(cells, boxes):
+        assert (cell.width, cell.height) == (r - l + 32, b - t + 32)
+        assert cell.getpixel((0, 0)) == (255, 0, 255)
+
+
+def test_slice_sheet_bridges_a_gap_inside_one_figure(tmp_path):
+    from cag.mask import slice_sheet
+
+    # A raised arm 6px clear of the torso is still one figure.
+    boxes = [(20, 40, 60, 130), (66, 20, 76, 80)]
+    cells = slice_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 1)
+    assert cells[0].width == 76 - 20 + 32
+
+
+def test_slice_sheet_rejects_the_wrong_figure_count(tmp_path):
+    from cag.mask import slice_sheet
+
+    with pytest.raises(MaskError, match="holds 2 figures, not 3"):
+        slice_sheet(figure_sheet(tmp_path / "sheet.png", [(20, 20, 60, 100), (100, 20, 140, 100)]), 3)
