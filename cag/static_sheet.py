@@ -46,14 +46,20 @@ def cell_path(state: StaticState, view: str) -> Path:
 
 
 def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
-    """Lock the character's appearance in words before drawing anything."""
+    """Lock the character's appearance in words before drawing anything.
+
+    A bible already on disk is the one every existing frame was drawn against,
+    so it is read back rather than rewritten. Asking for a second description of
+    the same brief returns different words, and a set rendered later would then
+    quote a different identity than the sets beside it.
+    """
+    record = state["work_dir"] / "bible.txt"
+    if record.exists():
+        return {"bible": record.read_text().strip()}
     reply = model.invoke(
         [SystemMessage(BIBLE_SYSTEM), HumanMessage(bible_request(state["spec"]))]
     )
     bible = str(reply.content).strip()
-    # Saved so a later run, or a different set, can pin the same identity
-    # instead of writing a fresh description of the same character.
-    record = state["work_dir"] / "bible.txt"
     record.parent.mkdir(parents=True, exist_ok=True)
     record.write_text(bible + "\n")
     return {"bible": bible}
