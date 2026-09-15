@@ -89,3 +89,13 @@ def test_produces_four_registered_cells(run):
 def test_scale_is_measured_once_from_the_key_art(run):
     # 160px of drawn subject must become 5'9" == 460px of cell.
     assert run["scale"] == pytest.approx(460 / 160)
+
+
+def test_a_bible_on_disk_is_reused_rather_than_rewritten(tmp_path):
+    """Later sets must quote the identity the earlier frames were drawn against."""
+    work = tmp_path / "lou"
+    work.mkdir()
+    (work / "bible.txt").write_text(BIBLE + "\n")
+    model = FakeMessagesListChatModel(responses=[AIMessage("A different performer entirely.")])
+    state = static_sheet.write_bible({"spec": load_spec("specs/velvet-lou.json"), "work_dir": work}, model)
+    assert state["bible"] == BIBLE

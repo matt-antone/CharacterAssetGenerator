@@ -2,13 +2,21 @@ import numpy
 import pytest
 from PIL import Image
 
-from cag.geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW
+from cag.geometry import (
+    ANIM_CONTACT_ROW,
+    CELL_HEIGHT,
+    CELL_WIDTH,
+    CONTACT_ROW,
+    anim_subject_height_px,
+)
+from cag.skeleton import pose_extent, stature
 from cag.mask import (
     KEY_THRESHOLD,
     MaskError,
     backdrop_colour,
     backdrop_share,
     cut_in,
+    frame_scale,
     key_out,
     key_art_scale,
     keyable,
@@ -203,3 +211,44 @@ def test_cutout_uses_the_key_when_it_finds_a_subject(tmp_path, monkeypatch):
         mask_module, "vision_cutout", lambda src: pytest.fail("should not need Vision")
     )
     assert numpy.array(mask_module.cutout(path))[:, :, 3].max() == 255
+
+
+#: A standing skeleton, enough of one for a scale to be read off it.
+POSE = {
+    "anL": [48, 180], "anR": [52, 180],
+    "knL": [48, 140], "knR": [52, 140],
+    "hipL": [48, 100], "hipR": [52, 100],
+    "shL": [46, 60], "shR": [54, 60],
+    "elL": [44, 85], "elR": [56, 85],
+    "wrL": [43, 105], "wrR": [57, 105],
+    "earL": [48, 45], "earR": [52, 45], "nose": [50, 47],
+}
+
+
+def test_frame_scale_ignores_how_big_the_generator_drew_the_frame():
+    """The animation bug itself: every frame is a separate generation, drawn at
+    whatever size, and a fixed factor piped that size straight into the cell."""
+    small = figure(size=(200, 400), box=(80, 40, 120, 360))
+    large = figure(size=(400, 800), box=(160, 80, 240, 720))  # same pose, twice over
+    heights = []
+    for art in (small, large):
+        cell = register(art, frame_scale(art, POSE, 182, 140, 69), ANIM_CONTACT_ROW)
+        top, bottom = subject_box(cell)[1], subject_box(cell)[3]
+        heights.append(bottom - top)
+    assert heights[0] == pytest.approx(heights[1], abs=1)
+
+
+def test_frame_scale_puts_a_character_at_their_height_in_the_eight_foot_frame():
+    art = figure(size=(200, 400), box=(80, 40, 120, 360))
+    cell = register(art, frame_scale(art, POSE, 182, 140, 69), ANIM_CONTACT_ROW)
+    top, bottom = subject_box(cell)[1], subject_box(cell)[3]
+    # The drawn box spans the whole pose, of which stature is the part that is
+    # height; scaled back up it must be 5'9" on the animation frame's ruler.
+    implied = (bottom - top) * stature(POSE, 140) / pose_extent(POSE, 182, 140)
+    assert implied == pytest.approx(anim_subject_height_px(69), abs=2)
+
+
+def test_animation_frames_stand_on_the_animation_contact_row():
+    cell = register(figure(), key_art_scale(figure(), 69), ANIM_CONTACT_ROW)
+    assert subject_box(cell)[3] - 1 == ANIM_CONTACT_ROW
+    assert ANIM_CONTACT_ROW < CONTACT_ROW  # further up: the frame keeps a margin

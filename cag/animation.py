@@ -17,7 +17,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 
 from .draw import draw
-from .mask import mask_to_cell
+from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
+from .mask import pose_to_cell
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt
 from .skeleton import write_skeletons
@@ -141,9 +142,28 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
 
 
 def mask_frames(state: AnimationState) -> AnimationState:
+    """Register every frame at the scale its own pose asks for.
+
+    The static sheet's scale only comes along as a fallback. It is pixels per
+    source pixel, read off one standing key art and calibrated to the 7' static
+    cell; an animation frame is neither standing, nor drawn at the key art's
+    size, nor 7' tall. Converting it to this frame's scale is the most it can
+    say about a set with no landmarks to measure.
+    """
+    motion = state["motion"]
+    fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
+    poses = {frame.index: frame.pts for frame in motion.frames}
     return {
         "cells": {
-            index: mask_to_cell(source, frame_path(state, "cells", index), state["scale"])
+            index: pose_to_cell(
+                source,
+                frame_path(state, "cells", index),
+                poses.get(index, {}),
+                motion.floor_y,
+                motion.body_h,
+                state["spec"].height_inches,
+                fallback,
+            )
             for index, source in sorted(state["sources"].items())
         }
     }

@@ -23,6 +23,14 @@ BONES = (
     ("shR", "elR"), ("elR", "wrR"),
 )
 
+#: Head radius, in body_h units. The drawn circle and the crown agree on it.
+HEAD_RADIUS = 0.07
+
+#: Ankle joint height above the floor, in body_h units. MediaPipe gives no heel
+#: landmark, so the last span from ankle down to the ground is assumed.
+# ponytail: anthropometric average; tune per rig if a character's feet read wrong.
+ANKLE_RISE = 0.039
+
 SIZE = (480, 560)
 MARGIN = 40
 INK = (0, 0, 0)
@@ -33,6 +41,50 @@ SPINE_WIDTH = 11
 
 def mid(a: list[float], b: list[float]) -> list[float]:
     return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]
+
+
+def span(a: list[float], b: list[float]) -> float:
+    return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
+
+
+def crown(pts: dict[str, list[float]], body_h: float) -> list[float]:
+    """Top of the skull: one head radius past the ears, along the neck's own axis.
+
+    Not straight up. A tilted head carries its crown sideways, and measuring to a
+    point directly above the ears would lose exactly the height the tilt costs.
+    """
+    ear = mid(pts["earL"], pts["earR"])
+    neck = mid(pts["shL"], pts["shR"])
+    dx, dy = ear[0] - neck[0], ear[1] - neck[1]
+    reach = span(ear, neck)
+    if reach < 1e-9:
+        return [ear[0], ear[1] - HEAD_RADIUS * body_h]
+    step = HEAD_RADIUS * body_h / reach
+    return [ear[0] + dx * step, ear[1] + dy * step]
+
+
+def stature(pts: dict[str, list[float]], body_h: float) -> float:
+    """Heel-to-crown measured along the bones, so the pose cannot change it.
+
+    Summing segment lengths is what makes this pose-invariant. A vertical extent
+    shortens the moment a character crouches or leans, and normalising on one
+    inflates them back to full height; the leg is the same leg either way.
+
+    The supporting leg is measured, the torso down the midline, and the two are
+    added rather than walked through — a chain that detoured via the supporting
+    hip would pick up half a pelvis width that is not part of anyone's height.
+    """
+    lower = "L" if pts["anL"][1] > pts["anR"][1] else "R"
+    ankle, knee, hip = pts[f"an{lower}"], pts[f"kn{lower}"], pts[f"hip{lower}"]
+    leg = ANKLE_RISE * body_h + span(ankle, knee) + span(knee, hip)
+    torso = span(mid(pts["hipL"], pts["hipR"]), mid(pts["shL"], pts["shR"]))
+    return leg + torso + span(mid(pts["shL"], pts["shR"]), crown(pts, body_h))
+
+
+def pose_extent(pts: dict[str, list[float]], floor_y: float, body_h: float) -> float:
+    """Vertical span of one pose, crown and floor included: what gets drawn."""
+    ys = [point[1] for point in pts.values()] + [floor_y, crown(pts, body_h)[1]]
+    return max(ys) - min(ys)
 
 
 def pose_box(frames: list[dict], floor_y: float) -> tuple[float, float, float, float]:
@@ -71,7 +123,7 @@ def skeleton(
     )
 
     head = place(mid(pts["earL"], pts["earR"]))
-    radius = 0.07 * body_h * scale
+    radius = HEAD_RADIUS * body_h * scale
     pen.ellipse(
         [head[0] - radius, head[1] - radius, head[0] + radius, head[1] + radius],
         outline=INK,

@@ -11,10 +11,17 @@ hue, so it is thrown away rather than judged — `STYLE` mandates an outline abo
 two pixels wide so there is one to spare. That is what keeps magenta off the
 outline; see `CUT_IN`.
 
-Scale is deliberately *not* derived per frame. A crouching pose has a shorter
-bounding box than a standing one, so fitting every frame to the same box would
-shrink and grow the character as it moves. One scale factor comes from the key
-art and every frame of that character uses it.
+Scale is never derived from a bounding box per frame. A crouching pose has a
+shorter box than a standing one, so fitting every frame to the same box would
+shrink and grow the character as it moves. A static view is always standing, so
+one factor read off the key art covers the whole sheet.
+
+An animation frame gets no such luxury. Each one is a separate generation, drawn
+at whatever size the generator felt like, so a fixed pixels-per-source-pixel
+factor drifts from frame to frame — and the frame spans 8' of world where the
+static cell spans 7'. So animation measures per frame after all, but along the
+motion sheet's own skeleton rather than the box: heel to crown through the
+bones, a length the pose cannot change. See `frame_scale`.
 """
 
 from __future__ import annotations
@@ -25,7 +32,15 @@ from pathlib import Path
 import numpy
 from PIL import Image
 
-from .geometry import CELL_HEIGHT, CELL_WIDTH, CONTACT_ROW, subject_height_px
+from .geometry import (
+    ANIM_CONTACT_ROW,
+    CELL_HEIGHT,
+    CELL_WIDTH,
+    CONTACT_ROW,
+    anim_subject_height_px,
+    subject_height_px,
+)
+from .skeleton import pose_extent, stature
 
 #: Alpha at or below this counts as background when measuring the subject.
 ALPHA_FLOOR = 8
@@ -235,9 +250,26 @@ def key_art_scale(key_art: Image.Image, height_inches: float) -> float:
     return subject_height_px(height_inches) / source_height
 
 
-def register(image: Image.Image, scale: float) -> Image.Image:
-    """Place a cutout on the canonical cell: scaled, centred, heel on the baseline."""
-    left, top, right, bottom = subject_box(image)
+def register(
+    image: Image.Image,
+    scale: float,
+    contact_row: int = CONTACT_ROW,
+    anchor: tuple[float, float] | None = None,
+) -> Image.Image:
+    """Place a cutout on the canonical cell: scaled, heel on the baseline.
+
+    `anchor` is `(source_x, cell_x)`: put the body point found at `source_x` in
+    the incoming image on column `cell_x` of the cell. Pass it for anything that
+    moves. Without it the bounding box is centred instead, and a box is a poor
+    thing to line a body up by — an outflung arm widens it on one side only, so
+    centring the box shoves the body the other way. Worse, it fights the
+    performance: a step to the left widens the box to the left, which pushes the
+    figure back to the right, and the motion comes out at half amplitude.
+
+    The default suits a single standing view, where there is no motion to lose.
+    """
+    origin_left, top, right, bottom = subject_box(image)
+    left = origin_left
     subject = image.crop((left, top, right, bottom))
     width = max(1, round(subject.width * scale))
     height = max(1, round(subject.height * scale))
@@ -254,13 +286,72 @@ def register(image: Image.Image, scale: float) -> Image.Image:
     # Pasted without a mask: the cell is empty, and using the subject as its own
     # mask would multiply alpha by itself and eat the antialiased edge.
     cell = Image.new("RGBA", (CELL_WIDTH, CELL_HEIGHT), (0, 0, 0, 0))
-    cell.paste(subject, ((CELL_WIDTH - (right - left)) // 2 - left, CONTACT_ROW + 1 - bottom))
+    if anchor is None:
+        offset_x = (CELL_WIDTH - (right - left)) // 2 - left
+    else:
+        source_x, cell_x = anchor
+        offset_x = round(cell_x - (source_x - origin_left) * scale)
+    cell.paste(subject, (offset_x, contact_row + 1 - bottom))
     return cell
 
 
-def mask_to_cell(src: Path | str, dst: Path | str, scale: float) -> Path:
+def mask_to_cell(
+    src: Path | str, dst: Path | str, scale: float, contact_row: int = CONTACT_ROW
+) -> Path:
     """Cut `src` out and save it registered into the cell at `dst`."""
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)
-    register(cutout(src), scale).save(dst, format="PNG")
+    register(cutout(src), scale, contact_row).save(dst, format="PNG")
+    return dst
+
+
+def frame_scale(
+    subject: Image.Image,
+    pts: dict[str, list[float]],
+    floor_y: float,
+    body_h: float,
+    height_inches: float,
+) -> float:
+    """Scale for one animation frame, read off the pose the frame was drawn from.
+
+    The generator draws the pose it was shown, at whatever size it likes, so the
+    cutout's box is the pose's full extent at an unknown magnification. The
+    motion sheet knows that same pose exactly: what fraction of its extent is
+    height rather than an outflung arm. Apply the fraction, and what falls out is
+    the character's crown-to-heel in source pixels, whatever the generator did.
+
+    This trusts the generator to have followed the skeleton's proportions, which
+    is the reason a skeleton is attached to every frame. It does not trust it to
+    have followed the skeleton's *size*, which it never has.
+    """
+    left, top, right, bottom = subject_box(subject)
+    drawn = bottom - top
+    extent = pose_extent(pts, floor_y, body_h)
+    standing = stature(pts, body_h)
+    if drawn <= 0 or extent <= 0 or standing <= 0:
+        raise MaskError("frame has no measurable pose")
+    return anim_subject_height_px(height_inches) / (drawn * standing / extent)
+
+
+def pose_to_cell(
+    src: Path | str,
+    dst: Path | str,
+    pts: dict[str, list[float]],
+    floor_y: float,
+    body_h: float,
+    height_inches: float,
+    fallback: float,
+) -> Path:
+    """Cut an animation frame out and register it at the scale its pose asks for.
+
+    `fallback` covers a sheet that carries no landmarks: nothing to measure, so
+    the key art's one factor is all there is.
+    """
+    dst = Path(dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    subject = cutout(src)
+    scale = fallback
+    if pts and body_h:
+        scale = frame_scale(subject, pts, floor_y, body_h, height_inches)
+    register(subject, scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
     return dst

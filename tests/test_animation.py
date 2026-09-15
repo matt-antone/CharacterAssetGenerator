@@ -6,7 +6,9 @@ from langchain_core.messages import AIMessage
 from PIL import Image
 
 from cag import animation, mask
+from cag.geometry import ANIM_CONTACT_ROW, anim_subject_height_px
 from cag.motion import load_motion
+from cag.skeleton import pose_extent, stature
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
 
@@ -158,3 +160,30 @@ def test_produces_sixteen_registered_cells(run):
     assert sorted(run["cells"]) == list(range(16))
     with Image.open(run["cells"][0]) as cell:
         assert cell.size == (480, 560)
+
+
+def cell_height(path):
+    with Image.open(path) as cell:
+        left, top, right, bottom = mask.subject_box(cell)
+    return bottom - top, bottom - 1
+
+
+def test_every_cell_stands_on_the_animation_contact_row(run):
+    for path in run["cells"].values():
+        assert cell_height(path)[1] == ANIM_CONTACT_ROW
+
+
+def test_each_cell_is_scaled_by_the_pose_of_its_own_frame(run):
+    """Every frame is drawn at the same size here, and the poses differ, so the
+    cells must differ too — by exactly what each frame's own skeleton asks for.
+    Hand a frame the wrong pose and its height stops matching."""
+    motion = load_motion(SAMPLE)
+    target = anim_subject_height_px(load_spec("specs/velvet-lou.json").height_inches)
+    heights = []
+    for index, path in sorted(run["cells"].items()):
+        pts = motion.frames[index].pts
+        stretch = pose_extent(pts, motion.floor_y, motion.body_h) / stature(pts, motion.body_h)
+        height = cell_height(path)[0]
+        assert height == pytest.approx(target * stretch, abs=2)
+        heights.append(height)
+    assert len(set(heights)) > 1  # the poses really are telling them apart
