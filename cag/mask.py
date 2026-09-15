@@ -27,7 +27,9 @@ bones, a length the pose cannot change. See `frame_scale`.
 from __future__ import annotations
 
 import io
+import statistics
 from pathlib import Path
+from typing import Callable
 
 import numpy
 from PIL import Image
@@ -355,3 +357,112 @@ def pose_to_cell(
         scale = frame_scale(subject, pts, floor_y, body_h, height_inches)
     register(subject, scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
     return dst
+
+
+#: A run of backdrop rows or columns thinner than this does not separate two
+#: figures. The gap between a raised arm and its own torso is backdrop too.
+MIN_GAP = 12
+
+
+def _runs(filled: numpy.ndarray, min_gap: int = MIN_GAP) -> list[tuple[int, int]]:
+    """Spans of True in `filled`, as (start, end), gaps shorter than `min_gap` bridged."""
+    runs: list[list[int]] = []
+    start = None
+    for i, on in enumerate(filled):
+        if on and start is None:
+            start = i
+        elif not on and start is not None:
+            runs.append([start, i])
+            start = None
+    if start is not None:
+        runs.append([start, len(filled)])
+    merged: list[list[int]] = []
+    for run in runs:
+        if merged and run[0] - merged[-1][1] < min_gap:
+            merged[-1][1] = run[1]
+        else:
+            merged.append(run)
+    return [(a, b) for a, b in merged]
+
+
+def slice_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> list[Image.Image]:
+    """Cut one render holding several figures into one source image per figure.
+
+    Figures are found, never assumed: rows of backdrop split the sheet into
+    bands, columns of backdrop split each band into cells, and the cells come
+    out in reading order. Each is set on fresh backdrop with a border wide
+    enough for `backdrop_colour` to read, so nothing downstream can tell it
+    from a figure rendered alone.
+    """
+    with Image.open(sheet) as image:
+        source = image.convert("RGB")
+    backdrop = backdrop_colour(source)
+    if not keyable(backdrop):
+        raise MaskError(f"{Path(sheet).name}: backdrop has no colour to find the figures against")
+    rgb = numpy.array(source, dtype=numpy.float64)
+    character = backdrop_share(rgb, backdrop) < KEY_THRESHOLD
+    boxes = []
+    for top, bottom in _runs(character.any(axis=1)):
+        for left, right in _runs(character[top:bottom].any(axis=0)):
+            # The band is as tall as its tallest figure; this one may be shorter.
+            rows = _runs(character[top:bottom, left:right].any(axis=1))
+            boxes.append((left, top + rows[0][0], right, top + rows[-1][1]))
+    if len(boxes) != count:
+        raise MaskError(f"{Path(sheet).name} holds {len(boxes)} figures, not {count}")
+    fill = tuple(int(v) for v in backdrop)
+    cells = []
+    for box in boxes:
+        figure = source.crop(box)
+        cell = Image.new("RGB", (figure.width + 2 * pad, figure.height + 2 * pad), fill)
+        cell.paste(figure, (pad, pad))
+        cells.append(cell)
+    return cells
+
+
+def set_to_cells(
+    sources: dict[int, Path],
+    dst_for: Callable[[int], Path],
+    poses: dict[int, dict[str, list[float]]],
+    floor_y: float,
+    body_h: float,
+    height_inches: float,
+    sheets: list[list[int]] | None = None,
+) -> dict[int, Path]:
+    """Register frames drawn together, one scale per sheet they were drawn on.
+
+    Figures on one sheet were drawn at one magnification, so one factor is
+    measured per sheet — the median of what each frame's pose says — and
+    applied to every frame from it. Measuring every frame on its own, as
+    `pose_to_cell` does, would put measurement noise back between frames the
+    generator had already drawn the same size. Two sheets of the same set do
+    not share a magnification, though: the first came back 8% larger than the
+    second, and one factor across both put a size pop at the seam.
+
+    `sheets` lists the frame indices drawn together; absent, every frame is
+    taken as one sheet.
+
+    A sheet with no landmarks has nothing to read a pose from, and the key
+    art's factor is no use either: it assumes the key art's magnification, and
+    a figure sharing a canvas with seven others is drawn a third that size. So
+    the sheet is its own ruler — the median figure height across it is taken as
+    standing height. A set that crouches or reaches for most of its frames
+    would read short or tall.
+    """
+    subjects = {index: cutout(source) for index, source in sorted(sources.items())}
+    cells = {}
+    for group in sheets or [list(subjects)]:
+        if body_h and all(poses.get(index) for index in group):
+            scale = statistics.median(
+                frame_scale(subjects[index], poses[index], floor_y, body_h, height_inches)
+                for index in group
+            )
+        else:
+            # ponytail: median box height as stature; measure the key art's proportions if a set fools it
+            heights = [subject_box(subjects[index])[3] - subject_box(subjects[index])[1] for index in group]
+            scale = anim_subject_height_px(height_inches) / statistics.median(heights)
+        for index in group:
+            dst = dst_for(index)
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            register(subjects[index], scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
+            cells[index] = dst
+    return cells

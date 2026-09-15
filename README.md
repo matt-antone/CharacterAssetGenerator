@@ -44,9 +44,14 @@ Then each animation set, drawn the way a studio draws one:
 | --- | --- |
 | `poses` | Draws each frame's pose as a stick figure from the sheet's landmarks. A generator flattens a written pose back towards neutral; it cannot argue with a picture. Only traced sheets carry landmarks, so a written set gets no skeleton — the one real quality difference between the two. |
 | `direct` | The motion director binds the motion source to this character: prop hand, how the costume moves, what must not change. |
-| `keyframe` | The keyframer draws the frames the sheet marks `key` and `pilot` — the extremes and the fastest transitions. |
-| `tween` | The tweener fills each in-between from its two locked neighbours, wrapping across the loop seam. Drawn, never interpolated. |
-| `mask` | Every frame cut out and registered at the key art's scale. |
+| `sheet` | One render of the whole set: eight figures on one canvas, in reading order, with the pose skeletons composed into a matching grid. The generator cannot follow a measurement, but it keeps figures it can see side by side the same size unasked — so the prompt names no size at all. Figures are found afterwards by the backdrop between them, never by a fixed grid; a render with the wrong count is kept as `sheet-NN.rejected-*.png` and drawn again. |
+| `mask` | Every frame cut out and registered at one scale per sheet: the median of what each pose reads, or the median figure height where a written set has no landmarks. |
+
+That is two image calls per sixteen-frame set instead of sixteen, and identity
+cannot drift between frames the generator drew in one go. `--per-frame` keeps
+the older path — the keyframer draws `key` and `pilot` frames first, the tweener
+fills each in-between from the frame before it — which pays for per-frame
+outlines twice as thick with sixteen chances for the costume to wander.
 
 Frame count, fps, view and playback come from the set's plan in `cag/sets.py`,
 not from the brief: `dance` and `sing` loop, `flinch`, `guard`, `entrance`,

@@ -31,6 +31,7 @@ def built(tmp_path, monkeypatch):
             "specs/velvet-lou.json",
             "--set", "dance",
             "--motion", SAMPLE,
+            "--per-frame",
             "--work", str(tmp_path / "work"),
             "--out", str(tmp_path / "out"),
         ]

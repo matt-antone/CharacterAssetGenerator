@@ -102,7 +102,7 @@ def view_prompt(
     )
     return "\n\n".join(
         part for part in [
-            f"Draw {spec.name}, who is {spec.height} tall.",
+            f"Draw {spec.name}.",
             bible,
             VIEWS[view],
             stance,
@@ -150,7 +150,7 @@ def frame_prompt(
     """Prompt for one animation frame."""
     return "\n\n".join(
         part for part in [
-            f"Draw one animation frame of {spec.name}, who is {spec.height} tall.",
+            f"Draw one animation frame of {spec.name}.",
             bible,
             set_note,
             view_clause,
@@ -165,5 +165,57 @@ def frame_prompt(
             "Match the reference images for identity, costume, colour, proportion and prop hand "
             "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
             "mirror the figure and do not move the prop to the other hand.",
+        ] if part
+    )
+
+
+POSE_SHEET_REFERENCE = (
+    "The last reference image shows every pose in this sequence as a stick-figure skeleton, laid "
+    "out in the same order and the same rows as the figures you draw, with the floor as a grey "
+    "line and hollow rings on the character-right wrist and ankle. Copy each pose from its own "
+    "skeleton: limb angles, which knee is bent, how the weight sits, which way the head turns. "
+    "The skeletons carry no identity, costume or style — take none of their look."
+)
+
+
+def sheet_prompt(
+    spec: CharacterSpec,
+    bible: str,
+    set_note: str,
+    view_clause: str,
+    cues: list[tuple[str, str]],
+    pose_reference: bool = False,
+    detail_level: int = DEFAULT_DETAIL_LEVEL,
+    detail_reference: bool = False,
+) -> str:
+    """Prompt for one render holding a whole animation sequence.
+
+    Nothing in it measures. The generator cannot hold a ruler, and every number
+    it was handed came back as noise — but it keeps figures it can see side by
+    side the same size without being asked, and that is what the sheet is for.
+    """
+    poses = "\n".join(f"{n} ({role}): {cue}" for n, (role, cue) in enumerate(cues, 1))
+    return "\n\n".join(
+        part for part in [
+            f"Draw {spec.name} {len(cues)} times in one image, as the consecutive frames of one "
+            "animation.",
+            bible,
+            set_note,
+            view_clause,
+            "Arrange the figures in reading order, left to right and then the next row down, with "
+            "clear background between every figure. No figure touches another figure or the canvas "
+            "edge. No numbers, labels, frame lines or grid lines: only the figures on the backdrop.",
+            "Every figure is the same character at the same size and the same distance from the "
+            f"viewer; only the pose changes from one to the next:\n{poses}",
+            STYLE,
+            BACKDROP,
+            detail_clause(detail_level),
+            DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
+            POSE_SHEET_REFERENCE if pose_reference else "",
+            PROP_CONTINUITY,
+            SIDE_LANGUAGE,
+            "Match the reference images for identity, costume, colour, proportion and prop hand "
+            "exactly. The supporting heel stays on the floor in every figure. Do not mirror any "
+            "figure and do not move the prop to the other hand.",
         ] if part
     )
