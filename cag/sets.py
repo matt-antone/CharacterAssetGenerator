@@ -27,7 +27,7 @@ class SetPlan:
 
 
 SET_PLANS = {
-    "dance": SetPlan(8, 4, "loop", "3/4"),
+    "dance": SetPlan(8, 4, "loop", "front"),
     "sing": SetPlan(8, 4, "loop", "left"),
     "flinch": SetPlan(8, 4, "oneshot", "left"),
     "guard": SetPlan(8, 4, "oneshot", "left", holds_final_frame=True),
