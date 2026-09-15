@@ -16,7 +16,12 @@ from .motion_writer import write_motion
 from .prompts import KEY_VIEW
 from .sets import plan_for, wanted
 from .spec import CharacterSpec, load_spec
-from .static_sheet import build_static_graph, projection_views
+from .static_sheet import (
+    ApprovalRequired,
+    approve,
+    build_static_graph,
+    projection_views,
+)
 
 #: Wrap long sets so the sheet stays a reasonable shape to open.
 SHEET_COLUMNS = 8
@@ -88,7 +93,14 @@ def build(
         raise SystemExit("--motion applies to a single --set; other sets write their own sheet")
 
     log(f"[static] {spec.name}: bible, key art, projection")
-    static = build_static_graph(ChatCodex()).invoke({"spec": spec, "work_dir": work_dir})
+    try:
+        static = build_static_graph(ChatCodex()).invoke({"spec": spec, "work_dir": work_dir})
+    except ApprovalRequired as gate:
+        raise SystemExit(
+            f"[static] {spec.name}: key art is waiting for approval at {gate}\n"
+            f"  approve it:  cag approve {spec_path}\n"
+            f"  or redraw it: rm {gate} and build again"
+        ) from None
 
     views = {}
     for view in [KEY_VIEW, *projection_views()]:
@@ -167,7 +179,17 @@ def main(argv: list[str] | None = None) -> int:
     build_parser.add_argument("--work", type=Path, default=Path("work"))
     build_parser.add_argument("--out", type=Path, default=Path("outputs"))
 
+    approve_parser = sub.add_parser(
+        "approve", help="sign off on a character's key art so the rest can be drawn"
+    )
+    approve_parser.add_argument("spec", type=Path, help="path to a character brief")
+    approve_parser.add_argument("--work", type=Path, default=Path("work"))
+
     args = parser.parse_args(argv)
+    if args.command == "approve":
+        spec = load_spec(args.spec)
+        log(f"[static] {spec.name}: approved {approve(args.work / spec.slug)}")
+        return 0
     build(args.spec, args.motion, args.set_names, args.work, args.out, args.jobs, args.sheet_mode)
     return 0
 

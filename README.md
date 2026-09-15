@@ -7,7 +7,15 @@ of static views, and a masked animation set per animation the brief names.
 cag build specs/belter.json --jobs 4
 ```
 
-That writes `outputs/belter/`: four projection cells under `views/`, then a
+The first run stops after the key art and waits for a human. Look at
+`work/belter/source/key.png`, then either sign it off or delete it and build
+again for a redraw:
+
+```bash
+cag approve specs/belter.json
+```
+
+Once approved, that writes `outputs/belter/`: four projection cells under `views/`, then a
 sprite sheet and a GIF proof for each of the brief's seven sets, and a gallery
 page tying them together. Sets render across `--jobs` lanes, and one that fails
 does not take the others down with it.
@@ -28,6 +36,7 @@ references what it locks:
 | --- | --- |
 | `bible` | One model call turns the brief into a locked visual description. Every later prompt quotes it verbatim, so identity cannot drift. Saved to `work/<slug>/bible.txt`, so a later run can pin the same identity instead of writing a fresh description and accepting the drift. |
 | `key_art` | Draws the front-left three-quarter reference on a magenta backdrop. |
+| `approval` | Stops the run until `cag approve` signs off on that key art. Every other render quotes it, so a wrong one is a whole wrong character. The record in `work/<slug>/key-approved.txt` holds the art's digest, so a redraw revokes the approval rather than inheriting it. |
 | `scale` | Measures the character's crown-to-heel span off the key art. Read once, reused forever. |
 | `projection` | Draws front, back and profile, each with the key art attached as a reference image. |
 | `mask` | Cuts every view out and registers it into the cell. |

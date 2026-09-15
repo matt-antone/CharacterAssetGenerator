@@ -23,6 +23,15 @@ process. A detached process does not appear in the user's background task list,
 so they cannot see what is running or stop it, and it looks like the build never
 started.
 
+## The first build stops at the key art
+
+A build draws the key art, then exits telling you it is waiting for approval.
+Nothing else — no projection views, no frames — is drawn until someone looks at
+`work/<slug>/source/key.png` and runs `cag approve specs/<slug>.json`, then
+builds again. A key art that is wrong gets deleted instead, and the next build
+redraws it. Show the user the key art and wait for their answer; do not approve
+on their behalf.
+
 ## A failed set is normal, retry it
 
 A sheet render that comes back with the wrong figure count is rejected and

@@ -17,6 +17,8 @@ def fake_draw(prompt, out_path, references=(), **kwargs):
     """Draw a figure whose size encodes nothing but keeps the mask path honest."""
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.exists():
+        return out_path  # like the real draw: a render on disk is never redrawn
     image = Image.new("RGBA", (100, 200), (255, 0, 255, 255))
     image.paste((20, 20, 20, 255), (40, 20, 60, 180))
     image.save(out_path)
@@ -39,9 +41,33 @@ def run(tmp_path, monkeypatch):
     monkeypatch.setattr(mask, "cutout", flat_cutout)
     model = FakeMessagesListChatModel(responses=[AIMessage(BIBLE)])
     graph = static_sheet.build_static_graph(model, draw_fn=fake_draw)
-    return graph.invoke(
-        {"spec": load_spec("specs/velvet-lou.json"), "work_dir": tmp_path / "lou"}
-    )
+    state = {"spec": load_spec("specs/velvet-lou.json"), "work_dir": tmp_path / "lou"}
+    # The first pass stops at the key art gate; sign off, then draw the rest.
+    with pytest.raises(static_sheet.ApprovalRequired):
+        graph.invoke(state)
+    static_sheet.approve(tmp_path / "lou")
+    return graph.invoke(state)
+
+
+def test_nothing_but_the_key_art_is_drawn_before_approval(tmp_path, monkeypatch):
+    fake_draw.calls = []
+    monkeypatch.setattr(static_sheet, "cutout", flat_cutout)
+    model = FakeMessagesListChatModel(responses=[AIMessage(BIBLE)])
+    graph = static_sheet.build_static_graph(model, draw_fn=fake_draw)
+    with pytest.raises(static_sheet.ApprovalRequired):
+        graph.invoke({"spec": load_spec("specs/velvet-lou.json"), "work_dir": tmp_path / "lou"})
+    assert [call["out"].stem for call in fake_draw.calls] == [KEY_VIEW]
+
+
+def test_approval_does_not_carry_over_to_redrawn_key_art(tmp_path):
+    work_dir = tmp_path / "lou"
+    key_art = static_sheet.source_path(work_dir, KEY_VIEW)
+    fake_draw("", key_art)
+    static_sheet.approve(work_dir)
+    assert static_sheet.is_approved(work_dir, key_art)
+
+    Image.new("RGBA", (100, 200), (255, 0, 255, 255)).save(key_art)  # a different render
+    assert not static_sheet.is_approved(work_dir, key_art)
 
 
 def test_draws_key_art_before_the_projection_views(run):

@@ -20,6 +20,8 @@ def fake_draw(prompt, out_path, references=(), **kwargs):
     """Each render differs, so GIF assembly cannot collapse identical frames."""
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.exists():
+        return out_path  # like the real draw: a render on disk is never redrawn
     shade = 20 + 10 * (len(fake_draw.calls) % 12)
     image = Image.new("RGBA", (100, 200), (255, 0, 255, 255))
     image.paste((shade, shade, shade, 255), (40, 20, 60, 180))

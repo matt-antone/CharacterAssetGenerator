@@ -25,8 +25,7 @@ def built(tmp_path, monkeypatch):
             responses=[AIMessage("A lounge performer."), AIMessage("Mic in the character-right hand.")]
         ),
     )
-    cli.main(
-        [
+    build_argv = [
             "build",
             "specs/velvet-lou.json",
             "--set", "dance",
@@ -34,9 +33,31 @@ def built(tmp_path, monkeypatch):
             "--per-frame",
             "--work", str(tmp_path / "work"),
             "--out", str(tmp_path / "out"),
-        ]
-    )
+    ]
+    with pytest.raises(SystemExit):  # the key art gate
+        cli.main(build_argv)
+    cli.main(["approve", "specs/velvet-lou.json", "--work", str(tmp_path / "work")])
+    cli.main(build_argv)
     return tmp_path / "out" / "velvet-lou"
+
+
+def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
+    fake_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    monkeypatch.setattr(static_sheet, "draw", fake_draw)
+    monkeypatch.setattr(
+        cli,
+        "ChatCodex",
+        lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
+    )
+    with pytest.raises(SystemExit) as stop:
+        cli.main(
+            ["build", "specs/velvet-lou.json", "--work", str(tmp_path / "w"),
+             "--out", str(tmp_path / "o")]
+        )
+    assert "source/key.png" in str(stop.value)
+    assert "cag approve specs/velvet-lou.json" in str(stop.value)
+    assert not (tmp_path / "o").exists()  # nothing else was drawn or written
 
 
 def test_writes_the_four_projection_views(built):
@@ -74,10 +95,12 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
         lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
     )
     monkeypatch.setattr(cli, "write_motion", lambda *a, **kw: pytest.fail("no sheet needed"))
-    cli.main(
-        ["build", "specs/no-animations.json", "--work", str(tmp_path / "w"),
-         "--out", str(tmp_path / "o")]
-    )
+    argv = ["build", "specs/no-animations.json", "--work", str(tmp_path / "w"),
+            "--out", str(tmp_path / "o")]
+    with pytest.raises(SystemExit):  # the key art gate
+        cli.main(argv)
+    cli.main(["approve", "specs/no-animations.json", "--work", str(tmp_path / "w")])
+    cli.main(argv)
     out = tmp_path / "o" / "no-one"
     assert (out / "index.html").exists()
     assert not list(out.glob("*.gif"))
