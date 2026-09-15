@@ -7,3 +7,6 @@ outputs/
 .pytest_cache/
 .DS_Store
 .fallow/churn.bin
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
