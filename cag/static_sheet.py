@@ -19,10 +19,14 @@ from langgraph.graph import END, START, StateGraph
 from .draw import draw
 from .mask import cutout, key_art_scale, mask_to_cell
 from .prompts import BIBLE_SYSTEM, KEY_VIEW, VIEWS, bible_request, view_prompt
+from .sets import REQUIRED_VIEWS, wanted
 from .style import detail_frame
 from .spec import CharacterSpec
 
-PROJECTION_VIEWS = [view for view in VIEWS if view != KEY_VIEW]
+
+def projection_views() -> list[str]:
+    """The views to draw beside the key art, minus any switched off in the config."""
+    return wanted([v for v in VIEWS if v != KEY_VIEW], "views", REQUIRED_VIEWS)
 
 
 class StaticState(TypedDict, total=False):
@@ -93,7 +97,7 @@ def draw_projection(state: StaticState, draw_fn: Callable[..., Path]) -> StaticS
     key_art = state["sources"][KEY_VIEW]
     detail = detail_frame(spec.detail_level)
     sources = dict(state["sources"])
-    for view in PROJECTION_VIEWS:
+    for view in projection_views():
         sources[view] = draw_fn(
             view_prompt(
                 spec,

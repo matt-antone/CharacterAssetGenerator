@@ -13,10 +13,10 @@ from .assemble import gallery, gif_proof, sprite_sheet
 from .chat_codex import ChatCodex
 from .motion import load_motion
 from .motion_writer import write_motion
-from .prompts import KEY_VIEW, VIEWS
-from .sets import plan_for
+from .prompts import KEY_VIEW
+from .sets import plan_for, wanted
 from .spec import CharacterSpec, load_spec
-from .static_sheet import build_static_graph
+from .static_sheet import build_static_graph, projection_views
 
 #: Wrap long sets so the sheet stays a reasonable shape to open.
 SHEET_COLUMNS = 8
@@ -81,7 +81,9 @@ def build(
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
     out_dir = out_root / spec.slug
-    chosen = set_names if set_names is not None else sorted(spec.animations)
+    # An explicit --set is the operator asking for that set by name, so it overrides the
+    # config. Without one, the config decides which of the brief's animations are drawn.
+    chosen = set_names if set_names is not None else wanted(sorted(spec.animations), "animations")
     if motion_path and len(chosen) != 1:
         raise SystemExit("--motion applies to a single --set; other sets write their own sheet")
 
@@ -89,7 +91,7 @@ def build(
     static = build_static_graph(ChatCodex()).invoke({"spec": spec, "work_dir": work_dir})
 
     views = {}
-    for view in [KEY_VIEW, *(v for v in VIEWS if v != KEY_VIEW)]:
+    for view in [KEY_VIEW, *projection_views()]:
         views[view] = Path("views") / f"{view}.png"
         destination = out_dir / views[view]
         destination.parent.mkdir(parents=True, exist_ok=True)
