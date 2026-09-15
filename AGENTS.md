@@ -16,6 +16,13 @@ done
 `--jobs` parallelises the animation sets within one character. Both levels of
 parallelism are wanted.
 
+## Launch builds as tracked background tasks
+
+Start each `cag build` as a harness background task, not a detached `nohup ... &`
+process. A detached process does not appear in the user's background task list,
+so they cannot see what is running or stop it, and it looks like the build never
+started.
+
 ## A failed set is normal, retry it
 
 A sheet render that comes back with the wrong figure count is rejected and
