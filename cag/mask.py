@@ -385,14 +385,124 @@ def _runs(filled: numpy.ndarray, min_gap: int = MIN_GAP) -> list[tuple[int, int]
     return [(a, b) for a, b in merged]
 
 
+def _row_runs(row: numpy.ndarray) -> list[tuple[int, int]]:
+    """Spans of True in one row of the mask, as (start, end)."""
+    edges = numpy.flatnonzero(numpy.diff(numpy.concatenate(([0], row.view(numpy.int8), [0]))))
+    return list(zip(edges[0::2], edges[1::2]))
+
+
+def _blobs(character: numpy.ndarray) -> list[tuple[int, int, int, int]]:
+    """Bounding boxes of the touching regions in the mask, as (left, top, right, bottom).
+
+    Row runs are labelled and any two that touch between one row and the next
+    are joined, so a region is followed whatever shape it takes. A figure is
+    usually one region; a detached spike of hair or a held prop is its own.
+    """
+    parent: dict[int, int] = {}
+
+    def root(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    spans: list[tuple[int, int, int, int]] = []
+    previous: list[tuple[int, int, int]] = []
+    for y in range(character.shape[0]):
+        current = []
+        for start, end in _row_runs(character[y]):
+            label = len(spans)
+            parent[label] = label
+            spans.append((start, y, end, y + 1))
+            for was_start, was_end, was_label in previous:
+                if start < was_end and was_start < end:
+                    a, b = root(was_label), root(label)
+                    if a != b:
+                        parent[b] = a
+            current.append((start, end, label))
+        previous = current
+    boxes: dict[int, tuple[int, int, int, int]] = {}
+    for label, span in enumerate(spans):
+        owner = root(label)
+        if owner in boxes:
+            have = boxes[owner]
+            boxes[owner] = (
+                min(have[0], span[0]),
+                min(have[1], span[1]),
+                max(have[2], span[2]),
+                max(have[3], span[3]),
+            )
+        else:
+            boxes[owner] = span
+    return list(boxes.values())
+
+
+#: A region smaller than this share of a figure's area is a piece of one, not a
+#: figure: a detached hair spike, a thrown highlight, a prop held clear of the hand.
+FRAGMENT_SHARE = 0.25
+
+
+def find_figures(character: numpy.ndarray, count: int) -> list[tuple[int, int, int, int]]:
+    """Figure boxes in reading order, found from the mask alone.
+
+    Splitting the sheet by rows and columns of backdrop cannot separate two
+    figures whose boxes overlap — a raised hand reaching up beside the boots of
+    the figure above it leaves no clear row to cut along. So regions are
+    followed by touch instead, and the small ones are folded into the nearest
+    figure so a detached hair spike never counts as one.
+    """
+    regions = _blobs(character)
+    area = lambda box: (box[2] - box[0]) * (box[3] - box[1])  # noqa: E731
+    ranked = sorted(regions, key=area, reverse=True)
+    biggest = ranked[:count] or ranked
+    if not biggest:
+        return []
+    median = sorted(area(box) for box in biggest)[len(biggest) // 2]
+    figures = [list(box) for box in ranked if area(box) >= FRAGMENT_SHARE * median]
+    for left, top, right, bottom in ranked[len(figures) :]:
+        def apart(figure: list[int]) -> int:
+            across = max(figure[0] - right, left - figure[2], 0)
+            down = max(figure[1] - bottom, top - figure[3], 0)
+            return across * across + down * down
+
+        nearest = min(figures, key=apart)
+        nearest[0] = min(nearest[0], left)
+        nearest[1] = min(nearest[1], top)
+        nearest[2] = max(nearest[2], right)
+        nearest[3] = max(nearest[3], bottom)
+    return [tuple(box) for box in _reading_order(figures)]
+
+
+def _reading_order(figures: list[list[int]]) -> list[list[int]]:
+    """Left to right within a row, row by row down the sheet.
+
+    A row is gathered by where each figure's middle falls, not by its top: two
+    figures stand side by side in the same row while one crouches and the other
+    reaches, and sorting on the top edge alone would shuffle them together with
+    the row below.
+    """
+    ordered: list[list[int]] = []
+    row: list[list[int]] = []
+    floor = 0
+    for figure in sorted(figures, key=lambda box: (box[1] + box[3]) / 2):
+        middle = (figure[1] + figure[3]) / 2
+        if row and middle > floor:
+            ordered.extend(sorted(row, key=lambda box: box[0]))
+            row, floor = [], 0
+        if not row:
+            floor = figure[3]
+        row.append(figure)
+    ordered.extend(sorted(row, key=lambda box: box[0]))
+    return ordered
+
+
 def slice_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> list[Image.Image]:
     """Cut one render holding several figures into one source image per figure.
 
-    Figures are found, never assumed: rows of backdrop split the sheet into
-    bands, columns of backdrop split each band into cells, and the cells come
-    out in reading order. Each is set on fresh backdrop with a border wide
-    enough for `backdrop_colour` to read, so nothing downstream can tell it
-    from a figure rendered alone.
+    Figures are found, never assumed: regions of character are followed through
+    the backdrop and come out in reading order. Each is set on fresh backdrop
+    with a border wide enough for `backdrop_colour` to read, so nothing
+    downstream can tell it from a figure rendered alone.
     """
     with Image.open(sheet) as image:
         source = image.convert("RGB")
@@ -401,12 +511,7 @@ def slice_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> 
         raise MaskError(f"{Path(sheet).name}: backdrop has no colour to find the figures against")
     rgb = numpy.array(source, dtype=numpy.float64)
     character = backdrop_share(rgb, backdrop) < KEY_THRESHOLD
-    boxes = []
-    for top, bottom in _runs(character.any(axis=1)):
-        for left, right in _runs(character[top:bottom].any(axis=0)):
-            # The band is as tall as its tallest figure; this one may be shorter.
-            rows = _runs(character[top:bottom, left:right].any(axis=1))
-            boxes.append((left, top + rows[0][0], right, top + rows[-1][1]))
+    boxes = find_figures(character, count)
     if len(boxes) != count:
         raise MaskError(f"{Path(sheet).name} holds {len(boxes)} figures, not {count}")
     fill = tuple(int(v) for v in backdrop)

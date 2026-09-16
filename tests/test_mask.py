@@ -8,6 +8,7 @@ from cag.geometry import (
     CELL_WIDTH,
     CONTACT_ROW,
     anim_subject_height_px,
+    subject_height_px,
 )
 from cag.skeleton import pose_extent, stature
 from cag.mask import (
@@ -45,8 +46,8 @@ def test_subject_box_rejects_empty_cutout():
 
 
 def test_key_art_scale_maps_subject_to_physical_height():
-    # 160px of subject must become 5'9" == 460px in the cell.
-    assert key_art_scale(figure(), 69) == pytest.approx(460 / 160)
+    # 160px of drawn subject must become 5'9" at the cell's own scale.
+    assert key_art_scale(figure(), 69) == pytest.approx(subject_height_px(69) / 160)
 
 
 def test_register_puts_feet_on_the_contact_row_and_centres():
@@ -55,7 +56,7 @@ def test_register_puts_feet_on_the_contact_row_and_centres():
     left, top, right, bottom = subject_box(cell)
     # The bbox is exclusive, so the last visible row is the contact row itself.
     assert bottom - 1 == CONTACT_ROW
-    assert bottom - top == 460
+    assert bottom - top == subject_height_px(69)
     assert (left + right) // 2 == pytest.approx(CELL_WIDTH // 2, abs=1)
 
 
@@ -65,7 +66,7 @@ def test_register_keeps_one_scale_across_poses():
     crouch = register(figure(box=(40, 100, 60, 180)), scale)
     left, top, right, bottom = subject_box(crouch)
     assert bottom - 1 == CONTACT_ROW
-    assert bottom - top == 230  # half the standing span, exactly
+    assert bottom - top == subject_height_px(69) // 2  # half the standing span, exactly
 
 
 def test_register_does_not_crash_when_subject_overflows_the_cell():
@@ -290,3 +291,51 @@ def test_slice_sheet_rejects_the_wrong_figure_count(tmp_path):
 
     with pytest.raises(MaskError, match="holds 2 figures, not 3"):
         slice_sheet(figure_sheet(tmp_path / "sheet.png", [(20, 20, 60, 100), (100, 20, 140, 100)]), 3)
+
+
+from cag.mask import slice_sheet  # noqa: E402
+
+
+def sheet_with_overlapping_rows(path, backdrop=(247, 4, 248)):
+    """Eight figures in two rows of four, the way a sheet render lays them out.
+
+    The first figure of the second row raises a hand up beside the boots of the
+    figure above it, so no row of backdrop runs clear across the sheet between
+    the two rows. Splitting by rows and columns reads that column as one figure.
+    """
+    image = Image.new("RGB", (400, 400), backdrop)
+    for row in range(2):
+        for column in range(4):
+            x, y = 10 + column * 100, 10 + row * 200
+            image.paste((0, 0, 0), (x, y, x + 60, y + 180))
+    # The hand clears the figure above it by 2px, so the two never touch, but it
+    # reaches past that figure's feet and leaves no clear row between the rows.
+    image.paste((0, 0, 0), (72, 170, 92, 215))
+    image.save(path)
+    return path
+
+
+def test_a_raised_hand_beside_the_row_above_still_counts_eight_figures(tmp_path):
+    sheet = sheet_with_overlapping_rows(tmp_path / "sheet-00.png")
+    assert len(slice_sheet(sheet, 8)) == 8
+
+
+def test_a_detached_piece_counts_with_its_figure_not_as_one(tmp_path):
+    image = Image.new("RGB", (400, 400), (247, 4, 248))
+    for column in range(4):
+        x = 10 + column * 100
+        image.paste((0, 0, 0), (x, 10, x + 60, 190))
+        image.paste((0, 0, 0), (x + 20, 200, x + 80, 380))
+    image.paste((0, 0, 0), (14, 2, 22, 8))  # a hair spike clear of the head
+    sheet = image.save(p := tmp_path / "sheet-00.png") or p
+    assert len(slice_sheet(sheet, 8)) == 8
+
+
+def test_a_sheet_drawn_short_is_still_rejected(tmp_path):
+    image = Image.new("RGB", (400, 400), (247, 4, 248))
+    for column in range(4):  # four figures where eight were asked for
+        x = 10 + column * 100
+        image.paste((0, 0, 0), (x, 10, x + 60, 190))
+    sheet = image.save(p := tmp_path / "sheet-00.png") or p
+    with pytest.raises(MaskError, match="holds 4 figures, not 8"):
+        slice_sheet(sheet, 8)
