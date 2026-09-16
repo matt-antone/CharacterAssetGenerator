@@ -24,7 +24,7 @@ A single set, against a traced [MotionArtist](https://github.com/matt-antone/Mot
 sheet instead of a written one:
 
 ```bash
-cag build specs/velvet-lou.json --set dance --motion ../MotionArtist/work/sample/motion.json
+cag build specs/crooner.json --set dance --motion ../MotionArtist/work/sample/motion.json
 ```
 
 ## How it runs
@@ -122,10 +122,10 @@ Art is never mirrored.
 
 ```json
 {
-  "name": "Velvet Lou",
-  "height": "5' 9\"",
-  "description": "A cheerful lounge performer in a deep green velvet jacket ...",
-  "animations": { "dance": "Relaxed club two-step that returns to frame 0." }
+  "name": "Crooner",
+  "height": "6' 2\"",
+  "description": "An unflappable lounge singer in his fifties: lean, tall, narrow ...",
+  "animations": { "dance": "Refined lounge sway loop that returns to frame 0." }
 }
 ```
 

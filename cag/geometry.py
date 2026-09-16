@@ -5,13 +5,18 @@ Carried over from KaraokeParty-Graphics, which had these numbers right.
 
 from __future__ import annotations
 
-CELL_WIDTH = 480
+#: A square cell. The width is free — scale is measured off the height alone —
+#: so widening it costs nothing but gives a reaching or striding pose room that a
+#: 480px portrait cropped into.
+CELL_WIDTH = 560
 CELL_HEIGHT = 560
 
-#: The full cell height represents a 7'0" character.
-CELL_HEIGHT_INCHES = 84
-PX_PER_INCH = CELL_HEIGHT / CELL_HEIGHT_INCHES  # 6.666...
-PX_PER_FOOT = PX_PER_INCH * 12  # 80.0
+#: The full cell height represents a 9'0" character: the figure is drawn at its true
+#: scale and the rest is headroom, so a hat, a raised arm or a stride has somewhere
+#: to go instead of meeting the edge.
+CELL_HEIGHT_INCHES = 108
+PX_PER_INCH = CELL_HEIGHT / CELL_HEIGHT_INCHES  # 5.185...
+PX_PER_FOOT = PX_PER_INCH * 12  # 62.22...
 
 #: Row the supporting heel sits on for grounded poses.
 CONTACT_ROW = 550
@@ -19,9 +24,12 @@ CONTACT_ROW = 550
 #: An animation frame spans more world than a static cell does. The static sheet
 #: is a portrait: the character stands, and 7'0" of canvas is all it ever needs.
 #: A performance jumps, reaches and wears a hat, so the same 560px of canvas is
-#: mapped to 8'0" instead, and every character is correspondingly smaller here.
-ANIM_CELL_HEIGHT_INCHES = 96
-ANIM_PX_PER_INCH = CELL_HEIGHT / ANIM_CELL_HEIGHT_INCHES  # 5.833...
+#: mapped to 10'0" instead, and every character is correspondingly smaller here.
+#: It stays one foot taller than the static cell: the static sheet sets the scale,
+#: and a frame must never render a character larger than the sheet it is measured
+#: against.
+ANIM_CELL_HEIGHT_INCHES = 120
+ANIM_PX_PER_INCH = CELL_HEIGHT / ANIM_CELL_HEIGHT_INCHES  # 4.666...
 
 #: The floor sits this far up from the bottom edge, so a heel is never flush
 #: against it and a shadow or a trailing foot has somewhere to go.

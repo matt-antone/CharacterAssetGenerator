@@ -1,6 +1,8 @@
 """End to end through the CLI, with the model and the image tool faked out."""
 
 import pytest
+
+from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
 from PIL import Image, ImageSequence
@@ -63,12 +65,12 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
 def test_writes_the_four_projection_views(built):
     for view in ("key", "front", "back", "profile"):
         with Image.open(built / "views" / f"{view}.png") as cell:
-            assert cell.size == (480, 560)
+            assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
 
 
 def test_writes_a_wrapped_sprite_sheet(built):
     with Image.open(built / "dance-sheet.png") as sheet:
-        assert sheet.size == (480 * 8, 560 * 2)  # 16 frames, 8 to a row
+        assert sheet.size == (CELL_WIDTH * 8, CELL_HEIGHT * 2)  # 16 frames, 8 to a row
 
 
 def test_writes_a_looping_proof_at_the_declared_rate(built):
