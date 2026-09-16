@@ -11,9 +11,9 @@
   "animations": {
     "dance": true,
     "sing": true,
-    "flinch": true,
-    "guard": true,
-    "entrance": true,
+    "flinch": false,
+    "guard": false,
+    "entrance": false,
     "victory": true,
     "ko": true
   }
