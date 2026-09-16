@@ -73,8 +73,30 @@ def pose_sheets(state: AnimationState) -> AnimationState:
     return {"poses": dict(enumerate(paths))}
 
 
+def set_note_path(state: AnimationState) -> Path:
+    return state["work_dir"] / "motion" / f"{state['set_name']}.note.txt"
+
+
+def _every_source_drawn(state: AnimationState) -> bool:
+    return all(
+        frame_path(state, "source", frame.index).exists() for frame in state["motion"].frames
+    )
+
+
 def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
-    """Bind the motion source to this character before a frame is drawn."""
+    """Bind the motion source to this character before a frame is drawn.
+
+    The note only ever goes into a prompt, and a render already on disk is
+    returned without its prompt being used. So a set whose frames are all drawn
+    needs no note at all, and asking for one spends a model call per set on
+    every rebuild — a re-mask of the whole roster was paying for thirty-two.
+    A note that is asked for is kept, so the next run does not ask again.
+    """
+    record = set_note_path(state)
+    if record.exists():
+        return {"set_note": record.read_text().strip()}
+    if _every_source_drawn(state):
+        return {"set_note": ""}
     motion = state["motion"]
     reply = model.invoke(
         [
@@ -86,7 +108,10 @@ def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
             ),
         ]
     )
-    return {"set_note": str(reply.content).strip()}
+    note = str(reply.content).strip()
+    record.parent.mkdir(parents=True, exist_ok=True)
+    record.write_text(note + "\n")
+    return {"set_note": note}
 
 
 def _draw_frame(
@@ -172,6 +197,15 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     for start in range(0, len(motion.frames), SHEET_FRAMES):
         chunk = motion.frames[start : start + SHEET_FRAMES]
         sheets.append([frame.index for frame in chunk])
+        # Every frame of this chunk is already cut out and on disk. Redrawing the sheet
+        # to slice it again would spend a render to arrive back at these same files, and
+        # would do it with whatever note this run happens to hold.
+        drawn_already = {
+            frame.index: frame_path(state, "source", frame.index) for frame in chunk
+        }
+        if all(path.exists() for path in drawn_already.values()):
+            sources.update(drawn_already)
+            continue
         cues = [(frame.role, f"{frame.cue} {frame.note}".strip()) for frame in chunk]
         pose_grid = None
         if poses:
