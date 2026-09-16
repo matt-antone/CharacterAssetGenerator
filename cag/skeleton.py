@@ -15,6 +15,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
+from .geometry import CELL_HEIGHT, CELL_WIDTH
+
 BONES = (
     ("hipL", "knL"), ("knL", "anL"), ("anL", "toeL"),
     ("hipR", "knR"), ("knR", "anR"), ("anR", "toeR"),
@@ -31,7 +33,9 @@ HEAD_RADIUS = 0.07
 # ponytail: anthropometric average; tune per rig if a character's feet read wrong.
 ANKLE_RISE = 0.039
 
-SIZE = (480, 560)
+#: The pose reference is drawn at the cell's own shape, so the skeleton a frame is
+#: posed against is centred exactly where the finished frame will be.
+SIZE = (CELL_WIDTH, CELL_HEIGHT)
 MARGIN = 40
 INK = (0, 0, 0)
 FLOOR_INK = (170, 170, 170)

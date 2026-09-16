@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import pytest
+
+from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
 from PIL import Image
@@ -161,7 +163,7 @@ def test_every_frame_prompt_carries_the_directors_note_and_view(run):
 def test_produces_sixteen_registered_cells(run):
     assert sorted(run["cells"]) == list(range(16))
     with Image.open(run["cells"][0]) as cell:
-        assert cell.size == (480, 560)
+        assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
 
 
 def cell_height(path):
@@ -252,7 +254,7 @@ def test_sheet_mode_registers_every_frame_at_one_scale(sheet_run):
     heights = set()
     for index in range(16):
         with Image.open(sheet_run["cells"][index]) as cell:
-            assert cell.size == (480, 560)
+            assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
             heights.add(mask.subject_box(cell)[3] - mask.subject_box(cell)[1])
     # Nearest-neighbour rounding from two source sizes; a missed sheet would be ~200px off.
     assert max(heights) - min(heights) <= 2
@@ -303,13 +305,13 @@ def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
         assert "wider than it is tall" in prompt
         rows = -(-animation.SHEET_FRAMES // animation.FIGURES_PER_ROW)
         assert f"{rows} rows of {animation.FIGURES_PER_ROW}" in prompt
-        assert "px" not in prompt and "480" not in prompt
+        assert "px" not in prompt and str(CELL_WIDTH) not in prompt
         assert "pixels tall" not in prompt
         assert "stick-figure skeleton" in prompt
         grid = Path(call["refs"][-1])
         assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")
         with Image.open(grid) as image:
-            assert image.size == (480 * animation.FIGURES_PER_ROW, 560 * 2)
+            assert image.size == (CELL_WIDTH * animation.FIGURES_PER_ROW, CELL_HEIGHT * 2)
 
 
 def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monkeypatch):

@@ -2,6 +2,8 @@ from pathlib import Path
 
 import numpy
 import pytest
+
+from cag.geometry import CELL_HEIGHT, CELL_WIDTH, subject_height_px
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
 from PIL import Image
@@ -108,13 +110,13 @@ def test_produces_four_registered_cells(run):
     assert sorted(run["cells"]) == ["back", "front", "key", "profile"]
     for path in run["cells"].values():
         with Image.open(path) as cell:
-            assert cell.size == (480, 560)
+            assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
             assert cell.mode == "RGBA"
 
 
 def test_scale_is_measured_once_from_the_key_art(run):
-    # 160px of drawn subject must become 5'9" == 460px of cell.
-    assert run["scale"] == pytest.approx(460 / 160)
+    # 160px of drawn subject must become 5'9" at the cell's own scale.
+    assert run["scale"] == pytest.approx(subject_height_px(69) / 160)
 
 
 def test_a_bible_on_disk_is_reused_rather_than_rewritten(tmp_path):

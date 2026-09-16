@@ -43,7 +43,7 @@ def test_sheet_wraps_onto_rows(tmp_path):
 def test_sheet_rejects_an_unregistered_cell(tmp_path):
     odd = tmp_path / "odd.png"
     Image.new("RGBA", (10, 10)).save(odd)
-    with pytest.raises(ValueError, match="not the 480x560 cell"):
+    with pytest.raises(ValueError, match=f"not the {CELL_WIDTH}x{CELL_HEIGHT} cell"):
         sprite_sheet([odd], tmp_path / "sheet.png")
 
 
