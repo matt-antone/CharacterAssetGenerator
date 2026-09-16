@@ -90,3 +90,14 @@ def test_every_frame_prompt_defends_the_prop_against_the_pose_cue():
     )
     assert "still in that same hand" in prompt
     assert "bare fist" in prompt
+
+
+def test_every_render_is_told_where_the_viewer_stands():
+    """Outlaw's victory set looked up at her; every other set looked slightly down."""
+    from cag.prompts import frame_prompt, sheet_prompt, view_prompt
+    from cag.style import VIEWPOINT
+
+    assert VIEWPOINT in STYLE  # so it reaches every prompt that carries the style
+    assert "never looking up at the figure from below" in VIEWPOINT
+    # Stated as the viewer's position, so a KO frame on the floor cannot drag the camera down.
+    assert "This is the camera, not the pose" in VIEWPOINT

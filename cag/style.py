@@ -15,6 +15,21 @@ from pathlib import Path
 #: is kept below as SIXTEEN_BIT. Everything load-bearing is the same in both:
 #: the pixel grid, the hard edges, no gradients, the two-pixel black outline.
 #: Only the palette depth changes. Do not soften either into "cartoon" or
+#: Where the viewer stands. The view prompts name which way the character faces
+#: but never the height the camera sees them from, so a render was free to look
+#: up at the figure: Outlaw's victory set came back showing the underside of the
+#: hat brim while every other set of hers looked slightly down onto the crown.
+#: Framing is stated as the viewer's position, never as the figure's posture —
+#: a KO frame ends up on the floor, and the camera must not follow it down.
+VIEWPOINT = (
+    "The viewer is level with the character and square to them, at the same fixed height and "
+    "distance in every render: never looking up at the figure from below, never down on it from "
+    "above, and never tilted. No perspective distortion and no lens foreshortening — near and "
+    "far parts of the body keep the same scale, and a hat brim, shoulder line or floor reads the "
+    "same way it does in every other render of this character. This is the camera, not the pose: "
+    "the character may crouch, lean or fall, and the viewpoint still does not move."
+)
+
 #: "cel-shaded" — that gives a modern vector sprite, not an arcade one.
 STYLE = (
     "Mid-1990s 32-bit arcade sprite art, the Capcom Street Fighter Alpha and Marvel vs Capcom "
@@ -23,7 +38,8 @@ STYLE = (
     "richer palette than the 16-bit era: four to six discrete banded tones per material, with "
     "deliberate rim light along the lit edge and reflected colour inside the shadows. A solid "
     "black silhouette outline about two pixels wide around the whole figure. Full body, head to "
-    "feet, nothing cropped."
+    "feet, nothing cropped. "
+    f"{VIEWPOINT}"
 )
 
 #: The 16-bit look this started from. Two or three flat tones per material.
