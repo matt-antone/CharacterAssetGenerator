@@ -58,7 +58,7 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
              "--out", str(tmp_path / "o")]
         )
     assert "source/key.png" in str(stop.value)
-    assert "cag approve specs/velvet-lou.json" in str(stop.value)
+    assert "uv run cag approve specs/velvet-lou.json" in str(stop.value)
     assert not (tmp_path / "o").exists()  # nothing else was drawn or written
 
 

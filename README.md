@@ -4,7 +4,7 @@ Turns a short character brief into game-ready sprite assets: a projection sheet
 of static views, and a masked animation set per animation the brief names.
 
 ```bash
-cag build specs/belter.json --jobs 4
+uv run cag build specs/belter.json --jobs 4
 ```
 
 The first run stops after the key art and waits for a human. Look at
@@ -12,7 +12,7 @@ The first run stops after the key art and waits for a human. Look at
 again for a redraw:
 
 ```bash
-cag approve specs/belter.json
+uv run cag approve specs/belter.json
 ```
 
 Once approved, that writes `outputs/belter/`: four projection cells under `views/`, then a
@@ -24,7 +24,7 @@ A single set, against a traced [MotionArtist](https://github.com/matt-antone/Mot
 sheet instead of a written one:
 
 ```bash
-cag build specs/crooner.json --set dance --motion ../MotionArtist/work/sample/motion.json
+uv run cag build specs/crooner.json --set dance --motion ../MotionArtist/work/sample/motion.json
 ```
 
 ## How it runs
@@ -36,7 +36,7 @@ references what it locks:
 | --- | --- |
 | `bible` | One model call turns the brief into a locked visual description. Every later prompt quotes it verbatim, so identity cannot drift. Saved to `work/<slug>/bible.txt`, so a later run can pin the same identity instead of writing a fresh description and accepting the drift. |
 | `key_art` | Draws the front-left three-quarter reference on a magenta backdrop. |
-| `approval` | Stops the run until `cag approve` signs off on that key art. Every other render quotes it, so a wrong one is a whole wrong character. The record in `work/<slug>/key-approved.txt` holds the art's digest, so a redraw revokes the approval rather than inheriting it. |
+| `approval` | Stops the run until `uv run cag approve` signs off on that key art. Every other render quotes it, so a wrong one is a whole wrong character. The record in `work/<slug>/key-approved.txt` holds the art's digest, so a redraw revokes the approval rather than inheriting it. |
 | `scale` | Measures the character's crown-to-heel span off the key art. Read once, reused forever. |
 | `projection` | Draws front, back and profile, each with the key art attached as a reference image. |
 | `mask` | Cuts every view out and registers it into the cell. |
@@ -77,10 +77,10 @@ high or low of its neighbours, and a loop that should stand still will jitter or
 slide. The mask cannot tell a drift from a deliberate step, so it leaves both
 alone. Deciding which is which is a person's job.
 
-`cag edit` serves a small editor over one character's output folder:
+`uv run cag edit` serves a small editor over one character's output folder:
 
 ```bash
-cag edit outputs/belter
+uv run cag edit outputs/belter
 ```
 
 Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
@@ -105,9 +105,9 @@ Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
 
 Frames are clipped to their own cell, so a nudge can push art off the edge but
 never into a neighbour. The editor changes pixels only: the fps box does not
-write back to the set's plan, and **a later `cag build` of that set overwrites
+write back to the set's plan, and **a later `uv run cag build` of that set overwrites
 the sheet and loses the edits**. Opened straight from disk instead of through
-`cag edit`, Save downloads the sheet and leaves the proof alone.
+`uv run cag edit`, Save downloads the sheet and leaves the proof alone.
 
 ## Constraints this was built under
 
@@ -198,6 +198,10 @@ QA belong to the pipeline, not to the designer's file.
 uv sync
 uv run pytest
 ```
+
+`uv sync` installs `cag` into the project's `.venv`, not onto your PATH, so a
+bare `cag` answers `command not found`. That is why every command here starts
+with `uv run`. After `source .venv/bin/activate`, plain `cag` works too.
 
 ## What this deliberately is not
 

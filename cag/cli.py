@@ -109,7 +109,7 @@ def build(
     except ApprovalRequired as gate:
         raise SystemExit(
             f"[static] {spec.name}: key art is waiting for approval at {gate}\n"
-            f"  approve it:  cag approve {spec_path}\n"
+            f"  approve it:  uv run cag approve {spec_path}\n"
             f"  or redraw it: rm {gate} and build again"
         ) from None
 

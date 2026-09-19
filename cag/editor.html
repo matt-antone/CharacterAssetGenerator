@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Frame Nudger</title>
-<!-- Served by `cag edit <out>`: open a *-sheet.png from that folder, drag or arrow-key frames,
+<!-- Served by `uv run cag edit <out>`: open a *-sheet.png from that folder, drag or arrow-key frames,
      Save overwrites the sheet and rebuilds its proof. Opened as a file, Save just downloads. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -113,7 +113,7 @@
 <section class="help">
  <h2>How to use</h2>
  <ol>
-  <li>Start the editor over a character's output folder: <code>uv run python -m cag.cli edit outputs/&lt;character&gt;</code>, then open <code>http://127.0.0.1:8765/</code>.</li>
+  <li>Start the editor over a character's output folder: <code>uv run cag edit outputs/&lt;character&gt;</code>, then open <code>http://127.0.0.1:8765/</code>.</li>
   <li><strong>Open sheet…</strong> and pick a <code>&lt;set&gt;-sheet.png</code> from that same folder.</li>
   <li><strong>Play</strong> to watch the loop. Pause, then pick the frame that jumps: click it in the strip, drag the slider, or step with <kbd>,</kbd> <kbd>.</kbd></li>
   <li><strong>Move the frame</strong> by dragging it on the stage, nudging with the arrow keys, or typing an exact x / y offset. The faded figure is the previous frame; line up against it and the floor guide.</li>
@@ -126,7 +126,7 @@
   <div><dt><kbd>,</kbd> / <kbd>.</kbd></dt><dd>previous / next frame</dd></div>
   <div><dt><kbd>Space</kbd></dt><dd>play / pause</dd></div>
  </dl>
- <p>Opened straight from disk instead of through <code>cag edit</code>, Save downloads the sheet and leaves the proof alone.</p>
+ <p>Opened straight from disk instead of through <code>uv run cag edit</code>, Save downloads the sheet and leaves the proof alone.</p>
 </section>
 
 <script>
@@ -235,7 +235,7 @@ $('save').onclick = async () => {
     if (!location.protocol.startsWith('http')) { // file: or data: — no cag edit server to rebuild the proof
       const a = document.createElement('a');
       a.href = URL.createObjectURL(png); a.download = name; a.click();
-      return status(`Downloaded ${name}. Proof not rebuilt: start with cag edit for that.`);
+      return status(`Downloaded ${name}. Proof not rebuilt: start the editor with uv run cag edit for that.`);
     }
     const r = await fetch(`/?name=${encodeURIComponent(name)}&fps=${$('fps').value}`, {method: 'POST', body: png});
     status(r.ok ? `Saved ${name}; ${(await r.text()).replace(/^saved, /, '')}.` : `Not saved: ${await r.text()}`, !r.ok);
