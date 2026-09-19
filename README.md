@@ -88,18 +88,26 @@ Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
 
 1. **Play** to watch the loop. Changing fps while it plays takes effect at once.
 2. Pause, then pick the frame that jumps: click it in the filmstrip, drag the
-   slider, or step with `,` and `.`.
+   slider, or step with the `‹` `›` buttons beside it, `⌘` + `←` `→`, or `,` and `.`.
 3. Move it by dragging it on the stage, nudging with the arrow keys (`Shift`
    for 10px), or typing an exact x / y offset. The faded figure is the previous
    frame; line up against it, the centre line and the floor line, which sits on
    the animation contact row.
+   If a frame reads bigger or smaller than its neighbours, scale it with `[` and
+   `]` (`Shift` for 10%) or type a %. It scales about the floor point on the
+   centre line, so feet stay planted.
 4. **Save sheet** overwrites the sheet in place and rebuilds `<set>-proof.gif`
-   beside it at the fps in the box. Frames you moved carry a dot in the filmstrip.
+   beside it at the fps in the box, then closes the sheet and shows the result
+   on the stage. If the save fails, the sheet stays open with your edits. Frames
+   you moved carry a dot in the filmstrip.
 
 | Key | Does |
 | --- | --- |
 | `←` `→` `↑` `↓` | nudge 1px |
 | `Shift` + arrows | nudge 10px |
+| `[` / `]` | scale −1% / +1% |
+| `Shift` + `[` `]` | scale ±10% |
+| `⌘` + `←` / `→` | previous / next frame |
 | `,` / `.` | previous / next frame |
 | `Space` | play / pause |
 
