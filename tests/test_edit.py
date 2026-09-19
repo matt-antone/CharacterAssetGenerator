@@ -66,3 +66,26 @@ def test_server_only_takes_saves_from_its_own_page(tmp_path):
     assert post("https://evil.example") == 403
     assert post(None) == 403
     assert post(f"http://127.0.0.1:{port}") == 200
+
+
+def test_locate_tells_characters_apart_by_contents(tmp_path, monkeypatch):
+    from cag.edit import locate
+
+    monkeypatch.chdir(tmp_path)  # find_spec reads specs/ from where cag runs
+    (tmp_path / "specs").mkdir()
+    (tmp_path / "specs" / "x.json").write_text(
+        '{"name": "Tall Tom", "height": "6\'", "description": "d"}'
+    )
+    for slug, colour in (("tall-tom", (255, 0, 0, 255)), ("belter", (0, 0, 255, 255))):
+        (tmp_path / slug).mkdir()
+        png = BytesIO()
+        Image.new("RGBA", (560, 560), colour).save(png, format="PNG")
+        (tmp_path / slug / "dance-sheet.png").write_bytes(png.getvalue())
+
+    tom = (tmp_path / "tall-tom" / "dance-sheet.png").read_bytes()
+    assert locate(tmp_path, "dance-sheet.png", tom) == {
+        "folder": "tall-tom", "height": "6'", "row": 133  # 528 - 72in at 560px / 102in
+    }
+    belter = (tmp_path / "belter" / "dance-sheet.png").read_bytes()
+    assert locate(tmp_path, "dance-sheet.png", belter)["row"] is None  # no brief for belter
+    assert locate(tmp_path / "belter", "dance-sheet.png", tom) is None

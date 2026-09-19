@@ -77,14 +77,18 @@ high or low of its neighbours, and a loop that should stand still will jitter or
 slide. The mask cannot tell a drift from a deliberate step, so it leaves both
 alone. Deciding which is which is a person's job.
 
-`uv run cag edit` serves a small editor over one character's output folder:
+`uv run cag edit` serves a small editor over the outputs, or one character's
+folder:
 
 ```bash
-uv run cag edit outputs/belter
+uv run cag edit outputs
 ```
 
 Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
-`<set>-sheet.png` from that folder.
+`<set>-sheet.png` from under that folder. Every character's sheets share the
+same names, so the editor matches the one you open to its folder by contents:
+that folder's brief (found in `specs/` by slug) sets the height guide, and Save
+writes back there. A sheet that isn't under the folder won't save.
 
 1. **Play** to watch the loop. Changing fps while it plays takes effect at once.
 2. Pause, then pick the frame that jumps: click it in the filmstrip, drag the
@@ -92,7 +96,8 @@ Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
 3. Move it by dragging it on the stage, nudging with the arrow keys (`Shift`
    for 10px), or typing an exact x / y offset. The faded figure is the previous
    frame; line up against it, the centre line and the floor line, which sits on
-   the animation contact row.
+   the animation contact row. The dashed line above is the brief's height: where
+   the crown lands on a standing frame.
    If a frame reads bigger or smaller than its neighbours, scale it with `[` and
    `]` (`Shift` for 10%) or type a %. It scales about the floor point on the
    centre line, so feet stay planted.
