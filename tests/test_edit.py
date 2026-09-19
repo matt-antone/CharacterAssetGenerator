@@ -66,3 +66,15 @@ def test_server_only_takes_saves_from_its_own_page(tmp_path):
     assert post("https://evil.example") == 403
     assert post(None) == 403
     assert post(f"http://127.0.0.1:{port}") == 200
+
+
+def test_editor_draws_the_briefs_height(tmp_path):
+    from cag.edit import editor_page, find_spec
+
+    specs = tmp_path / "specs"
+    specs.mkdir()
+    (specs / "x.json").write_text('{"name": "Tall Tom", "height": "6\'", "description": "d"}')
+    spec = find_spec(tmp_path / "tall-tom", specs)
+    assert spec == specs / "x.json"
+    assert 'const SPEC = {"height": "6\'", "row": 133};' in editor_page(spec).decode()  # 528 - 72in
+    assert find_spec(tmp_path / "nobody", specs) is None

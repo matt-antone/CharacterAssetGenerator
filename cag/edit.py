@@ -6,6 +6,7 @@ rebuilds the proof beside it, the same way `build` made it.
 
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -16,7 +17,8 @@ from urllib.parse import parse_qs, urlparse
 from PIL import Image
 
 from .assemble import gif_proof, split_sheet
-from .geometry import CELL_HEIGHT, CELL_WIDTH
+from .geometry import ANIM_CONTACT_ROW, CELL_HEIGHT, CELL_WIDTH, anim_subject_height_px
+from .spec import load_spec
 
 EDITOR = Path(__file__).with_name("editor.html")
 
@@ -52,16 +54,39 @@ def save_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Path:
     return proof
 
 
-def serve(out_dir: Path, port: int) -> None:
+def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
+    """The brief whose slug names this output folder, if one is in `specs`."""
+    for path in sorted(specs.glob("*.json")):
+        try:
+            if load_spec(path).slug == Path(out_dir).resolve().name:
+                return path
+        except ValueError:
+            continue  # the schema, or a brief that doesn't load
+    return None
+
+
+def editor_page(spec_path: Path | None) -> bytes:
+    """The editor, told where the brief's crown lands so it can draw a height guide."""
+    page = EDITOR.read_text()
+    if spec_path is not None:
+        spec = load_spec(spec_path)
+        row = ANIM_CONTACT_ROW + 1 - anim_subject_height_px(spec.height_inches)
+        crown = {"height": spec.height, "row": row}
+        page = page.replace("const SPEC = null;", f"const SPEC = {json.dumps(crown)};")
+    return page.encode()
+
+
+def serve(out_dir: Path, port: int, spec_path: Path | None = None) -> None:
     # Any page the user visits can POST to localhost, and a rebound DNS name can
     # reach it too. Only our own origin, addressed by a local name, gets in.
     hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+    page = editor_page(spec_path or find_spec(out_dir))
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             if self.headers.get("Host") not in hosts:
                 return self.reply(403, b"forbidden", "text/plain")
-            self.reply(200, EDITOR.read_bytes(), "text/html; charset=utf-8")
+            self.reply(200, page, "text/html; charset=utf-8")
 
         def do_POST(self):
             host = self.headers.get("Host")

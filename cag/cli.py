@@ -219,10 +219,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     edit_parser.add_argument("out", type=Path, help="a character's output folder")
     edit_parser.add_argument("--port", type=int, default=8765)
+    edit_parser.add_argument(
+        "--spec",
+        type=Path,
+        help="brief for the height guide; default: the one in specs/ whose slug matches",
+    )
 
     args = parser.parse_args(argv)
     if args.command == "edit":
-        serve(args.out, args.port)
+        serve(args.out, args.port, args.spec)
         return 0
     if args.command == "approve":
         spec = load_spec(args.spec)

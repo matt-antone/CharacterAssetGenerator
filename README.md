@@ -92,7 +92,9 @@ Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
 3. Move it by dragging it on the stage, nudging with the arrow keys (`Shift`
    for 10px), or typing an exact x / y offset. The faded figure is the previous
    frame; line up against it, the centre line and the floor line, which sits on
-   the animation contact row.
+   the animation contact row. The dashed line above is the brief's height: where
+   the crown lands on a standing frame. `cag edit` finds the brief in `specs/`
+   by the folder's name (`--spec` to point elsewhere).
    If a frame reads bigger or smaller than its neighbours, scale it with `[` and
    `]` (`Shift` for 10%) or type a %. It scales about the floor point on the
    centre line, so feet stay planted.

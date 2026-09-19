@@ -30,6 +30,7 @@
  canvas{cursor:grab;touch-action:none} canvas:active{cursor:grabbing}
  svg{pointer-events:none} svg line{stroke:var(--accent);stroke-width:1;opacity:.45;vector-effect:non-scaling-stroke}
  svg text{fill:var(--accent);opacity:.7;font:500 13px "Instrument Sans",sans-serif}
+ svg line.crown{stroke-dasharray:6 4}
  .empty{position:absolute;inset:0;display:grid;place-content:center;text-align:center;color:var(--mute);
   pointer-events:none;padding:24px}
  .empty b{display:block;color:var(--ink);font-weight:500;font-size:17px;margin-bottom:4px}
@@ -54,7 +55,7 @@
  .num{display:flex;align-items:center;gap:4px;background:var(--raise);border:1px solid var(--line);
   border-radius:5px;padding:1px 6px;color:var(--mute)}
  .num input{width:3.2em;background:none;border:0;font-variant-numeric:tabular-nums;color:var(--ink)}
- .num input:focus{outline:none} .num:focus-within{border-color:var(--accent)}
+ .num #dk{width:4.2em} .num input:focus{outline:none} .num:focus-within{border-color:var(--accent)}
  .ghost{background:none;border:1px solid var(--line);border-radius:5px;padding:2px 8px;cursor:pointer}
  .ghost:hover:not(:disabled){border-color:var(--mute)}
  #play{min-width:4.2em}
@@ -91,6 +92,7 @@
    <svg id="guides" viewBox="0 0 560 560" aria-hidden="true">
     <line x1="280" y1="0" x2="280" y2="560"/><line x1="0" y1="527" x2="560" y2="527"/>
     <text x="8" y="520">floor</text>
+    <g id="crown" display="none"><line class="crown" x1="0" x2="560"/><text x="8"></text></g>
    </svg>
    <div id="status" role="status"></div>
    <p class="empty"><span><b>Open a sprite sheet</b>Pick a <code>*-sheet.png</code> from this character's output folder.</span></p>
@@ -106,7 +108,7 @@
    <span class="count" id="count">– <small>/ –</small></span>
    <label class="num">x <input type="number" id="dx" value="0" step="1" aria-label="x offset, px"></label>
    <label class="num">y <input type="number" id="dy" value="0" step="1" aria-label="y offset, px"></label>
-   <label class="num">% <input type="number" id="dk" value="100" step="1" min="10" max="400" aria-label="scale, percent"></label>
+   <label class="num">% <input type="number" id="dk" value="100" step="0.25" min="10" max="400" aria-label="scale, percent"></label>
    <button class="ghost" id="reset" title="Reset this frame's offset and scale">Reset</button>
   </div>
   <div class="row">
@@ -123,16 +125,17 @@
   <li>Start the editor over a character's output folder: <code>uv run cag edit outputs/&lt;character&gt;</code>, then open <code>http://127.0.0.1:8765/</code>.</li>
   <li><strong>Open sheet…</strong> and pick a <code>&lt;set&gt;-sheet.png</code> from that same folder.</li>
   <li><strong>Play</strong> to watch the loop. Pause, then pick the frame that jumps: click it in the strip, drag the slider, or step with the ‹ › buttons beside the strip, <kbd>⌘</kbd> + <kbd>←</kbd> <kbd>→</kbd>, or <kbd>,</kbd> <kbd>.</kbd></li>
-  <li><strong>Move the frame</strong> by dragging it on the stage, nudging with the arrow keys, or typing an exact x / y offset. The faded figure is the previous frame; line up against it and the floor guide.</li>
-  <li><strong>Scale the frame</strong> with <kbd>[</kbd> <kbd>]</kbd> or by typing a %. It grows and shrinks about the floor point on the centre line, so feet stay planted.</li>
+  <li><strong>Move the frame</strong> by dragging it on the stage, nudging with the arrow keys, or typing an exact x / y offset. The faded figure is the previous frame; line up against it, the floor guide, and the dashed height guide from the brief.</li>
+  <li><strong>Scale the frame</strong> with <kbd>[</kbd> <kbd>]</kbd>, <kbd>⌘</kbd> + <kbd>↑</kbd> <kbd>↓</kbd>, or by typing a %. It grows and shrinks about the floor point on the centre line, so feet stay planted.</li>
   <li><strong>Save sheet</strong> overwrites the sheet and rebuilds <code>&lt;set&gt;-proof.gif</code> at the fps shown, then closes the sheet; the result shows on the stage. Frames you moved carry a dot in the strip. If the save fails the sheet stays open with your edits.</li>
  </ol>
  <h2>Keys</h2>
  <dl class="keys">
   <div><dt><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></dt><dd>nudge 1px</dd></div>
   <div><dt><kbd>Shift</kbd> + arrows</dt><dd>nudge 10px</dd></div>
-  <div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>scale −1% / +1%</dd></div>
+  <div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>scale −0.25% / +0.25%</dd></div>
   <div><dt><kbd>Shift</kbd> + <kbd>[</kbd> <kbd>]</kbd></dt><dd>scale ±10%</dd></div>
+  <div><dt><kbd>⌘</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd></dt><dd>scale +0.25% / −0.25% (<kbd>Shift</kbd> ±10%)</dd></div>
   <div><dt><kbd>⌘</kbd> + <kbd>←</kbd> / <kbd>→</kbd></dt><dd>previous / next frame</dd></div>
   <div><dt><kbd>,</kbd> / <kbd>.</kbd></dt><dd>previous / next frame</dd></div>
   <div><dt><kbd>Space</kbd></dt><dd>play / pause</dd></div>
@@ -144,6 +147,13 @@
 const CELL = 560; // cag/geometry.py CELL_WIDTH/CELL_HEIGHT
 const AX = 280, AY = 527; // scale anchor: cell centre on the floor guide (ANIM_CONTACT_ROW)
 const $ = id => document.getElementById(id);
+const SPEC = null; // `cag edit` fills in the brief's height and the row its crown lands on
+if (SPEC) {
+  const [line, text] = $('crown').children;
+  line.setAttribute('y1', SPEC.row); line.setAttribute('y2', SPEC.row);
+  text.setAttribute('y', SPEC.row - 6); text.textContent = `height ${SPEC.height}`;
+  $('crown').removeAttribute('display');
+}
 const ctx = $('view').getContext('2d');
 let img, name, cols, count = 0, offsets = [], thumbs = [], cur = 0, timer = null, drag = null;
 
@@ -184,13 +194,15 @@ function show(i) {
   ctx.clearRect(0, 0, CELL, CELL);
   if ($('onion').checked && !timer && count > 1) {
     const p = (cur - 1 + count) % count;
-    ctx.globalAlpha = .3; cell(p, offsets[p]); ctx.globalAlpha = 1;
+    const o = new OffscreenCanvas(CELL, CELL).getContext('2d'); cell(p, offsets[p], o);
+    o.globalCompositeOperation = 'source-atop'; o.fillStyle = '#ff4fa3'; o.fillRect(0, 0, CELL, CELL); // pink tint
+    ctx.globalAlpha = .35; ctx.drawImage(o.canvas, 0, 0); ctx.globalAlpha = 1;
   }
   cell(cur, offsets[cur]);
   $('count').innerHTML = `${String(cur + 1).padStart(2, '0')} <small>/ ${count}</small>`;
   if (document.activeElement !== $('dx')) $('dx').value = offsets[cur][0];
   if (document.activeElement !== $('dy')) $('dy').value = offsets[cur][1];
-  if (document.activeElement !== $('dk')) $('dk').value = +(offsets[cur][2] * 100).toFixed(1);
+  if (document.activeElement !== $('dk')) $('dk').value = +(offsets[cur][2] * 100).toFixed(2);
   thumbs.forEach((t, k) => t.setAttribute('aria-current', k === cur));
   if (!timer) { thumb(cur); thumbs[cur].scrollIntoView({block: 'nearest', inline: 'nearest'}); }
 }
@@ -239,10 +251,14 @@ document.onkeydown = e => {
     e.preventDefault(); return $(e.key === 'ArrowLeft' ? 'prev' : 'next').click();
   }
   const step = e.shiftKey ? 10 : 1;
-  const d = {ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step]}[e.key];
-  const z = {'[': -.01, ']': .01, '{': -.1, '}': .1}[e.key]; // Shift+[ ] arrive as { }
+  const mod = e.metaKey || e.ctrlKey; // ⌘+↑ ↓ scale instead of nudge
+  const d = !mod && {ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step]}[e.key];
+  const zs = e.shiftKey ? .1 : .0025;
+  const z = mod ? {ArrowUp: zs, ArrowDown: -zs}[e.key]
+    : {'[': -.0025, ']': .0025, '{': -.1, '}': .1}[e.key]; // Shift+[ ] arrive as { }
+  if (z && mod) e.preventDefault(); // not scroll-to-top/bottom
   if (d) { e.preventDefault(); move(offsets[cur][0] + d[0], offsets[cur][1] + d[1]); }
-  else if (z) { const [x, y, k] = offsets[cur]; move(x, y, Math.round((k + z) * 100) / 100); }
+  else if (z) { const [x, y, k] = offsets[cur]; move(x, y, Math.round((k + z) * 10000) / 10000); }
   else if (e.key === ',') { stop(); show(cur - 1); }
   else if (e.key === '.') { stop(); show(cur + 1); }
   else if (e.key === ' ') { e.preventDefault(); $('play').click(); }
