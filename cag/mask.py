@@ -71,6 +71,11 @@ CUT_IN = 1
 #: the render falls back to Vision.
 MIN_SUBJECT_SHARE = 0.02
 
+#: On a sheet with no landmarks, frames within this factor of the shortest
+#: figure count as standing. Measured standing frames of one sheet spread about
+#: 3%; arms overhead added 6-15%.
+STANDING_SPREAD = 1.05
+
 
 class MaskError(RuntimeError):
     """Raised when no subject could be separated from the background."""
@@ -549,9 +554,12 @@ def set_to_cells(
     A sheet with no landmarks has nothing to read a pose from, and the key
     art's factor is no use either: it assumes the key art's magnification, and
     a figure sharing a canvas with seven others is drawn a third that size. So
-    the sheet is its own ruler — the median figure height across it is taken as
-    standing height. A set that crouches or reaches for most of its frames
-    would read short or tall.
+    the sheet is its own ruler: the frames drawn near the sheet's shortest are
+    taken as standing, and their median is standing height. Arms raised overhead
+    add up to a sixth to a figure's box, and a victory set that reached on half
+    its frames had its median pulled up by that and came out 7% small. A hung
+    head or a bent knee takes off far less, so those frames stay in the count.
+    A set that crouches on most of its frames would still read tall.
     """
     subjects = {index: cutout(source) for index, source in sorted(sources.items())}
     cells = {}
@@ -562,9 +570,10 @@ def set_to_cells(
                 for index in group
             )
         else:
-            # ponytail: median box height as stature; measure the key art's proportions if a set fools it
+            # ponytail: shortest-cluster box height as stature; measure the key art's proportions if a set fools it
             heights = [subject_box(subjects[index])[3] - subject_box(subjects[index])[1] for index in group]
-            scale = anim_subject_height_px(height_inches) / statistics.median(heights)
+            standing = [h for h in heights if h <= min(heights) * STANDING_SPREAD]
+            scale = anim_subject_height_px(height_inches) / statistics.median(standing)
         for index in group:
             dst = dst_for(index)
             dst.parent.mkdir(parents=True, exist_ok=True)
