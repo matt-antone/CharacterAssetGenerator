@@ -217,17 +217,14 @@ def main(argv: list[str] | None = None) -> int:
     edit_parser = sub.add_parser(
         "edit", help="nudge frames of a set's sheet in the browser; Save rebuilds its proof"
     )
-    edit_parser.add_argument("out", type=Path, help="a character's output folder")
-    edit_parser.add_argument("--port", type=int, default=8765)
     edit_parser.add_argument(
-        "--spec",
-        type=Path,
-        help="brief for the height guide; default: the one in specs/ whose slug matches",
+        "out", type=Path, help="a character's output folder, or outputs/ for every character"
     )
+    edit_parser.add_argument("--port", type=int, default=8765)
 
     args = parser.parse_args(argv)
     if args.command == "edit":
-        serve(args.out, args.port, args.spec)
+        serve(args.out, args.port)
         return 0
     if args.command == "approve":
         spec = load_spec(args.spec)

@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Frame Nudger</title>
-<!-- Served by `uv run cag edit <out>`: open a *-sheet.png from that folder, drag or arrow-key frames,
+<!-- Served by `uv run cag edit <out>`: open a *-sheet.png from under that folder, drag or arrow-key frames,
      Save overwrites the sheet and rebuilds its proof. Opened as a file, Save just downloads. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -122,8 +122,8 @@
 <section class="help">
  <h2>How to use</h2>
  <ol>
-  <li>Start the editor over a character's output folder: <code>uv run cag edit outputs/&lt;character&gt;</code>, then open <code>http://127.0.0.1:8765/</code>.</li>
-  <li><strong>Open sheet…</strong> and pick a <code>&lt;set&gt;-sheet.png</code> from that same folder.</li>
+  <li>Start the editor over the outputs: <code>uv run cag edit outputs</code> (or one character's folder), then open <code>http://127.0.0.1:8765/</code>.</li>
+  <li><strong>Open sheet…</strong> and pick a <code>&lt;set&gt;-sheet.png</code> from under that folder. The editor matches it to its character by contents, draws that brief's height, and saves back to the same folder.</li>
   <li><strong>Play</strong> to watch the loop. Pause, then pick the frame that jumps: click it in the strip, drag the slider, or step with the ‹ › buttons beside the strip, <kbd>⌘</kbd> + <kbd>←</kbd> <kbd>→</kbd>, or <kbd>,</kbd> <kbd>.</kbd></li>
   <li><strong>Move the frame</strong> by dragging it on the stage, nudging with the arrow keys, or typing an exact x / y offset. The faded figure is the previous frame; line up against it, the floor guide, and the dashed height guide from the brief.</li>
   <li><strong>Scale the frame</strong> with <kbd>[</kbd> <kbd>]</kbd>, <kbd>⌘</kbd> + <kbd>↑</kbd> <kbd>↓</kbd>, or by typing a %. It grows and shrinks about the floor point on the centre line, so feet stay planted.</li>
@@ -147,15 +147,16 @@
 const CELL = 560; // cag/geometry.py CELL_WIDTH/CELL_HEIGHT
 const AX = 280, AY = 527; // scale anchor: cell centre on the floor guide (ANIM_CONTACT_ROW)
 const $ = id => document.getElementById(id);
-const SPEC = null; // `cag edit` fills in the brief's height and the row its crown lands on
-if (SPEC) {
+const served = location.protocol.startsWith('http'); // under `cag edit`, not opened from disk
+function crown(spec) { // the brief's height, where a standing frame's crown lands
   const [line, text] = $('crown').children;
-  line.setAttribute('y1', SPEC.row); line.setAttribute('y2', SPEC.row);
-  text.setAttribute('y', SPEC.row - 6); text.textContent = `height ${SPEC.height}`;
-  $('crown').removeAttribute('display');
+  $('crown').setAttribute('display', spec && spec.row ? 'inline' : 'none');
+  if (!spec || !spec.row) return;
+  line.setAttribute('y1', spec.row); line.setAttribute('y2', spec.row);
+  text.setAttribute('y', spec.row - 6); text.textContent = `height ${spec.height}`;
 }
 const ctx = $('view').getContext('2d');
-let img, name, cols, count = 0, offsets = [], thumbs = [], cur = 0, timer = null, drag = null;
+let img, name, folder = null, cols, count = 0, offsets = [], thumbs = [], cur = 0, timer = null, drag = null;
 
 $('file').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
@@ -173,6 +174,13 @@ $('file').onchange = async e => {
   $('strip').replaceChildren(...thumbs); thumbs.forEach((_, i) => thumb(i));
   $('frame').max = count - 1; $('sheet').textContent = name; $('stage').classList.add('loaded');
   status(''); e.target.blur(); show(0);
+  crown(null); folder = null;
+  if (served) { // only the bytes say whose sheet this is: every character has a dance-sheet.png
+    const r = await fetch(`/locate?name=${encodeURIComponent(name)}`, {method: 'POST', body: f});
+    if (!r.ok) return status(`${await r.text()}. Save is off for this sheet.`, true);
+    const found = await r.json(); folder = found.folder; crown(found);
+    $('sheet').textContent = `${found.folder === '.' ? '' : found.folder + '/'}${name}`;
+  }
 };
 
 function cell(i, [dx, dy, k] = [0, 0, 1], c = ctx, s = 1) {
@@ -213,7 +221,7 @@ function unload() { // after a save: close the sheet so the next one starts clea
   ctx.clearRect(0, 0, CELL, CELL); $('strip').replaceChildren(); $('file').value = '';
   $('stage').classList.remove('loaded'); $('sheet').textContent = 'no sheet open';
   $('count').innerHTML = '– <small>/ –</small>'; $('frame').max = 0;
-  $('dx').value = $('dy').value = 0; $('dk').value = 100;
+  $('dx').value = $('dy').value = 0; $('dk').value = 100; crown(null); folder = null;
 }
 function status(text, bad = false) { $('status').textContent = text; $('status').classList.toggle('bad', bad); }
 
@@ -280,7 +288,9 @@ $('save').onclick = async () => {
       a.href = URL.createObjectURL(png); a.download = name; a.click();
       unload(); return status(`Downloaded ${name}. Proof not rebuilt: start the editor with uv run cag edit for that.`);
     }
-    const r = await fetch(`/?name=${encodeURIComponent(name)}&fps=${$('fps').value}`, {method: 'POST', body: png});
+    if (folder === null) return status('Not saved: this sheet was not found under the cag edit folder.', true);
+    const q = new URLSearchParams({name, folder, fps: $('fps').value});
+    const r = await fetch(`/save?${q}`, {method: 'POST', body: png});
     const text = await r.text();
     if (!r.ok) return status(`Not saved: ${text}`, true); // keep the sheet and its edits
     unload(); status(`Saved ${name}; ${text.replace(/^saved, /, '')}.`);

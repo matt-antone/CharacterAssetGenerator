@@ -65,37 +65,60 @@ def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
     return None
 
 
-def editor_page(spec_path: Path | None) -> bytes:
-    """The editor, told where the brief's crown lands so it can draw a height guide."""
-    page = EDITOR.read_text()
-    if spec_path is not None:
-        spec = load_spec(spec_path)
-        row = ANIM_CONTACT_ROW + 1 - anim_subject_height_px(spec.height_inches)
-        crown = {"height": spec.height, "row": row}
-        page = page.replace("const SPEC = null;", f"const SPEC = {json.dumps(crown)};")
-    return page.encode()
+def folders(root: Path) -> list[Path]:
+    """Where sheets may live: the folder `cag edit` was given, and the ones inside it."""
+    return [root, *sorted(p for p in root.iterdir() if p.is_dir())]
 
 
-def serve(out_dir: Path, port: int, spec_path: Path | None = None) -> None:
+def locate(root: Path, name: str, png: bytes) -> dict | None:
+    """Find which folder an opened sheet came from, by its bytes, and that brief's height.
+
+    The browser hands over a file's name but never its folder, and every set's
+    sheet is called `<set>-sheet.png` whatever the character. Only the contents
+    tell a heavyweight's dance sheet from a belter's.
+    """
+    for folder in folders(root):
+        path = folder / Path(name).name
+        if path.is_file() and path.read_bytes() == png:
+            found = {"folder": folder.relative_to(root).as_posix(), "height": None, "row": None}
+            spec_path = find_spec(folder)
+            if spec_path is not None:
+                spec = load_spec(spec_path)
+                found["height"] = spec.height
+                found["row"] = ANIM_CONTACT_ROW + 1 - anim_subject_height_px(spec.height_inches)
+            return found
+    return None
+
+
+def serve(out_dir: Path, port: int) -> None:
     # Any page the user visits can POST to localhost, and a rebound DNS name can
     # reach it too. Only our own origin, addressed by a local name, gets in.
     hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
-    page = editor_page(spec_path or find_spec(out_dir))
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             if self.headers.get("Host") not in hosts:
                 return self.reply(403, b"forbidden", "text/plain")
-            self.reply(200, page, "text/html; charset=utf-8")
+            self.reply(200, EDITOR.read_bytes(), "text/html; charset=utf-8")
 
         def do_POST(self):
             host = self.headers.get("Host")
             if host not in hosts or self.headers.get("Origin") != f"http://{host}":
                 return self.reply(403, b"forbidden: not from this editor", "text/plain")
-            query = parse_qs(urlparse(self.path).query)
+            url = urlparse(self.path)
+            query = parse_qs(url.query)
             try:
                 body = self.rfile.read(int(self.headers["Content-Length"]))
-                proof = save_sheet(out_dir, query["name"][0], body, int(query["fps"][0]))
+                name = query["name"][0]
+                if url.path == "/locate":
+                    found = locate(out_dir, name, body)
+                    if found is None:
+                        raise ValueError(f"{Path(name).name} is not a sheet under {out_dir}")
+                    return self.reply(200, json.dumps(found).encode(), "application/json")
+                folder = query.get("folder", ["."])[0]
+                if folder not in {f.relative_to(out_dir).as_posix() for f in folders(out_dir)}:
+                    raise ValueError(f"no folder {folder!r} under {out_dir}")
+                proof = save_sheet(out_dir / folder, name, body, int(query["fps"][0]))
             except (KeyError, ValueError, OSError) as error:
                 self.reply(400, str(error).encode(), "text/plain")
             else:
