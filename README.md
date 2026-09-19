@@ -64,7 +64,50 @@ outlines twice as thick with sixteen chances for the costume to wander.
 
 Frame count, fps, view and playback come from the set's plan in `cag/sets.py`,
 not from the brief: `dance` and `sing` loop, `flinch`, `guard`, `entrance`,
-`victory` and `ko` run once. All seven are eight frames at four fps.
+`victory` and `ko` run once. All seven are sixteen frames: `dance` plays at six
+fps, the rest at eight.
+
+## Every set needs a hand pass
+
+Expect to nudge frames after a build. The generator draws a set's figures
+side by side, but never at fixed positions: each figure is found by the
+backdrop around it, cut out and registered into its cell on its own. Scale holds
+across a sheet; placement does not. So a figure can sit a few pixels left, right,
+high or low of its neighbours, and a loop that should stand still will jitter or
+slide. The mask cannot tell a drift from a deliberate step, so it leaves both
+alone. Deciding which is which is a person's job.
+
+`cag edit` serves a small editor over one character's output folder:
+
+```bash
+cag edit outputs/belter
+```
+
+Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
+`<set>-sheet.png` from that folder.
+
+1. **Play** to watch the loop. Changing fps while it plays takes effect at once.
+2. Pause, then pick the frame that jumps: click it in the filmstrip, drag the
+   slider, or step with `,` and `.`.
+3. Move it by dragging it on the stage, nudging with the arrow keys (`Shift`
+   for 10px), or typing an exact x / y offset. The faded figure is the previous
+   frame; line up against it, the centre line and the floor line, which sits on
+   the animation contact row.
+4. **Save sheet** overwrites the sheet in place and rebuilds `<set>-proof.gif`
+   beside it at the fps in the box. Frames you moved carry a dot in the filmstrip.
+
+| Key | Does |
+| --- | --- |
+| `←` `→` `↑` `↓` | nudge 1px |
+| `Shift` + arrows | nudge 10px |
+| `,` / `.` | previous / next frame |
+| `Space` | play / pause |
+
+Frames are clipped to their own cell, so a nudge can push art off the edge but
+never into a neighbour. The editor changes pixels only: the fps box does not
+write back to the set's plan, and **a later `cag build` of that set overwrites
+the sheet and loses the edits**. Opened straight from disk instead of through
+`cag edit`, Save downloads the sheet and leaves the proof alone.
 
 ## Constraints this was built under
 
@@ -108,10 +151,26 @@ this buys the clean edge with.
 
 ## Geometry
 
-Every cell is `480x560`. The full height represents 7'0", so `80 px/ft`, and the
-supporting heel sits on row `550`. Scale comes from the key art and is applied
-unchanged to every frame, so a crouch renders shorter instead of being stretched
-back to standing height.
+Every cell is a `560x560` square, static or animated. The width is free (scale
+is measured off the height alone), so a reach or a stride has room.
+
+| | Static view | Animation frame |
+| --- | --- | --- |
+| Cell height represents | 9'0" | 8'6" |
+| Scale | `62.2 px/ft` | `65.9 px/ft` |
+| Supporting heel sits on row | `550` | `527`, six inches up |
+
+The static cell draws the character at true scale with headroom for a hat or a
+raised arm. An animation frame maps the same canvas to half a foot less world,
+so a character renders slightly larger there than on the static sheet, and the
+floor sits six inches off the bottom edge so a trailing foot or a shadow has
+somewhere to go. The editor's floor line is that `527` row.
+
+Static views take their scale from the key art. Animation frames take one scale
+per sheet, read off that set's own poses (see `mask` above), because a frame is
+neither standing nor drawn at the key art's size. Either way the scale is
+applied unchanged to every figure, so a crouch renders shorter instead of being
+stretched back to standing height.
 
 `character-left` and `character-right` name the character's own sides.
 `screen-left` and `screen-right` name position in the image. A prop is locked to

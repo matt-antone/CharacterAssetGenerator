@@ -13,6 +13,7 @@ from .animation import build_animation_graph
 from .assemble import gallery, gif_proof, sprite_sheet
 from .chat_codex import ChatCodex
 from .draw import draw
+from .edit import serve
 from .motion import load_motion
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
@@ -208,7 +209,16 @@ def main(argv: list[str] | None = None) -> int:
     approve_parser.add_argument("spec", type=Path, help="path to a character brief")
     approve_parser.add_argument("--work", type=Path, default=Path("work"))
 
+    edit_parser = sub.add_parser(
+        "edit", help="nudge frames of a set's sheet in the browser; Save rebuilds its proof"
+    )
+    edit_parser.add_argument("out", type=Path, help="a character's output folder")
+    edit_parser.add_argument("--port", type=int, default=8765)
+
     args = parser.parse_args(argv)
+    if args.command == "edit":
+        serve(args.out, args.port)
+        return 0
     if args.command == "approve":
         spec = load_spec(args.spec)
         log(f"[static] {spec.name}: approved {approve(args.work / spec.slug)}")
