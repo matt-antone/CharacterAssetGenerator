@@ -21,15 +21,11 @@ PX_PER_FOOT = PX_PER_INCH * 12  # 62.22...
 #: Row the supporting heel sits on for grounded poses.
 CONTACT_ROW = 550
 
-#: An animation frame spans more world than a static cell does. The static sheet
-#: is a portrait: the character stands, and 7'0" of canvas is all it ever needs.
-#: A performance jumps, reaches and wears a hat, so the same 560px of canvas is
-#: mapped to 10'0" instead, and every character is correspondingly smaller here.
-#: It stays one foot taller than the static cell: the static sheet sets the scale,
-#: and a frame must never render a character larger than the sheet it is measured
-#: against.
-ANIM_CELL_HEIGHT_INCHES = 120
-ANIM_PX_PER_INCH = CELL_HEIGHT / ANIM_CELL_HEIGHT_INCHES  # 4.666...
+#: An animation frame maps the same 560px of canvas to 8'6" of world, bottom edge
+#: to top. That is half a foot less than the static cell, so a character renders
+#: slightly larger in an animation frame than on the static sheet.
+ANIM_CELL_HEIGHT_INCHES = 102
+ANIM_PX_PER_INCH = CELL_HEIGHT / ANIM_CELL_HEIGHT_INCHES  # 5.490...
 
 #: The floor sits this far up from the bottom edge, so a heel is never flush
 #: against it and a shadow or a trailing foot has somewhere to go.
@@ -48,7 +44,7 @@ def subject_height_px(height_inches: float) -> int:
 
 
 def anim_subject_height_px(height_inches: float) -> int:
-    """Crown-to-heel pixel span in an animation frame, which spans 8' not 7'."""
+    """Crown-to-heel pixel span in an animation frame, which spans 8'6\"."""
     if height_inches <= 0:
         raise ValueError("height must be positive")
     return round(height_inches * ANIM_PX_PER_INCH)
