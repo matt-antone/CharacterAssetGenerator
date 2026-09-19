@@ -53,11 +53,20 @@ def save_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Path:
 
 
 def serve(out_dir: Path, port: int) -> None:
+    # Any page the user visits can POST to localhost, and a rebound DNS name can
+    # reach it too. Only our own origin, addressed by a local name, gets in.
+    hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
+            if self.headers.get("Host") not in hosts:
+                return self.reply(403, b"forbidden", "text/plain")
             self.reply(200, EDITOR.read_bytes(), "text/html; charset=utf-8")
 
         def do_POST(self):
+            host = self.headers.get("Host")
+            if host not in hosts or self.headers.get("Origin") != f"http://{host}":
+                return self.reply(403, b"forbidden: not from this editor", "text/plain")
             query = parse_qs(urlparse(self.path).query)
             try:
                 body = self.rfile.read(int(self.headers["Content-Length"]))

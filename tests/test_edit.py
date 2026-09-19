@@ -35,3 +35,34 @@ def test_save_refuses_anything_but_an_existing_sheet(tmp_path):
     Image.new("RGBA", (CELL_WIDTH, CELL_HEIGHT)).save(png, format="PNG")
     with pytest.raises(ValueError):
         save_sheet(tmp_path, "../hop-sheet.png", png.getvalue(), fps=12)
+
+
+def test_server_only_takes_saves_from_its_own_page(tmp_path):
+    import threading
+    import time
+    import urllib.error
+    import urllib.request
+
+    from cag.edit import serve
+
+    paths = cells(tmp_path, count=2)
+    sprite_sheet(paths, tmp_path / "hop-sheet.png")
+    png = (tmp_path / "hop-sheet.png").read_bytes()
+    port = 8799
+    threading.Thread(target=serve, args=(tmp_path, port), daemon=True).start()
+    time.sleep(0.3)
+
+    def post(origin):
+        request = urllib.request.Request(
+            f"http://127.0.0.1:{port}/?name=hop-sheet.png&fps=4", data=png, method="POST"
+        )
+        if origin:
+            request.add_header("Origin", origin)
+        try:
+            return urllib.request.urlopen(request).status
+        except urllib.error.HTTPError as error:
+            return error.code
+
+    assert post("https://evil.example") == 403
+    assert post(None) == 403
+    assert post(f"http://127.0.0.1:{port}") == 200
