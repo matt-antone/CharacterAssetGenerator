@@ -10,7 +10,7 @@ from functools import partial
 from pathlib import Path
 
 from .animation import build_animation_graph
-from .assemble import gallery, gif_proof, sprite_sheet
+from .assemble import PORTRAIT_SIZES, gallery, gif_proof, portrait, sprite_sheet
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
@@ -157,6 +157,11 @@ def build(
         sprite_sheet(cells, out_dir / block["sheet"], columns=min(SHEET_COLUMNS, len(cells)))
         gif_proof(cells, out_dir / block["proof"], motion.fps, loop=motion.loops)
         sets.append(block)
+
+    # Last, once every set is in: the portraits are cut from the key art, not drawn.
+    for units, size in PORTRAIT_SIZES.items():
+        views[f"portrait-{units}"] = Path("views") / f"portrait-{units}.png"
+        portrait(static["cells"][KEY_VIEW], out_dir / views[f"portrait-{units}"], size)
 
     page = gallery(
         out_dir / "index.html",

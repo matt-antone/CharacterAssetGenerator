@@ -2,7 +2,7 @@ import numpy
 import pytest
 from PIL import Image, ImageSequence
 
-from cag.assemble import PROOF_BACKDROP, gif_proof, split_sheet, sprite_sheet
+from cag.assemble import PORTRAIT_SIZES, PROOF_BACKDROP, gif_proof, portrait, split_sheet, sprite_sheet
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 
 
@@ -67,3 +67,18 @@ def test_empty_input_is_rejected(tmp_path):
         sprite_sheet([], tmp_path / "sheet.png")
     with pytest.raises(ValueError, match="no cells"):
         gif_proof([], tmp_path / "proof.gif", fps=4)
+
+
+def test_portrait_is_a_square_cut_around_the_head(tmp_path):
+    """A figure 400px tall with its head off to one side: the portrait is square,
+    starts at the crown and is centred on the head, not the body."""
+    cell = Image.new("RGBA", (CELL_WIDTH, CELL_HEIGHT), (0, 0, 0, 0))
+    cell.paste((200, 0, 0, 255), (200, 200, 300, 550))  # body
+    cell.paste((0, 0, 200, 255), (300, 150, 340, 200))  # head, right of the body
+    cell.save(key := tmp_path / "key.png")
+    for size in PORTRAIT_SIZES.values():
+        out = Image.open(portrait(key, tmp_path / f"portrait-{size}.png", size))
+        assert out.size == (size, size)
+        box = out.getchannel("A").getbbox()
+        assert box[1] <= size // 15  # crown near the top edge
+        assert out.getpixel((size // 2, box[1]))[2] == 200  # head sits in the middle column
