@@ -94,6 +94,8 @@ def serve(out_dir: Path, port: int) -> None:
     # Any page the user visits can POST to localhost, and a rebound DNS name can
     # reach it too. Only our own origin, addressed by a local name, gets in.
     hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+    if any(out_dir.glob("*-sheet.png")):  # one character's folder: serve its siblings too
+        out_dir = out_dir.parent
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
