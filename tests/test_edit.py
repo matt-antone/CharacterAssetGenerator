@@ -54,7 +54,7 @@ def test_server_only_takes_saves_from_its_own_page(tmp_path):
 
     def post(origin):
         request = urllib.request.Request(
-            f"http://127.0.0.1:{port}/?name=hop-sheet.png&fps=4", data=png, method="POST"
+            f"http://127.0.0.1:{port}/save?name=hop-sheet.png&fps=4&folder={tmp_path.name}", data=png, method="POST"
         )
         if origin:
             request.add_header("Origin", origin)
