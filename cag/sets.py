@@ -29,13 +29,13 @@ class SetPlan:
 
 
 SET_PLANS = {
-    "dance": SetPlan(8, 4, "loop", "front"),
-    "sing": SetPlan(8, 4, "loop", "left"),
-    "flinch": SetPlan(8, 4, "oneshot", "left"),
-    "guard": SetPlan(8, 4, "oneshot", "left", holds_final_frame=True),
-    "entrance": SetPlan(8, 4, "oneshot", "left"),
-    "victory": SetPlan(8, 4, "oneshot", "front"),
-    "ko": SetPlan(8, 4, "oneshot", "front", holds_final_frame=True),
+    "dance": SetPlan(16, 6, "loop", "front"),
+    "sing": SetPlan(16, 8, "loop", "left"),
+    "flinch": SetPlan(16, 8, "oneshot", "left"),
+    "guard": SetPlan(16, 8, "oneshot", "left", holds_final_frame=True),
+    "entrance": SetPlan(16, 8, "oneshot", "left"),
+    "victory": SetPlan(16, 8, "oneshot", "front", holds_final_frame=True),
+    "ko": SetPlan(16, 8, "oneshot", "front", holds_final_frame=True),
 }
 
 

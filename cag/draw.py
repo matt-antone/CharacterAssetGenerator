@@ -1,20 +1,32 @@
-"""Render a PNG with the codex CLI's built-in image generation.
+"""Render a PNG with a CLI agent's built-in image generation.
 
 Mechanism only. What to draw is decided upstream; this module gets the bytes on
 disk and confirms they are a real image. Sources always land on a magenta
 backdrop — the cutout happens later, once, in `cag.mask`.
+
+Two backends, one at a time: `codex` (the ChatGPT subscription, via `codex exec`)
+and `agy` (the Antigravity subscription, via `agy`, Gemini's replacement for the
+retired `gemini` CLI). Both are agentic CLIs with their own built-in image tool —
+neither is a raw provider API call.
 """
 
 from __future__ import annotations
 
 import subprocess
 from pathlib import Path
-from typing import Sequence
+from typing import Literal, Sequence
 
 import numpy
 from PIL import Image
 
 from .style import OUTLINE
+
+Backend = Literal["codex", "agy"]
+
+#: Model asked to draw when the backend is `agy`. Antigravity has no dedicated
+#: image-gen model name; Gemini 3's built-in image tool comes along with the
+#: agent model, so this just picks the strongest one.
+AGY_MODEL = "gemini-3.1-pro-high"
 
 
 INSTRUCTIONS = """Generate exactly one image with your built-in image generation tool and \
@@ -73,30 +85,7 @@ def backdrop_is_usable(image: Image.Image) -> tuple[bool, str]:
     return True, ""
 
 
-def draw(
-    prompt: str,
-    out_path: Path | str,
-    references: Sequence[Path | str] = (),
-    timeout: int = 900,
-    attempts: int = 2,
-    reuse: bool = True,
-) -> Path:
-    """Generate one image for `prompt` and save it at `out_path`.
-
-    `references` are attached to the prompt as reference images — the approved
-    key art, a neighbouring frame, whatever locks identity for this render.
-
-    A render that already exists is kept, never redrawn and never overwritten,
-    so a run interrupted at frame twelve resumes at frame twelve. Delete the
-    file to force a redraw, or pass `reuse=False` to make its presence an error.
-    """
-    out_path = Path(out_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    if out_path.exists():
-        if reuse:
-            return _verify(out_path)
-        raise DrawError(f"{out_path} already exists; refusing to overwrite a source")
-
+def _codex_call(full_prompt: str, out_path: Path, references: Sequence[Path | str]) -> tuple:
     argv = [
         "codex",
         "exec",
@@ -111,8 +100,84 @@ def draw(
     for reference in references:
         argv += ["--image", str(Path(reference).resolve())]
     argv.append("-")
+    return argv, {"input": full_prompt}
+
+
+#: agy's orchestrating agent does not forward its own prompt to the built-in
+#: generate_image tool — left to its own judgement it writes a short paraphrase
+#: as that tool's Prompt argument, dropping the style contract, palette and
+#: negative constraints the image quality actually depends on. This is the only
+#: lever available: no flag controls the tool-call argument, so the agent has to
+#: be told, forcefully, not to summarise.
+AGY_VERBATIM_INSTRUCTION = (
+    "\n\nWhen you call your image-generation tool, its Prompt argument must be a verbatim, "
+    "character-for-character copy of this entire message, from \"Draw\" at the top to the end of "
+    "these instructions — every sentence, hex code, and clause, in order. Do not summarise, "
+    "shorten, condense, paraphrase, or drop anything, even if the tool's argument ends up "
+    "extremely long. A shortened prompt has repeatedly produced unusable, off-style renders."
+)
+
+
+def _agy_call(full_prompt: str, out_path: Path, references: Sequence[Path | str]) -> tuple:
+    # agy has no --cd: unlike codex, its working directory is whatever the process
+    # inherits, not something a flag sets. INSTRUCTIONS says "the working directory",
+    # so the subprocess's actual cwd must be out_path.parent or the file lands wrong.
+    # Both that cwd and --add-dir must be absolute: once the subprocess's cwd changes,
+    # a relative --add-dir would resolve against the new cwd, not the caller's.
+    out_dir = out_path.parent.resolve()
+    dirs = {str(out_dir)} | {str(Path(r).resolve().parent) for r in references}
+    argv = ["agy", "--model", AGY_MODEL, "--dangerously-skip-permissions"]
+    for directory in sorted(dirs):
+        argv += ["--add-dir", directory]
+    reference_note = (
+        "\n\nReference images, at these exact paths:\n"
+        + "\n".join(str(Path(r).resolve()) for r in references)
+        if references
+        else ""
+    )
+    argv += [
+        "--print-timeout",
+        "900s",
+        "-p",
+        full_prompt + reference_note + AGY_VERBATIM_INSTRUCTION,
+    ]
+    return argv, {"cwd": str(out_dir)}
+
+
+_CALL_BUILDERS = {"codex": _codex_call, "agy": _agy_call}
+
+
+def draw(
+    prompt: str,
+    out_path: Path | str,
+    references: Sequence[Path | str] = (),
+    timeout: int = 900,
+    attempts: int = 2,
+    reuse: bool = True,
+    backend: Backend = "codex",
+) -> Path:
+    """Generate one image for `prompt` and save it at `out_path`.
+
+    `references` are attached to the prompt as reference images — the approved
+    key art, a neighbouring frame, whatever locks identity for this render.
+
+    `backend` picks the CLI agent that does the drawing: `codex` (default, the
+    ChatGPT subscription) or `agy` (the Antigravity subscription). One at a
+    time — there is no fallback between them.
+
+    A render that already exists is kept, never redrawn and never overwritten,
+    so a run interrupted at frame twelve resumes at frame twelve. Delete the
+    file to force a redraw, or pass `reuse=False` to make its presence an error.
+    """
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.exists():
+        if reuse:
+            return _verify(out_path)
+        raise DrawError(f"{out_path} already exists; refusing to overwrite a source")
 
     full_prompt = f"{prompt}\n\n{INSTRUCTIONS.format(filename=out_path.name)}"
+    argv, run_kwargs = _CALL_BUILDERS[backend](full_prompt, out_path, references)
 
     # Written before the call, so a frame that comes back wrong can be read back
     # against what was actually asked for.
@@ -127,7 +192,7 @@ def draw(
     for _ in range(attempts):
         try:
             result = subprocess.run(
-                argv, input=full_prompt, capture_output=True, text=True, timeout=timeout
+                argv, capture_output=True, text=True, timeout=timeout, **run_kwargs
             )
         except subprocess.TimeoutExpired:
             last_error = f"timed out after {timeout}s"
@@ -143,7 +208,7 @@ def draw(
                 out_path.unlink(missing_ok=True)
                 last_error = str(error)
                 continue
-        last_error = "codex reported success but wrote no file"
+        last_error = f"{backend} reported success but wrote no file"
     raise DrawError(f"could not draw {out_path.name}: {last_error}")
 
 

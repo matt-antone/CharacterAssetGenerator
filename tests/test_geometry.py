@@ -27,11 +27,11 @@ def test_subject_height_px():
     assert subject_height_px(69) == round(69 * CELL_HEIGHT / CELL_HEIGHT_INCHES)
 
 
-def test_an_animation_frame_spans_a_foot_more_world_than_the_static_cell():
-    assert ANIM_CELL_HEIGHT_INCHES == CELL_HEIGHT_INCHES + 12
+def test_an_animation_frame_spans_eight_and_a_half_feet():
+    assert ANIM_CELL_HEIGHT_INCHES == 102
     assert anim_subject_height_px(ANIM_CELL_HEIGHT_INCHES) == CELL_HEIGHT
-    # The same character is smaller in an animation frame than on a static sheet.
-    assert anim_subject_height_px(69) < subject_height_px(69)
+    # 8'6" of world is less than the static cell's 9', so the character is larger here.
+    assert anim_subject_height_px(69) > subject_height_px(69)
 
 
 def test_the_animation_floor_sits_six_inches_off_the_bottom_edge():

@@ -18,8 +18,8 @@ one factor read off the key art covers the whole sheet.
 
 An animation frame gets no such luxury. Each one is a separate generation, drawn
 at whatever size the generator felt like, so a fixed pixels-per-source-pixel
-factor drifts from frame to frame — and the frame spans 8' of world where the
-static cell spans 7'. So animation measures per frame after all, but along the
+factor drifts from frame to frame — and the frame spans 8'6" of world where the
+static cell spans 9'. So animation measures per frame after all, but along the
 motion sheet's own skeleton rather than the box: heel to crown through the
 bones, a length the pose cannot change. See `frame_scale`.
 """

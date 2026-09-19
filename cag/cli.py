@@ -6,11 +6,13 @@ import argparse
 import shutil
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from pathlib import Path
 
 from .animation import build_animation_graph
 from .assemble import gallery, gif_proof, sprite_sheet
 from .chat_codex import ChatCodex
+from .draw import draw
 from .motion import load_motion
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
@@ -55,11 +57,15 @@ def render_set(
     work_dir: Path,
     supplied: Path | None,
     sheet_mode: bool = True,
+    draw_backend: str = "codex",
 ) -> dict:
     """Draw and mask one animation set. Safe to run alongside other sets."""
     motion = motion_for(spec, set_name, work_dir, supplied)
     log(f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, {motion.view} view")
-    animated = build_animation_graph(ChatCodex(), sheet_mode=sheet_mode).invoke(
+    # None keeps callers pointed at each module's own `draw` name (unpatched, that's
+    # the seam tests replace) instead of forcing a swap when nothing was asked for.
+    draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
+    animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, sheet_mode=sheet_mode).invoke(
         {
             "spec": spec,
             "bible": static["bible"],
@@ -82,6 +88,7 @@ def build(
     out_root: Path,
     jobs: int = 1,
     sheet_mode: bool = True,
+    draw_backend: str = "codex",
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -94,7 +101,10 @@ def build(
 
     log(f"[static] {spec.name}: bible, key art, projection")
     try:
-        static = build_static_graph(ChatCodex()).invoke({"spec": spec, "work_dir": work_dir})
+        draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
+        static = build_static_graph(ChatCodex(), draw_fn=draw_fn).invoke(
+            {"spec": spec, "work_dir": work_dir}
+        )
     except ApprovalRequired as gate:
         raise SystemExit(
             f"[static] {spec.name}: key art is waiting for approval at {gate}\n"
@@ -115,7 +125,14 @@ def build(
         with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
             futures = {
                 name: pool.submit(
-                    render_set, spec, name, static, work_dir, motion_path, sheet_mode
+                    render_set,
+                    spec,
+                    name,
+                    static,
+                    work_dir,
+                    motion_path,
+                    sheet_mode,
+                    draw_backend,
                 )
                 for name in chosen
             }
@@ -178,6 +195,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     build_parser.add_argument("--work", type=Path, default=Path("work"))
     build_parser.add_argument("--out", type=Path, default=Path("outputs"))
+    build_parser.add_argument(
+        "--draw-backend",
+        choices=["codex", "agy"],
+        default="codex",
+        help="CLI agent that draws the art: codex (ChatGPT sub) or agy (Antigravity sub)",
+    )
 
     approve_parser = sub.add_parser(
         "approve", help="sign off on a character's key art so the rest can be drawn"
@@ -190,7 +213,16 @@ def main(argv: list[str] | None = None) -> int:
         spec = load_spec(args.spec)
         log(f"[static] {spec.name}: approved {approve(args.work / spec.slug)}")
         return 0
-    build(args.spec, args.motion, args.set_names, args.work, args.out, args.jobs, args.sheet_mode)
+    build(
+        args.spec,
+        args.motion,
+        args.set_names,
+        args.work,
+        args.out,
+        args.jobs,
+        args.sheet_mode,
+        args.draw_backend,
+    )
     return 0
 
 
