@@ -218,7 +218,7 @@ def main(argv: list[str] | None = None) -> int:
         "edit", help="nudge frames of a set's sheet in the browser; Save rebuilds its proof"
     )
     edit_parser.add_argument(
-        "out", type=Path, help="a character's output folder, or outputs/ for every character"
+        "out", type=Path, nargs="?", default=Path("outputs"), help="default: outputs/, every character"
     )
     edit_parser.add_argument("--port", type=int, default=8765)
 

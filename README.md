@@ -81,7 +81,7 @@ alone. Deciding which is which is a person's job.
 folder:
 
 ```bash
-uv run cag edit outputs
+uv run cag edit
 ```
 
 Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
