@@ -43,7 +43,7 @@ def run(tmp_path, monkeypatch):
     )
     return graph.invoke(
         {
-            "spec": load_spec("specs/velvet-lou.json"),
+            "spec": load_spec("tests/fixtures/velvet-lou.json"),
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,
@@ -141,7 +141,7 @@ def test_a_sheet_without_poses_draws_without_one(tmp_path, monkeypatch):
         FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, sheet_mode=False
     ).invoke(
         {
-            "spec": load_spec("specs/velvet-lou.json"),
+            "spec": load_spec("tests/fixtures/velvet-lou.json"),
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,
@@ -182,7 +182,7 @@ def test_each_cell_is_scaled_by_the_pose_of_its_own_frame(run):
     cells must differ too — by exactly what each frame's own skeleton asks for.
     Hand a frame the wrong pose and its height stops matching."""
     motion = load_motion(SAMPLE)
-    target = anim_subject_height_px(load_spec("specs/velvet-lou.json").height_inches)
+    target = anim_subject_height_px(load_spec("tests/fixtures/velvet-lou.json").height_inches)
     heights = []
     for index, path in sorted(run["cells"].items()):
         pts = motion.frames[index].pts
@@ -221,7 +221,7 @@ def sheet_run(tmp_path, monkeypatch):
     )
     return graph.invoke(
         {
-            "spec": load_spec("specs/velvet-lou.json"),
+            "spec": load_spec("tests/fixtures/velvet-lou.json"),
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,
@@ -277,7 +277,7 @@ def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkey
         FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_sheet_draw, sheet_mode=True
     ).invoke(
         {
-            "spec": load_spec("specs/velvet-lou.json"),
+            "spec": load_spec("tests/fixtures/velvet-lou.json"),
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,  # would put a 160px figure at 460px; the sheet must not use it
@@ -336,7 +336,7 @@ def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monke
         FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=flaky, sheet_mode=True
     ).invoke(
         {
-            "spec": load_spec("specs/velvet-lou.json"),
+            "spec": load_spec("tests/fixtures/velvet-lou.json"),
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,

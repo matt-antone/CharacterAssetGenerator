@@ -13,7 +13,7 @@ SPEC = load_spec("specs/belter.json")
 PLAN = plan_for("victory")
 
 
-def sheet(frames=8):
+def sheet(frames=PLAN.frame_count):
     return json.dumps(
         {
             "arc": "She plants, lifts her chin, and holds.",

@@ -23,7 +23,7 @@ def write(tmp_path, **overrides):
 
 
 def test_loads_the_sample_spec():
-    spec = load_spec("specs/velvet-lou.json")
+    spec = load_spec("tests/fixtures/velvet-lou.json")
     assert spec.slug == "velvet-lou"
     assert spec.height_inches == 69.0
     assert "dance" in spec.animations
@@ -59,7 +59,7 @@ def test_rejects_broken_json(tmp_path):
 def test_detail_level_defaults_and_validates(tmp_path):
     from cag.style import DEFAULT_DETAIL_LEVEL
 
-    assert load_spec("specs/velvet-lou.json").detail_level == DEFAULT_DETAIL_LEVEL
+    assert load_spec("tests/fixtures/velvet-lou.json").detail_level == DEFAULT_DETAIL_LEVEL
     assert load_spec(write(tmp_path, detail_level=7)).detail_level == 7
     for bad in (0, 11, "four", 4.5):
         with pytest.raises(SpecError, match="detail_level must be"):

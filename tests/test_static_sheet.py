@@ -43,7 +43,7 @@ def run(tmp_path, monkeypatch):
     monkeypatch.setattr(mask, "cutout", flat_cutout)
     model = FakeMessagesListChatModel(responses=[AIMessage(BIBLE)])
     graph = static_sheet.build_static_graph(model, draw_fn=fake_draw)
-    state = {"spec": load_spec("specs/velvet-lou.json"), "work_dir": tmp_path / "lou"}
+    state = {"spec": load_spec("tests/fixtures/velvet-lou.json"), "work_dir": tmp_path / "lou"}
     # The first pass stops at the key art gate; sign off, then draw the rest.
     with pytest.raises(static_sheet.ApprovalRequired):
         graph.invoke(state)
@@ -57,7 +57,7 @@ def test_nothing_but_the_key_art_is_drawn_before_approval(tmp_path, monkeypatch)
     model = FakeMessagesListChatModel(responses=[AIMessage(BIBLE)])
     graph = static_sheet.build_static_graph(model, draw_fn=fake_draw)
     with pytest.raises(static_sheet.ApprovalRequired):
-        graph.invoke({"spec": load_spec("specs/velvet-lou.json"), "work_dir": tmp_path / "lou"})
+        graph.invoke({"spec": load_spec("tests/fixtures/velvet-lou.json"), "work_dir": tmp_path / "lou"})
     assert [call["out"].stem for call in fake_draw.calls] == [KEY_VIEW]
 
 
@@ -125,5 +125,5 @@ def test_a_bible_on_disk_is_reused_rather_than_rewritten(tmp_path):
     work.mkdir()
     (work / "bible.txt").write_text(BIBLE + "\n")
     model = FakeMessagesListChatModel(responses=[AIMessage("A different performer entirely.")])
-    state = static_sheet.write_bible({"spec": load_spec("specs/velvet-lou.json"), "work_dir": work}, model)
+    state = static_sheet.write_bible({"spec": load_spec("tests/fixtures/velvet-lou.json"), "work_dir": work}, model)
     assert state["bible"] == BIBLE

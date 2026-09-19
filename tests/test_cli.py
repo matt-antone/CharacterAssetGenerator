@@ -29,7 +29,7 @@ def built(tmp_path, monkeypatch):
     )
     build_argv = [
             "build",
-            "specs/velvet-lou.json",
+            "tests/fixtures/velvet-lou.json",
             "--set", "dance",
             "--motion", SAMPLE,
             "--per-frame",
@@ -38,7 +38,7 @@ def built(tmp_path, monkeypatch):
     ]
     with pytest.raises(SystemExit):  # the key art gate
         cli.main(build_argv)
-    cli.main(["approve", "specs/velvet-lou.json", "--work", str(tmp_path / "work")])
+    cli.main(["approve", "tests/fixtures/velvet-lou.json", "--work", str(tmp_path / "work")])
     cli.main(build_argv)
     return tmp_path / "out" / "velvet-lou"
 
@@ -54,11 +54,11 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
     )
     with pytest.raises(SystemExit) as stop:
         cli.main(
-            ["build", "specs/velvet-lou.json", "--work", str(tmp_path / "w"),
+            ["build", "tests/fixtures/velvet-lou.json", "--work", str(tmp_path / "w"),
              "--out", str(tmp_path / "o")]
         )
     assert "source/key.png" in str(stop.value)
-    assert "uv run cag approve specs/velvet-lou.json" in str(stop.value)
+    assert "uv run cag approve tests/fixtures/velvet-lou.json" in str(stop.value)
     assert not (tmp_path / "o").exists()  # nothing else was drawn or written
 
 
@@ -97,11 +97,11 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
         lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
     )
     monkeypatch.setattr(cli, "write_motion", lambda *a, **kw: pytest.fail("no sheet needed"))
-    argv = ["build", "specs/no-animations.json", "--work", str(tmp_path / "w"),
+    argv = ["build", "tests/fixtures/no-animations.json", "--work", str(tmp_path / "w"),
             "--out", str(tmp_path / "o")]
     with pytest.raises(SystemExit):  # the key art gate
         cli.main(argv)
-    cli.main(["approve", "specs/no-animations.json", "--work", str(tmp_path / "w")])
+    cli.main(["approve", "tests/fixtures/no-animations.json", "--work", str(tmp_path / "w")])
     cli.main(argv)
     out = tmp_path / "o" / "no-one"
     assert (out / "index.html").exists()
