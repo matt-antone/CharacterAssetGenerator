@@ -554,12 +554,13 @@ def set_to_cells(
     A sheet with no landmarks has nothing to read a pose from, and the key
     art's factor is no use either: it assumes the key art's magnification, and
     a figure sharing a canvas with seven others is drawn a third that size. So
-    the sheet is its own ruler: the frames drawn near the sheet's shortest are
-    taken as standing, and their median is standing height. Arms raised overhead
-    add up to a sixth to a figure's box, and a victory set that reached on half
-    its frames had its median pulled up by that and came out 7% small. A hung
-    head or a bent knee takes off far less, so those frames stay in the count.
-    A set that crouches on most of its frames would still read tall.
+    the sheet is its own ruler: the largest group of frames drawn within a few
+    percent of each other's height is taken as standing, and its median is
+    standing height; on a tie the shorter group wins. Arms raised overhead add
+    up to a sixth to a figure's box, and a victory set that reached on half its
+    frames had its median pulled up by that and came out 7% small. A single
+    crouched frame is a group of one and is outvoted. A set that crouches on
+    most of its frames would still read tall.
     """
     subjects = {index: cutout(source) for index, source in sorted(sources.items())}
     cells = {}
@@ -570,9 +571,10 @@ def set_to_cells(
                 for index in group
             )
         else:
-            # ponytail: shortest-cluster box height as stature; measure the key art's proportions if a set fools it
-            heights = [subject_box(subjects[index])[3] - subject_box(subjects[index])[1] for index in group]
-            standing = [h for h in heights if h <= min(heights) * STANDING_SPREAD]
+            # ponytail: largest height cluster as stature, O(n²) over <=16 frames; measure the key art's proportions if a set fools it
+            heights = sorted(subject_box(subjects[index])[3] - subject_box(subjects[index])[1] for index in group)
+            # max() keeps the first of equal clusters, and heights are sorted, so a tie goes to the shorter
+            standing = max(([x for x in heights if h <= x <= h * STANDING_SPREAD] for h in heights), key=len)
             scale = anim_subject_height_px(height_inches) / statistics.median(standing)
         for index in group:
             dst = dst_for(index)

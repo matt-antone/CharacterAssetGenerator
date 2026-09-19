@@ -354,3 +354,17 @@ def test_raised_arms_do_not_shrink_a_sheet_with_no_landmarks(tmp_path):
     cells = set_to_cells(sources, lambda i: tmp_path / "cells" / f"{i:02d}.png", {}, 0, 0, 69)
     top, bottom = subject_box(Image.open(cells[0]))[1], subject_box(Image.open(cells[0]))[3]
     assert abs((bottom - top) - anim_subject_height_px(69)) <= 2
+
+
+def test_one_crouched_frame_does_not_grow_a_sheet_with_no_landmarks(tmp_path):
+    """A guard that drops low on one frame of eight must not become the ruler
+    for the seven standing ones."""
+    sources = {}
+    for index in range(8):
+        top = 110 if index == 4 else 50  # one frame crouches 60px below the head
+        image = Image.new("RGB", (100, 300), (247, 4, 248))
+        image.paste((0, 0, 0), (40, top, 60, 250))
+        image.save(sources.setdefault(index, tmp_path / f"{index:02d}.png"))
+    cells = set_to_cells(sources, lambda i: tmp_path / "cells" / f"{i:02d}.png", {}, 0, 0, 69)
+    top, bottom = subject_box(Image.open(cells[0]))[1], subject_box(Image.open(cells[0]))[3]
+    assert abs((bottom - top) - anim_subject_height_px(69)) <= 2
