@@ -10,7 +10,7 @@ from functools import partial
 from pathlib import Path
 
 from .animation import build_animation_graph
-from .assemble import PORTRAIT_SIZES, gallery, gif_proof, portrait, sprite_sheet
+from .assemble import MANIFEST, PORTRAIT_SIZES, gallery, gif_proof, manifest, portrait, sprite_sheet
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
@@ -151,10 +151,11 @@ def build(
             "set_name": name,
             "frames": len(cells),
             "fps": motion.fps,
+            "columns": min(SHEET_COLUMNS, len(cells)),
             "sheet": f"{name}-sheet.png",
             "proof": f"{name}-proof.gif",
         }
-        sprite_sheet(cells, out_dir / block["sheet"], columns=min(SHEET_COLUMNS, len(cells)))
+        sprite_sheet(cells, out_dir / block["sheet"], columns=block["columns"])
         gif_proof(cells, out_dir / block["proof"], motion.fps, loop=motion.loops)
         sets.append(block)
 
@@ -163,6 +164,7 @@ def build(
         views[f"portrait-{units}"] = Path("views") / f"portrait-{units}.png"
         portrait(static["cells"][KEY_VIEW], out_dir / views[f"portrait-{units}"], size)
 
+    manifest(out_dir / MANIFEST, spec.name, spec.height, views, sets)
     page = gallery(
         out_dir / "index.html",
         spec.name,

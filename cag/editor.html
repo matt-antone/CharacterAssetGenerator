@@ -127,7 +127,7 @@
   <li><strong>Play</strong> to watch the loop. Pause, then pick the frame that jumps: click it in the strip, drag the slider, or step with the ‹ › buttons beside the strip, <kbd>⌘</kbd> + <kbd>←</kbd> <kbd>→</kbd>, or <kbd>,</kbd> <kbd>.</kbd></li>
   <li><strong>Move the frame</strong> by dragging it on the stage, nudging with the arrow keys, or typing an exact x / y offset. The faded figure is the previous frame; line up against it, the floor guide, and the dashed height guide from the brief.</li>
   <li><strong>Scale the frame</strong> with <kbd>[</kbd> <kbd>]</kbd>, <kbd>⌘</kbd> + <kbd>↑</kbd> <kbd>↓</kbd>, or by typing a %. It grows and shrinks about the floor point on the centre line, so feet stay planted.</li>
-  <li><strong>Save sheet</strong> overwrites the sheet and rebuilds <code>&lt;set&gt;-proof.gif</code> at the fps shown, then closes the sheet; the result shows on the stage. Frames you moved carry a dot in the strip. If the save fails the sheet stays open with your edits.</li>
+  <li><strong>Save sheet</strong> overwrites the sheet and rebuilds <code>&lt;set&gt;-proof.gif</code> at the fps shown and writes that fps into <code>manifest.json</code>, then closes the sheet; the result shows on the stage. Frames you moved carry a dot in the strip. If the save fails the sheet stays open with your edits.</li>
  </ol>
  <h2>Keys</h2>
  <dl class="keys">
@@ -179,6 +179,7 @@ $('file').onchange = async e => {
     const r = await fetch(`/locate?name=${encodeURIComponent(name)}`, {method: 'POST', body: f});
     if (!r.ok) return status(`${await r.text()}. Save is off for this sheet.`, true);
     const found = await r.json(); folder = found.folder; crown(found);
+    if (found.fps) $('fps').value = found.fps; // the rate it was rendered for; Save writes it back
     $('sheet').textContent = `${found.folder === '.' ? '' : found.folder + '/'}${name}`;
   }
 };

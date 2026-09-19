@@ -16,7 +16,7 @@ from urllib.parse import parse_qs, urlparse
 
 from PIL import Image
 
-from .assemble import gif_proof, split_sheet
+from .assemble import MANIFEST, gif_proof, split_sheet
 from .geometry import ANIM_CONTACT_ROW, CELL_HEIGHT, CELL_WIDTH, anim_subject_height_px
 from .spec import load_spec
 
@@ -51,7 +51,26 @@ def save_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Path:
             cell.save(paths[-1])
         dst.write_bytes(png)
         gif_proof(paths, proof, fps, loop)
+    update_manifest(dst.parent, dst.name, fps, len(cells))
     return proof
+
+
+def update_manifest(out_dir: Path, sheet: str, fps: int, frames: int) -> None:
+    """Keep the manifest's fps and frame count on what was just written.
+
+    The front end plays from the manifest, so an edit at another rate has to land
+    there too or the game keeps the build's speed.
+    """
+    path = out_dir / MANIFEST
+    if not path.is_file():
+        return  # a folder from before manifests, or one sheet on its own
+    data = json.loads(path.read_text())
+    for block in data.get("sets", {}).values():
+        if block.get("sheet") == sheet:
+            block["fps"] = fps
+            block["frames"] = frames
+            path.write_text(json.dumps(data, indent=2) + "\n")
+            return
 
 
 def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
@@ -70,6 +89,17 @@ def folders(root: Path) -> list[Path]:
     return [root, *sorted(p for p in root.iterdir() if p.is_dir())]
 
 
+def sheet_fps(out_dir: Path, sheet: str) -> int | None:
+    """The rate this sheet was rendered for, off the manifest the build wrote."""
+    path = out_dir / MANIFEST
+    if not path.is_file():
+        return None
+    for block in json.loads(path.read_text()).get("sets", {}).values():
+        if block.get("sheet") == sheet:
+            return block.get("fps")
+    return None
+
+
 def locate(root: Path, name: str, png: bytes) -> dict | None:
     """Find which folder an opened sheet came from, by its bytes, and that brief's height.
 
@@ -80,7 +110,12 @@ def locate(root: Path, name: str, png: bytes) -> dict | None:
     for folder in folders(root):
         path = folder / Path(name).name
         if path.is_file() and path.read_bytes() == png:
-            found = {"folder": folder.relative_to(root).as_posix(), "height": None, "row": None}
+            found = {
+                "folder": folder.relative_to(root).as_posix(),
+                "height": None,
+                "row": None,
+                "fps": sheet_fps(folder, path.name),
+            }
             spec_path = find_spec(folder)
             if spec_path is not None:
                 spec = load_spec(spec_path)

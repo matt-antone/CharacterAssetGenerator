@@ -16,8 +16,11 @@ uv run cag approve specs/belter.json
 ```
 
 Once approved, that writes `outputs/belter/`: four projection cells under `views/`, then a
-sprite sheet and a GIF proof for each of the brief's seven sets, and a gallery
-page tying them together. Sets render across `--jobs` lanes, and one that fails
+sprite sheet and a GIF proof for each of the brief's seven sets, a gallery page
+tying them together, and a `manifest.json` for the front end: cell size, view
+paths, and per set the frame count, columns, fps and file names. Play from the
+manifest's fps — `cag edit` rewrites it when a save rebuilds the proof at
+another rate, so it always matches the GIF beside it. Sets render across `--jobs` lanes, and one that fails
 does not take the others down with it.
 
 A single set, against a traced [MotionArtist](https://github.com/matt-antone/MotionArtist)
