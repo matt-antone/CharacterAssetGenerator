@@ -83,6 +83,37 @@ def gif_proof(cells: Sequence[Path | str], dst: Path | str, fps: int, loop: bool
     return dst
 
 
+#: Portrait side as a share of the figure's height: crown to about mid-chest.
+PORTRAIT_SHARE = 0.3
+
+#: The game's two portrait sizes, by the unit name its files carry, drawn at 4x.
+PORTRAIT_SIZES = {34: 136, 80: 320}
+
+
+def portrait(key_cell: Path | str, dst: Path | str, size: int) -> Path:
+    """Cut a square head-and-shoulders portrait from the key art's cell.
+
+    Cut, not drawn: portraits drawn on their own drifted off-model and nothing
+    said so. Centred on the head, read as the top eighth of the figure, then
+    resized nearest-neighbour to `size`, so every character ships the same
+    dimensions whatever their height.
+    """
+    image = Image.open(key_cell).convert("RGBA")
+    alpha = image.getchannel("A")
+    _, top, _, bottom = alpha.getbbox()
+    side = round((bottom - top) * PORTRAIT_SHARE)
+    # ponytail: head read as the top eighth's box; a tall hair tower or a raised prop drags the centre
+    head = alpha.crop((0, top, image.width, top + max(1, (bottom - top) // 8))).getbbox()
+    centre = (head[0] + head[2]) // 2
+    left = min(max(0, centre - side // 2), image.width - side)
+    top = max(0, top - side // 20)
+    dst = Path(dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    crop = image.crop((left, top, left + side, top + side))
+    crop.resize((size, size), Image.Resampling.NEAREST).save(dst)
+    return dst
+
+
 GALLERY = """<!doctype html>
 <meta charset="utf-8"><title>{name}</title>
 <style>
