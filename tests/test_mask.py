@@ -22,6 +22,7 @@ from cag.mask import (
     key_art_scale,
     keyable,
     register,
+    set_to_cells,
     subject_box,
     trim_matte,
 )
@@ -339,3 +340,17 @@ def test_a_sheet_drawn_short_is_still_rejected(tmp_path):
     sheet = image.save(p := tmp_path / "sheet-00.png") or p
     with pytest.raises(MaskError, match="holds 4 figures, not 8"):
         slice_sheet(sheet, 8)
+
+
+def test_raised_arms_do_not_shrink_a_sheet_with_no_landmarks(tmp_path):
+    """Frank's victory: half the sheet reached overhead, the median box grew with
+    the arms, and every frame of the set came out small."""
+    sources = {}
+    for index in range(8):
+        top = 20 if index in (3, 4, 5, 6) else 50  # four frames reach 30px above the head
+        image = Image.new("RGB", (100, 300), (247, 4, 248))
+        image.paste((0, 0, 0), (40, top, 60, 250))
+        image.save(sources.setdefault(index, tmp_path / f"{index:02d}.png"))
+    cells = set_to_cells(sources, lambda i: tmp_path / "cells" / f"{i:02d}.png", {}, 0, 0, 69)
+    top, bottom = subject_box(Image.open(cells[0]))[1], subject_box(Image.open(cells[0]))[3]
+    assert abs((bottom - top) - anim_subject_height_px(69)) <= 2
