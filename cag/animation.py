@@ -20,10 +20,10 @@ from langgraph.graph import END, START, StateGraph
 from .assemble import sprite_sheet
 from .draw import DrawError, draw
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
-from .mask import MaskError, pose_to_cell, set_to_cells, slice_sheet
+from .mask import MaskError, home_x, pose_to_cell, set_to_cells, slice_sheet
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, sheet_prompt
-from .poses import write_poses
+from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos, write_poses
 from .props import clauses
 from .style import detail_frame
 from .spec import CharacterSpec
@@ -40,8 +40,13 @@ class AnimationState(TypedDict, total=False):
     work_dir: Path
     #: Standing instruction for every frame in this set.
     set_note: str
-    #: Stick-figure pose reference per frame index, when the sheet carries poses.
+    #: Pose reference per frame index, when the sheet carries poses.
     poses: dict[int, Path]
+    #: Whether those references are photographs of the performer rather than
+    #: drawn figures. They are described very differently to the generator: one
+    #: is a person to copy a pose off and take nothing else from, the other a
+    #: colour-coded diagram carrying no costume at all.
+    photographic: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
@@ -72,23 +77,29 @@ def view_clause(state: AnimationState) -> str:
 
 
 def pose_sheets(state: AnimationState) -> AnimationState:
-    """Cut the bundle's sprite sheet up, so each frame is shown its pose.
+    """One pose card per frame: the traced footage when the bundle carries it,
+    the drawn sprite sheet otherwise.
 
     Shown, not told: a cue is a paragraph and an image generator will quietly
-    flatten a paragraph back towards a neutral standing pose. The figure on the
-    sheet is not negotiable in the same way, and it carries what a paragraph
-    cannot — the hands, the feet hinged at the ball, and the pelvis turning
-    against the rib cage.
+    flatten a paragraph back towards a neutral standing pose. A picture of the
+    pose is not negotiable in the same way.
+
+    The photographs win where it counts. Both references rank the poses about
+    equally against the trace, but measured on amplitude — how big the drawn
+    movement is beside the real one — the drawn cards come back at 0.43-0.70
+    and the photographs at 0.9-1.2. A set that ranks perfectly at half size
+    still reads as a sway. The cost is that a photograph also carries the
+    performer's own costume, which bleeds: a lifted foot came back wearing the
+    dancer's white trainer instead of the character's boot until the prompt
+    named the footwear positively.
     """
     motion = state["motion"]
+    work = state["work_dir"] / "poses" / state["set_name"]
+    if motion.photos:
+        return {"poses": dict(enumerate(write_photos(motion.photos, work))), "photographic": True}
     if not (motion.poses and motion.pose_layout):
         return {"poses": {}}
-    paths = write_poses(
-        motion.poses,
-        motion.pose_layout,
-        len(motion.frames),
-        state["work_dir"] / "poses" / state["set_name"],
-    )
+    paths = write_poses(motion.poses, motion.pose_layout, len(motion.frames), work)
     return {"poses": dict(enumerate(paths))}
 
 
@@ -175,6 +186,7 @@ def _draw_frame(
         detail_level=spec.detail_level,
         detail_reference=detail is not None,
         props=prop_clause(state),
+        photographic=state.get("photographic", False),
     )
     # The pose goes last, because the prompt calls it "the last reference image".
     references = [*references, *( [detail] if detail else [] ), *([pose] if pose else [])]
@@ -210,10 +222,21 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     return {"sources": sources}
 
 
-#: Figures per render in sheet mode. The whole set in one image when it fits,
-#: so every figure is drawn at one size against its neighbours.
-# ponytail: 8 fills a 4x2 grid; drop to 4 if the outline comes back thinner than CUT_IN can spare.
-SHEET_FRAMES = 8
+#: Figures per render in sheet mode, drawn as a grid `FIGURES_PER_ROW` wide.
+#:
+#: 12 is the ceiling, measured up the ladder 8/12/16/24/32 on one 4-column grid.
+#: Two separate things break above it. At 16 the count is still right but the
+#: generator stops reading distinct poses and tiles one across the final row —
+#: figures 12-15 came back at silhouette IoU 0.88-0.95, the same pose four
+#: times. At 24 and 32 it will not draw the count asked for at all (20 and 28),
+#: which also makes every per-frame measurement meaningless, because figure `n`
+#: is no longer frame `n`. 8 and 12 both came back clean with no repeats.
+#:
+#: 12 costs some resolution: its figures land ~344px tall against ~476px at 8,
+#: and the cell holds a ~390px character, so 12 is upscaled into the cell where
+#: 8 is downsampled into it. Twelve is chosen anyway because it covers a
+#: 24-frame set in two renders.
+SHEET_FRAMES = 12
 FIGURES_PER_ROW = 4
 
 #: Draws allowed per sheet before the set is given up on.
@@ -256,6 +279,7 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
                 [poses[frame.index] for frame in chunk],
                 state["work_dir"] / "poses" / state["set_name"] / f"sheet-{start:02d}.png",
                 columns=FIGURES_PER_ROW,
+                cell=(CARD_WIDTH, CARD_HEIGHT),
             )
         prompt = sheet_prompt(
             spec,
@@ -268,6 +292,7 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
             detail_reference=detail is not None,
             per_row=FIGURES_PER_ROW,
             props=prop_clause(state),
+            photographic=state.get("photographic", False),
         )
         references = [state["key_art"], *([detail] if detail else []), *([pose_grid] if pose_grid else [])]
         # The render is of this chunk of this sheet, so the name says so. `draw` keeps
@@ -317,6 +342,7 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
     motion = state["motion"]
     fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
     poses = {frame.index: frame.pts for frame in motion.frames}
+    airborne = frozenset(frame.index for frame in motion.frames if frame.airborne)
     if single_scale:
         return {
             "cells": set_to_cells(
@@ -327,8 +353,10 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
                 motion.body_h,
                 state["spec"].height_inches,
                 state.get("sheets"),
+                airborne,
             )
         }
+    home = home_x(poses)
     return {
         "cells": {
             index: pose_to_cell(
@@ -339,6 +367,8 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
                 motion.body_h,
                 state["spec"].height_inches,
                 fallback,
+                home,
+                index in airborne,
             )
             for index, source in sorted(state["sources"].items())
         }
