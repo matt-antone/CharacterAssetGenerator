@@ -13,6 +13,7 @@ from langchain_core.messages import AIMessage
 from PIL import Image, ImageSequence
 
 from cag import animation, cli, mask, static_sheet
+from cag.prompts import KEY_VIEW
 from cag.motion import MotionError
 from cag.spec import load_spec
 from tests.test_animation import fake_draw
@@ -69,8 +70,8 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
     assert not (tmp_path / "o").exists()  # nothing else was drawn or written
 
 
-def test_writes_the_four_projection_views(built):
-    for view in ("key", "front", "back", "profile"):
+def test_writes_every_view_left_on(built):
+    for view in (KEY_VIEW, *static_sheet.projection_views()):
         with Image.open(built / "views" / f"{view}.png") as cell:
             assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
 
@@ -113,7 +114,7 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
     out = tmp_path / "o" / "no-one"
     assert (out / "index.html").exists()
     assert not list(out.glob("*.gif"))
-    assert len(fake_draw.calls) == 4
+    assert len(fake_draw.calls) == 1 + len(static_sheet.projection_views()), "key art and the views left on"
 
 
 def test_a_named_sheet_is_found_under_the_motion_root(tmp_path):

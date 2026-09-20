@@ -4,8 +4,8 @@
   "views": {
     "key": true,
     "front": true,
-    "back": true,
-    "profile": true
+    "back": false,
+    "profile": false
   },
 
   "animations": {
@@ -14,7 +14,7 @@
     "flinch": false,
     "guard": false,
     "entrance": false,
-    "victory": true,
-    "ko": true
+    "victory": false,
+    "ko": false
   }
 }

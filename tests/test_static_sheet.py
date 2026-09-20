@@ -12,6 +12,7 @@ from PIL import Image
 from cag import mask, static_sheet
 from cag.prompts import KEY_VIEW
 from cag.spec import load_spec
+from cag.static_sheet import set_key_art
 
 BIBLE = "A lounge performer in a green velvet jacket, microphone in the character-right hand."
 
@@ -76,7 +77,7 @@ def test_approval_does_not_carry_over_to_redrawn_key_art(tmp_path):
 def test_draws_key_art_before_the_projection_views(run):
     order = [call["out"].stem for call in fake_draw.calls]
     assert order[0] == KEY_VIEW
-    assert sorted(order[1:]) == ["back", "front", "profile"]
+    assert sorted(order[1:]) == sorted(static_sheet.projection_views())
 
 
 def test_projection_views_reference_the_key_art(run):
@@ -107,8 +108,8 @@ def test_every_prompt_quotes_the_locked_bible(run):
     assert all(BIBLE in call["prompt"] for call in fake_draw.calls)
 
 
-def test_produces_four_registered_cells(run):
-    assert sorted(run["cells"]) == ["back", "front", "key", "profile"]
+def test_produces_a_registered_cell_for_every_view_left_on(run):
+    assert sorted(run["cells"]) == sorted([KEY_VIEW, *static_sheet.projection_views()])
     for path in run["cells"].values():
         with Image.open(path) as cell:
             assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
@@ -188,3 +189,40 @@ def test_a_brief_that_states_its_appearance_needs_no_model(tmp_path):
     # microphone, and that sentence was quoted into sets drawn empty-handed.
     assert "microphone" not in bible
     assert "trainers" not in bible, "an avoid list in a render prompt draws the thing"
+
+
+def test_a_set_whose_hands_differ_gets_its_own_key_art(tmp_path):
+    """The prop sits on the character in the key art, and every frame prompt says
+    to match the reference for prop hand. Belter's dance came back holding a
+    microphone in almost every figure while its own director note said, in the
+    same prompt, that both hands were empty. The reference is a picture; words
+    do not win that argument."""
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Velvet Lou", "height": "5' 9\"", "description": "A lounge performer.",
+        "build": "Lean.", "props": ["mic"],
+        "animations": {"sing": {"intent": "A held note.", "props": ["mic"]},
+                       "dance": "A club loop."},
+    }))
+    spec = load_spec(brief)
+    key_art = tmp_path / "key.png"
+    key_art.write_bytes(b"key")
+    drawn = {}
+
+    def fake_draw(prompt, out_path, references=(), **kwargs):
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+        Path(out_path).write_bytes(b"drawn")
+        drawn[Path(out_path).name] = (prompt, list(references))
+        return Path(out_path)
+
+    # sing holds what the key art holds, so it is handed the key art itself.
+    assert set_key_art(spec, "sing", "B", tmp_path, key_art, fake_draw) == key_art
+    assert not drawn, "no render for a set whose hands already match"
+
+    # dance is drawn empty-handed, so it gets a reference with empty hands.
+    path = static_sheet.set_key_art(spec, "dance", "B", tmp_path, key_art, fake_draw)
+    assert path.name == "dance-key.png"
+    prompt, references = drawn["dance-key.png"]
+    assert "Both of their hands are empty" in prompt
+    assert "Microphone:" not in prompt, "the prop clause is replaced, not added to"
+    assert key_art in references, "identity and scale come from the approved key art"

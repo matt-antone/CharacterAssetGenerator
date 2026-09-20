@@ -74,8 +74,8 @@ instruction and nothing else."""
 #: ended up standing instruction for `dance`, `ko` and `victory` on four
 #: characters that are drawn empty-handed in all three.
 EMPTY_HANDS = (
-    "The character holds nothing in this set. Both of their hands are empty and stay empty for "
-    "every frame: no microphone, no stand, no cable and no object of any kind."
+    "The character holds nothing here. Both of their hands are empty and stay empty in every "
+    "figure: no microphone, no stand, no cable and no object of any kind."
 )
 
 
@@ -239,9 +239,10 @@ def frame_prompt(
             # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
             PROP_CONTINUITY if props else "",
             SIDE_LANGUAGE,
-            "Match the reference images for identity, costume, colour, proportion and prop hand "
-            "exactly; only the pose changes. Do not "
-            "mirror the figure and do not move the prop to the other hand.",
+            "Match the reference images for identity, costume, colour, proportion"
+            + (" and prop hand" if props else "")
+            + " exactly; only the pose changes. Do not mirror the figure"
+            + (" and do not move the prop to the other hand." if props else "."),
         ] if part
     )
 
@@ -392,8 +393,9 @@ def frame_sheet_prompt(
             # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
             PROP_CONTINUITY if props else "",
             SIDE_LANGUAGE,
-            "Match the reference images for identity, costume, colour, proportion and prop hand "
-            "exactly. Do not mirror any "
-            "figure and do not move the prop to the other hand.",
+            "Match the reference images for identity, costume, colour, proportion"
+            + (" and prop hand" if props else "")
+            + " exactly. Do not mirror any figure"
+            + (" and do not move the prop to the other hand." if props else "."),
         ] if part
     )

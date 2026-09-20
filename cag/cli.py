@@ -25,6 +25,7 @@ from .static_sheet import (
     approve,
     build_static_graph,
     projection_views,
+    set_key_art,
 )
 
 #: Wrap long sets so the sheet stays a reasonable shape to open.
@@ -127,11 +128,16 @@ def render_set(
     # None keeps callers pointed at each module's own `draw` name (unpatched, that's
     # the seam tests replace) instead of forcing a swap when nothing was asked for.
     draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
+    # The reference this set is drawn against has this set's hands, not the key
+    # art's: a prop on the character follows it into every frame that quotes it.
+    key_art = set_key_art(
+        spec, set_name, static["bible"], work_dir, static["sources"][KEY_VIEW], draw_fn
+    )
     animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
         {
             "spec": spec,
             "bible": static["bible"],
-            "key_art": static["sources"][KEY_VIEW],
+            "key_art": key_art,
             "scale": static["scale"],
             "motion": motion,
             "set_name": set_name,
