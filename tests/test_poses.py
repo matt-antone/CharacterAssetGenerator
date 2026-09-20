@@ -1,12 +1,13 @@
 import json
+
+import numpy
 from pathlib import Path
 
 import pytest
 from PIL import Image
 
-from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 from cag.motion import read_bundle
-from cag.poses import PoseSheetError, SheetLayout, cut, write_poses
+from cag.poses import CARD_HEIGHT, CARD_WIDTH, PoseSheetError, SheetLayout, cut, write_poses
 
 BLOCK = {
     "cols": 4, "rows": 3, "scale": 2,
@@ -72,7 +73,7 @@ def test_poses_are_written_cell_sized_and_all_at_one_scale(sheet, tmp_path):
     boxes = []
     for each in written:
         with Image.open(each) as cell:
-            assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
+            assert cell.size == (CARD_WIDTH, CARD_HEIGHT)
             boxes.append(cell.getbbox())
     assert len(set(boxes)) == 1
 
@@ -100,3 +101,68 @@ def test_a_bundle_without_a_sprite_sheet_carries_no_poses(tmp_path):
     bundle = read_bundle(root)
     assert bundle.poses is None
     assert bundle.load().pose_layout is None
+
+
+def test_photo_cards_keep_one_scale_across_the_set(tmp_path):
+    """The performer's own travel is the point: a frame filmed smaller stays
+    smaller. Fitting each photograph to its own card would flatten exactly that."""
+    from cag.poses import write_photos
+
+    shots = []
+    for index, height in enumerate((400, 400, 200)):
+        path = tmp_path / f"f{index:02d}.jpg"
+        Image.new("RGB", (200, height), (80, 90, 100)).save(path)
+        shots.append(path)
+    cards = write_photos(shots, tmp_path / "out")
+
+    assert [p.name for p in cards] == ["00.png", "01.png", "02.png"]
+    filled = []
+    for card in cards:
+        with Image.open(card) as image:
+            assert image.size == (CARD_WIDTH, CARD_HEIGHT)
+            pixels = numpy.array(image.convert("RGB"))
+            filled.append(int((pixels.sum(axis=2) > 0).sum()))
+    assert filled[0] == filled[1]
+    # Half the height at the same scale, so about half the pixels — not refitted.
+    assert filled[2] == pytest.approx(filled[0] / 2, rel=0.02)
+
+
+def test_a_bundle_with_one_photograph_per_frame_prefers_them_over_the_drawn_sheet():
+    """The traced footage is the pose reference when the bundle carries a full
+    set of it: drawn cards rank the poses as well but come back at half the
+    movement, which reads as a sway rather than the motion that was traced."""
+    bundle = read_bundle(Path("motions/shuffle"))
+    assert len(bundle.photos) == bundle.frame_count
+    assert [p.name for p in bundle.photos] == [f"f{i:02d}.jpg" for i in range(bundle.frame_count)]
+    assert bundle.poses is not None  # the drawn sheet is still shipped, just not preferred
+    assert bundle.load().photos == bundle.photos
+
+
+def test_a_bundle_missing_a_photograph_falls_back_rather_than_mispairing(tmp_path):
+    """A partial set would silently pair figure n with the wrong frame."""
+    source = Path("motions/shuffle")
+    manifest = json.loads((source / "manifest.json").read_text())
+    manifest["files"] = {
+        name: value for name, value in manifest["files"].items() if name != "thumbs/f05.jpg"
+    }
+    (tmp_path / "manifest.json").write_text(json.dumps(manifest))
+    for name in manifest["files"]:
+        target = tmp_path / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((source / name).read_bytes())
+    assert read_bundle(tmp_path).photos == ()
+
+
+def test_photo_cards_are_never_blown_up_past_their_shipped_size(tmp_path):
+    """Thumbnails ship at 200px. Upscaling into the card invents no detail, softens
+    the edges the pose is read from, and is not what the amplitude was measured on."""
+    from cag.poses import write_photos
+
+    small = tmp_path / "f00.jpg"
+    Image.new("RGB", (200, 355), (80, 90, 100)).save(small)
+    with Image.open(write_photos([small], tmp_path / "out")[0]) as card:
+        assert card.size == (CARD_WIDTH, CARD_HEIGHT)
+        pixels = numpy.array(card.convert("RGB"))
+        rows = numpy.where((pixels.sum(axis=2) > 0).any(axis=1))[0]
+        cols = numpy.where((pixels.sum(axis=2) > 0).any(axis=0))[0]
+    assert (cols.max() - cols.min() + 1, rows.max() - rows.min() + 1) == (200, 355)

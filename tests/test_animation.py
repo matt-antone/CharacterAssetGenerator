@@ -1,9 +1,11 @@
+import re
 from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH
+from cag.poses import CARD_HEIGHT, CARD_WIDTH
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
 from PIL import Image, ImageDraw
@@ -215,15 +217,21 @@ def test_each_cell_is_scaled_by_the_pose_of_its_own_frame(run):
 
 
 def fake_sheet_draw(prompt, out_path, references=(), **kwargs):
-    """One render of SHEET_FRAMES figures in a 4-wide grid, each a different shade."""
+    """One render of the figures the prompt asked for, in a 4-wide grid, each a different shade.
+
+    The count comes from the prompt, not from SHEET_FRAMES: a set that does not
+    divide evenly ends on a short chunk, and a stand-in that always drew a full
+    sheet would hand that chunk more figures than it asked for.
+    """
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    per_row = animation.FIGURES_PER_ROW
-    rows = -(-animation.SHEET_FRAMES // per_row)
+    asked = int(re.search(r" (\d+) times in one image", prompt).group(1))
+    per_row = min(animation.FIGURES_PER_ROW, asked)
+    rows = -(-asked // per_row)
     # Each later sheet comes back at a different magnification, as real ones do.
     m = 1 + 0.5 * (int(out_path.stem.split("-")[1]) // animation.SHEET_FRAMES)
     image = Image.new("RGB", (int(per_row * 120 * m), int(rows * 220 * m)), (255, 0, 255))
-    for n in range(animation.SHEET_FRAMES):
+    for n in range(asked):
         x, y = int(((n % per_row) * 120 + 40) * m), int(((n // per_row) * 220 + 20) * m)
         image.paste((20 + 10 * n,) * 3, (x, y, x + int(20 * m), y + int(160 * m)))
     image.save(out_path)
@@ -271,14 +279,17 @@ def test_sheet_mode_slices_figures_back_in_frame_order(sheet_run):
 def test_sheet_mode_registers_every_frame_at_one_scale(sheet_run):
     """Same size on a sheet means same size in the cell — and across sheets too,
     though the fake draws the second one half again as large."""
-    assert sheet_run["sheets"] == [list(range(8)), list(range(8, 16))]
+    n = animation.SHEET_FRAMES
+    assert sheet_run["sheets"] == [list(range(0, min(n, 16))), list(range(min(n, 16), 16))]
     heights = set()
     for index in range(16):
         with Image.open(sheet_run["cells"][index]) as cell:
             assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
             heights.add(mask.subject_box(cell)[3] - mask.subject_box(cell)[1])
-    # Nearest-neighbour rounding from two source sizes; a missed sheet would be ~200px off.
-    assert max(heights) - min(heights) <= 2
+    # Nearest-neighbour rounding from two source sizes, and the two sheets are
+    # different lengths as well as different magnifications, so the rounding does
+    # not cancel. A missed sheet would be ~200px off, not a few.
+    assert max(heights) - min(heights) <= 5
 
 
 def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkeypatch):
@@ -316,23 +327,33 @@ def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkey
 
 
 def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
-    for call in fake_sheet_draw.calls:
+    # A set that does not divide evenly ends on a short chunk, and that render is
+    # asked for its own figure count, not for a full sheet.
+    n = animation.SHEET_FRAMES
+    expected = [min(n, 16 - start) for start in range(0, 16, n)]
+    assert [len(s) for s in sheet_run["sheets"]] == expected
+    for call, size in zip(fake_sheet_draw.calls, expected):
         prompt = call["prompt"]
-        assert f"{animation.SHEET_FRAMES} times in one image" in prompt
+        assert f"{size} times in one image" in prompt
+        rows = -(-size // animation.FIGURES_PER_ROW)
         assert "same size" in prompt
-        # The canvas shape and the grid are told, because the generator picks both otherwise and
-        # a tall canvas crowds eight figures into each other. Neither is a measurement: no size
-        # for the figures, and no ratio for the canvas.
-        assert "wider than it is tall" in prompt
-        rows = -(-animation.SHEET_FRAMES // animation.FIGURES_PER_ROW)
-        assert f"{rows} rows of {animation.FIGURES_PER_ROW}" in prompt
+        # The grid is told as cells, not as figures with gaps between them: figures
+        # asked to stand apart still reach into each other, and then a box cut round
+        # one carries the neighbour's hand into its frame.
+        columns = min(animation.FIGURES_PER_ROW, size)
+        assert f"grid of {columns} columns and {rows} row" in prompt
+        assert f"{size} equal rectangular cells" in prompt
+        assert "entirely within its own cell" in prompt
+        # Still no measurement: no size for the figures and no ratio for the canvas.
         assert "px" not in prompt and str(CELL_WIDTH) not in prompt
         assert "pixels tall" not in prompt
         assert "every pose in this sequence as a figure on a dark card" in prompt
         grid = Path(call["refs"][-1])
         assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")
         with Image.open(grid) as image:
-            assert image.size == (CELL_WIDTH * animation.FIGURES_PER_ROW, CELL_HEIGHT * 2)
+            # Card for card, the same grid the figures are asked for, so pose N sits
+            # where figure N is drawn.
+            assert image.size == (CARD_WIDTH * animation.FIGURES_PER_ROW, CARD_HEIGHT * rows)
 
 
 def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monkeypatch):
@@ -399,3 +420,47 @@ def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_r
 
     animation.sheet({**state, "motion": replace(swapped, frames=moved)}, draw_fn=fake_sheet_draw)
     assert len(fake_sheet_draw.calls) > before, "a changed sheet must redraw"
+
+
+def test_photographic_references_are_described_as_photographs_not_diagrams():
+    """A photograph carries a whole person, so the prompt has to draw the line:
+    everything about the pose, nothing about who is holding it. The diagram
+    clause says the opposite — that the figure has no costume at all."""
+    from cag.prompts import FRAME_VIEWS, sheet_prompt
+
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    cues = [("key", "a cue"), ("inbetween", "another")]
+    drawn = sheet_prompt(spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True)
+    shot = sheet_prompt(
+        spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True, photographic=True
+    )
+
+    assert "teal green" in drawn and "photograph" not in drawn
+    assert "photographs of a real performer" in shot
+    assert "teal green" not in shot
+    # The two things measurement said the photo route needs: full-size movement,
+    # and the character's own footwear kept on a foot that has left the floor.
+    assert "not a smaller, more cautious version" in shot
+    assert "including on a foot that is off the floor" in shot
+
+
+def test_a_photographic_set_sends_the_lean_prompt():
+    """A photograph already says what the bible, the director's note and the cues
+    approximate, and repeating it in prose costs movement: the same cards drew
+    0.43-0.70 of the traced amplitude carrying all three and 0.75-1.21 without.
+    What a photograph cannot say is whose costume survives it, so that stays."""
+    from cag.prompts import FRAME_VIEWS, sheet_prompt
+
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    bible = "He is tall. Chunky ankle boots in brown leather. A tall dark quiff."
+    cues = [("key", "weight centred over both feet"), ("inbetween", "knee lifted")]
+    args = (spec, bible, "THE DIRECTOR NOTE", FRAME_VIEWS["front"], cues)
+
+    lean = sheet_prompt(*args, pose_reference=True, photographic=True)
+    full = sheet_prompt(*args, pose_reference=True)
+
+    for dropped in ("He is tall", "THE DIRECTOR NOTE", "weight centred over both feet"):
+        assert dropped in full
+        assert dropped not in lean
+    assert "ankle boots" in lean and "quiff" in lean
+    assert len(lean) < len(full)

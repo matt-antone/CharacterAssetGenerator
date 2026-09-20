@@ -430,3 +430,26 @@ def test_stature_tracks_extent_across_a_real_traced_set():
     spread = lambda xs: (max(xs) - min(xs)) / statistics.median(xs)
     assert spread(statures) > 0.05  # the raw measure really does move about
     assert spread(ratios) < 0.05  # the one the scale is built on does not
+
+
+def test_a_kicked_leg_does_not_shove_the_body_and_a_hop_leaves_the_floor(tmp_path):
+    """Sheet frames were centred by their box and pinned by their lowest pixel: a
+    leg out to one side pushed the torso the other way, and no jump survived."""
+    kick = {**POSE, "anL": [90, 180], "knL": [70, 140]}
+    hop = {name: [x, y - 14] for name, (x, y) in POSE.items()}  # 14 of 140: a tenth of body height
+    sources = {}
+    for index, leg in enumerate([None, (60, 170, 100, 180), None]):
+        image = Image.new("RGB", (200, 300), (247, 4, 248))
+        image.paste((0, 0, 0), (40, 20, 60, 180))
+        if leg:
+            image.paste((0, 0, 0), leg)
+        image.save(sources.setdefault(index, tmp_path / f"{index:02d}.png"))
+    cells = set_to_cells(
+        sources, lambda i: tmp_path / "cells" / f"{i:02d}.png",
+        {0: POSE, 1: kick, 2: hop}, 182, 140, 69, airborne=frozenset({2}),
+    )
+    boxes = [subject_box(Image.open(cells[index])) for index in range(3)]
+    assert abs(boxes[1][0] - boxes[0][0]) <= 1  # torso's edge stays put; only the leg reaches out
+    assert boxes[0][3] - 1 == ANIM_CONTACT_ROW
+    lift = round((182 - 166) / 140 * anim_subject_height_px(69))
+    assert boxes[0][3] - boxes[2][3] == pytest.approx(lift, abs=1)
