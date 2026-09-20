@@ -95,7 +95,7 @@ def test_a_frame_that_holds_a_prop_defends_it_against_the_pose_cue():
 
 def test_every_render_is_told_where_the_viewer_stands():
     """Outlaw's victory set looked up at her; every other set looked slightly down."""
-    from cag.prompts import frame_prompt, sheet_prompt, view_prompt
+    from cag.prompts import frame_prompt, frame_sheet_prompt, view_prompt
     from cag.style import VIEWPOINT
 
     assert VIEWPOINT in STYLE  # so it reaches every prompt that carries the style

@@ -321,7 +321,7 @@ def costume_anchor(bible: str) -> str:
     )
 
 
-def sheet_prompt(
+def frame_sheet_prompt(
     spec: CharacterSpec,
     bible: str,
     set_note: str,

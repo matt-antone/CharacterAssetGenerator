@@ -16,25 +16,25 @@ from urllib.parse import parse_qs, urlparse
 
 from PIL import Image
 
-from .assemble import MANIFEST, gif_proof, split_sheet
+from .assemble import MANIFEST, gif_proof, split_frame_sheet
 from .geometry import ANIM_CONTACT_ROW, CELL_HEIGHT, CELL_WIDTH, anim_subject_height_px
 from .spec import load_spec
 
 EDITOR = Path(__file__).with_name("editor.html")
 
 
-def save_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Path:
+def save_frame_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Path:
     """Overwrite an existing sheet with an edited one and rebuild its proof."""
     dst = Path(out_dir) / Path(name).name
     if not dst.name.endswith("-sheet.png") or not dst.is_file():
-        raise ValueError(f"no sprite sheet called {dst.name} in {out_dir}")
+        raise ValueError(f"no frame sheet called {dst.name} in {out_dir}")
     with Image.open(dst) as before:
         size = before.size
     with Image.open(BytesIO(png)) as image:
         if image.size != size:
             raise ValueError(f"edited sheet is {image.size}, the original is {size}")
     columns = size[0] // CELL_WIDTH
-    cells = split_sheet(BytesIO(png), columns * (size[1] // CELL_HEIGHT), columns)
+    cells = split_frame_sheet(BytesIO(png), columns * (size[1] // CELL_HEIGHT), columns)
     while len(cells) > 1 and not cells[-1].getchannel("A").getbbox():
         cells.pop()  # blank tail of the last row
 
@@ -93,7 +93,7 @@ def folders(root: Path) -> list[Path]:
     return [root, *sorted(p for p in root.iterdir() if p.is_dir())]
 
 
-def sheet_fps(out_dir: Path, sheet: str) -> int | None:
+def frame_sheet_fps(out_dir: Path, sheet: str) -> int | None:
     """The rate this sheet was rendered for, off the manifest the build wrote."""
     path = out_dir / MANIFEST
     if not path.is_file():
@@ -118,7 +118,7 @@ def locate(root: Path, name: str, png: bytes) -> dict | None:
                 "folder": folder.relative_to(root).as_posix(),
                 "height": None,
                 "row": None,
-                "fps": sheet_fps(folder, path.name),
+                "fps": frame_sheet_fps(folder, path.name),
             }
             spec_path = find_spec(folder)
             if spec_path is not None:
@@ -159,7 +159,7 @@ def serve(out_dir: Path, port: int) -> None:
                 folder = query.get("folder", ["."])[0]
                 if folder not in {f.relative_to(out_dir).as_posix() for f in folders(out_dir)}:
                     raise ValueError(f"no folder {folder!r} under {out_dir}")
-                proof = save_sheet(out_dir / folder, name, body, int(query["fps"][0]))
+                proof = save_frame_sheet(out_dir / folder, name, body, int(query["fps"][0]))
             except (KeyError, ValueError, OSError) as error:
                 self.reply(400, str(error).encode(), "text/plain")
             else:

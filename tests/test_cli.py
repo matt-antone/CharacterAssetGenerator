@@ -158,7 +158,7 @@ def _bundle(root, name):
 
 
 def _library(tmp_path, *names):
-    root = tmp_path / "sheets"
+    root = tmp_path / "frame_sheets"
     for name in names:
         _bundle(root, name)
     return root
@@ -168,9 +168,9 @@ def test_auto_keeps_a_character_on_the_same_sheet_between_runs(tmp_path):
     root = _library(tmp_path, "a-loop", "b-loop", "c-loop")
     spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": cli.AUTO})
 
-    first = cli.auto_sheet(spec, "dance", root)[0]
+    first = cli.auto_bundle(spec, "dance", root)[0]
 
-    assert cli.auto_sheet(spec, "dance", root)[0] == first
+    assert cli.auto_bundle(spec, "dance", root)[0] == first
 
 
 def test_auto_spreads_the_library_across_a_roster(tmp_path):
@@ -178,7 +178,7 @@ def test_auto_spreads_the_library_across_a_roster(tmp_path):
     root = _library(tmp_path, "a-loop", "b-loop", "c-loop")
     base = load_spec("tests/fixtures/velvet-lou.json")
     picks = {
-        cli.auto_sheet(replace(base, name=f"Singer {n}"), "dance", root)[0] for n in range(12)
+        cli.auto_bundle(replace(base, name=f"Singer {n}"), "dance", root)[0] for n in range(12)
     }
     assert len(picks) > 1, f"every character landed on the same sheet: {picks}"
 

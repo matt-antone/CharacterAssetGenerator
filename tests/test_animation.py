@@ -59,7 +59,7 @@ def run(tmp_path, monkeypatch):
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     graph = animation.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, sheet_mode=False
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, frame_sheet_mode=False
     )
     return graph.invoke(
         {
@@ -158,7 +158,7 @@ def test_a_sheet_without_poses_draws_without_one(tmp_path, monkeypatch):
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     animation_module.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, sheet_mode=False
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_draw, frame_sheet_mode=False
     ).invoke(
         {
             "spec": load_spec("tests/fixtures/velvet-lou.json"),
@@ -213,10 +213,10 @@ def test_each_cell_is_scaled_by_the_pose_of_its_own_frame(run):
     assert len(set(heights)) > 1  # the poses really are telling them apart
 
 
-def fake_sheet_draw(prompt, out_path, references=(), **kwargs):
+def fake_frame_sheet_draw(prompt, out_path, references=(), **kwargs):
     """One render of the figures the prompt asked for, in a 4-wide grid, each a different shade.
 
-    The count comes from the prompt, not from SHEET_FRAMES: a set that does not
+    The count comes from the prompt, not from FRAME_SHEET_SIZE: a set that does not
     divide evenly ends on a short chunk, and a stand-in that always drew a full
     sheet would hand that chunk more figures than it asked for.
     """
@@ -226,24 +226,24 @@ def fake_sheet_draw(prompt, out_path, references=(), **kwargs):
     per_row = min(animation.FIGURES_PER_ROW, asked)
     rows = -(-asked // per_row)
     # Each later sheet comes back at a different magnification, as real ones do.
-    m = 1 + 0.5 * (int(out_path.stem.split("-")[1]) // animation.SHEET_FRAMES)
+    m = 1 + 0.5 * (int(out_path.stem.split("-")[1]) // animation.FRAME_SHEET_SIZE)
     image = Image.new("RGB", (int(per_row * 120 * m), int(rows * 220 * m)), (255, 0, 255))
     for n in range(asked):
         x, y = int(((n % per_row) * 120 + 40) * m), int(((n // per_row) * 220 + 20) * m)
         image.paste((20 + 10 * n,) * 3, (x, y, x + int(20 * m), y + int(160 * m)))
     image.save(out_path)
-    fake_sheet_draw.calls.append({"prompt": prompt, "out": out_path, "refs": list(references)})
+    fake_frame_sheet_draw.calls.append({"prompt": prompt, "out": out_path, "refs": list(references)})
     return out_path
 
 
 @pytest.fixture
 def sheet_run(tmp_path, monkeypatch):
-    fake_sheet_draw.calls = []
+    fake_frame_sheet_draw.calls = []
     monkeypatch.setattr(mask, "cutout", flat_cutout)
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     graph = animation.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_sheet_draw, sheet_mode=True
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_frame_sheet_draw, frame_sheet_mode=True
     )
     return graph.invoke(
         {
@@ -259,7 +259,7 @@ def sheet_run(tmp_path, monkeypatch):
 
 
 def test_sheet_mode_draws_the_set_in_as_few_renders_as_it_fits(sheet_run):
-    assert len(fake_sheet_draw.calls) == -(-16 // animation.SHEET_FRAMES)
+    assert len(fake_frame_sheet_draw.calls) == -(-16 // animation.FRAME_SHEET_SIZE)
     assert sorted(sheet_run["sources"]) == list(range(16))
     assert sorted(sheet_run["cells"]) == list(range(16))
 
@@ -270,14 +270,14 @@ def test_sheet_mode_slices_figures_back_in_frame_order(sheet_run):
     for index in range(16):
         with Image.open(sheet_run["sources"][index]) as source:
             shades.append(source.getpixel((source.width // 2, source.height // 2))[0])
-    assert shades == [20 + 10 * (i % animation.SHEET_FRAMES) for i in range(16)]
+    assert shades == [20 + 10 * (i % animation.FRAME_SHEET_SIZE) for i in range(16)]
 
 
 def test_sheet_mode_registers_every_frame_at_one_scale(sheet_run):
     """Same size on a sheet means same size in the cell — and across sheets too,
     though the fake draws the second one half again as large."""
-    n = animation.SHEET_FRAMES
-    assert sheet_run["sheets"] == [list(range(0, min(n, 16))), list(range(min(n, 16), 16))]
+    n = animation.FRAME_SHEET_SIZE
+    assert sheet_run["frame_sheets"] == [list(range(0, min(n, 16))), list(range(min(n, 16), 16))]
     heights = set()
     for index in range(16):
         with Image.open(sheet_run["cells"][index]) as cell:
@@ -298,12 +298,12 @@ def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkey
         frame.pop("pts", None)
     stripped = tmp_path / "motion.json"
     stripped.write_text(json.dumps(raw))
-    fake_sheet_draw.calls = []
+    fake_frame_sheet_draw.calls = []
     monkeypatch.setattr(mask, "cutout", flat_cutout)
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     result = animation.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_sheet_draw, sheet_mode=True
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_frame_sheet_draw, frame_sheet_mode=True
     ).invoke(
         {
             "spec": load_spec("tests/fixtures/velvet-lou.json"),
@@ -315,7 +315,7 @@ def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkey
             "work_dir": tmp_path / "lou",
         }
     )
-    for call in fake_sheet_draw.calls:
+    for call in fake_frame_sheet_draw.calls:
         assert "dark card" not in call["prompt"]
     for index in range(16):
         with Image.open(result["cells"][index]) as cell:
@@ -326,10 +326,10 @@ def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkey
 def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
     # A set that does not divide evenly ends on a short chunk, and that render is
     # asked for its own figure count, not for a full sheet.
-    n = animation.SHEET_FRAMES
+    n = animation.FRAME_SHEET_SIZE
     expected = [min(n, 16 - start) for start in range(0, 16, n)]
-    assert [len(s) for s in sheet_run["sheets"]] == expected
-    for call, size in zip(fake_sheet_draw.calls, expected):
+    assert [len(s) for s in sheet_run["frame_sheets"]] == expected
+    for call, size in zip(fake_frame_sheet_draw.calls, expected):
         prompt = call["prompt"]
         assert f"{size} times in one image" in prompt
         rows = -(-size // animation.FIGURES_PER_ROW)
@@ -346,7 +346,7 @@ def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
         assert "pixels tall" not in prompt
         assert "a strip of photographs of a real performer, one per figure" in prompt
         grid = Path(call["refs"][-1])
-        assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")
+        assert grid.parts[-3] == "poses" and grid.stem.startswith("pose-grid-")
         with Image.open(grid) as image:
             # Card for card, the same grid the figures are asked for, so pose N sits
             # where figure N is drawn.
@@ -364,15 +364,15 @@ def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monke
             image.save(out_path)
             flaky.calls.append(out_path)
             return out_path
-        return fake_sheet_draw(prompt, out_path, references, **kwargs)
+        return fake_frame_sheet_draw(prompt, out_path, references, **kwargs)
 
     flaky.calls = []
-    fake_sheet_draw.calls = []
+    fake_frame_sheet_draw.calls = []
     monkeypatch.setattr(mask, "cutout", flat_cutout)
     key_art = tmp_path / "key.png"
     Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
     result = animation.build_animation_graph(
-        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=flaky, sheet_mode=True
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=flaky, frame_sheet_mode=True
     ).invoke(
         {
             "spec": load_spec("tests/fixtures/velvet-lou.json"),
@@ -396,7 +396,7 @@ def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_r
     A traced sheet swapped in for a written one shares frame indices with it, so
     an index-only cache kept every render drawn from the prose it replaced.
     """
-    before = len(fake_sheet_draw.calls)
+    before = len(fake_frame_sheet_draw.calls)
     swapped = load_motion(SAMPLE)
     moved = tuple(
         replace(frame, cue=f"{frame.cue} arms overhead") for frame in swapped.frames
@@ -412,11 +412,11 @@ def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_r
         "poses": {},
     }
 
-    animation.sheet({**state, "motion": swapped}, draw_fn=fake_sheet_draw)
-    assert len(fake_sheet_draw.calls) == before, "the same sheet must not redraw"
+    animation.frame_sheet({**state, "motion": swapped}, draw_fn=fake_frame_sheet_draw)
+    assert len(fake_frame_sheet_draw.calls) == before, "the same sheet must not redraw"
 
-    animation.sheet({**state, "motion": replace(swapped, frames=moved)}, draw_fn=fake_sheet_draw)
-    assert len(fake_sheet_draw.calls) > before, "a changed sheet must redraw"
+    animation.frame_sheet({**state, "motion": replace(swapped, frames=moved)}, draw_fn=fake_frame_sheet_draw)
+    assert len(fake_frame_sheet_draw.calls) > before, "a changed sheet must redraw"
 
 
 def test_the_pose_reference_is_described_as_a_photograph():
@@ -424,11 +424,11 @@ def test_the_pose_reference_is_described_as_a_photograph():
     everything about the pose, nothing about who is holding it. It is the only
     kind of pose reference left — the drawn cards, and the clause that described
     their teal and violet limbs, went with the sprite-sheet route."""
-    from cag.prompts import FRAME_VIEWS, sheet_prompt
+    from cag.prompts import FRAME_VIEWS, frame_sheet_prompt
 
     spec = load_spec("tests/fixtures/velvet-lou.json")
     cues = [("key", "a cue"), ("inbetween", "another")]
-    shot = sheet_prompt(spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True)
+    shot = frame_sheet_prompt(spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True)
 
     assert "photographs of a real performer" in shot
     assert "teal green" not in shot, "the drawn-card clause is gone"
@@ -443,7 +443,7 @@ def test_a_photographic_set_sends_the_lean_prompt():
     approximate, and repeating it in prose costs movement: the same cards drew
     0.43-0.70 of the traced amplitude carrying all three and 0.75-1.21 without.
     What a photograph cannot say is whose costume survives it, so that stays."""
-    from cag.prompts import FRAME_VIEWS, sheet_prompt
+    from cag.prompts import FRAME_VIEWS, frame_sheet_prompt
 
     spec = load_spec("tests/fixtures/velvet-lou.json")
     bible = "He is tall. Chunky ankle boots in brown leather. A tall dark quiff."
@@ -452,8 +452,8 @@ def test_a_photographic_set_sends_the_lean_prompt():
 
     # The two prompts the pipeline actually builds: a set driven by photographs,
     # and a written set with no pose reference at all.
-    lean = sheet_prompt(*args, pose_reference=True, photographic=True)
-    full = sheet_prompt(*args)
+    lean = frame_sheet_prompt(*args, pose_reference=True, photographic=True)
+    full = frame_sheet_prompt(*args)
 
     for dropped in ("He is tall", "THE DIRECTOR NOTE", "weight centred over both feet"):
         assert dropped in full

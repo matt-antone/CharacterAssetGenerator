@@ -11,7 +11,7 @@ from functools import partial
 from pathlib import Path
 
 from .animation import build_animation_graph
-from .assemble import MANIFEST, PORTRAIT_SIZES, gallery, gif_proof, manifest, portrait, sprite_sheet
+from .assemble import MANIFEST, PORTRAIT_SIZES, gallery, gif_proof, manifest, portrait, tile
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
@@ -60,7 +60,7 @@ def motion_for(
         return load_motion(supplied)
     named = spec.motions.get(set_name)
     if named == AUTO:
-        name, bundle = auto_sheet(spec, set_name, motion_root)
+        name, bundle = auto_bundle(spec, set_name, motion_root)
         log(f"[{set_name}] auto: the {name!r} sheet")
         return bundle.load()
     if named:
@@ -84,7 +84,7 @@ def motion_for(
     )
 
 
-def auto_sheet(spec: CharacterSpec, set_name: str, motion_root: Path) -> tuple[str, "Bundle"]:
+def auto_bundle(spec: CharacterSpec, set_name: str, motion_root: Path) -> tuple[str, "Bundle"]:
     """Choose a traced sheet for a set whose brief did not name one.
 
     Every traced sheet reads as a coherent performance — that is what tracing
@@ -112,7 +112,7 @@ def render_set(
     static: dict,
     work_dir: Path,
     supplied: Path | None,
-    sheet_mode: bool = True,
+    frame_sheet_mode: bool = True,
     draw_backend: str = "codex",
     motion_root: Path = MOTION_ROOT,
 ) -> dict:
@@ -127,7 +127,7 @@ def render_set(
     # None keeps callers pointed at each module's own `draw` name (unpatched, that's
     # the seam tests replace) instead of forcing a swap when nothing was asked for.
     draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
-    animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, sheet_mode=sheet_mode).invoke(
+    animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
         {
             "spec": spec,
             "bible": static["bible"],
@@ -149,7 +149,7 @@ def build(
     work_root: Path,
     out_root: Path,
     jobs: int = 1,
-    sheet_mode: bool = True,
+    frame_sheet_mode: bool = True,
     draw_backend: str = "codex",
     motion_root: Path = MOTION_ROOT,
 ) -> Path:
@@ -194,7 +194,7 @@ def build(
                     static,
                     work_dir,
                     motion_path,
-                    sheet_mode,
+                    frame_sheet_mode,
                     draw_backend,
                     motion_root,
                 )
@@ -218,7 +218,7 @@ def build(
             "sheet": f"{name}-sheet.png",
             "proof": f"{name}-proof.gif",
         }
-        sprite_sheet(cells, out_dir / block["sheet"], columns=block["columns"])
+        tile(cells, out_dir / block["sheet"], columns=block["columns"])
         gif_proof(cells, out_dir / block["proof"], motion.fps, loop=motion.loops)
         sets.append(block)
 
@@ -260,7 +260,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     build_parser.add_argument(
         "--per-frame",
-        dest="sheet_mode",
+        dest="frame_sheet_mode",
         action="store_false",
         help="draw one render per frame instead of one sheet per set",
     )
@@ -331,7 +331,7 @@ def main(argv: list[str] | None = None) -> int:
         args.work,
         args.out,
         args.jobs,
-        args.sheet_mode,
+        args.frame_sheet_mode,
         args.draw_backend,
         args.motion_root,
     )
