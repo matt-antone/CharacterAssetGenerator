@@ -40,13 +40,15 @@ runs. See what there is to name with:
 uv run cag motions
 ```
 
-It names the sheet, never the file. Sheets live in `motions/<name>/motion.json`
-in this repo, so a brief is portable and a sheet cannot be cleaned away from
-under the roster by the checkout that traced it. Adding one is a copy — the
-`motion.json` alone, not the footage beside it:
+It names the sheet, never the file. Sheets live in `motions/<name>/` in this
+repo, so a brief is portable and a sheet cannot be cleaned away from under the
+roster by the checkout that traced it. Each one is a MotionArtist bundle, and
+its `manifest.json` is what makes it one: the layout it declares, the header a
+brief picks it by, and the files it contains, including which one holds the
+motion. Adding a sheet is copying the bundle:
 
 ```bash
-cp ../MotionArtist/work/shuffle/motion.json motions/shuffle/motion.json
+cp -R ../MotionArtist/work/shuffle motions/shuffle
 ```
 
 `--motion-root` reads them from somewhere else, and `--motion` points one run at

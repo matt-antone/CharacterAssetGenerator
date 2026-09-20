@@ -1,5 +1,6 @@
 """End to end through the CLI, with the model and the image tool faked out."""
 
+import json
 import shutil
 from dataclasses import replace
 from pathlib import Path
@@ -118,8 +119,7 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
 def test_a_named_sheet_is_found_under_the_motion_root(tmp_path):
     """The brief names a choreography; the pipeline knows where sheets live."""
     root = tmp_path / "work"
-    (root / "zs-loop").mkdir(parents=True)
-    shutil.copy(SAMPLE, root / "zs-loop" / "motion.json")
+    _bundle(root, "zs-loop")
     spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": "zs-loop"})
 
     motion = cli.motion_for(spec, "dance", tmp_path / "work_dir", None, root)
@@ -142,11 +142,25 @@ def test_the_motion_flag_wins_over_the_sheet_the_brief_names(tmp_path):
     assert motion.frames, "the flag is used and the missing named sheet never looked for"
 
 
+def _bundle(root, name):
+    """A motion bundle is its manifest and the files the manifest names."""
+    (root / name).mkdir(parents=True)
+    shutil.copy(SAMPLE, root / name / "motion.json")
+    sheet = json.loads(Path(SAMPLE).read_text())
+    (root / name / "manifest.json").write_text(json.dumps({
+        "bundle": "motion-source", "schema": "motion-artist/1",
+        "name": name, "title": name.replace("-", " ").title(),
+        "fps": sheet["fps"], "frame_count": len(sheet["frames"]),
+        "playback": sheet["playback"], "view": sheet["view"],
+        "seam": sheet.get("seam", ""), "files": {"motion.json": "unchecked"},
+    }))
+    return root / name
+
+
 def _library(tmp_path, *names):
     root = tmp_path / "sheets"
     for name in names:
-        (root / name).mkdir(parents=True)
-        shutil.copy(SAMPLE, root / name / "motion.json")
+        _bundle(root, name)
     return root
 
 

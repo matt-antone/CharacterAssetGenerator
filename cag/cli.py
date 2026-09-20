@@ -15,7 +15,7 @@ from .assemble import MANIFEST, PORTRAIT_SIZES, gallery, gif_proof, manifest, po
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
-from .motion import MotionError, MotionSheet, library, load_motion
+from .motion import BUNDLE, MotionError, library, load_motion, read_bundle
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
 from .sets import plan_for, wanted
@@ -60,17 +60,17 @@ def motion_for(
         return load_motion(supplied)
     named = spec.motions.get(set_name)
     if named == AUTO:
-        name, sheet = auto_sheet(spec, set_name, motion_root)
+        name, bundle = auto_sheet(spec, set_name, motion_root)
         log(f"[{set_name}] auto: the {name!r} sheet")
-        return sheet
+        return bundle.load()
     if named:
-        sheet = motion_root / named / "motion.json"
-        if not sheet.exists():
+        bundle = motion_root / named
+        if not (bundle / BUNDLE).exists():
             raise MotionError(
                 f"{spec.name} names the {named!r} motion sheet for {set_name}, "
-                f"but there is none at {sheet}"
+                f"but there is no bundle at {bundle}"
             )
-        return load_motion(sheet)
+        return read_bundle(bundle).load()
     intent = spec.animations.get(set_name)
     if not intent:
         raise KeyError(f"{spec.name} has no {set_name!r} animation in their brief")
@@ -84,9 +84,7 @@ def motion_for(
     )
 
 
-def auto_sheet(
-    spec: CharacterSpec, set_name: str, motion_root: Path
-) -> tuple[str, MotionSheet]:
+def auto_sheet(spec: CharacterSpec, set_name: str, motion_root: Path) -> tuple[str, "Bundle"]:
     """Choose a traced sheet for a set whose brief did not name one.
 
     Every traced sheet reads as a coherent performance — that is what tracing
@@ -121,6 +119,11 @@ def render_set(
     """Draw and mask one animation set. Safe to run alongside other sets."""
     motion = motion_for(spec, set_name, work_dir, supplied, motion_root)
     log(f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, {motion.view} view")
+    if not motion.seams_cleanly:
+        # The tracer compared the last frame to the first and they do not meet.
+        # Nothing downstream can fix that, so it is said once, where it is chosen.
+        log(f"[{set_name}] the {motion.name!r} sheet loops on a {motion.seam!r} seam: "
+            "the proof will jump from the last frame back to the first")
     # None keeps callers pointed at each module's own `draw` name (unpatched, that's
     # the seam tests replace) instead of forcing a swap when nothing was asked for.
     draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
@@ -301,11 +304,17 @@ def main(argv: list[str] | None = None) -> int:
         if not sheets:
             log(f"no motion sheets under {args.motion_root}")
             return 1
-        print(f"{'name':16s} {'frames':>6} {'fps':>4} {'view':>7} {'travel':>7}  poses")
-        for name, sheet in sorted(sheets.items()):
+        print(
+            f"{'name':16s} {'title':18s} {'frames':>6} {'fps':>4} {'view':>7} "
+            f"{'travel':>7}  {'poses':5s}  seam"
+        )
+        for name, bundle in sorted(sheets.items()):
+            # The header is the manifest's; travel and poses are only in the landmarks.
+            motion = bundle.load()
             print(
-                f"{name:16s} {len(sheet.frames):6d} {sheet.fps:4d} {sheet.view:>7s} "
-                f"{sheet.travel:7.3f}  {'yes' if sheet.has_poses else 'no'}"
+                f"{name:16s} {bundle.title[:18]:18s} {bundle.frame_count:6d} "
+                f"{bundle.fps:4d} {bundle.view:>7s} {motion.travel:7.3f}  "
+                f"{'yes' if motion.has_poses else 'no':5s}  {bundle.seam or '-'}"
             )
         return 0
     if args.command == "edit":

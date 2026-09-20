@@ -154,7 +154,7 @@ def _draw_frame(
     draw_fn: Callable[..., Path],
 ) -> Path:
     spec = state["spec"]
-    cue = f"{frame.cue} {frame.note}".strip()
+    cue = frame.instruction
     pose = state.get("poses", {}).get(frame.index)
     detail = detail_frame(spec.detail_level)
     prompt = frame_prompt(
@@ -242,7 +242,7 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
         if reusable and all(path.exists() for path in drawn_already.values()):
             sources.update(drawn_already)
             continue
-        cues = [(frame.role, f"{frame.cue} {frame.note}".strip()) for frame in chunk]
+        cues = [(frame.role, frame.instruction) for frame in chunk]
         pose_grid = None
         if poses:
             pose_grid = sprite_sheet(

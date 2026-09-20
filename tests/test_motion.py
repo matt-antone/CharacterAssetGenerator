@@ -1,8 +1,12 @@
 import json
+from pathlib import Path
+import shutil
+
+from dataclasses import replace
 
 import pytest
 
-from cag.motion import MotionError, load_motion
+from cag.motion import Frame, library, read_bundle, MotionError, load_motion
 
 SAMPLE = "tests/fixtures/sample-motion.json"
 
@@ -76,3 +80,69 @@ def test_rejects_unusable_sheets(tmp_path, overrides, message):
         path = sheet(tmp_path, **overrides)
     with pytest.raises(MotionError, match=message):
         load_motion(path)
+
+
+def test_a_frames_pace_is_said_out_loud():
+    """Traced pace, or the settle the performer did averages into an in-between."""
+    def frame(pace):
+        return Frame(index=0, role="key", pace=pace, cue="Weight centred.", note="")
+
+    assert "settles here" in frame("hold").instruction
+    assert "fast transition" in frame("fast").instruction
+    steady = frame("steady").instruction
+    assert steady == "Weight centred.", f"a steady frame says only its cue: {steady!r}"
+
+    # and the cue and note survive whatever the pace
+    assert "Weight centred." in frame("hold").instruction
+
+
+def test_a_sheet_that_does_not_loop_cleanly_says_so():
+    sheet = load_motion(SAMPLE)
+    assert replace(sheet, seam="needs blend").seams_cleanly is False
+    assert replace(sheet, seam="clean").seams_cleanly is True
+    assert replace(sheet, seam="").seams_cleanly is True, "unset is not a complaint"
+    assert replace(sheet, seam="needs blend", playback="oneshot").seams_cleanly is True
+
+
+def bundle_at(tmp_path, **overrides):
+    sheet = json.loads(Path(SAMPLE).read_text())
+    root = tmp_path / "shuffle"
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "motion.json").write_text(json.dumps(sheet))
+    manifest = {
+        "bundle": "motion-source", "schema": "motion-artist/1", "name": "shuffle",
+        "title": "Shuffle", "fps": sheet["fps"], "frame_count": len(sheet["frames"]),
+        "playback": sheet["playback"], "view": sheet["view"], "seam": "clean",
+        "files": {"motion.json": "unchecked"},
+    }
+    manifest.update(overrides)
+    (root / "manifest.json").write_text(json.dumps(manifest))
+    return root
+
+
+def test_a_bundle_is_found_by_its_manifest(tmp_path):
+    """Not by guessing at a filename the bundle never promised."""
+    bundle_at(tmp_path)
+    found = library(tmp_path)
+    assert list(found) == ["shuffle"]
+    assert found["shuffle"].sheet.name == "motion.json"
+    assert found["shuffle"].title == "Shuffle"
+
+
+def test_a_directory_without_a_manifest_is_not_a_bundle(tmp_path):
+    (tmp_path / "loose").mkdir()
+    shutil.copy(SAMPLE, tmp_path / "loose" / "motion.json")
+    assert library(tmp_path) == {}
+
+
+def test_an_unknown_bundle_layout_is_refused(tmp_path):
+    bundle_at(tmp_path, schema="motion-artist/9")
+    with pytest.raises(MotionError, match="schema"):
+        library(tmp_path)
+
+
+def test_a_manifest_that_disagrees_with_its_sheet_is_caught(tmp_path):
+    """The header a brief picks a sheet by has to be the sheet it gets."""
+    root = bundle_at(tmp_path, frame_count=99)
+    with pytest.raises(MotionError, match="advertises 99 frames"):
+        read_bundle(root).load()
