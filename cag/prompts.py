@@ -198,28 +198,6 @@ PROP_CONTINUITY = (
     "open hand, in any frame, whatever the arm is doing."
 )
 
-#: What the figure on a pose card is drawn with. Said once, because both the
-#: single-frame and the sheet clause have to describe the same picture, and a
-#: prompt that describes the reference wrongly is worse than one that says
-#: nothing about it.
-POSE_CARD = (
-    "On it the character's own LEFT arm and leg are teal green and their own RIGHT arm and leg "
-    "pale violet, so you can tell which side a limb belongs to and which one passes in front "
-    "where they cross. The two orange outlines are the rib cage and the pelvis: copy how far "
-    "each is turned, including where they disagree with each other, because that counter-turn "
-    "is the movement. Hands and feet are drawn as their own shapes — a foot is hinged at the "
-    "ball, so copy which way it points and whether the heel is down or lifted. The floor is a "
-    "dashed line: a foot drawn above it is off the floor and is drawn off the floor. These "
-    "colours are a code, not costume, and the figure carries no identity or style — take none "
-    "of its look, and draw nothing teal, violet, orange or grey because of it."
-)
-
-POSE_REFERENCE = (
-    "The last reference image is a figure holding this exact pose, on a dark card. Copy the "
-    "pose from it: limb angles, which knee is bent, how wide the feet are set, how the weight "
-    f"sits, and which way the head turns. {POSE_CARD}"
-)
-
 #: Whichever produced the cue — a traced skeleton or a written pose description — the key art
 #: is still sitting in the reference list purely for identity, and its own stance has a way of
 #: winning anyway. Said once, unconditionally, so a written set with no skeleton to point at is
@@ -242,7 +220,6 @@ def frame_prompt(
     detail_level: int = DEFAULT_DETAIL_LEVEL,
     detail_reference: bool = False,
     props: str = "",
-    photographic: bool = False,
 ) -> str:
     """Prompt for one animation frame."""
     return "\n\n".join(
@@ -257,7 +234,7 @@ def frame_prompt(
             BACKDROP,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
-            (PHOTO_REFERENCE if photographic else POSE_REFERENCE) if pose_reference else "",
+            PHOTO_REFERENCE if pose_reference else "",
             STANCE_REFERENCE,
             # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
             PROP_CONTINUITY if props else "",
@@ -279,13 +256,6 @@ PHOTO_REFERENCE = (
     "photograph: not the performer's face, hair, body, build, clothing, footwear, or the room "
     "behind them. The character keeps their own costume from the key art, including on a foot "
     "that is off the floor."
-)
-
-POSE_SHEET_REFERENCE = (
-    "The last reference image shows every pose in this sequence as a figure on a dark card, laid "
-    "out in the same order and the same rows as the figures you draw. Copy each pose from its "
-    "own card: limb angles, which knee is bent, how wide the feet are set, how the weight sits, "
-    f"and which way the head turns. {POSE_CARD}"
 )
 
 #: Said of a sheet of photographs instead. A photograph carries a whole person,
@@ -417,9 +387,7 @@ def sheet_prompt(
             BACKDROP,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
-            (PHOTO_SHEET_REFERENCE if photographic else POSE_SHEET_REFERENCE)
-            if pose_reference
-            else "",
+            PHOTO_SHEET_REFERENCE if pose_reference else "",
             STANCE_SHEET_REFERENCE,
             # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
             PROP_CONTINUITY if props else "",

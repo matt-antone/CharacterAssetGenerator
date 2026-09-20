@@ -186,7 +186,6 @@ def _draw_frame(
         detail_level=spec.detail_level,
         detail_reference=detail is not None,
         props=prop_clause(state),
-        photographic=state.get("photographic", False),
     )
     # The pose goes last, because the prompt calls it "the last reference image".
     references = [*references, *( [detail] if detail else [] ), *([pose] if pose else [])]

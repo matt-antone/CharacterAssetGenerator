@@ -419,22 +419,19 @@ def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_r
     assert len(fake_sheet_draw.calls) > before, "a changed sheet must redraw"
 
 
-def test_photographic_references_are_described_as_photographs_not_diagrams():
+def test_the_pose_reference_is_described_as_a_photograph():
     """A photograph carries a whole person, so the prompt has to draw the line:
-    everything about the pose, nothing about who is holding it. The diagram
-    clause says the opposite — that the figure has no costume at all."""
+    everything about the pose, nothing about who is holding it. It is the only
+    kind of pose reference left — the drawn cards, and the clause that described
+    their teal and violet limbs, went with the sprite-sheet route."""
     from cag.prompts import FRAME_VIEWS, sheet_prompt
 
     spec = load_spec("tests/fixtures/velvet-lou.json")
     cues = [("key", "a cue"), ("inbetween", "another")]
-    drawn = sheet_prompt(spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True)
-    shot = sheet_prompt(
-        spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True, photographic=True
-    )
+    shot = sheet_prompt(spec, "B", "N", FRAME_VIEWS["front"], cues, pose_reference=True)
 
-    assert "teal green" in drawn and "photograph" not in drawn
     assert "photographs of a real performer" in shot
-    assert "teal green" not in shot
+    assert "teal green" not in shot, "the drawn-card clause is gone"
     # The two things measurement said the photo route needs: full-size movement,
     # and the character's own footwear kept on a foot that has left the floor.
     assert "not a smaller, more cautious version" in shot
@@ -453,14 +450,15 @@ def test_a_photographic_set_sends_the_lean_prompt():
     cues = [("key", "weight centred over both feet"), ("inbetween", "knee lifted")]
     args = (spec, bible, "THE DIRECTOR NOTE", FRAME_VIEWS["front"], cues)
 
+    # The two prompts the pipeline actually builds: a set driven by photographs,
+    # and a written set with no pose reference at all.
     lean = sheet_prompt(*args, pose_reference=True, photographic=True)
-    full = sheet_prompt(*args, pose_reference=True)
+    full = sheet_prompt(*args)
 
     for dropped in ("He is tall", "THE DIRECTOR NOTE", "weight centred over both feet"):
         assert dropped in full
         assert dropped not in lean
     assert "ankle boots" in lean and "quiff" in lean
-    assert len(lean) < len(full)
 
 
 def test_the_director_is_told_what_the_set_holds_rather_than_left_to_guess(tmp_path):
