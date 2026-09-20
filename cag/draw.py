@@ -30,7 +30,11 @@ AGY_MODEL = "gemini-3.1-pro-high"
 
 
 INSTRUCTIONS = """Generate exactly one image with your built-in image generation tool and \
-save it to {filename} in the working directory.
+save it to {filename} in the working directory. Pass every attached image to the tool as a \
+reference image. You will shorten this message to write the tool's prompt; when you do, keep \
+every "character-left" and "character-right" exactly as written, never as a bare "left" or \
+"right", and keep the pose list and everything said about the pose reference in full. Shorten \
+the character description first.
 
 Then view {filename} and check the background. Every pixel that is not the character must be \
 magenta, out to all four canvas edges and inside every gap between hair, limbs and props. If any \
