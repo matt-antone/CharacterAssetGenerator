@@ -1,0 +1,40 @@
+{
+  "name": "dead pigeon",
+  "summary": "One dead city pigeon carried in one hand, limp and long past flapping. It is never sung into, never alive, and never gets put down.",
+  "draw": {
+    "shape": "A plump city pigeon about the size of the character's own head, hanging head-down from the hand that holds its feet. The wings sag half-open and loose, the neck is slack so the head dangles and swings, and the body reads as a dead weight rather than a bird in flight.",
+    "material": "Dull grey plumage gone ruffled and dusty, a darker head, two dark wing bars, a faded green-violet sheen at the throat, a small pale beak hanging open and stiff pink feet. Whole and unbloodied: it simply stopped.",
+    "palette": {
+      "base": "#8E949C",
+      "shadow": "#4B5057",
+      "highlight": "#C4C9CF"
+    },
+    "readability": "The bird stays a distinct rounded shape with at least one sagging wing clear of the costume in every frame, never a smudge, never a shape that merges into the body behind it. The dangling head and the slack open wings are what make it read as dead rather than held."
+  },
+  "hold": {
+    "hands": {
+      "character-left": "The fist closes around both stiff feet, knuckles down, so the bird hangs upside down below the hand. The grip is casual, the way anyone carries a dead bird they have stopped thinking about."
+    },
+    "orientation": "The feet are at the hand and the head hangs below, swinging with whatever the arm does. The bird is held clear of the face, never against the mouth, and never right way up, perched or flying.",
+    "rest": "Hanging straight down from the hand at hip height, wings sagging open, unless the set below or the brief says otherwise."
+  },
+  "carriage": {
+    "dance": "Swings from the fist on the beat, wings flopping loose and the head swinging with each step, dragged along through the whole dance.",
+    "sing": "Hangs from the fist out to the side, ignored entirely. It never comes near the mouth.",
+    "flinch": "Jerks once on the end of the arm with the reaction, wings flapping loosely from the movement alone, then hangs still again.",
+    "guard": "Pulled in against the torso in the prop hand, still hanging head-down, while the free arm shields.",
+    "entrance": "Lifted once alongside the greeting, the limp body swinging up and back down, then carried at hip height.",
+    "victory": "Raised high with the celebration, hanging from the fist, wings flopping wide at the top of the lift.",
+    "ko": "Hangs slack at the side, head down, as motionless as the character."
+  },
+  "never": [
+    "in the character-right hand, or swapped between hands across a set",
+    "brought to the mouth, sung into, or held like a microphone",
+    "alive, flapping, perched, standing, flying, or held right way up",
+    "bloodied, gory, wounded, crushed, plucked, skeletal or rotting",
+    "swung, brandished or used as a club or a weapon",
+    "put down, dropped, released, or out of the hand in any frame",
+    "a dove, a crow, a chicken, a parrot or any bird but a grey city pigeon",
+    "a second bird, or replaced by an empty hand in any frame, whatever the arm is doing"
+  ]
+}

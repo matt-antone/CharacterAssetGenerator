@@ -1,0 +1,54 @@
+{
+  "name": "Chops",
+  "height": "6' 4\"",
+  "description": "A masked slasher who turns out to be painfully shy off stage and a full-throated arena-metal howler on it; earnest, gentle and a little bashful between numbers. Very tall and broad with heavy shoulders, thick forearms and slow deliberate movement, standing upright and level like the rest of the roster with weight even over both feet; never hunched, stalking, creeping or menacing. His recognition cues are a smooth blank off-white oval face plate with two rounded eye holes and a small mouth slot, a dark strap across the jaw, stringy dark shoulder-length hair hanging out from behind the plate, a patched navy boiler suit with the sleeves pushed up the forearms, brown leather work gloves, and heavy tan work boots, all readable without facial detail. The plate is smooth, plain and undecorated: no lacing holes, no triangular vent cutouts, no goalie-mask pattern, no blood, cracks, scratches or markings, and it stays on in every frame. No hat or headwear over the mask. He wears a faded navy boiler suit zipped to mid-chest with two mismatched cloth patches at one knee and one elbow, the sleeves pushed up above the wrists, a grey shirt showing at the open collar, brown leather work gloves, and scuffed heavy tan work boots with thick soles. His ready stance is tall and square with the feet planted wide, shoulders level, head tipped very slightly down, and the free gloved character-right hand hanging open at his side, shy but ready. Palette, as base/shadow/highlight per material: boiler suit #2F3A4E / #161C27 / #53637E; patches #4A5460 / #262C34 / #737E8B; shirt #8B8F94 / #52565B / #B6BABE; mask #E4DECF / #A8A294 / #FAF6EB; mask openings #1B1A1E; strap #2A2620 / #121110 / #4A443A; hair #23201F / #0E0D0D / #494442; gloves #7A5434 / #432C18 / #A87C52; boots #9A7549 / #5A4326 / #C3A075; eye dark #1B1A1E. Never draw: a blade raised to strike or pointed at the viewer; blood on the character, the costume, the mask or the floor; gore, wounds or splatter; a raised threatening arm, a stalking or creeping posture, or a lunge toward the viewer; victims, bodies, ropes, restraints or chase imagery; a hockey goalie mask, its lace holes or its triangular vent pattern; a cracked, scratched, bloodied, painted or decorated mask; the mask removed, lifted or absent; a visible face or expression through the mask; a woods, camp, cabin or night-stalk backdrop; any real actor's likeness or any film's mask or costume design; logos, text or real brands.",
+  "animations": {
+    "dance": {
+      "intent": "Heavy headbang loop: plant the boots wide, swing the masked head down and up so the stringy hair sweeps forward and back, rock the weight from one boot to the other with the knees loose, and pump the free gloved character-right fist at shoulder height, then return to the tall square opening stance. Loose and enthusiastic, never a stalk or a lunge.",
+      "props": [
+        "knife"
+      ]
+    },
+    "sing": {
+      "intent": "Arena-metal loop: lean the mask back for a long roaring line with the chest expanding, throw the free gloved character-right hand up with the fingers spread, then settle back into his tall square stance. The mask stays on; the mouth slot and the head angle must visibly move across the loop so he unmistakably reads as singing.",
+      "props": [
+        "knife",
+        "mic"
+      ]
+    },
+    "flinch": {
+      "intent": "Brief room-sound startle: the heavy shoulders jump and the masked head pulls back, the free gloved hand flies up open, then he ducks his head bashfully and resettles into his tall square stance. No opponent, strike or contact.",
+      "props": [
+        "knife"
+      ]
+    },
+    "guard": {
+      "intent": "One-shot stage self-protection: turn one broad shoulder forward and raise the free gloved character-right forearm flat in front of the mask as a shield, then hold a steady upright finish. Not a combat action.",
+      "props": [
+        "knife"
+      ]
+    },
+    "entrance": {
+      "intent": "One-shot entrance: walk in with slow heavy steps, stop, push the sleeves further up the forearms with the free gloved hand, give the room a small shy wave, then take the tall square ready stance.",
+      "props": [
+        "knife"
+      ]
+    },
+    "victory": {
+      "intent": "One-shot song-finish celebration: throw both arms overhead in delighted disbelief with the whole tall frame lifting onto the balls of the work boots and the stringy hair flying, then settle into a proud upright pose with the mask tipped a little to one side.",
+      "props": [
+        "knife"
+      ]
+    },
+    "ko": {
+      "intent": "Non-contact performance defeat: he stays on his feet while the nerve drains out of him — the heavy shoulders drop, the thick arms hang, and the masked head tips low toward the open collar with the stringy hair falling forward over the mask. He holds a standing, visibly dejected finish with weight even over both work boots. He remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent.",
+      "props": [
+        "knife"
+      ]
+    }
+  },
+  "props": [
+    "knife",
+    "mic"
+  ]
+}

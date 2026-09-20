@@ -3,12 +3,7 @@
   "height": "5' 7\"",
   "description": "A power-ballad singer in her forties with a trim, athletic, braced arcade build and commanding performance energy. Lean and fit rather than heavy: a firm torso, trim hips and thighs, a defined waist, a low centre of gravity and planted weight, carrying about twenty pounds less than a thickset build — strong, not bulky. Never narrow, dainty or elongated, and never heavy, wide-hipped or thick-thighed. Her recognition cue is that her wavy auburn hair mass is visibly wider than her shoulders — a large shoulder-clearing mass of thick wavy auburn hair with a high crown and wide side volume, worn completely loose and down — every strand falls free from the scalp, with nothing gathered, tied, clipped, twisted or swept back at the crown, temples or nape. No hat or headwear. She wears a structured crimson performance jacket with angular lapels over a dark fitted top, high-waisted blue mom jeans, a crimson waist accent, and chunky ankle boots in near-black dark brown leather, with visible laces: warm mid-brown cross-laced cords over a dark tongue, at least three readable rungs per boot, tied off at the top. The laces are brown, but a distinctly lighter, warmer, more saturated brown than the boot leather — they must read as their own material at a glance, with at least three tone steps between lace and boot. Her ready stance has flexed knees, torso braced over a low centre, feet planted, and the free hand compact and relaxed. Palette, as base/shadow/highlight per material: crimson #C01723 / #7A0D17 / #F0444E; blue denim #4B576F / #2F374A / #8B98B1; skin #B96B4F / #794333 / #DB9372; hair #593029 / #2D1815 / #8A4A3F; boot leather #3A2A23 / #1C1310 / #5E463A; boot lace #B98A55 / #6E4E2E / #E0B57F; eye white #F3E8D8; eye dark #251713; lip #8E2633; tooth highlight #F4E9D7. Never draw: hair pulled back, tied back, half-up, swept off the face, or gathered into a ponytail, bun, topknot, twist or clip; a heavy, thickset or broad-hipped build; laceless, slip-on or zip-sided boots; laces in the same brown as the boot leather, or close enough to blend into it; white, cream, pale or black laces; a hair mass equal to or narrower than the shoulders; slim upright fashion-pose proportions; a youth-coded or elderly caricature; a gown or skirt silhouette; logos, text or real brands.",
   "animations": {
-    "dance": {
-      "intent": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow. The character-right hand and arm are free to move.",
-      "props": [
-        "mic"
-      ]
-    },
+    "dance": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow. The character-right hand and arm are free to move.",
     "sing": {
       "intent": "Planted power-ballad vocal loop: brace through the legs, use one compact free-hand emphasis, then settle back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [
@@ -16,25 +11,10 @@
       ]
     },
     "flinch": "Brief room-sound surprise: shoulders and wide hair lift, torso draws back slightly, then she regains her broad composed stance. No opponent, strike, or physical contact.",
-    "guard": {
-      "intent": "One-shot stage self-protection: lower into a compact braced stance, shield the torso with the free arm, then hold a stable grounded finish. Not combat.",
-      "props": [
-        "mic"
-      ]
-    },
-    "entrance": {
-      "intent": "One-shot entrance: step in with low confident weight, square the crimson jacket toward the room, then land in her broad performance-ready stance.",
-      "props": [
-        "mic"
-      ]
-    },
+    "guard": "One-shot stage self-protection: lower into a compact braced stance, shield the torso with the free arm, then hold a stable grounded finish. Not combat.",
+    "entrance": "One-shot entrance: step in with low confident weight, square the crimson jacket toward the room, then land in her broad performance-ready stance.",
     "victory": "One-shot song-finish celebration: plant both boots, lift the free hand and chin in a proud acknowledgement, let the hair settle, then hold a commanding balanced pose.",
-    "ko": {
-      "intent": "Non-contact performance defeat: she stays on her feet while the braced stance goes slack — the shoulders drop, the free hand opens and falls, and her head hangs low with the chin toward her chest. She holds a standing, visibly crushed finish. The wavy auburn hair mass stays wider than her shoulders as it falls forward. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent.",
-      "props": [
-        "mic"
-      ]
-    }
+    "ko": "Non-contact performance defeat: she stays on her feet while the braced stance goes slack — the shoulders drop, the free hand opens and falls, and her head hangs low with the chin toward her chest. She holds a standing, visibly crushed finish. The wavy auburn hair mass stays wider than her shoulders as it falls forward. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
   },
   "props": [
     "mic"

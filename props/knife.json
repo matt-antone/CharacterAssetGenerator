@@ -1,0 +1,39 @@
+{
+  "name": "butcher knife",
+  "summary": "One bloodied butcher knife, carried in the character-left hand as a costume piece, never used on anything. No second blade, no sheath.",
+  "draw": {
+    "shape": "A broad rectangular butcher blade tapering to a point, with a straight spine and a short riveted handle. The blade is about as long as the character's own forearm and clearly wider than the handle, so the silhouette reads as a blade at cell size.",
+    "material": "Dull steel with a lightly specular edge and a dark riveted wooden handle. A few dried dark-red smears and one thin drip line sit on the flat of the blade, #7A1B1B with #3F0D0D in shadow, on the blade only.",
+    "palette": {
+      "base": "#8A9099",
+      "shadow": "#3E434A",
+      "highlight": "#D2D7DD"
+    },
+    "readability": "The blade stays a distinct flat shape against the costume, edge and point legible in every frame, never a smudge, a stub, or a shape that merges into the body behind it."
+  },
+  "hold": {
+    "hands": {
+      "character-left": "The fist wraps the handle behind the rivets, fingers closed, thumb along the spine. The blade points down and slightly forward, away from the body."
+    },
+    "orientation": "The handle leads at the hand and the point trails below it. The blade never points at the viewer, at the character's own face or body, or straight up.",
+    "rest": "Hanging at the character-left side, blade down and angled slightly away from the leg, unless the set below says otherwise."
+  },
+  "carriage": {
+    "dance": "Swings loosely with the character-left arm on the beat, blade down, the point kept clear of the body and the costume.",
+    "sing": "Held low and out to the character-left side, blade down, well away from the face and the microphone.",
+    "flinch": "Stays still at the side through the reaction, blade down.",
+    "guard": "Drops low and angles away from the body while the free arm shields, blade down and never crossing the face.",
+    "entrance": "Lifted once in a small, bashful greeting, blade still down, then settled at the side.",
+    "victory": "Rises with the celebration, held up by the handle with the blade angled away from the head, never overhead point-down.",
+    "ko": "Hangs slack at the character-left side, point toward the floor."
+  },
+  "never": [
+    "in the character-right hand, or swapped between hands across a set",
+    "raised, cocked or swung in a stabbing, slashing or striking action",
+    "pointed at the viewer, at another figure, or at the character's own face or body",
+    "touching anyone, anything, or the floor",
+    "dripping, spattering or leaving blood on the character, the costume, the glove or the ground",
+    "a second blade, a sheath, a cleaver, a machete or an axe",
+    "replaced by a bare fist, an open hand or an empty hand in any frame, whatever the arm is doing"
+  ]
+}
