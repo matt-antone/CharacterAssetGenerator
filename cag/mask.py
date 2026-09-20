@@ -394,6 +394,74 @@ def frame_scale(
     return anim_subject_height_px(height_inches) / (drawn * standing / extent)
 
 
+#: The four joints that box the torso. Their mean is where the body is, whatever
+#: the arms and legs are doing.
+TORSO = ("shL", "shR", "hipL", "hipR")
+
+#: Every landmark that can be the lowest point of a foot.
+SOLES = ("anL", "anR", "heelL", "heelR", "toeL", "toeR")
+
+
+def torso_x(pts: dict[str, list[float]]) -> float:
+    return statistics.fmean(pts[name][0] for name in TORSO)
+
+
+def home_x(poses: dict[int, dict[str, list[float]]]) -> float | None:
+    """Where the performer's torso sits on average across the set, or None."""
+    xs = [torso_x(pts) for pts in poses.values() if pts]
+    return statistics.fmean(xs) if xs else None
+
+
+def placement(
+    subject: Image.Image,
+    pts: dict[str, list[float]],
+    floor_y: float,
+    body_h: float,
+    height_inches: float,
+    home: float | None,
+    airborne: bool,
+) -> tuple[tuple[float, float] | None, int]:
+    """Where a drawn frame goes in its cell: `register`'s anchor and contact row.
+
+    Across: the torso is found in the drawing and put where the pose says the
+    torso is, so a kicked leg widens the box without shoving the body the other
+    way, and the performer's own side-to-side travel survives. Up: a frame the
+    tracer calls airborne is lifted off the contact row by as far as its lowest
+    sole is off the floor. Grounded frames are not lifted at all — their soles
+    sit a few percent off `floor_y` by noise, and that would come out as jitter.
+    """
+    if not pts or not body_h or home is None:
+        return None, ANIM_CONTACT_ROW
+    px = anim_subject_height_px(height_inches) / body_h
+    row = ANIM_CONTACT_ROW
+    if airborne:
+        lowest = max(pts[name][1] for name in SOLES if name in pts)
+        row -= max(0, round((floor_y - lowest) * px))
+
+    # The torso's rows in the drawing, read off the pose. The box runs crown to
+    # lowest landmark: a generator draws feet, not the floor under a jump.
+    left, top, right, bottom = subject_box(subject)
+    ys = [point[1] for point in pts.values()] + [crown(pts, body_h)[1]]
+    low, high = min(ys), max(ys)
+    rows = [
+        top + round((statistics.fmean(pts[a][1] for a in pair) - low) / (high - low) * (bottom - top))
+        for pair in (TORSO[:2], TORSO[2:])
+    ]
+    alpha = numpy.array(subject.convert("RGBA").getchannel("A")) > ALPHA_FLOOR
+    # Row by row, the middle of the widest unbroken run is the torso; the median
+    # over the band outvotes the few rows an outstretched arm is joined to it.
+    # Counting every pixel instead let that arm drag the body 6px on the shuffle.
+    middles = []
+    for line in alpha[min(rows) : max(rows) + 1]:
+        filled = numpy.flatnonzero(line)
+        if len(filled):
+            run = max(numpy.split(filled, numpy.flatnonzero(numpy.diff(filled) > 1) + 1), key=len)
+            middles.append((run[0] + run[-1]) / 2)
+    if not middles:
+        return None, row
+    return (statistics.median(middles), CELL_WIDTH / 2 + (torso_x(pts) - home) * px), row
+
+
 def pose_to_cell(
     src: Path | str,
     dst: Path | str,
@@ -402,6 +470,8 @@ def pose_to_cell(
     body_h: float,
     height_inches: float,
     fallback: float,
+    home: float | None = None,
+    airborne: bool = False,
 ) -> Path:
     """Cut an animation frame out and register it at the scale its pose asks for.
 
@@ -414,7 +484,8 @@ def pose_to_cell(
     scale = fallback
     if pts and body_h:
         scale = frame_scale(subject, pts, floor_y, body_h, height_inches)
-    register(subject, scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
+    anchor, row = placement(subject, pts, floor_y, body_h, height_inches, home, airborne)
+    register(subject, scale, row, anchor).save(dst, format="PNG")
     return dst
 
 
@@ -591,8 +662,12 @@ def set_to_cells(
     body_h: float,
     height_inches: float,
     sheets: list[list[int]] | None = None,
+    airborne: frozenset[int] = frozenset(),
 ) -> dict[int, Path]:
     """Register frames drawn together, one scale per sheet they were drawn on.
+
+    `airborne` names the frames the tracer says have both feet off the floor;
+    see `placement` for what is done with them.
 
     Figures on one sheet were drawn at one magnification, so one factor is
     measured per sheet — the median of what each frame's pose says — and
@@ -618,6 +693,7 @@ def set_to_cells(
     """
     subjects = {index: cutout(source) for index, source in sorted(sources.items())}
     cells = {}
+    home = home_x(poses)
     for group in sheets or [list(subjects)]:
         if body_h and all(poses.get(index) for index in group):
             scale = statistics.median(
@@ -633,6 +709,10 @@ def set_to_cells(
         for index in group:
             dst = dst_for(index)
             dst.parent.mkdir(parents=True, exist_ok=True)
-            register(subjects[index], scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
+            anchor, row = placement(
+                subjects[index], poses.get(index, {}), floor_y, body_h, height_inches,
+                home, index in airborne,
+            )
+            register(subjects[index], scale, row, anchor).save(dst, format="PNG")
             cells[index] = dst
     return cells

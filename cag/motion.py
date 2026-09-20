@@ -33,6 +33,9 @@ class Frame:
     note: str = ""
     #: MediaPipe landmark positions for this pose, keyed by joint name.
     pts: dict[str, list[float]] = field(default_factory=dict)
+    #: The tracer's own call that both feet are off the floor. Read, never
+    #: re-derived from `pts`: MotionArtist decides contact from the soles.
+    airborne: bool = False
 
     @property
     def is_locked(self) -> bool:
@@ -66,6 +69,12 @@ class MotionSheet:
     #: rather than out of a bundle has no sprite sheet and so carries neither.
     poses: Path | None = None
     pose_layout: SheetLayout | None = None
+    #: The traced video frames, one per motion frame. Preferred over the drawn
+    #: sprite sheet: measured against the trace, renders made from photographs
+    #: carry 0.9-1.2 of the movement in it, where the drawn cards carry 0.43-0.70
+    #: — the poses rank correctly either way, but the drawn ones come out small
+    #: enough to read as a sway rather than the motion that was traced.
+    photos: tuple[Path, ...] = ()
     #: Where the performer's floor sits, and their body height, both normalised.
     floor_y: float = 0.0
     body_h: float = 0.0
@@ -143,6 +152,7 @@ def load_motion(path: Path | str) -> MotionSheet:
             cue=raw["cue"].strip(),
             note=raw.get("note", "").strip(),
             pts=raw.get("pts", {}),
+            airborne=bool(raw.get("features", {}).get("airborne", False)),
         )
         for raw in data["frames"]
     )
@@ -202,6 +212,9 @@ class Bundle:
     #: existed simply has no pose reference rather than a guessed one.
     poses: Path | None = None
     pose_layout: SheetLayout | None = None
+    #: One traced video frame per motion frame, in order, when the bundle ships
+    #: a complete set. The preferred pose reference; see `photos` on MotionSheet.
+    photos: tuple[Path, ...] = ()
 
     def load(self) -> MotionSheet:
         """The sheet itself, checked against the header that advertised it."""
@@ -211,7 +224,9 @@ class Bundle:
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
                 f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
             )
-        return replace(motion, poses=self.poses, pose_layout=self.pose_layout)
+        return replace(
+            motion, poses=self.poses, pose_layout=self.pose_layout, photos=self.photos
+        )
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -247,6 +262,19 @@ def read_bundle(path: Path | str) -> Bundle:
     drawn = [f for f in data["files"] if Path(f).name.endswith("-spritesheet.png")]
     block = data.get("spritesheet")
     poses = manifest.parent / drawn[0] if len(drawn) == 1 and block else None
+
+    # The traced frames themselves. A photograph of the performer carries what a
+    # drawn skeleton cannot — the whole body at once, at the size and commitment
+    # it was really done at — and renders drawn from it came back at 0.9-1.2 of
+    # the movement in the trace where skeleton cards sat at 0.43-0.70. Taken only
+    # when there is one per frame, in order: a partial set would silently pair
+    # figure n with the wrong frame.
+    thumbs = sorted(f for f in data["files"] if Path(f).parent.name == "thumbs")
+    photos = (
+        tuple(manifest.parent / f for f in thumbs)
+        if len(thumbs) == int(data["frame_count"])
+        else ()
+    )
     return Bundle(
         name=data.get("name", manifest.parent.name),
         title=data.get("title", ""),
@@ -259,6 +287,7 @@ def read_bundle(path: Path | str) -> Bundle:
         sheet=manifest.parent / named[0],
         poses=poses,
         pose_layout=SheetLayout.from_manifest(block) if poses else None,
+        photos=photos,
     )
 
 
