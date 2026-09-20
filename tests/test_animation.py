@@ -8,12 +8,11 @@ from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 from cag.poses import CARD_HEIGHT, CARD_WIDTH
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
-from PIL import Image, ImageDraw
+from PIL import Image
 
 from cag import animation, mask
 from cag.geometry import ANIM_CONTACT_ROW, anim_subject_height_px
 from cag.motion import load_motion
-from cag.poses import SheetLayout
 from cag.mask import pose_extent, stature
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
@@ -23,22 +22,20 @@ NOTE = "The microphone stays in the character-right hand for every frame."
 
 
 def posed(motion, tmp_path):
-    """The sample motion with a sprite sheet attached, the way a bundle carries one.
+    """The sample motion with one traced frame per motion frame, the way a
+    bundle carries them.
 
-    The figures are just boxes: nothing here reads what is drawn on a pose, only
-    that one tile per frame is cut out of the sheet and handed over.
+    The frames are just flat tiles: nothing here reads what is in a photograph,
+    only that one card per frame is written and handed over.
     """
-    layout = SheetLayout(
-        columns=4, rows=4, tile_w=60, tile_h=70, cell_w=50, cell_h=60, label_h=10
-    )
-    sheet = tmp_path / "poses.png"
-    image = Image.new("RGB", (240, 280), (20, 19, 28))
-    pen = ImageDraw.Draw(image)
+    shots = []
+    thumbs = tmp_path / "thumbs"
+    thumbs.mkdir(parents=True, exist_ok=True)
     for index in range(len(motion.frames)):
-        left, top, right, bottom = layout.box(index)
-        pen.rectangle([left + 4, top + 4, right - 4, bottom - 4], outline=(240, 160, 90), width=3)
-    image.save(sheet)
-    return replace(motion, poses=sheet, pose_layout=layout)
+        path = thumbs / f"f{index:02d}.jpg"
+        Image.new("RGB", (120, 160), (20 + index * 4, 40, 60)).save(path)
+        shots.append(path)
+    return replace(motion, photos=tuple(shots))
 
 
 def fake_draw(prompt, out_path, references=(), **kwargs):
@@ -127,7 +124,7 @@ def test_the_pose_card_is_always_the_last_reference(run):
     for call in fake_draw.calls:
         assert pose_ref(call).parts[-3] == "poses"
         assert pose_ref(call).stem == call["out"].stem
-        assert "figure holding this exact pose" in call["prompt"]
+        assert "photograph of a real performer holding this exact pose" in call["prompt"]
 
 
 def test_every_frame_names_its_detail_level_and_style(run):
@@ -347,7 +344,7 @@ def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
         # Still no measurement: no size for the figures and no ratio for the canvas.
         assert "px" not in prompt and str(CELL_WIDTH) not in prompt
         assert "pixels tall" not in prompt
-        assert "every pose in this sequence as a figure on a dark card" in prompt
+        assert "a strip of photographs of a real performer, one per figure" in prompt
         grid = Path(call["refs"][-1])
         assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")
         with Image.open(grid) as image:

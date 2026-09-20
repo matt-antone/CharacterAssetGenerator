@@ -23,7 +23,7 @@ from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
 from .mask import MaskError, home_x, pose_to_cell, set_to_cells, slice_sheet
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, sheet_prompt
-from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos, write_poses
+from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos
 from .props import clauses
 from .style import detail_frame
 from .spec import CharacterSpec
@@ -94,13 +94,10 @@ def pose_sheets(state: AnimationState) -> AnimationState:
     named the footwear positively.
     """
     motion = state["motion"]
-    work = state["work_dir"] / "poses" / state["set_name"]
-    if motion.photos:
-        return {"poses": dict(enumerate(write_photos(motion.photos, work))), "photographic": True}
-    if not (motion.poses and motion.pose_layout):
+    if not motion.photos:
         return {"poses": {}}
-    paths = write_poses(motion.poses, motion.pose_layout, len(motion.frames), work)
-    return {"poses": dict(enumerate(paths))}
+    work = state["work_dir"] / "poses" / state["set_name"]
+    return {"poses": dict(enumerate(write_photos(motion.photos, work))), "photographic": True}
 
 
 def set_note_path(state: AnimationState) -> Path:
