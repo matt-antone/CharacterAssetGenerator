@@ -4,7 +4,7 @@ Turns a short character brief into game-ready sprite assets: a projection sheet
 of static views, and a masked animation set per animation the brief names.
 
 ```bash
-uv run cag build specs/belter.json --jobs 4
+uv run cag build specs/default/belter.json --jobs 4
 ```
 
 The first run stops after the key art and waits for a human. Look at
@@ -12,7 +12,7 @@ The first run stops after the key art and waits for a human. Look at
 again for a redraw:
 
 ```bash
-uv run cag approve specs/belter.json
+uv run cag approve specs/default/belter.json
 ```
 
 Once approved, that writes `outputs/belter/`: four projection cells under `views/`, then a
@@ -55,7 +55,7 @@ cp -R ../MotionArtist/work/shuffle motions/shuffle
 one file, overriding whatever the brief names:
 
 ```bash
-uv run cag build specs/crooner.json --set dance --motion ../MotionArtist/work/shuffle/motion.json
+uv run cag build specs/default/crooner.json --set dance --motion ../MotionArtist/work/shuffle/motion.json
 ```
 
 ## How it runs
@@ -121,7 +121,7 @@ uv run cag edit
 Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
 `<set>-sheet.png` from under that folder. Every character's sheets share the
 same names, so the editor matches the one you open to its folder by contents:
-that folder's brief (found in `specs/` by slug) sets the height guide, and Save
+that folder's brief (found anywhere under `specs/` by slug) sets the height guide, and Save
 writes back there. A sheet that isn't under the folder won't save.
 
 1. **Play** to watch the loop. Changing fps while it plays takes effect at once.
