@@ -146,3 +146,14 @@ def test_a_manifest_that_disagrees_with_its_sheet_is_caught(tmp_path):
     root = bundle_at(tmp_path, frame_count=99)
     with pytest.raises(MotionError, match="advertises 99 frames"):
         read_bundle(root).load()
+
+
+def test_a_v2_bundle_loads_and_keeps_its_depth(tmp_path):
+    """motion-artist/2 only adds a z per landmark; the reader takes it in its stride."""
+    root = bundle_at(tmp_path, schema="motion-artist/2")
+    sheet = json.loads((root / "motion.json").read_text())
+    for frame in sheet["frames"]:
+        frame["pts"] = {name: [*point, -0.5] for name, point in frame["pts"].items()}
+    (root / "motion.json").write_text(json.dumps(sheet))
+    motion = read_bundle(root).load()
+    assert all(len(point) == 3 for point in motion.frames[0].pts.values())

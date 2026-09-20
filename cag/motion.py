@@ -164,7 +164,10 @@ BUNDLE = "manifest.json"
 
 #: Bundle layouts this reads. A bundle that declares anything else is refused
 #: rather than guessed at.
-SCHEMAS = ("motion-artist/1",)
+# motion-artist/2 gave landmarks a third float, z. Every reader here takes [0] and
+# [1] and leaves the rest, so both versions load the same way and a 2D sheet keeps
+# working; the depth only shows up where the skeleton sorts bones by it.
+SCHEMAS = ("motion-artist/1", "motion-artist/2")
 
 
 @dataclass(frozen=True)

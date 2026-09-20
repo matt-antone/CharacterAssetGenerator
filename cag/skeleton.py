@@ -39,8 +39,21 @@ SIZE = (CELL_WIDTH, CELL_HEIGHT)
 MARGIN = 40
 INK = (0, 0, 0)
 FLOOR_INK = (170, 170, 170)
+#: Limbs on the far side of the body. Grey, because two black bones overlapping
+#: read as one shape: without a tone difference, drawing order shows nothing.
+FAR_INK = (150, 150, 150)
 BONE_WIDTH = 9
 SPINE_WIDTH = 11
+
+
+def depth(pts: dict[str, list[float]], name: str) -> float:
+    """One landmark's z, MediaPipe's sign: larger is farther from the camera.
+
+    A sheet traced in 2D carries `[x, y]` and no depth at all, so every joint
+    answers 0.0 and nothing downstream can tell one limb from another.
+    """
+    point = pts[name]
+    return point[2] if len(point) > 2 else 0.0
 
 
 def mid(a: list[float], b: list[float]) -> list[float]:
@@ -118,8 +131,18 @@ def skeleton(
     floor = place([x0, floor_y])[1]
     pen.line([(0, floor), (SIZE[0], floor)], fill=FLOOR_INK, width=3)
 
-    for a, b in BONES:
-        pen.line([place(pts[a]), place(pts[b])], fill=INK, width=BONE_WIDTH, joint="curve")
+    # Depth, when the trace carries it: far bones first and in grey, so a crossed
+    # leg says which side of the body it passes on. A 2D trace leaves every z at
+    # 0.0, every bone near, and the figure exactly as it was before.
+    hips = (depth(pts, "hipL") + depth(pts, "hipR")) / 2
+    for a, b in sorted(BONES, key=lambda ab: -(depth(pts, ab[0]) + depth(pts, ab[1])) / 2):
+        far = (depth(pts, a) + depth(pts, b)) / 2 > hips
+        pen.line(
+            [place(pts[a]), place(pts[b])],
+            fill=FAR_INK if far else INK,
+            width=BONE_WIDTH,
+            joint="curve",
+        )
     pen.line(
         [place(mid(pts["hipL"], pts["hipR"])), place(mid(pts["shL"], pts["shR"]))],
         fill=INK,

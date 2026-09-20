@@ -1,6 +1,6 @@
 {
  "bundle": "motion-source",
- "schema": "motion-artist/1",
+ "schema": "motion-artist/2",
  "name": "shuffle",
  "title": "Shuffle",
  "fps": 8,
@@ -22,8 +22,8 @@
  },
  "arc_written": true,
  "files": {
-  "motion.json": "a7ba00734c8f49311ac76d511ba716760d640dadcb6c75c387f088f765d6be61",
-  "shuffle-motion.html": "93c18f98b866b61586ddf1b3dede918d7fce27ba0332b25c72fa785d00a54c00",
+  "motion.json": "516be29995c05bd7a797818b827685f40d6df5d15daeb79956000e47fab426c7",
+  "shuffle-motion.html": "dbc3a836cb1cd9eb7ec76d33712868f92833568ced5048caa62b0163e0156d73",
   "thumbs/f00.jpg": "45212c2bbe8cbacd09b426a2e8f628cfc869113e1f78e462ba318fc43c137136",
   "thumbs/f01.jpg": "dbef383f9cb4962bd8e41a73b67e8fbcda587f6e3a2aa3e6ec20b0be53c3456b",
   "thumbs/f02.jpg": "d2fd1d2d5d5d94bd63b7d4e6a77c6995a84c278dd28c168fac47a08d16cd55e3",

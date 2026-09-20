@@ -139,6 +139,16 @@ POSE_REFERENCE = (
     "turns. It carries no identity, costume or style — take none of its look."
 )
 
+#: Whichever produced the cue — a traced skeleton or a written pose description — the key art
+#: is still sitting in the reference list purely for identity, and its own stance has a way of
+#: winning anyway. Said once, unconditionally, so a written set with no skeleton to point at is
+#: covered too, not just the sets `POSE_REFERENCE` fires for.
+STANCE_REFERENCE = (
+    "The key art shows the character in one stance only; that stance is not locked. Stance and "
+    "foot spacing for this frame come from the pose described above, not from the key art, even "
+    "where that means standing narrower or wider than the key art does."
+)
+
 
 def frame_prompt(
     spec: CharacterSpec,
@@ -166,6 +176,8 @@ def frame_prompt(
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_REFERENCE if pose_reference else "",
+            STANCE_REFERENCE,
+            LEG_ROTATION,
             PROP_CONTINUITY,
             SIDE_LANGUAGE,
             "Match the reference images for identity, costume, colour, proportion and prop hand "
@@ -181,6 +193,27 @@ POSE_SHEET_REFERENCE = (
     "line and hollow rings on the character-right wrist and ankle. Copy each pose from its own "
     "skeleton: limb angles, which knee is bent, how the weight sits, which way the head turns. "
     "The skeletons carry no identity, costume or style — take none of their look."
+)
+
+#: Sheet-mode counterpart to `STANCE_REFERENCE`, said of every figure at once.
+STANCE_SHEET_REFERENCE = (
+    "The key art shows the character in one stance only; that stance is not locked. Stance and "
+    "foot spacing for each figure come from its own pose cue, not from the key art, even where "
+    "that means one figure stands narrower or wider than another or than the key art does."
+)
+
+
+#: Neither reference pins how a limb is rolled about its own length. A stick figure is a line
+#: drawing, so it cannot carry it, and the cue does not either: measured off the landmarks, foot
+#: heading jitters about 33 degrees between adjacent frames even after smoothing, which is noise,
+#: not turnout, and a word built on it would strobe the way the old measured stance word did.
+#: Left unsaid the generator invents it afresh per frame and the legs flicker, so it is pinned
+#: rather than described. Said unconditionally, like `STANCE_REFERENCE`.
+LEG_ROTATION = (
+    "Neither the pose description nor any reference says how the legs are turned about their own "
+    "length — which way the knees and the toes point. That turn is the character's own: hold it "
+    "as the key art has it and keep it the same in every frame, and never swing it to explain a "
+    "pose. Where a pose needs the feet somewhere else, move them; do not rotate them."
 )
 
 
@@ -230,6 +263,8 @@ def sheet_prompt(
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_SHEET_REFERENCE if pose_reference else "",
+            STANCE_SHEET_REFERENCE,
+            LEG_ROTATION,
             PROP_CONTINUITY,
             SIDE_LANGUAGE,
             "Match the reference images for identity, costume, colour, proportion and prop hand "

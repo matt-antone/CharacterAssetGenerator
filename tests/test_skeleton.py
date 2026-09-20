@@ -6,7 +6,16 @@ import numpy
 import pytest
 from PIL import Image
 
-from cag.skeleton import SIZE, crown, pose_box, pose_extent, skeleton, stature, write_skeletons
+from cag.skeleton import (
+    FAR_INK,
+    SIZE,
+    crown,
+    pose_box,
+    pose_extent,
+    skeleton,
+    stature,
+    write_skeletons,
+)
 
 SAMPLE = Path("tests/fixtures/sample-motion.json")
 MOTION = json.loads(SAMPLE.read_text())
@@ -17,7 +26,7 @@ def test_box_covers_every_pose_and_the_floor():
     x0, y0, width, height = pose_box(POSES, MOTION["floor_y"])
     assert y0 + height >= MOTION["floor_y"]
     for pose in POSES:
-        for x, y in pose.values():
+        for x, y, *_ in pose.values():
             assert x0 <= x <= x0 + width and y0 <= y <= y0 + height
 
 
@@ -101,3 +110,13 @@ def test_stature_tracks_extent_across_a_real_traced_set():
     spread = lambda xs: (max(xs) - min(xs)) / statistics.median(xs)
     assert spread(statures) > 0.05  # the raw measure really does move about
     assert spread(ratios) < 0.05  # the one the scale is built on does not
+
+
+def test_a_far_limb_is_drawn_grey_and_a_2d_trace_is_unchanged():
+    """z on the landmarks says which crossed leg is behind; without it, nothing moves."""
+    box, floor, body = pose_box(POSES, MOTION["floor_y"]), MOTION["floor_y"], MOTION["body_h"]
+    flat = skeleton(POSES[0], box, floor, body)
+    deep = {name: [*point, 1.0 if name.endswith("L") else -1.0] for name, point in POSES[0].items()}
+    greys = numpy.array(skeleton(deep, box, floor, body).convert("L"))
+    assert (numpy.abs(greys.astype(int) - FAR_INK[0]) < 10).sum() > 200  # the character-left side
+    assert numpy.array_equal(numpy.array(flat), numpy.array(skeleton(POSES[0], box, floor, body)))
