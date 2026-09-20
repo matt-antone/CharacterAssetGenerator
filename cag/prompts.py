@@ -125,18 +125,34 @@ def view_prompt(
 #: between them a frame reads as an empty hand and the prop quietly disappears
 #: mid-set. Neither is describing what the character is holding.
 PROP_CONTINUITY = (
-    "The pose cue and the pose skeleton describe limb positions only. Neither one shows what the "
-    "character is holding: the skeleton has no props, and its rings mark joints, not empty hands. "
+    "The pose cue and the pose card describe limb positions only. Neither one shows what the "
+    "character is holding: the card has no props, and the shape at the end of an arm is a hand, "
+    "not a statement that the hand is empty. "
     "Anything the description above says the character holds is still in that same hand in this "
     "frame, drawn in full and clearly readable. Never replace a held prop with a bare fist or an "
     "open hand, in any frame, whatever the arm is doing."
 )
 
+#: What the figure on a pose card is drawn with. Said once, because both the
+#: single-frame and the sheet clause have to describe the same picture, and a
+#: prompt that describes the reference wrongly is worse than one that says
+#: nothing about it.
+POSE_CARD = (
+    "On it the character's own LEFT arm and leg are teal green and their own RIGHT arm and leg "
+    "pale violet, so you can tell which side a limb belongs to and which one passes in front "
+    "where they cross. The two orange outlines are the rib cage and the pelvis: copy how far "
+    "each is turned, including where they disagree with each other, because that counter-turn "
+    "is the movement. Hands and feet are drawn as their own shapes — a foot is hinged at the "
+    "ball, so copy which way it points and whether the heel is down or lifted. The floor is a "
+    "dashed line: a foot drawn above it is off the floor and is drawn off the floor. These "
+    "colours are a code, not costume, and the figure carries no identity or style — take none "
+    "of its look, and draw nothing teal, violet, orange or grey because of it."
+)
+
 POSE_REFERENCE = (
-    "The last reference image is a stick-figure skeleton of this exact pose, with the floor "
-    "drawn as a grey line and hollow rings on the character-right wrist and ankle. Copy the "
-    "pose from it: limb angles, which knee is bent, how the weight sits, which way the head "
-    "turns. It carries no identity, costume or style — take none of its look."
+    "The last reference image is a figure holding this exact pose, on a dark card. Copy the "
+    "pose from it: limb angles, which knee is bent, how wide the feet are set, how the weight "
+    f"sits, and which way the head turns. {POSE_CARD}"
 )
 
 #: Whichever produced the cue — a traced skeleton or a written pose description — the key art
@@ -177,22 +193,20 @@ def frame_prompt(
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_REFERENCE if pose_reference else "",
             STANCE_REFERENCE,
-            LEG_ROTATION,
             PROP_CONTINUITY,
             SIDE_LANGUAGE,
             "Match the reference images for identity, costume, colour, proportion and prop hand "
-            "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
+            "exactly; only the pose changes. Do not "
             "mirror the figure and do not move the prop to the other hand.",
         ] if part
     )
 
 
 POSE_SHEET_REFERENCE = (
-    "The last reference image shows every pose in this sequence as a stick-figure skeleton, laid "
-    "out in the same order and the same rows as the figures you draw, with the floor as a grey "
-    "line and hollow rings on the character-right wrist and ankle. Copy each pose from its own "
-    "skeleton: limb angles, which knee is bent, how the weight sits, which way the head turns. "
-    "The skeletons carry no identity, costume or style — take none of their look."
+    "The last reference image shows every pose in this sequence as a figure on a dark card, laid "
+    "out in the same order and the same rows as the figures you draw. Copy each pose from its "
+    "own card: limb angles, which knee is bent, how wide the feet are set, how the weight sits, "
+    f"and which way the head turns. {POSE_CARD}"
 )
 
 #: Sheet-mode counterpart to `STANCE_REFERENCE`, said of every figure at once.
@@ -200,20 +214,6 @@ STANCE_SHEET_REFERENCE = (
     "The key art shows the character in one stance only; that stance is not locked. Stance and "
     "foot spacing for each figure come from its own pose cue, not from the key art, even where "
     "that means one figure stands narrower or wider than another or than the key art does."
-)
-
-
-#: Neither reference pins how a limb is rolled about its own length. A stick figure is a line
-#: drawing, so it cannot carry it, and the cue does not either: measured off the landmarks, foot
-#: heading jitters about 33 degrees between adjacent frames even after smoothing, which is noise,
-#: not turnout, and a word built on it would strobe the way the old measured stance word did.
-#: Left unsaid the generator invents it afresh per frame and the legs flicker, so it is pinned
-#: rather than described. Said unconditionally, like `STANCE_REFERENCE`.
-LEG_ROTATION = (
-    "Neither the pose description nor any reference says how the legs are turned about their own "
-    "length — which way the knees and the toes point. That turn is the character's own: hold it "
-    "as the key art has it and keep it the same in every frame, and never swing it to explain a "
-    "pose. Where a pose needs the feet somewhere else, move them; do not rotate them."
 )
 
 
@@ -264,11 +264,10 @@ def sheet_prompt(
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             POSE_SHEET_REFERENCE if pose_reference else "",
             STANCE_SHEET_REFERENCE,
-            LEG_ROTATION,
             PROP_CONTINUITY,
             SIDE_LANGUAGE,
             "Match the reference images for identity, costume, colour, proportion and prop hand "
-            "exactly. The supporting heel stays on the floor in every figure. Do not mirror any "
+            "exactly. Do not mirror any "
             "figure and do not move the prop to the other hand.",
         ] if part
     )

@@ -23,8 +23,8 @@ from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
 from .mask import MaskError, pose_to_cell, set_to_cells, slice_sheet
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, sheet_prompt
+from .poses import write_poses
 from .props import clauses
-from .skeleton import write_skeletons
 from .style import detail_frame
 from .spec import CharacterSpec
 
@@ -72,14 +72,21 @@ def view_clause(state: AnimationState) -> str:
 
 
 def pose_sheets(state: AnimationState) -> AnimationState:
-    """Draw the motion sheet's poses, so each frame is shown its pose, not told it."""
+    """Cut the bundle's sprite sheet up, so each frame is shown its pose.
+
+    Shown, not told: a cue is a paragraph and an image generator will quietly
+    flatten a paragraph back towards a neutral standing pose. The figure on the
+    sheet is not negotiable in the same way, and it carries what a paragraph
+    cannot — the hands, the feet hinged at the ball, and the pelvis turning
+    against the rib cage.
+    """
     motion = state["motion"]
-    if not motion.has_poses:
+    if not (motion.poses and motion.pose_layout):
         return {"poses": {}}
-    paths = write_skeletons(
-        [frame.pts for frame in motion.frames],
-        motion.floor_y,
-        motion.body_h,
+    paths = write_poses(
+        motion.poses,
+        motion.pose_layout,
+        len(motion.frames),
         state["work_dir"] / "poses" / state["set_name"],
     )
     return {"poses": dict(enumerate(paths))}

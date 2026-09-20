@@ -6,17 +6,37 @@ import pytest
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from cag import animation, mask
 from cag.geometry import ANIM_CONTACT_ROW, anim_subject_height_px
 from cag.motion import load_motion
-from cag.skeleton import pose_extent, stature
+from cag.poses import SheetLayout
+from cag.mask import pose_extent, stature
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
 
 SAMPLE = "tests/fixtures/sample-motion.json"
 NOTE = "The microphone stays in the character-right hand for every frame."
+
+
+def posed(motion, tmp_path):
+    """The sample motion with a sprite sheet attached, the way a bundle carries one.
+
+    The figures are just boxes: nothing here reads what is drawn on a pose, only
+    that one tile per frame is cut out of the sheet and handed over.
+    """
+    layout = SheetLayout(
+        columns=4, rows=4, tile_w=60, tile_h=70, cell_w=50, cell_h=60, label_h=10
+    )
+    sheet = tmp_path / "poses.png"
+    image = Image.new("RGB", (240, 280), (20, 19, 28))
+    pen = ImageDraw.Draw(image)
+    for index in range(len(motion.frames)):
+        left, top, right, bottom = layout.box(index)
+        pen.rectangle([left + 4, top + 4, right - 4, bottom - 4], outline=(240, 160, 90), width=3)
+    image.save(sheet)
+    return replace(motion, poses=sheet, pose_layout=layout)
 
 
 def fake_draw(prompt, out_path, references=(), **kwargs):
@@ -48,7 +68,7 @@ def run(tmp_path, monkeypatch):
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,
-            "motion": load_motion(SAMPLE),
+            "motion": posed(load_motion(SAMPLE), tmp_path),
             "set_name": "dance",
             "work_dir": tmp_path / "lou",
         }
@@ -101,11 +121,11 @@ def test_no_inbetween_carries_more_than_one_neighbour(run):
         assert len(sources(call)) <= 1
 
 
-def test_the_pose_skeleton_is_always_the_last_reference(run):
+def test_the_pose_card_is_always_the_last_reference(run):
     for call in fake_draw.calls:
         assert pose_ref(call).parts[-3] == "poses"
         assert pose_ref(call).stem == call["out"].stem
-        assert "stick-figure skeleton" in call["prompt"]
+        assert "figure holding this exact pose" in call["prompt"]
 
 
 def test_every_frame_names_its_detail_level_and_style(run):
@@ -152,7 +172,7 @@ def test_a_sheet_without_poses_draws_without_one(tmp_path, monkeypatch):
         }
     )
     assert len(fake_draw.calls) == 16
-    assert all("stick-figure skeleton" not in c["prompt"] for c in fake_draw.calls)
+    assert all("figure holding this exact pose" not in c["prompt"] for c in fake_draw.calls)
 
 
 def test_every_frame_prompt_carries_the_directors_note_and_view(run):
@@ -226,7 +246,7 @@ def sheet_run(tmp_path, monkeypatch):
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,
-            "motion": load_motion(SAMPLE),
+            "motion": posed(load_motion(SAMPLE), tmp_path),
             "set_name": "dance",
             "work_dir": tmp_path / "lou",
         }
@@ -288,7 +308,7 @@ def test_sheet_mode_without_landmarks_measures_the_sheet_itself(tmp_path, monkey
         }
     )
     for call in fake_sheet_draw.calls:
-        assert "stick-figure" not in call["prompt"]
+        assert "dark card" not in call["prompt"]
     for index in range(16):
         with Image.open(result["cells"][index]) as cell:
             top, bottom = mask.subject_box(cell)[1], mask.subject_box(cell)[3]
@@ -308,7 +328,7 @@ def test_sheet_prompt_shows_every_pose_and_measures_nothing(sheet_run):
         assert f"{rows} rows of {animation.FIGURES_PER_ROW}" in prompt
         assert "px" not in prompt and str(CELL_WIDTH) not in prompt
         assert "pixels tall" not in prompt
-        assert "stick-figure skeleton" in prompt
+        assert "every pose in this sequence as a figure on a dark card" in prompt
         grid = Path(call["refs"][-1])
         assert grid.parts[-3] == "poses" and grid.stem.startswith("sheet-")
         with Image.open(grid) as image:
@@ -341,7 +361,7 @@ def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monke
             "bible": "A lounge performer.",
             "key_art": key_art,
             "scale": 2.875,
-            "motion": load_motion(SAMPLE),
+            "motion": posed(load_motion(SAMPLE), tmp_path),
             "set_name": "dance",
             "work_dir": tmp_path / "lou",
         }

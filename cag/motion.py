@@ -11,8 +11,10 @@ Produced by https://github.com/matt-antone/MotionArtist —
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
+
+from .poses import SheetLayout
 
 #: Drawn first, by the keyframer. Everything else is a tweener's in-between.
 LOCKED_ROLES = ("key", "pilot")
@@ -59,6 +61,11 @@ class MotionSheet:
     playback: str
     arc: str
     frames: tuple[Frame, ...]
+    #: The bundle's sprite sheet and where each frame sits on it. This is the
+    #: pose reference the keyframer is shown; a sheet read straight off disk
+    #: rather than out of a bundle has no sprite sheet and so carries neither.
+    poses: Path | None = None
+    pose_layout: SheetLayout | None = None
     #: Where the performer's floor sits, and their body height, both normalised.
     floor_y: float = 0.0
     body_h: float = 0.0
@@ -190,6 +197,11 @@ class Bundle:
     #: The manifest's own directory, and the motion data it names inside it.
     root: Path
     sheet: Path
+    #: The sprite sheet of every frame's figure, and the layout that cuts it up.
+    #: Both come from the manifest, so a bundle exported before sprite sheets
+    #: existed simply has no pose reference rather than a guessed one.
+    poses: Path | None = None
+    pose_layout: SheetLayout | None = None
 
     def load(self) -> MotionSheet:
         """The sheet itself, checked against the header that advertised it."""
@@ -199,7 +211,7 @@ class Bundle:
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
                 f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
             )
-        return motion
+        return replace(motion, poses=self.poses, pose_layout=self.pose_layout)
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -227,6 +239,14 @@ def read_bundle(path: Path | str) -> Bundle:
         raise MotionError(
             f"{manifest} names {len(named)} motion files; a bundle carries exactly one"
         )
+
+    # The sprite sheet is the pose reference. It is taken only when the manifest
+    # both names the image and declares its layout: without the layout the grid
+    # would have to be measured off the picture, which is cag guessing at
+    # MotionArtist's renderer instead of reading what it published.
+    drawn = [f for f in data["files"] if Path(f).name.endswith("-spritesheet.png")]
+    block = data.get("spritesheet")
+    poses = manifest.parent / drawn[0] if len(drawn) == 1 and block else None
     return Bundle(
         name=data.get("name", manifest.parent.name),
         title=data.get("title", ""),
@@ -237,6 +257,8 @@ def read_bundle(path: Path | str) -> Bundle:
         seam=str(data.get("seam", "")).strip(),
         root=manifest.parent,
         sheet=manifest.parent / named[0],
+        poses=poses,
+        pose_layout=SheetLayout.from_manifest(block) if poses else None,
     )
 
 
