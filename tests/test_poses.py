@@ -53,7 +53,7 @@ def test_photo_cards_are_never_blown_up_past_their_shipped_size(tmp_path):
 
 
 def test_a_real_bundle_hands_over_one_photograph_per_frame():
-    bundle = read_bundle(Path("motions/shuffle"))
+    bundle = read_bundle(Path("motions/shuffle-1"))
     assert len(bundle.photos) == bundle.frame_count
     assert [p.name for p in bundle.photos] == [f"f{i:02d}.jpg" for i in range(bundle.frame_count)]
     assert bundle.load().photos == bundle.photos
@@ -65,7 +65,7 @@ def test_a_bundle_missing_a_photograph_carries_none_rather_than_mispairing(tmp_p
     There is no second pose reference to fall back to: the set is drawn from its
     cues alone, which is loud in the render rather than quietly half-sized.
     """
-    source = Path("motions/shuffle")
+    source = Path("motions/shuffle-1")
     manifest = json.loads((source / "manifest.json").read_text())
     manifest["files"] = {
         name: value for name, value in manifest["files"].items() if name != "thumbs/f05.jpg"
@@ -80,6 +80,6 @@ def test_a_bundle_missing_a_photograph_carries_none_rather_than_mispairing(tmp_p
 
 def test_a_spritesheet_in_the_manifest_is_ignored():
     """MotionArtist still ships one; nothing here reads it."""
-    bundle = read_bundle(Path("motions/shuffle"))
+    bundle = read_bundle(Path("motions/shuffle-1"))
     assert not hasattr(bundle, "poses")
     assert not hasattr(bundle.load(), "pose_layout")

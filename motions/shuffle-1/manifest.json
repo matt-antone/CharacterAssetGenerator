@@ -1,7 +1,7 @@
 {
  "bundle": "motion-source",
  "schema": "motion-artist/2",
- "name": "shuffle",
+ "name": "shuffle-1",
  "title": "Shuffle",
  "fps": 8,
  "frame_count": 32,
