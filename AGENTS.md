@@ -2,6 +2,33 @@
 
 Instructions for agents working in this repo.
 
+## Do not merge the photo pose path before one real render
+
+On `pose-reference-from-sprite-sheet`, a bundle that ships one thumbnail per
+frame now uses those photographs as the pose reference, and a photographic set
+sends a leaner prompt — the bible, the director's note and every per-frame cue
+are dropped. It measures far better on amplitude, which is what decides whether
+a set reads as a dance or a sway. **It has never produced a real render through
+`cag build`.** Every number behind it came from scratch scripts that
+hand-assembled their prompts, and the shipped code assembles them differently.
+
+Run one 12-frame set end to end before this reaches main, and check four things:
+
+1. Photo cards in frame order, and the photograph wording in the prompt rather
+   than the pose-diagram wording.
+2. Zero overlapping figure boxes — every figure inside its own cell.
+3. The character's costume surviving onto a foot that is off the floor. Before
+   the costume anchor, a lifted foot came back wearing the reference dancer's
+   white trainer, 2 of 16 figures.
+4. Identity across a chunk boundary: does figure 13 look like figure 1? Scale is
+   already proven fine there — a 2.0x drawn-size difference registers down to a
+   4px spread — but nothing measures identity and nothing warns.
+
+Ruled out with measurements, do not re-open: fixing torso rotation through
+prompting. A frame traced at 28 degrees of body yaw comes back square-on in
+every condition tried — 1, 4, 8 and 12 figures per render, photographs or
+skeletons, and three separate rewordings.
+
 ## Build characters in parallel
 
 Run every character that needs building at once, each as its own `uv run cag build`
