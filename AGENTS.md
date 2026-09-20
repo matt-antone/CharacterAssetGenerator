@@ -82,3 +82,7 @@ sets' sheets and GIFs are still on disk, untouched — only the page forgot them
 
 Finish with a full `uv run cag build <spec>` afterwards. Completed frames are cached and
 skipped, so it costs almost nothing and puts every set back on the page.
+
+## graft skill
+
+This repo is indexed by graft. Use the graft skill for codebase context — `graft_find_code`, `graft_find_all`, `graft_trace_calls`, `graft_file_api`, `graft_repo_map` — before grepping or reading source files. Never commit graft caches.

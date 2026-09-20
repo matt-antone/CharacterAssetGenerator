@@ -16,14 +16,14 @@
   "sets": {
     "dance": {
       "frames": 16,
-      "fps": 6,
+      "fps": 2,
       "columns": 8,
       "sheet": "dance-sheet.png",
       "proof": "dance-proof.gif"
     },
     "ko": {
       "frames": 16,
-      "fps": 8,
+      "fps": 2,
       "columns": 8,
       "sheet": "ko-sheet.png",
       "proof": "ko-proof.gif"
