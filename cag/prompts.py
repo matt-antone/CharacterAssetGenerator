@@ -10,7 +10,9 @@ Two rules the old project learned the hard way and this one keeps:
 
 from __future__ import annotations
 
-from .spec import CharacterSpec
+import re
+
+from .spec import LIST_FIELDS, TEXT_FIELDS, CharacterSpec
 from .style import (
     BACKDROP,
     DEFAULT_DETAIL_LEVEL,
@@ -66,20 +68,83 @@ Use "character-left" and "character-right" for the character's own sides. Output
 instruction and nothing else."""
 
 
-def director_request(bible: str, arc: str, fps: int, frame_count: int, view: str) -> str:
+#: Said when a set carries no props. DIRECTOR_SYSTEM asks the director what the
+#: character holds, so silence is not an answer: left to guess, it answered from
+#: whatever the identity text happened to mention, which is how a microphone
+#: ended up standing instruction for `dance`, `ko` and `victory` on four
+#: characters that are drawn empty-handed in all three.
+EMPTY_HANDS = (
+    "The character holds nothing here. Both of their hands are empty and stay empty in every "
+    "figure: no microphone, no stand, no cable and no object of any kind."
+)
+
+
+def director_request(
+    bible: str, arc: str, fps: int, frame_count: int, view: str, props: str = ""
+) -> str:
     return (
         f"Character: {bible}\n\n"
+        f"{props or EMPTY_HANDS}\n\n"
         f"Set: {frame_count} frames at {fps} fps, drawn in the {view} view.\n\n"
         f"Performance arc: {arc}"
     )
 
 
+#: The brief's own fields, sent to the bible writer as the facts it must keep.
+#: `prop` and `personality` stay out because BIBLE_SYSTEM forbids both: props are
+#: attached per set, and personality is not visible. Derived from the spec's own
+#: field lists so a field added there cannot be silently dropped here.
+BIBLE_FIELDS = tuple(
+    name for name in (*TEXT_FIELDS, *LIST_FIELDS) if name not in ("prop", "personality")
+)
+
+
+def assemble_bible(spec: CharacterSpec) -> str:
+    """The bible, written from the brief's own fields instead of by a model.
+
+    A brief that states its build, face, hair, outfit and palette has already
+    said everything the bible is for, so there is nothing left to infer and no
+    reason to spend a model call inferring it. That call was the only reason the
+    bible had to be frozen to a file: a second one returned different words.
+
+    `prop` is not here and cannot be. Every bible a model wrote for this roster
+    named the microphone despite BIBLE_SYSTEM forbidding it, and the sentence
+    was then quoted into the frames of `dance`, `ko` and `victory` — sets the
+    brief draws empty-handed, where nothing else in the prompt contradicted it.
+    Leaving the field out closes that structurally rather than by asking a model
+    to behave. `avoid` is out too: it is a list of things not to draw, and an
+    image generator handed one tends to draw them.
+
+    Empty for a brief that fills none of the fields; those still ask a model.
+    """
+    said = [spec.description, spec.build, spec.face, spec.hair, spec.outfit]
+    if not any(said[1:]):
+        return ""
+    body = " ".join(part for part in said if part)
+    if spec.palette:
+        body += " Colours, base/shadow/highlight per material: " + "; ".join(spec.palette) + "."
+    return body
+
+
 def bible_request(spec: CharacterSpec) -> str:
-    return (
-        f"Character: {spec.name}\n"
-        f"Height: {spec.height}\n"
-        f"Designer's brief: {spec.description}"
-    )
+    """The brief as the bible writer sees it: the pitch, then the stated facts.
+
+    A brief that fills none of the fields sends exactly what it always sent. One
+    that fills them stops relying on the writer to infer a costume it was never
+    told: the boots are in `outfit`, so the boots reach the paragraph.
+    """
+    facts = [
+        f"{name.replace('_', ' ').capitalize()}: "
+        + (value if isinstance(value, str) else "; ".join(value))
+        for name in BIBLE_FIELDS
+        if (value := getattr(spec, name))
+    ]
+    return "\n".join([
+        f"Character: {spec.name}",
+        f"Height: {spec.height}",
+        f"Designer's brief: {spec.description}",
+        *facts,
+    ])
 
 
 def view_prompt(
@@ -125,18 +190,12 @@ def view_prompt(
 #: between them a frame reads as an empty hand and the prop quietly disappears
 #: mid-set. Neither is describing what the character is holding.
 PROP_CONTINUITY = (
-    "The pose cue and the pose skeleton describe limb positions only. Neither one shows what the "
-    "character is holding: the skeleton has no props, and its rings mark joints, not empty hands. "
+    "The pose cue and the pose card describe limb positions only. Neither one shows what the "
+    "character is holding: the card has no props, and the shape at the end of an arm is a hand, "
+    "not a statement that the hand is empty. "
     "Anything the description above says the character holds is still in that same hand in this "
     "frame, drawn in full and clearly readable. Never replace a held prop with a bare fist or an "
     "open hand, in any frame, whatever the arm is doing."
-)
-
-POSE_REFERENCE = (
-    "The last reference image is a stick-figure skeleton of this exact pose, with the floor "
-    "drawn as a grey line and hollow rings on the character-right wrist and ankle. Copy the "
-    "pose from it: limb angles, which knee is bent, how the weight sits, which way the head "
-    "turns. It carries no identity, costume or style — take none of its look."
 )
 
 #: Whichever produced the cue — a traced skeleton or a written pose description — the key art
@@ -175,24 +234,47 @@ def frame_prompt(
             BACKDROP,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
-            POSE_REFERENCE if pose_reference else "",
+            PHOTO_REFERENCE if pose_reference else "",
             STANCE_REFERENCE,
-            LEG_ROTATION,
-            PROP_CONTINUITY,
+            # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
+            PROP_CONTINUITY if props else "",
             SIDE_LANGUAGE,
-            "Match the reference images for identity, costume, colour, proportion and prop hand "
-            "exactly; only the pose changes. The supporting heel stays on the floor. Do not "
-            "mirror the figure and do not move the prop to the other hand.",
+            "Match the reference images for identity, costume, colour, proportion"
+            + (" and prop hand" if props else "")
+            + " exactly; only the pose changes. Do not mirror the figure"
+            + (" and do not move the prop to the other hand." if props else "."),
         ] if part
     )
 
 
-POSE_SHEET_REFERENCE = (
-    "The last reference image shows every pose in this sequence as a stick-figure skeleton, laid "
-    "out in the same order and the same rows as the figures you draw, with the floor as a grey "
-    "line and hollow rings on the character-right wrist and ankle. Copy each pose from its own "
-    "skeleton: limb angles, which knee is bent, how the weight sits, which way the head turns. "
-    "The skeletons carry no identity, costume or style — take none of their look."
+#: The single-frame counterpart to `PHOTO_SHEET_REFERENCE`.
+PHOTO_REFERENCE = (
+    "The last reference image is a photograph of a real performer holding this exact pose. Copy "
+    "the pose from it: limb angles, which knee is bent, how high a foot leaves the floor, how "
+    "wide the feet are set, where the weight sits, how far each arm reaches and in which "
+    "direction, and which way the head and shoulders turn. Draw the movement at the size the "
+    "photograph has it, not a smaller, more cautious version of it. Take nothing else from that "
+    "photograph: not the performer's face, hair, body, build, clothing, footwear, or the room "
+    "behind them. The character keeps their own costume from the key art, including on a foot "
+    "that is off the floor."
+)
+
+#: Said of a sheet of photographs instead. A photograph carries a whole person,
+#: so the boundary has to be drawn explicitly: everything about the pose, and
+#: nothing about who is holding it. Saying only what NOT to take is not enough —
+#: the dancer's trainers still arrived on a lifted foot while the prompt was
+#: already forbidding her clothing, and it took naming the character's own
+#: footwear positively to stop it.
+PHOTO_SHEET_REFERENCE = (
+    "The last reference image is a strip of photographs of a real performer, one per figure, laid "
+    "out in the same order and the same rows as the figures you draw. Copy each photograph's pose "
+    "onto the character: limb angles, which knee is bent, how high a foot leaves the floor, how "
+    "wide the feet are set, where the weight sits, how far each arm reaches and in which "
+    "direction, and which way the head and shoulders turn. Draw the movement at the size the "
+    "photograph has it, not a smaller, more cautious version of it. Take nothing else from those "
+    "photographs: not the performer's face, hair, body, build, clothing, footwear, or the room "
+    "behind them. The character keeps their own costume from the key art in every figure, "
+    "including on a foot that is off the floor."
 )
 
 #: Sheet-mode counterpart to `STANCE_REFERENCE`, said of every figure at once.
@@ -203,21 +285,44 @@ STANCE_SHEET_REFERENCE = (
 )
 
 
-#: Neither reference pins how a limb is rolled about its own length. A stick figure is a line
-#: drawing, so it cannot carry it, and the cue does not either: measured off the landmarks, foot
-#: heading jitters about 33 degrees between adjacent frames even after smoothing, which is noise,
-#: not turnout, and a word built on it would strobe the way the old measured stance word did.
-#: Left unsaid the generator invents it afresh per frame and the legs flicker, so it is pinned
-#: rather than described. Said unconditionally, like `STANCE_REFERENCE`.
-LEG_ROTATION = (
-    "Neither the pose description nor any reference says how the legs are turned about their own "
-    "length — which way the knees and the toes point. That turn is the character's own: hold it "
-    "as the key art has it and keep it the same in every frame, and never swing it to explain a "
-    "pose. Where a pose needs the feet somewhere else, move them; do not rotate them."
-)
+#: What a photograph of somebody else will argue with. Footwear first: that is
+#: the one that was measured, where a lifted foot came back in the dancer's
+#: white trainer instead of the character's boot. Hair is the other thing a
+#: reference carries in full view and cannot help asserting.
+#: Footwear is its own group and is taken first: it is the measured failure, and
+#: a bible that describes hair at length would otherwise fill the anchor with it
+#: and leave the feet undefended — which is exactly what a first draft did here.
+FOOTWEAR_WORDS = ("boot", "shoe", "sneaker", "trainer", "sandal", "footwear", "heel")
+HAIR_WORDS = ("hair", "braid", "ponytail", "quiff", "curls")
 
 
-def sheet_prompt(
+def costume_anchor(bible: str) -> str:
+    """The sentences of the bible a photographic pose reference will contradict.
+
+    Not the whole bible: carrying that into a sheet prompt is what compressed
+    the movement in the first place. Only the parts a photograph of a different
+    body will overwrite, said positively — the prompt was already forbidding the
+    performer's clothing when the trainers arrived, so naming what the character
+    wears is doing the work that the prohibition could not.
+    """
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", bible) if part.strip()]
+
+    def first(words: tuple[str, ...]) -> list[str]:
+        return next(([s] for s in sentences if any(w in s.lower() for w in words)), [])
+
+    # ponytail: one sentence each, footwear before hair; a bible that buries
+    # either deeper wants a spec field rather than more parsing here.
+    kept = first(FOOTWEAR_WORDS) + first(HAIR_WORDS)
+    if not kept:
+        return ""
+    return " ".join(kept) + (
+        " That is what the character wears in every figure, whatever the pose. A foot lifted off "
+        "the floor still wears the character's own footwear, drawn in full: never the footwear, "
+        "hair or clothing of anyone in the reference photographs, and never bare."
+    )
+
+
+def frame_sheet_prompt(
     spec: CharacterSpec,
     bible: str,
     set_note: str,
@@ -228,6 +333,7 @@ def sheet_prompt(
     detail_reference: bool = False,
     per_row: int = 4,
     props: str = "",
+    photographic: bool = False,
 ) -> str:
     """Prompt for one render holding a whole animation sequence.
 
@@ -239,36 +345,57 @@ def sheet_prompt(
     # Naming the grid costs nothing — the generator already lays sheets out this way — and it
     # keeps the prompt saying what the pose reference beside it shows.
     rows = -(-len(cues) // per_row)
+    columns = min(per_row, len(cues))
+    # Asking for figures with gaps between them is not enough: a flung arm still
+    # crosses into the next figure's space, and cutting a box around one then
+    # brings the neighbour's hand along. Naming cells and saying nothing may
+    # leave its own cell took overlapping boxes from three per sheet to none.
     layout = (
-        f"Arrange the figures in one row of {len(cues)}"
-        if rows == 1
-        else f"Arrange the figures in {rows} rows of {per_row}"
+        f"Lay the figures out as a grid of {columns} {'column' if columns == 1 else 'columns'} and "
+        f"{rows} {'row' if rows == 1 else 'rows'}, in reading order, left to right and then the "
+        f"next row down. Divide the canvas into {len(cues)} equal rectangular cells, {columns} across and "
+        f"{rows} down, and draw exactly one figure inside each cell. Every figure stays entirely "
+        "within its own cell: no limb, hand, foot or strand of hair crosses into a neighbouring "
+        "cell or touches the canvas edge. Within its cell each figure is drawn as large as it can "
+        "be while still fitting whole."
     )
+    # A photograph already says everything the bible, the director's note and the
+    # per-frame cues approximate, and saying it again in prose costs movement:
+    # the same pose cards drew 0.43-0.70 of the traced amplitude carrying all
+    # three, and 0.75-1.21 without them. What a photograph cannot say is which
+    # costume the character keeps while copying somebody else's body, so that one
+    # part of the bible comes back as `costume_anchor` and nothing else does.
+    sameness = (
+        "Every figure is the same character at the same size and the same distance from the "
+        "viewer; only the pose changes from one to the next."
+    )
+    if photographic:
+        identity, standing, figures = costume_anchor(bible), "", sameness
+    else:
+        identity, standing, figures = bible, set_note, f"{sameness[:-1]}:\n{poses}"
     return "\n\n".join(
         part for part in [
             f"Draw {spec.name} {len(cues)} times in one image, as the consecutive frames of one "
             "animation.",
-            bible,
+            identity,
             props,
-            set_note,
+            standing,
             view_clause,
-            f"Draw this on a wide landscape canvas, wider than it is tall. {layout} in "
-            "reading order, left to right and then the next row down, with clear background "
-            "between every figure. No figure touches another figure or the canvas edge. No "
-            "numbers, labels, frame lines or grid lines: only the figures on the backdrop.",
-            "Every figure is the same character at the same size and the same distance from the "
-            f"viewer; only the pose changes from one to the next:\n{poses}",
+            f"Draw this on a landscape canvas. {layout} No numbers, labels, frame lines or grid "
+            "lines: only the figures on the backdrop.",
+            figures,
             STYLE,
             BACKDROP,
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
-            POSE_SHEET_REFERENCE if pose_reference else "",
+            PHOTO_SHEET_REFERENCE if pose_reference else "",
             STANCE_SHEET_REFERENCE,
-            LEG_ROTATION,
-            PROP_CONTINUITY,
+            # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
+            PROP_CONTINUITY if props else "",
             SIDE_LANGUAGE,
-            "Match the reference images for identity, costume, colour, proportion and prop hand "
-            "exactly. The supporting heel stays on the floor in every figure. Do not mirror any "
-            "figure and do not move the prop to the other hand.",
+            "Match the reference images for identity, costume, colour, proportion"
+            + (" and prop hand" if props else "")
+            + " exactly. Do not mirror any figure"
+            + (" and do not move the prop to the other hand." if props else "."),
         ] if part
     )

@@ -1,0 +1,32 @@
+{
+ "_comment": "Worked example of the manifest cag reads. Required: schema, fps, frame_count, playback, view, files. `files` must name exactly one file basenamed motion.json. One thumb per frame under thumbs/ is the pose reference; a partial set is dropped entirely rather than paired wrong. fps and frame_count must agree with motion.json or the bundle is refused. Unknown keys are ignored.",
+ "bundle": "motion-source",
+ "schema": "motion-artist/2",
+ "name": "sample",
+ "title": "Sample Sway",
+ "fps": 4,
+ "frame_count": 16,
+ "playback": "loop",
+ "view": "front",
+ "seam": "clean",
+ "missing_frames": [],
+ "files": {
+  "motion.json": "",
+  "thumbs/f00.jpg": "",
+  "thumbs/f01.jpg": "",
+  "thumbs/f02.jpg": "",
+  "thumbs/f03.jpg": "",
+  "thumbs/f04.jpg": "",
+  "thumbs/f05.jpg": "",
+  "thumbs/f06.jpg": "",
+  "thumbs/f07.jpg": "",
+  "thumbs/f08.jpg": "",
+  "thumbs/f09.jpg": "",
+  "thumbs/f10.jpg": "",
+  "thumbs/f11.jpg": "",
+  "thumbs/f12.jpg": "",
+  "thumbs/f13.jpg": "",
+  "thumbs/f14.jpg": "",
+  "thumbs/f15.jpg": ""
+ }
+}

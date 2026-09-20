@@ -1,7 +1,75 @@
 {
+  "id": "deb",
   "name": "Deb",
   "height": "5' 6\"",
-  "description": "A forty-year-old diner waitress who never missed a disco night, worked the counter straight through the first winter of the apocalypse, died on a supply run, and came back still in her uniform; brassy, warm and relentlessly upbeat. Average height and sturdily built with square shoulders, heavy strong forearms, a thick waist and the settled weight of a woman of forty who has been on her feet for twenty years, standing upright and level like the rest of the roster with weight even over both feet; never hunched, shambling, lurching or menacing. She is unmistakably a corpse, not a woman in makeup, and unmistakably middle-aged, not a girl. She is dressed for a double shift, never for a stage: the uniform is practical, modest and well covered. Her recognition cues are dead flesh-grey skin mottled with blue-green patches and dark veins standing out at the temples, throat, forearms and the backs of the hands, cheeks fallen in over the bone, heavy dark hollows around clouded milk-white eyes with pinprick pupils, grey lips shrunk back off long teeth in a permanent open grin, a thinning matted honey-blonde flip with bare patches at the temples and one dull silver streak over the character-right side, a faded tangerine diner dress buttoned to a white collar with the hem at the knee, a grease-stained white half-apron with two deep pockets and a small blank name tag, one yellow rubber dish glove on the character-left hand, and scuffed lace-up work boots, all readable without facial detail. Her skin is dry, dusty and drawn tight over the bone, never wet, torn, split or wounded, and her gear is worn and mended, never bloodied. Crow's feet, deep smile lines and a slack heavy jaw age her to forty on top of the death. No hat or headwear. She wears a faded tangerine diner dress with short sleeves, a white peter-pan collar, a row of buttons down the front and a straight hem at the knee, under a cut-down army-green field jacket with the sleeves torn off and left open, a grease-stained white half-apron tied at the waist with two deep pockets and a small blank name tag, one yellow rubber dish glove on the character-left hand, a cloth-and-tape guard wound around the character-right forearm, small gold hoop earrings in sagging lobes, thick dark work tights, and scuffed lace-up work boots taped at the ankles. Her ready stance is squared and confident, one boot forward, chin up, shoulders level, the free character-right hand raised high with the index finger pointed at the ceiling, and a wide open grin full of teeth. Palette, as base/shadow/highlight per material: skin #9FAD9C / #56624F / #C6D0BF; mottling #7C8C82 / #454E47 / #A4B2A6; veins #55676B / #2E3A3D / #7E9094; lips #6E6068 / #3D343B / #948691; teeth #D8D2B8 / #9A937C / #F0ECDA; eye clouded #DAD9CE / #9A9A8E / #F4F3EB; eye pupil #1B1A1E; uniform dress #D9763F / #8B441E / #F0A472; collar and apron #E8E3D6 / #A9A498 / #FBF8EF; grease stain #8E8474 / #574F44 / #B3AA9A; field jacket #5A6247 / #313626 / #868E6D; rubber glove #E3C23F / #8E7418 / #F6E187; tape #9BA0A6 / #5C6066 / #C8CDD2; tights #2C2E33 / #141519 / #4E5158; hair #C4A465 / #8A7040 / #E4CE96; hair streak #C9C9C4 / #8C8C88 / #ECECE8; boots #55504A / #2B2825 / #807A72; gold #D2A63C / #8A6A1E / #F2D07A; lash #1B1A1E. Never draw: living, healthy, rosy or tanned skin; clear white eyes with ordinary irises; a young woman, a smooth unlined face, or anyone who reads under thirty-five; a low, deep or plunging neckline; visible cleavage, midriff or thigh; a short, tight, bodycon or sequinned dress; a glamour, pin-up or pageant pose; platform heels or any heel; a microphone of any kind; blood, gore, open wounds, torn flesh, exposed bone, ribs or organs; bites, scratches, bandages or anything that reads as injury; maggots, flies or dripping rot; a firearm, bat, blade, axe or any weapon; body armour, a military uniform, a gas mask or a respirator; arms stretched straight out in front in a zombie walk; a hunched, shambling or lurching posture; a hungry, snarling or biting face, or reaching for anyone; graves, headstones, coffins, wreckage or a ruined-city backdrop; missing or detached limbs; a mirror ball, dance floor or stage set; a rubber glove on the character-right hand or on both hands; readable text, lettering or a name on the tag; any real actor's likeness or any film's makeup design; logos, text or real brands.",
+  "description": "A forty-year-old diner waitress who never missed a disco night, worked the counter straight through the first winter of the apocalypse, died on a supply run, and came back still in her uniform.",
+  "build": "Average height and sturdily built with square shoulders, heavy strong forearms, a thick waist and the settled weight of a woman of forty who has been on her feet for twenty years, standing upright and level like the rest of the roster with weight even over both feet; never hunched, shambling, lurching or menacing. She is unmistakably a corpse, not a woman in makeup, and unmistakably middle-aged, not a girl.",
+  "face": "Dead flesh-grey skin mottled with blue-green patches, with dark veins standing out at the temples, throat, forearms and the backs of the hands; cheeks fallen in over the bone; heavy dark hollows around clouded milk-white eyes with pinprick pupils; and grey lips shrunk back off long teeth in a permanent open grin. Crow's feet, deep smile lines and a slack heavy jaw age her to forty on top of the death. Her skin is dry, dusty and drawn tight over the bone, never wet, torn, split or wounded.",
+  "hair": "A thinning matted honey-blonde flip with bare patches at the temples and one dull silver streak over the character-right side.",
+  "outfit": "She is dressed for a double shift, never for a stage: the uniform is practical, modest and well covered. A faded tangerine diner dress with short sleeves, a white peter-pan collar, a row of buttons down the front and a straight hem at the knee, under a cut-down army-green field jacket with the sleeves torn off and left open; a grease-stained white half-apron tied at the waist with two deep pockets and a small blank name tag; one yellow rubber dish glove on the character-left hand; a cloth-and-tape guard wound around the character-right forearm; small gold hoop earrings in sagging lobes; thick dark work tights; and scuffed lace-up work boots taped at the ankles. Her gear is worn and mended, never bloodied. No hat or headwear.",
+  "personality": "Brassy, warm and relentlessly upbeat.",
+  "performance_style": "Squared and confident: one boot forward, chin up, shoulders level, the free character-right hand raised high with the index finger pointed at the ceiling, and a wide open grin full of teeth.",
+  "recognition_cues": [
+    "dead flesh-grey skin mottled with blue-green patches and dark veins standing out at the temples, throat, forearms and the backs of the hands",
+    "cheeks fallen in over the bone",
+    "heavy dark hollows around clouded milk-white eyes with pinprick pupils",
+    "grey lips shrunk back off long teeth in a permanent open grin",
+    "a thinning matted honey-blonde flip with bare patches at the temples and one dull silver streak over the character-right side",
+    "a faded tangerine diner dress buttoned to a white collar with the hem at the knee",
+    "a grease-stained white half-apron with two deep pockets and a small blank name tag",
+    "one yellow rubber dish glove on the character-left hand",
+    "scuffed lace-up work boots"
+  ],
+  "palette": [
+    "skin #9FAD9C / #56624F / #C6D0BF",
+    "mottling #7C8C82 / #454E47 / #A4B2A6",
+    "veins #55676B / #2E3A3D / #7E9094",
+    "lips #6E6068 / #3D343B / #948691",
+    "teeth #D8D2B8 / #9A937C / #F0ECDA",
+    "eye clouded #DAD9CE / #9A9A8E / #F4F3EB",
+    "eye pupil #1B1A1E",
+    "uniform dress #D9763F / #8B441E / #F0A472",
+    "collar and apron #E8E3D6 / #A9A498 / #FBF8EF",
+    "grease stain #8E8474 / #574F44 / #B3AA9A",
+    "field jacket #5A6247 / #313626 / #868E6D",
+    "rubber glove #E3C23F / #8E7418 / #F6E187",
+    "tape #9BA0A6 / #5C6066 / #C8CDD2",
+    "tights #2C2E33 / #141519 / #4E5158",
+    "hair #C4A465 / #8A7040 / #E4CE96",
+    "hair streak #C9C9C4 / #8C8C88 / #ECECE8",
+    "boots #55504A / #2B2825 / #807A72",
+    "gold #D2A63C / #8A6A1E / #F2D07A",
+    "lash #1B1A1E"
+  ],
+  "avoid": [
+    "living, healthy, rosy or tanned skin",
+    "clear white eyes with ordinary irises",
+    "a young woman, a smooth unlined face, or anyone who reads under thirty-five",
+    "a low, deep or plunging neckline",
+    "visible cleavage, midriff or thigh",
+    "a short, tight, bodycon or sequinned dress",
+    "a glamour, pin-up or pageant pose",
+    "platform heels or any heel",
+    "a microphone of any kind",
+    "blood, gore, open wounds, torn flesh, exposed bone, ribs or organs",
+    "bites, scratches, bandages or anything that reads as injury",
+    "maggots, flies or dripping rot",
+    "a firearm, bat, blade, axe or any weapon",
+    "body armour, a military uniform, a gas mask or a respirator",
+    "arms stretched straight out in front in a zombie walk",
+    "a hunched, shambling or lurching posture",
+    "a hungry, snarling or biting face, or reaching for anyone",
+    "graves, headstones, coffins, wreckage or a ruined-city backdrop",
+    "missing or detached limbs",
+    "a mirror ball, dance floor or stage set",
+    "a rubber glove on the character-right hand or on both hands",
+    "readable text, lettering or a name on the tag",
+    "any real actor's likeness or any film's makeup design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "pigeon"
+  ],
   "animations": {
     "dance": {
       "intent": "Full disco loop: step out wide onto one boot with the hips swinging and the apron pockets bouncing, drive the free character-right arm up and across in the big point-to-the-ceiling, point down across the opposite hip, then swing back to the squared opening stance. Loose, joyful and on the beat, never a lurch or a shamble.",
@@ -45,8 +113,5 @@
         "pigeon"
       ]
     }
-  },
-  "props": [
-    "pigeon"
-  ]
+  }
 }

@@ -1,7 +1,52 @@
 {
+  "id": "chops",
   "name": "Chops",
   "height": "6' 4\"",
-  "description": "A masked slasher who turns out to be painfully shy off stage and a full-throated arena-metal howler on it; earnest, gentle and a little bashful between numbers. Very tall and broad with heavy shoulders, thick forearms and slow deliberate movement, standing upright and level like the rest of the roster with weight even over both feet; never hunched, stalking, creeping or menacing. His recognition cues are a smooth blank off-white oval face plate with two rounded eye holes and a small mouth slot, a dark strap across the jaw, stringy dark shoulder-length hair hanging out from behind the plate, a patched navy boiler suit with the sleeves pushed up the forearms, brown leather work gloves, and heavy tan work boots, all readable without facial detail. The plate is smooth, plain and undecorated: no lacing holes, no triangular vent cutouts, no goalie-mask pattern, no blood, cracks, scratches or markings, and it stays on in every frame. No hat or headwear over the mask. He wears a faded navy boiler suit zipped to mid-chest with two mismatched cloth patches at one knee and one elbow, the sleeves pushed up above the wrists, a grey shirt showing at the open collar, brown leather work gloves, and scuffed heavy tan work boots with thick soles. His ready stance is tall and square with the feet planted wide, shoulders level, head tipped very slightly down, and the free gloved character-right hand hanging open at his side, shy but ready. Palette, as base/shadow/highlight per material: boiler suit #2F3A4E / #161C27 / #53637E; patches #4A5460 / #262C34 / #737E8B; shirt #8B8F94 / #52565B / #B6BABE; mask #E4DECF / #A8A294 / #FAF6EB; mask openings #1B1A1E; strap #2A2620 / #121110 / #4A443A; hair #23201F / #0E0D0D / #494442; gloves #7A5434 / #432C18 / #A87C52; boots #9A7549 / #5A4326 / #C3A075; eye dark #1B1A1E. Never draw: a blade raised to strike or pointed at the viewer; blood on the character, the costume, the mask or the floor; gore, wounds or splatter; a raised threatening arm, a stalking or creeping posture, or a lunge toward the viewer; victims, bodies, ropes, restraints or chase imagery; a hockey goalie mask, its lace holes or its triangular vent pattern; a cracked, scratched, bloodied, painted or decorated mask; the mask removed, lifted or absent; a visible face or expression through the mask; a woods, camp, cabin or night-stalk backdrop; any real actor's likeness or any film's mask or costume design; logos, text or real brands.",
+  "description": "A masked slasher who turns out to be painfully shy off stage and a full-throated arena-metal howler on it.",
+  "build": "Very tall and broad with heavy shoulders, thick forearms and slow deliberate movement, standing upright and level like the rest of the roster with weight even over both feet; never hunched, stalking, creeping or menacing.",
+  "face": "A smooth blank off-white oval face plate with two rounded eye holes and a small mouth slot, held on by a dark strap across the jaw. The plate is smooth, plain and undecorated: no lacing holes, no triangular vent cutouts, no goalie-mask pattern, no blood, cracks, scratches or markings, and it stays on in every frame.",
+  "hair": "Stringy dark shoulder-length hair hanging out from behind the plate.",
+  "outfit": "A faded navy boiler suit zipped to mid-chest with two mismatched cloth patches at one knee and one elbow, the sleeves pushed up above the wrists, a grey shirt showing at the open collar, brown leather work gloves, and scuffed heavy tan work boots with thick soles. No hat or headwear over the mask.",
+  "personality": "Earnest, gentle and a little bashful between numbers.",
+  "performance_style": "Tall and square with the feet planted wide, shoulders level, head tipped very slightly down, and the free gloved character-right hand hanging open at his side: shy but ready.",
+  "recognition_cues": [
+    "a smooth blank off-white oval face plate with two rounded eye holes and a small mouth slot",
+    "a dark strap across the jaw",
+    "stringy dark shoulder-length hair hanging out from behind the plate",
+    "a patched navy boiler suit with the sleeves pushed up the forearms",
+    "brown leather work gloves",
+    "heavy tan work boots"
+  ],
+  "palette": [
+    "boiler suit #2F3A4E / #161C27 / #53637E",
+    "patches #4A5460 / #262C34 / #737E8B",
+    "shirt #8B8F94 / #52565B / #B6BABE",
+    "mask #E4DECF / #A8A294 / #FAF6EB",
+    "mask openings #1B1A1E",
+    "strap #2A2620 / #121110 / #4A443A",
+    "hair #23201F / #0E0D0D / #494442",
+    "gloves #7A5434 / #432C18 / #A87C52",
+    "boots #9A7549 / #5A4326 / #C3A075",
+    "eye dark #1B1A1E"
+  ],
+  "avoid": [
+    "a blade raised to strike or pointed at the viewer",
+    "blood on the character, the costume, the mask or the floor",
+    "gore, wounds or splatter",
+    "a raised threatening arm, a stalking or creeping posture, or a lunge toward the viewer",
+    "victims, bodies, ropes, restraints or chase imagery",
+    "a hockey goalie mask, its lace holes or its triangular vent pattern",
+    "a cracked, scratched, bloodied, painted or decorated mask",
+    "the mask removed, lifted or absent",
+    "a visible face or expression through the mask",
+    "a woods, camp, cabin or night-stalk backdrop",
+    "any real actor's likeness or any film's mask or costume design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "knife",
+    "mic"
+  ],
   "animations": {
     "dance": {
       "intent": "Heavy headbang loop: plant the boots wide, swing the masked head down and up so the stringy hair sweeps forward and back, rock the weight from one boot to the other with the knees loose, and pump the free gloved character-right fist at shoulder height, then return to the tall square opening stance. Loose and enthusiastic, never a stalk or a lunge.",
@@ -46,9 +91,5 @@
         "knife"
       ]
     }
-  },
-  "props": [
-    "knife",
-    "mic"
-  ]
+  }
 }

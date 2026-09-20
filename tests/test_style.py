@@ -74,30 +74,50 @@ def test_every_generation_prompt_carries_the_backdrop_clause():
     assert BACKDROP in frame_prompt(spec, "B", "N", FRAME_VIEWS["front"], "a cue", "key")
 
 
-def test_every_frame_prompt_defends_the_prop_against_the_pose_cue():
-    """The cue names arms and the skeleton draws bare joints; the mic vanished."""
+def test_a_frame_that_holds_a_prop_defends_it_against_the_pose_cue():
+    """The cue names arms and the skeleton draws bare joints; the mic vanished.
+    A set with empty hands is not told to keep a prop: belter's dance grew a mic."""
     from cag.prompts import FRAME_VIEWS, frame_prompt
     from cag.spec import load_spec
 
-    prompt = frame_prompt(
+    args = (
         load_spec("specs/default/belter.json"),
         "B",
         "N",
         FRAME_VIEWS["front"],
         "character-right arm at chest height, elbow bent ~90 degrees.",
         "key",
-        pose_reference=True,
     )
-    assert "still in that same hand" in prompt
-    assert "bare fist" in prompt
+    held = frame_prompt(*args, pose_reference=True, props="She holds a microphone.")
+    assert "still in that same hand" in held and "bare fist" in held
+    assert "still in that same hand" not in frame_prompt(*args, pose_reference=True)
 
 
 def test_every_render_is_told_where_the_viewer_stands():
     """Outlaw's victory set looked up at her; every other set looked slightly down."""
-    from cag.prompts import frame_prompt, sheet_prompt, view_prompt
+    from cag.prompts import frame_prompt, frame_sheet_prompt, view_prompt
     from cag.style import VIEWPOINT
 
     assert VIEWPOINT in STYLE  # so it reaches every prompt that carries the style
     assert "never looking up at the figure from below" in VIEWPOINT
     # Stated as the viewer's position, so a KO frame on the floor cannot drag the camera down.
     assert "This is the camera, not the pose" in VIEWPOINT
+
+
+def test_the_costume_anchor_defends_footwear_before_hair():
+    """A bible that describes hair at length would otherwise fill the anchor with
+    it and leave the feet undefended — and feet are the measured failure: a lifted
+    foot came back in the reference dancer's white trainer, not the character's boot."""
+    from cag.prompts import costume_anchor
+
+    bible = (
+        "She is tall and lean. Thick auburn hair falls loose and ungathered. "
+        "Hair uses #593029 and highlight #8A4A3F. "
+        "Chunky ankle boots have near-black brown leather and warm mid-brown cords."
+    )
+    anchor = costume_anchor(bible)
+    assert "ankle boots" in anchor
+    assert "auburn hair" in anchor
+    assert "tall and lean" not in anchor  # only what a photograph can contradict
+    assert "still wears the character's own footwear" in anchor
+    assert costume_anchor("She is tall and lean. She looks cheerful.") == ""

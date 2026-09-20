@@ -1,3 +1,6 @@
+import json
+import statistics
+from pathlib import Path
 import numpy
 import pytest
 from PIL import Image
@@ -10,7 +13,7 @@ from cag.geometry import (
     anim_subject_height_px,
     subject_height_px,
 )
-from cag.skeleton import pose_extent, stature
+from cag.mask import crown, pose_extent, stature
 from cag.mask import (
     KEY_THRESHOLD,
     MaskError,
@@ -266,11 +269,11 @@ def figure_sheet(path, boxes, size=(400, 300)):
 
 
 def test_slice_sheet_finds_figures_in_reading_order(tmp_path):
-    from cag.mask import slice_sheet
+    from cag.mask import slice_frame_sheet
 
     # Two rows of two, the second row shifted so a fixed grid would miss it.
     boxes = [(20, 20, 80, 130), (150, 30, 220, 130), (40, 170, 90, 280), (250, 160, 330, 280)]
-    cells = slice_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 4)
+    cells = slice_frame_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 4)
     shades = [cell.getpixel((cell.width // 2, cell.height // 2))[0] for cell in cells]
     assert shades == [30, 50, 70, 90]
     for cell, (l, t, r, b) in zip(cells, boxes):
@@ -279,22 +282,22 @@ def test_slice_sheet_finds_figures_in_reading_order(tmp_path):
 
 
 def test_slice_sheet_bridges_a_gap_inside_one_figure(tmp_path):
-    from cag.mask import slice_sheet
+    from cag.mask import slice_frame_sheet
 
     # A raised arm 6px clear of the torso is still one figure.
     boxes = [(20, 40, 60, 130), (66, 20, 76, 80)]
-    cells = slice_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 1)
+    cells = slice_frame_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 1)
     assert cells[0].width == 76 - 20 + 32
 
 
 def test_slice_sheet_rejects_the_wrong_figure_count(tmp_path):
-    from cag.mask import slice_sheet
+    from cag.mask import slice_frame_sheet
 
     with pytest.raises(MaskError, match="holds 2 figures, not 3"):
-        slice_sheet(figure_sheet(tmp_path / "sheet.png", [(20, 20, 60, 100), (100, 20, 140, 100)]), 3)
+        slice_frame_sheet(figure_sheet(tmp_path / "sheet.png", [(20, 20, 60, 100), (100, 20, 140, 100)]), 3)
 
 
-from cag.mask import slice_sheet  # noqa: E402
+from cag.mask import slice_frame_sheet  # noqa: E402
 
 
 def sheet_with_overlapping_rows(path, backdrop=(247, 4, 248)):
@@ -318,7 +321,7 @@ def sheet_with_overlapping_rows(path, backdrop=(247, 4, 248)):
 
 def test_a_raised_hand_beside_the_row_above_still_counts_eight_figures(tmp_path):
     sheet = sheet_with_overlapping_rows(tmp_path / "sheet-00.png")
-    assert len(slice_sheet(sheet, 8)) == 8
+    assert len(slice_frame_sheet(sheet, 8)) == 8
 
 
 def test_a_detached_piece_counts_with_its_figure_not_as_one(tmp_path):
@@ -329,7 +332,7 @@ def test_a_detached_piece_counts_with_its_figure_not_as_one(tmp_path):
         image.paste((0, 0, 0), (x + 20, 200, x + 80, 380))
     image.paste((0, 0, 0), (14, 2, 22, 8))  # a hair spike clear of the head
     sheet = image.save(p := tmp_path / "sheet-00.png") or p
-    assert len(slice_sheet(sheet, 8)) == 8
+    assert len(slice_frame_sheet(sheet, 8)) == 8
 
 
 def test_a_sheet_drawn_short_is_still_rejected(tmp_path):
@@ -339,7 +342,7 @@ def test_a_sheet_drawn_short_is_still_rejected(tmp_path):
         image.paste((0, 0, 0), (x, 10, x + 60, 190))
     sheet = image.save(p := tmp_path / "sheet-00.png") or p
     with pytest.raises(MaskError, match="holds 4 figures, not 8"):
-        slice_sheet(sheet, 8)
+        slice_frame_sheet(sheet, 8)
 
 
 def test_raised_arms_do_not_shrink_a_sheet_with_no_landmarks(tmp_path):
@@ -368,3 +371,85 @@ def test_one_crouched_frame_does_not_grow_a_sheet_with_no_landmarks(tmp_path):
     cells = set_to_cells(sources, lambda i: tmp_path / "cells" / f"{i:02d}.png", {}, 0, 0, 69)
     top, bottom = subject_box(Image.open(cells[0]))[1], subject_box(Image.open(cells[0]))[3]
     assert abs((bottom - top) - anim_subject_height_px(69)) <= 2
+
+
+# --- pose measurement, moved here with `stature` and `pose_extent` -----------
+#: A stand and a crouch built so every segment keeps its length between the
+#: two: 40px shin, 40px thigh, 40px torso.
+BODY_H = 140
+FLOOR_Y = 182
+STAND = {
+    "anL": [48, 180], "anR": [52, 180],
+    "knL": [48, 140], "knR": [52, 140],
+    "hipL": [48, 100], "hipR": [52, 100],
+    "shL": [46, 60], "shR": [54, 60],
+    "elL": [44, 85], "elR": [56, 85],
+    "wrL": [43, 105], "wrR": [57, 105],
+    "earL": [48, 45], "earR": [52, 45], "nose": [50, 47],
+}
+CROUCH = {
+    "anL": [48, 180], "anR": [52, 180],
+    "knL": [72, 148], "knR": [76, 148],
+    "hipL": [48, 116], "hipR": [52, 116],
+    "shL": [46, 76], "shR": [54, 76],
+    "elL": [44, 101], "elR": [56, 101],
+    "wrL": [43, 121], "wrR": [57, 121],
+    "earL": [48, 61], "earR": [52, 61], "nose": [50, 63],
+}
+
+
+def test_bending_a_knee_folds_the_leg_without_shortening_it():
+    """The whole point of measuring along bones instead of down a bounding box."""
+    assert stature(CROUCH, BODY_H) == pytest.approx(stature(STAND, BODY_H))
+
+
+def test_the_same_crouch_does_shrink_the_vertical_extent():
+    """What a bounding box would have measured, and why it misleads."""
+    assert pose_extent(CROUCH, FLOOR_Y, BODY_H) < pose_extent(STAND, FLOOR_Y, BODY_H)
+
+
+def test_the_crown_leans_with_the_head_rather_than_staying_overhead():
+    tilted = dict(STAND, earL=[63, 52], earR=[67, 52], nose=[69, 54])
+    upright, leaning = crown(STAND, BODY_H), crown(tilted, BODY_H)
+    assert upright[0] == pytest.approx(50)  # squarely above the neck
+    assert leaning[0] > upright[0] + 5  # carried sideways by the tilt
+    assert leaning[1] > upright[1]  # and, being off the vertical, lower
+
+
+def test_stature_tracks_extent_across_a_real_traced_set():
+    """The landmarks are 2D, so a limb angled at the camera foreshortens and
+    stature alone wobbles by ~9%. `frame_scale` divides it by the extent, and
+    that ratio is several times steadier, because both shrink together."""
+    motion = json.loads(Path("motions/sample/motion.json").read_text())
+    poses = [frame["pts"] for frame in motion["frames"]]
+    statures = [stature(pose, motion["body_h"]) for pose in poses]
+    ratios = [
+        stature(pose, motion["body_h"]) / pose_extent(pose, motion["floor_y"], motion["body_h"])
+        for pose in poses
+    ]
+    spread = lambda xs: (max(xs) - min(xs)) / statistics.median(xs)
+    assert spread(statures) > 0.05  # the raw measure really does move about
+    assert spread(ratios) < 0.05  # the one the scale is built on does not
+
+
+def test_a_kicked_leg_does_not_shove_the_body_and_a_hop_leaves_the_floor(tmp_path):
+    """Sheet frames were centred by their box and pinned by their lowest pixel: a
+    leg out to one side pushed the torso the other way, and no jump survived."""
+    kick = {**POSE, "anL": [90, 180], "knL": [70, 140]}
+    hop = {name: [x, y - 14] for name, (x, y) in POSE.items()}  # 14 of 140: a tenth of body height
+    sources = {}
+    for index, leg in enumerate([None, (60, 170, 100, 180), None]):
+        image = Image.new("RGB", (200, 300), (247, 4, 248))
+        image.paste((0, 0, 0), (40, 20, 60, 180))
+        if leg:
+            image.paste((0, 0, 0), leg)
+        image.save(sources.setdefault(index, tmp_path / f"{index:02d}.png"))
+    cells = set_to_cells(
+        sources, lambda i: tmp_path / "cells" / f"{i:02d}.png",
+        {0: POSE, 1: kick, 2: hop}, 182, 140, 69, airborne=frozenset({2}),
+    )
+    boxes = [subject_box(Image.open(cells[index])) for index in range(3)]
+    assert abs(boxes[1][0] - boxes[0][0]) <= 1  # torso's edge stays put; only the leg reaches out
+    assert boxes[0][3] - 1 == ANIM_CONTACT_ROW
+    lift = round((182 - 166) / 140 * anim_subject_height_px(69))
+    assert boxes[0][3] - boxes[2][3] == pytest.approx(lift, abs=1)

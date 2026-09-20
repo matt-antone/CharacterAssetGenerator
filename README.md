@@ -29,7 +29,7 @@ is needed. A brief that wants a traced
 one, and every build picks it up:
 
 ```json
-"dance": { "intent": "Refined lounge sway loop...", "motion": "shuffle" }
+"dance": { "intent": "Refined lounge sway loop...", "motion": "shuffle-1" }
 ```
 
 `"motion": "auto"` has one chosen instead, spread across the roster so a cast
@@ -48,7 +48,7 @@ brief picks it by, and the files it contains, including which one holds the
 motion. Adding a sheet is copying the bundle:
 
 ```bash
-cp -R ../MotionArtist/work/shuffle motions/shuffle
+cp -R ../MotionArtist/work/shuffle motions/shuffle-1
 ```
 
 `--motion-root` reads them from somewhere else, and `--motion` points one run at

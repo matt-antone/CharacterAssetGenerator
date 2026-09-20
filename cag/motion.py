@@ -11,8 +11,9 @@ Produced by https://github.com/matt-antone/MotionArtist —
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
+
 
 #: Drawn first, by the keyframer. Everything else is a tweener's in-between.
 LOCKED_ROLES = ("key", "pilot")
@@ -31,6 +32,9 @@ class Frame:
     note: str = ""
     #: MediaPipe landmark positions for this pose, keyed by joint name.
     pts: dict[str, list[float]] = field(default_factory=dict)
+    #: The tracer's own call that both feet are off the floor. Read, never
+    #: re-derived from `pts`: MotionArtist decides contact from the soles.
+    airborne: bool = False
 
     @property
     def is_locked(self) -> bool:
@@ -59,6 +63,11 @@ class MotionSheet:
     playback: str
     arc: str
     frames: tuple[Frame, ...]
+    #: The traced video frames, one per motion frame: the pose reference the
+    #: keyframer is shown. Measured against the trace, renders made from them
+    #: carry 0.9-1.2 of the movement in it. A sheet read straight off disk
+    #: rather than out of a bundle has none.
+    photos: tuple[Path, ...] = ()
     #: Where the performer's floor sits, and their body height, both normalised.
     floor_y: float = 0.0
     body_h: float = 0.0
@@ -136,6 +145,7 @@ def load_motion(path: Path | str) -> MotionSheet:
             cue=raw["cue"].strip(),
             note=raw.get("note", "").strip(),
             pts=raw.get("pts", {}),
+            airborne=bool(raw.get("features", {}).get("airborne", False)),
         )
         for raw in data["frames"]
     )
@@ -190,6 +200,9 @@ class Bundle:
     #: The manifest's own directory, and the motion data it names inside it.
     root: Path
     sheet: Path
+    #: One traced video frame per motion frame, in order, when the bundle ships
+    #: a complete set. The pose reference; see `photos` on MotionSheet.
+    photos: tuple[Path, ...] = ()
 
     def load(self) -> MotionSheet:
         """The sheet itself, checked against the header that advertised it."""
@@ -199,7 +212,7 @@ class Bundle:
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
                 f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
             )
-        return motion
+        return replace(motion, photos=self.photos)
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -227,6 +240,19 @@ def read_bundle(path: Path | str) -> Bundle:
         raise MotionError(
             f"{manifest} names {len(named)} motion files; a bundle carries exactly one"
         )
+
+    # The traced frames. A photograph of the performer carries what a drawn
+    # skeleton cannot — the whole body at once, at the size and commitment it
+    # was really done at. Taken only when there is one per frame, in order: a
+    # partial set would silently pair figure n with the wrong frame, so it is
+    # dropped entirely and the set is drawn with no pose reference at all.
+    # A `spritesheet` block in the manifest is ignored; nothing reads it.
+    thumbs = sorted(f for f in data["files"] if Path(f).parent.name == "thumbs")
+    photos = (
+        tuple(manifest.parent / f for f in thumbs)
+        if len(thumbs) == int(data["frame_count"])
+        else ()
+    )
     return Bundle(
         name=data.get("name", manifest.parent.name),
         title=data.get("title", ""),
@@ -237,6 +263,7 @@ def read_bundle(path: Path | str) -> Bundle:
         seam=str(data.get("seam", "")).strip(),
         root=manifest.parent,
         sheet=manifest.parent / named[0],
+        photos=photos,
     )
 
 

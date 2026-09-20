@@ -42,10 +42,16 @@ from .geometry import (
     anim_subject_height_px,
     subject_height_px,
 )
-from .skeleton import pose_extent, stature
-
 #: Alpha at or below this counts as background when measuring the subject.
 ALPHA_FLOOR = 8
+
+#: Head radius, in body_h units, for finding the crown above the ears.
+HEAD_RADIUS = 0.07
+
+#: Ankle joint height above the floor, in body_h units. MediaPipe gives no heel
+#: landmark, so the last span from ankle down to the ground is assumed.
+# ponytail: anthropometric average; tune per rig if a character's feet read wrong.
+ANKLE_RISE = 0.039
 
 #: Width of the border band the backdrop colour is measured from.
 BORDER_PIXELS = 8
@@ -312,6 +318,54 @@ def mask_to_cell(
     return dst
 
 
+def mid(a: list[float], b: list[float]) -> list[float]:
+    return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]
+
+
+def span(a: list[float], b: list[float]) -> float:
+    return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
+
+
+def crown(pts: dict[str, list[float]], body_h: float) -> list[float]:
+    """Top of the skull: one head radius past the ears, along the neck's own axis.
+
+    Not straight up. A tilted head carries its crown sideways, and measuring to a
+    point directly above the ears would lose exactly the height the tilt costs.
+    """
+    ear = mid(pts["earL"], pts["earR"])
+    neck = mid(pts["shL"], pts["shR"])
+    dx, dy = ear[0] - neck[0], ear[1] - neck[1]
+    reach = span(ear, neck)
+    if reach < 1e-9:
+        return [ear[0], ear[1] - HEAD_RADIUS * body_h]
+    step = HEAD_RADIUS * body_h / reach
+    return [ear[0] + dx * step, ear[1] + dy * step]
+
+
+def stature(pts: dict[str, list[float]], body_h: float) -> float:
+    """Heel-to-crown measured along the bones, so the pose cannot change it.
+
+    Summing segment lengths is what makes this pose-invariant. A vertical extent
+    shortens the moment a character crouches or leans, and normalising on one
+    inflates them back to full height; the leg is the same leg either way.
+
+    The supporting leg is measured, the torso down the midline, and the two are
+    added rather than walked through — a chain that detoured via the supporting
+    hip would pick up half a pelvis width that is not part of anyone's height.
+    """
+    lower = "L" if pts["anL"][1] > pts["anR"][1] else "R"
+    ankle, knee, hip = pts[f"an{lower}"], pts[f"kn{lower}"], pts[f"hip{lower}"]
+    leg = ANKLE_RISE * body_h + span(ankle, knee) + span(knee, hip)
+    torso = span(mid(pts["hipL"], pts["hipR"]), mid(pts["shL"], pts["shR"]))
+    return leg + torso + span(mid(pts["shL"], pts["shR"]), crown(pts, body_h))
+
+
+def pose_extent(pts: dict[str, list[float]], floor_y: float, body_h: float) -> float:
+    """Vertical span of one pose, crown and floor included: what gets drawn."""
+    ys = [point[1] for point in pts.values()] + [floor_y, crown(pts, body_h)[1]]
+    return max(ys) - min(ys)
+
+
 def frame_scale(
     subject: Image.Image,
     pts: dict[str, list[float]],
@@ -340,6 +394,74 @@ def frame_scale(
     return anim_subject_height_px(height_inches) / (drawn * standing / extent)
 
 
+#: The four joints that box the torso. Their mean is where the body is, whatever
+#: the arms and legs are doing.
+TORSO = ("shL", "shR", "hipL", "hipR")
+
+#: Every landmark that can be the lowest point of a foot.
+SOLES = ("anL", "anR", "heelL", "heelR", "toeL", "toeR")
+
+
+def torso_x(pts: dict[str, list[float]]) -> float:
+    return statistics.fmean(pts[name][0] for name in TORSO)
+
+
+def home_x(poses: dict[int, dict[str, list[float]]]) -> float | None:
+    """Where the performer's torso sits on average across the set, or None."""
+    xs = [torso_x(pts) for pts in poses.values() if pts]
+    return statistics.fmean(xs) if xs else None
+
+
+def placement(
+    subject: Image.Image,
+    pts: dict[str, list[float]],
+    floor_y: float,
+    body_h: float,
+    height_inches: float,
+    home: float | None,
+    airborne: bool,
+) -> tuple[tuple[float, float] | None, int]:
+    """Where a drawn frame goes in its cell: `register`'s anchor and contact row.
+
+    Across: the torso is found in the drawing and put where the pose says the
+    torso is, so a kicked leg widens the box without shoving the body the other
+    way, and the performer's own side-to-side travel survives. Up: a frame the
+    tracer calls airborne is lifted off the contact row by as far as its lowest
+    sole is off the floor. Grounded frames are not lifted at all — their soles
+    sit a few percent off `floor_y` by noise, and that would come out as jitter.
+    """
+    if not pts or not body_h or home is None:
+        return None, ANIM_CONTACT_ROW
+    px = anim_subject_height_px(height_inches) / body_h
+    row = ANIM_CONTACT_ROW
+    if airborne:
+        lowest = max(pts[name][1] for name in SOLES if name in pts)
+        row -= max(0, round((floor_y - lowest) * px))
+
+    # The torso's rows in the drawing, read off the pose. The box runs crown to
+    # lowest landmark: a generator draws feet, not the floor under a jump.
+    left, top, right, bottom = subject_box(subject)
+    ys = [point[1] for point in pts.values()] + [crown(pts, body_h)[1]]
+    low, high = min(ys), max(ys)
+    rows = [
+        top + round((statistics.fmean(pts[a][1] for a in pair) - low) / (high - low) * (bottom - top))
+        for pair in (TORSO[:2], TORSO[2:])
+    ]
+    alpha = numpy.array(subject.convert("RGBA").getchannel("A")) > ALPHA_FLOOR
+    # Row by row, the middle of the widest unbroken run is the torso; the median
+    # over the band outvotes the few rows an outstretched arm is joined to it.
+    # Counting every pixel instead let that arm drag the body 6px on the shuffle.
+    middles = []
+    for line in alpha[min(rows) : max(rows) + 1]:
+        filled = numpy.flatnonzero(line)
+        if len(filled):
+            run = max(numpy.split(filled, numpy.flatnonzero(numpy.diff(filled) > 1) + 1), key=len)
+            middles.append((run[0] + run[-1]) / 2)
+    if not middles:
+        return None, row
+    return (statistics.median(middles), CELL_WIDTH / 2 + (torso_x(pts) - home) * px), row
+
+
 def pose_to_cell(
     src: Path | str,
     dst: Path | str,
@@ -348,6 +470,8 @@ def pose_to_cell(
     body_h: float,
     height_inches: float,
     fallback: float,
+    home: float | None = None,
+    airborne: bool = False,
 ) -> Path:
     """Cut an animation frame out and register it at the scale its pose asks for.
 
@@ -360,7 +484,8 @@ def pose_to_cell(
     scale = fallback
     if pts and body_h:
         scale = frame_scale(subject, pts, floor_y, body_h, height_inches)
-    register(subject, scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
+    anchor, row = placement(subject, pts, floor_y, body_h, height_inches, home, airborne)
+    register(subject, scale, row, anchor).save(dst, format="PNG")
     return dst
 
 
@@ -501,7 +626,7 @@ def _reading_order(figures: list[list[int]]) -> list[list[int]]:
     return ordered
 
 
-def slice_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> list[Image.Image]:
+def slice_frame_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> list[Image.Image]:
     """Cut one render holding several figures into one source image per figure.
 
     Figures are found, never assumed: regions of character are followed through
@@ -536,19 +661,23 @@ def set_to_cells(
     floor_y: float,
     body_h: float,
     height_inches: float,
-    sheets: list[list[int]] | None = None,
+    frame_sheets: list[list[int]] | None = None,
+    airborne: frozenset[int] = frozenset(),
 ) -> dict[int, Path]:
     """Register frames drawn together, one scale per sheet they were drawn on.
+
+    `airborne` names the frames the tracer says have both feet off the floor;
+    see `placement` for what is done with them.
 
     Figures on one sheet were drawn at one magnification, so one factor is
     measured per sheet — the median of what each frame's pose says — and
     applied to every frame from it. Measuring every frame on its own, as
     `pose_to_cell` does, would put measurement noise back between frames the
-    generator had already drawn the same size. Two sheets of the same set do
+    generator had already drawn the same size. Two frame sheets of the same set do
     not share a magnification, though: the first came back 8% larger than the
     second, and one factor across both put a size pop at the seam.
 
-    `sheets` lists the frame indices drawn together; absent, every frame is
+    `frame_sheets` lists the frame indices drawn together; absent, every frame is
     taken as one sheet.
 
     A sheet with no landmarks has nothing to read a pose from, and the key
@@ -564,7 +693,8 @@ def set_to_cells(
     """
     subjects = {index: cutout(source) for index, source in sorted(sources.items())}
     cells = {}
-    for group in sheets or [list(subjects)]:
+    home = home_x(poses)
+    for group in frame_sheets or [list(subjects)]:
         if body_h and all(poses.get(index) for index in group):
             scale = statistics.median(
                 frame_scale(subjects[index], poses[index], floor_y, body_h, height_inches)
@@ -579,6 +709,10 @@ def set_to_cells(
         for index in group:
             dst = dst_for(index)
             dst.parent.mkdir(parents=True, exist_ok=True)
-            register(subjects[index], scale, ANIM_CONTACT_ROW).save(dst, format="PNG")
+            anchor, row = placement(
+                subjects[index], poses.get(index, {}), floor_y, body_h, height_inches,
+                home, index in airborne,
+            )
+            register(subjects[index], scale, row, anchor).save(dst, format="PNG")
             cells[index] = dst
     return cells

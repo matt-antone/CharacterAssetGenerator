@@ -13,12 +13,13 @@ from langchain_core.messages import AIMessage
 from PIL import Image, ImageSequence
 
 from cag import animation, cli, mask, static_sheet
+from cag.prompts import KEY_VIEW
 from cag.motion import MotionError
 from cag.spec import load_spec
 from tests.test_animation import fake_draw
 from tests.test_static_sheet import flat_cutout
 
-SAMPLE = "tests/fixtures/sample-motion.json"
+SAMPLE = "motions/sample/motion.json"
 
 
 @pytest.fixture
@@ -69,8 +70,8 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
     assert not (tmp_path / "o").exists()  # nothing else was drawn or written
 
 
-def test_writes_the_four_projection_views(built):
-    for view in ("key", "front", "back", "profile"):
+def test_writes_every_view_left_on(built):
+    for view in (KEY_VIEW, *static_sheet.projection_views()):
         with Image.open(built / "views" / f"{view}.png") as cell:
             assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
 
@@ -113,7 +114,7 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
     out = tmp_path / "o" / "no-one"
     assert (out / "index.html").exists()
     assert not list(out.glob("*.gif"))
-    assert len(fake_draw.calls) == 4
+    assert len(fake_draw.calls) == 1 + len(static_sheet.projection_views()), "key art and the views left on"
 
 
 def test_a_named_sheet_is_found_under_the_motion_root(tmp_path):
@@ -158,7 +159,7 @@ def _bundle(root, name):
 
 
 def _library(tmp_path, *names):
-    root = tmp_path / "sheets"
+    root = tmp_path / "frame_sheets"
     for name in names:
         _bundle(root, name)
     return root
@@ -168,9 +169,9 @@ def test_auto_keeps_a_character_on_the_same_sheet_between_runs(tmp_path):
     root = _library(tmp_path, "a-loop", "b-loop", "c-loop")
     spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": cli.AUTO})
 
-    first = cli.auto_sheet(spec, "dance", root)[0]
+    first = cli.auto_bundle(spec, "dance", root)[0]
 
-    assert cli.auto_sheet(spec, "dance", root)[0] == first
+    assert cli.auto_bundle(spec, "dance", root)[0] == first
 
 
 def test_auto_spreads_the_library_across_a_roster(tmp_path):
@@ -178,7 +179,7 @@ def test_auto_spreads_the_library_across_a_roster(tmp_path):
     root = _library(tmp_path, "a-loop", "b-loop", "c-loop")
     base = load_spec("tests/fixtures/velvet-lou.json")
     picks = {
-        cli.auto_sheet(replace(base, name=f"Singer {n}"), "dance", root)[0] for n in range(12)
+        cli.auto_bundle(replace(base, name=f"Singer {n}"), "dance", root)[0] for n in range(12)
     }
     assert len(picks) > 1, f"every character landed on the same sheet: {picks}"
 

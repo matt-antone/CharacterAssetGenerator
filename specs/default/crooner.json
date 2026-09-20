@@ -1,8 +1,37 @@
 {
+  "id": "crooner",
   "name": "Crooner",
   "height": "6' 2\"",
-  "detail_level": 4,
-  "description": "An unflappable lounge singer in his fifties: lean, tall, narrow and controlled, entirely at ease in the room. Long clean jacket and trouser lines, low relaxed shoulders; never broad, squat or heavily coiled. His recognition cues are a hard jet-black slick side part with one sharp highlight band, a narrow dinner-jacket line, a black bow tie hanging undone, No hat or headwear. He wears a bright moss dinner jacket with satin peak lapels, a cream dress shirt with an open collar, black dress trousers with a satin side stripe, and polished black loafers. Angled upward and inward toward his mouth; His ready stance has narrow staggered feet with both knees slightly flexed, chin raised, one shoulder angled forward, and the character-right hand at chest height. Palette, as base/shadow/highlight per material: moss #0D7039 / #074522 / #2FA55E; cream #E6D9BC / #B9A98B / #FFF4D9; dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; skin #B97855 / #754631 / #D99A75; hair #171719 / #080809 / #424248. Never draw: a broad or squat build; large hair; a fully tied bow tie; an exuberant grin; an aggressive fist; flashy jewellery; logos, text or real brands.",
+  "description": "An unflappable lounge singer in his fifties, entirely at ease in the room.",
+  "build": "Lean, tall, narrow and controlled. Long clean jacket and trouser lines, low relaxed shoulders; never broad, squat or heavily coiled.",
+  "hair": "A hard jet-black slick side part with one sharp highlight band.",
+  "outfit": "A bright moss dinner jacket with satin peak lapels over a cream dress shirt with an open collar, a black bow tie left hanging undone, black dress trousers with a satin side stripe, and polished black loafers. The dinner-jacket line stays narrow. No hat or headwear.",
+  "performance_style": "Narrow staggered feet with both knees slightly flexed, chin raised, one shoulder angled forward, and the character-right hand at chest height, angled upward and inward toward his mouth.",
+  "recognition_cues": [
+    "a hard jet-black slick side part with one sharp highlight band",
+    "a narrow dinner-jacket line",
+    "a black bow tie hanging undone"
+  ],
+  "palette": [
+    "moss #0D7039 / #074522 / #2FA55E",
+    "cream #E6D9BC / #B9A98B / #FFF4D9",
+    "dark #20232B / #101217 / #3A3E48",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "skin #B97855 / #754631 / #D99A75",
+    "hair #171719 / #080809 / #424248"
+  ],
+  "avoid": [
+    "a broad or squat build",
+    "large hair",
+    "a fully tied bow tie",
+    "an exuberant grin",
+    "an aggressive fist",
+    "flashy jewellery",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
   "animations": {
     "dance": "Refined lounge sway loop: settle the weight through restrained heel-and-toe shifts, let the dinner jacket and undone bow tie follow subtly, and return to the narrow staggered opening stance. The free character-left arm carries the gesture.",
     "sing": {
@@ -17,7 +46,5 @@
     "victory": "One-shot performance finish: make a contained bow and one free-hand acknowledgement, then rise into a tall settled finish.",
     "ko": "Non-contact performance defeat: he stays on his feet while the unflappable control drains out of him — the shoulders slump forward without breaking the dinner-jacket line, and his head hangs low with the chin toward his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   },
-  "props": [
-    "mic"
-  ]
+  "detail_level": 4
 }

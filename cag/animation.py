@@ -17,14 +17,14 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 
-from .assemble import sprite_sheet
+from .assemble import tile
 from .draw import DrawError, draw
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
-from .mask import MaskError, pose_to_cell, set_to_cells, slice_sheet
+from .mask import MaskError, home_x, pose_to_cell, set_to_cells, slice_frame_sheet
 from .motion import Frame, MotionSheet
-from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, sheet_prompt
+from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, frame_sheet_prompt
+from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos
 from .props import clauses
-from .skeleton import write_skeletons
 from .style import detail_frame
 from .spec import CharacterSpec
 
@@ -40,12 +40,17 @@ class AnimationState(TypedDict, total=False):
     work_dir: Path
     #: Standing instruction for every frame in this set.
     set_note: str
-    #: Stick-figure pose reference per frame index, when the sheet carries poses.
+    #: Pose reference per frame index, when the sheet carries poses.
     poses: dict[int, Path]
+    #: Whether those references are photographs of the performer rather than
+    #: drawn figures. They are described very differently to the generator: one
+    #: is a person to copy a pose off and take nothing else from, the other a
+    #: colour-coded diagram carrying no costume at all.
+    photographic: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
-    sheets: list[list[int]]
+    frame_sheets: list[list[int]]
     #: Masked frames registered into the cell, by frame index.
     cells: dict[int, Path]
 
@@ -71,18 +76,27 @@ def view_clause(state: AnimationState) -> str:
     return FRAME_VIEWS[view]
 
 
-def pose_sheets(state: AnimationState) -> AnimationState:
-    """Draw the motion sheet's poses, so each frame is shown its pose, not told it."""
+def pose_cards(state: AnimationState) -> AnimationState:
+    """One pose card per frame, cut from the bundle's traced footage.
+
+    Shown, not told: a cue is a paragraph and an image generator will quietly
+    flatten a paragraph back towards a neutral standing pose. A picture of the
+    pose is not negotiable in the same way.
+
+    The photographs win where it counts. Both references rank the poses about
+    equally against the trace, but measured on amplitude — how big the drawn
+    movement is beside the real one — the drawn cards come back at 0.43-0.70
+    and the photographs at 0.9-1.2. A set that ranks perfectly at half size
+    still reads as a sway. The cost is that a photograph also carries the
+    performer's own costume, which bleeds: a lifted foot came back wearing the
+    dancer's white trainer instead of the character's boot until the prompt
+    named the footwear positively.
+    """
     motion = state["motion"]
-    if not motion.has_poses:
+    if not motion.photos:
         return {"poses": {}}
-    paths = write_skeletons(
-        [frame.pts for frame in motion.frames],
-        motion.floor_y,
-        motion.body_h,
-        state["work_dir"] / "poses" / state["set_name"],
-    )
-    return {"poses": dict(enumerate(paths))}
+    work = state["work_dir"] / "poses" / state["set_name"]
+    return {"poses": dict(enumerate(write_photos(motion.photos, work))), "photographic": True}
 
 
 def set_note_path(state: AnimationState) -> Path:
@@ -136,7 +150,10 @@ def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
             SystemMessage(DIRECTOR_SYSTEM),
             HumanMessage(
                 director_request(
-                    state["bible"], motion.arc, motion.fps, len(motion.frames), motion.view
+                    state["bible"], motion.arc, motion.fps, len(motion.frames), motion.view,
+                    # The brief already says what this set holds. The director
+                    # was reading it out of the identity text instead.
+                    prop_clause(state),
                 )
             ),
         ]
@@ -203,17 +220,37 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     return {"sources": sources}
 
 
-#: Figures per render in sheet mode. The whole set in one image when it fits,
-#: so every figure is drawn at one size against its neighbours.
-# ponytail: 8 fills a 4x2 grid; drop to 4 if the outline comes back thinner than CUT_IN can spare.
-SHEET_FRAMES = 8
+#: Figures per render in sheet mode, drawn as a grid `FIGURES_PER_ROW` wide.
+#:
+#: 12 is the ceiling, measured up the ladder 8/12/16/24/32 on one 4-column grid.
+#: Two separate things break above it. At 16 the count is still right but the
+#: generator stops reading distinct poses and tiles one across the final row —
+#: figures 12-15 came back at silhouette IoU 0.88-0.95, the same pose four
+#: times. At 24 and 32 it will not draw the count asked for at all (20 and 28),
+#: which also makes every per-frame measurement meaningless, because figure `n`
+#: is no longer frame `n`. 8 and 12 both came back clean with no repeats.
+#:
+#: 12 costs resolution: its figures land ~344px tall against ~476px at 8, and
+#: the cell holds a ~390px character, so 12 is upscaled into the cell where 8 is
+#: downsampled into it. Twelve was chosen anyway, to cover a 24-frame set in two
+#: renders rather than three.
+#:
+#: That trade was wrong. Belter's dance at 12 came back with the dancer's white
+#: socks above the character's boots in 11 of 24 figures, and denim shorts in
+#: place of her jeans on the second sheet — while the prompt named the boots and
+#: the jeans positively and the key art beside it showed both. The costume
+#: anchor is a sentence and the photograph is a picture, and at 344px the
+#: picture stops being read as this performer's clothing and starts being read
+#: as the character's. Eight does not argue with the photograph; it makes each
+#: one big enough to read correctly.
+FRAME_SHEET_SIZE = 8
 FIGURES_PER_ROW = 4
 
 #: Draws allowed per sheet before the set is given up on.
 SHEET_ATTEMPTS = 4
 
 
-def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
+def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
     """Draw the set as one image of every frame, then slice it into sources.
 
     The generator is shown all the poses at once and told nothing about size:
@@ -227,12 +264,12 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     poses = state.get("poses", {})
     detail = detail_frame(spec.detail_level)
     sources = {}
-    sheets = []
+    frame_sheets = []
     digest = motion_digest(motion)
     reusable = sources_are_current(state)
-    for start in range(0, len(motion.frames), SHEET_FRAMES):
-        chunk = motion.frames[start : start + SHEET_FRAMES]
-        sheets.append([frame.index for frame in chunk])
+    for start in range(0, len(motion.frames), FRAME_SHEET_SIZE):
+        chunk = motion.frames[start : start + FRAME_SHEET_SIZE]
+        frame_sheets.append([frame.index for frame in chunk])
         # Every frame of this chunk is already cut out and on disk. Redrawing the sheet
         # to slice it again would spend a render to arrive back at these same files, and
         # would do it with whatever note this run happens to hold.
@@ -245,12 +282,13 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
         cues = [(frame.role, frame.instruction) for frame in chunk]
         pose_grid = None
         if poses:
-            pose_grid = sprite_sheet(
+            pose_grid = tile(
                 [poses[frame.index] for frame in chunk],
-                state["work_dir"] / "poses" / state["set_name"] / f"sheet-{start:02d}.png",
+                state["work_dir"] / "poses" / state["set_name"] / f"pose-grid-{start:02d}.png",
                 columns=FIGURES_PER_ROW,
+                cell=(CARD_WIDTH, CARD_HEIGHT),
             )
-        prompt = sheet_prompt(
+        prompt = frame_sheet_prompt(
             spec,
             state["bible"],
             state["set_note"],
@@ -261,6 +299,7 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
             detail_reference=detail is not None,
             per_row=FIGURES_PER_ROW,
             props=prop_clause(state),
+            photographic=state.get("photographic", False),
         )
         references = [state["key_art"], *([detail] if detail else []), *([pose_grid] if pose_grid else [])]
         # The render is of this chunk of this sheet, so the name says so. `draw` keeps
@@ -278,7 +317,7 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
         for attempt in range(SHEET_ATTEMPTS):
             drawn = draw_fn(prompt, path, references=references)
             try:
-                cells = slice_sheet(drawn, len(chunk))
+                cells = slice_frame_sheet(drawn, len(chunk))
                 break
             except MaskError as error:
                 drawn.rename(path.with_name(f"{path.stem}.rejected-{attempt}.png"))
@@ -292,7 +331,7 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     stamp = motion_stamp(state)
     stamp.parent.mkdir(parents=True, exist_ok=True)
     stamp.write_text(motion_digest(motion) + "\n")
-    return {"sources": sources, "sheets": sheets}
+    return {"sources": sources, "frame_sheets": frame_sheets}
 
 
 def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationState:
@@ -310,6 +349,7 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
     motion = state["motion"]
     fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
     poses = {frame.index: frame.pts for frame in motion.frames}
+    airborne = frozenset(frame.index for frame in motion.frames if frame.airborne)
     if single_scale:
         return {
             "cells": set_to_cells(
@@ -319,9 +359,11 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
                 motion.floor_y,
                 motion.body_h,
                 state["spec"].height_inches,
-                state.get("sheets"),
+                state.get("frame_sheets"),
+                airborne,
             )
         }
+    home = home_x(poses)
     return {
         "cells": {
             index: pose_to_cell(
@@ -332,6 +374,8 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
                 motion.body_h,
                 state["spec"].height_inches,
                 fallback,
+                home,
+                index in airborne,
             )
             for index, source in sorted(state["sources"].items())
         }
@@ -339,21 +383,21 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
 
 
 def build_animation_graph(
-    model: BaseChatModel, draw_fn: Callable[..., Path] | None = None, sheet_mode: bool = True
+    model: BaseChatModel, draw_fn: Callable[..., Path] | None = None, frame_sheet_mode: bool = True
 ):
     """Sheet mode draws the whole set in one render; off, it draws a frame at a time."""
     # Resolved here, not as a default, so the module attribute stays swappable.
     draw_fn = draw_fn or draw
     graph = StateGraph(AnimationState)
-    graph.add_node("poses", pose_sheets)
+    graph.add_node("poses", pose_cards)
     graph.add_node("direct", partial(direct, model=model))
-    graph.add_node("mask", partial(mask_frames, single_scale=sheet_mode))
+    graph.add_node("mask", partial(mask_frames, single_scale=frame_sheet_mode))
     graph.add_edge(START, "poses")
     graph.add_edge("poses", "direct")
-    if sheet_mode:
-        graph.add_node("sheet", partial(sheet, draw_fn=draw_fn))
-        graph.add_edge("direct", "sheet")
-        graph.add_edge("sheet", "mask")
+    if frame_sheet_mode:
+        graph.add_node("frame_sheet", partial(frame_sheet, draw_fn=draw_fn))
+        graph.add_edge("direct", "frame_sheet")
+        graph.add_edge("frame_sheet", "mask")
     else:
         graph.add_node("keyframe", partial(keyframe, draw_fn=draw_fn))
         graph.add_node("tween", partial(tween, draw_fn=draw_fn))

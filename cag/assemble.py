@@ -1,6 +1,6 @@
 """Turn registered cells into the things a game and a reviewer actually use.
 
-The sprite sheet is the deliverable and keeps its alpha. The proof is a looping
+The frame sheet is the deliverable and keeps its alpha. The proof is a looping
 GIF flattened onto grey — it exists so a person can watch the motion and check
 the loop seam, which a grid of stills cannot show.
 """
@@ -19,20 +19,26 @@ from .geometry import CELL_HEIGHT, CELL_WIDTH
 PROOF_BACKDROP = (68, 68, 68)
 
 
-def sprite_sheet(cells: Sequence[Path | str], dst: Path | str, columns: int | None = None) -> Path:
+def tile(
+    cells: Sequence[Path | str],
+    dst: Path | str,
+    columns: int | None = None,
+    cell: tuple[int, int] = (CELL_WIDTH, CELL_HEIGHT),
+) -> Path:
     """Lay the cells out left to right, top to bottom, in frame order."""
+    width, height = cell
     cells = [Path(cell) for cell in cells]
     if not cells:
         raise ValueError("no cells to assemble")
     columns = columns or len(cells)
     rows = -(-len(cells) // columns)
 
-    sheet = Image.new("RGBA", (CELL_WIDTH * columns, CELL_HEIGHT * rows), (0, 0, 0, 0))
-    for index, cell in enumerate(cells):
-        with Image.open(cell) as image:
-            if image.size != (CELL_WIDTH, CELL_HEIGHT):
-                raise ValueError(f"{cell} is {image.size}, not the {CELL_WIDTH}x{CELL_HEIGHT} cell")
-            sheet.paste(image.convert("RGBA"), (index % columns * CELL_WIDTH, index // columns * CELL_HEIGHT))
+    sheet = Image.new("RGBA", (width * columns, height * rows), (0, 0, 0, 0))
+    for index, path in enumerate(cells):
+        with Image.open(path) as image:
+            if image.size != (width, height):
+                raise ValueError(f"{path} is {image.size}, not the {width}x{height} cell")
+            sheet.paste(image.convert("RGBA"), (index % columns * width, index // columns * height))
 
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -40,8 +46,8 @@ def sprite_sheet(cells: Sequence[Path | str], dst: Path | str, columns: int | No
     return dst
 
 
-def split_sheet(sheet: Path | str, count: int, columns: int | None = None) -> list[Image.Image]:
-    """Cut a sprite sheet back into cells. The inverse of `sprite_sheet`."""
+def split_frame_sheet(sheet: Path | str, count: int, columns: int | None = None) -> list[Image.Image]:
+    """Cut a frame sheet back into cells. The inverse of `tile`."""
     columns = columns or count
     with Image.open(sheet) as image:
         image = image.convert("RGBA")
@@ -136,7 +142,7 @@ GALLERY = """<!doctype html>
 
 SET_BLOCK = """<h2>{set_name} &middot; {frames} frames at {fps} fps</h2>
 <figure><img src="{proof}" alt="{set_name} loop"><figcaption>proof, {fps} fps</figcaption></figure>
-<div class="sheet"><img src="{sheet}" alt="{set_name} sprite sheet"></div>
+<div class="sheet"><img src="{sheet}" alt="{set_name} frame sheet"></div>
 """
 
 
