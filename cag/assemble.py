@@ -19,20 +19,26 @@ from .geometry import CELL_HEIGHT, CELL_WIDTH
 PROOF_BACKDROP = (68, 68, 68)
 
 
-def sprite_sheet(cells: Sequence[Path | str], dst: Path | str, columns: int | None = None) -> Path:
+def sprite_sheet(
+    cells: Sequence[Path | str],
+    dst: Path | str,
+    columns: int | None = None,
+    cell: tuple[int, int] = (CELL_WIDTH, CELL_HEIGHT),
+) -> Path:
     """Lay the cells out left to right, top to bottom, in frame order."""
+    width, height = cell
     cells = [Path(cell) for cell in cells]
     if not cells:
         raise ValueError("no cells to assemble")
     columns = columns or len(cells)
     rows = -(-len(cells) // columns)
 
-    sheet = Image.new("RGBA", (CELL_WIDTH * columns, CELL_HEIGHT * rows), (0, 0, 0, 0))
-    for index, cell in enumerate(cells):
-        with Image.open(cell) as image:
-            if image.size != (CELL_WIDTH, CELL_HEIGHT):
-                raise ValueError(f"{cell} is {image.size}, not the {CELL_WIDTH}x{CELL_HEIGHT} cell")
-            sheet.paste(image.convert("RGBA"), (index % columns * CELL_WIDTH, index // columns * CELL_HEIGHT))
+    sheet = Image.new("RGBA", (width * columns, height * rows), (0, 0, 0, 0))
+    for index, path in enumerate(cells):
+        with Image.open(path) as image:
+            if image.size != (width, height):
+                raise ValueError(f"{path} is {image.size}, not the {width}x{height} cell")
+            sheet.paste(image.convert("RGBA"), (index % columns * width, index // columns * height))
 
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)

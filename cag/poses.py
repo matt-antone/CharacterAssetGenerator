@@ -26,7 +26,12 @@ from pathlib import Path
 
 from PIL import Image
 
-from .geometry import CELL_HEIGHT, CELL_WIDTH
+#: One pose card. Four across and two down is 1536x1024, the landscape canvas the
+#: generator draws a sheet on, so card N sits exactly where figure N is drawn. It
+#: is also MotionArtist's tile shape (163x220) to within a pixel, so the figure
+#: fills its card; the 560x560 sprite cell left it a third of the width.
+CARD_WIDTH = 384
+CARD_HEIGHT = 512
 
 
 class PoseSheetError(ValueError):
@@ -97,10 +102,43 @@ def cut(sheet_path: Path | str, layout: SheetLayout, count: int) -> list[Image.I
         return [sheet.crop(layout.box(index)) for index in range(count)]
 
 
+def write_photos(photos: list[Path] | tuple[Path, ...], out_dir: Path | str) -> list[Path]:
+    """Letterbox each traced video frame onto a card, numbered in frame order.
+
+    One scale for the whole set, as `write_poses` does, so the performer keeps
+    the sizes they were really filmed at from one frame to the next. Fitting
+    each frame to its own card would flatten exactly the travel the sheet is
+    there to show.
+    """
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    frames = [Image.open(photo).convert("RGB") for photo in photos]
+    # Never past 1: a thumbnail smaller than the card is pasted at the size it
+    # was shipped at, letterboxed. Blowing it up adds no detail, softens the
+    # edges the pose is read from, and is not what the amplitude was measured
+    # on — those renders were fed thumbnails at their native 200px.
+    scale = min(
+        CARD_WIDTH / max(f.width for f in frames),
+        CARD_HEIGHT / max(f.height for f in frames),
+        1.0,
+    )
+
+    paths = []
+    for index, frame in enumerate(frames):
+        size = (max(1, round(frame.width * scale)), max(1, round(frame.height * scale)))
+        card = Image.new("RGB", (CARD_WIDTH, CARD_HEIGHT), (0, 0, 0))
+        card.paste(frame.resize(size, Image.LANCZOS), ((CARD_WIDTH - size[0]) // 2, 0))
+        path = out_dir / f"{index:02d}.png"
+        card.save(path, format="PNG")
+        paths.append(path)
+        frame.close()
+    return paths
+
+
 def write_poses(
     sheet_path: Path | str, layout: SheetLayout, count: int, out_dir: Path | str
 ) -> list[Path]:
-    """Cut the sheet into one cell-sized pose per frame, numbered in frame order.
+    """Cut the sheet into one card per frame, numbered in frame order.
 
     Every tile is scaled by the same factor, so the figures keep the sizes they
     were drawn at relative to each other — the whole set is laid out at one
@@ -111,13 +149,13 @@ def write_poses(
     out_dir.mkdir(parents=True, exist_ok=True)
     cells = cut(sheet_path, layout, count)
     backdrop = cells[0].getpixel((0, 0))
-    scale = min(CELL_WIDTH / layout.cell_w, CELL_HEIGHT / layout.cell_h)
+    scale = min(CARD_WIDTH / layout.cell_w, CARD_HEIGHT / layout.cell_h)
 
     paths = []
     for index, cell in enumerate(cells):
         size = (max(1, round(cell.width * scale)), max(1, round(cell.height * scale)))
-        card = Image.new("RGB", (CELL_WIDTH, CELL_HEIGHT), backdrop)
-        card.paste(cell.resize(size, Image.LANCZOS), ((CELL_WIDTH - size[0]) // 2, 0))
+        card = Image.new("RGB", (CARD_WIDTH, CARD_HEIGHT), backdrop)
+        card.paste(cell.resize(size, Image.LANCZOS), ((CARD_WIDTH - size[0]) // 2, 0))
         path = out_dir / f"{index:02d}.png"
         card.save(path, format="PNG")
         paths.append(path)
