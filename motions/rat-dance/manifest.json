@@ -14,7 +14,7 @@
  "source": {
   "url": "https://youtube.com/shorts/FILJpZiAFo0?si=UJlD33fbRacxAC2_",
   "file": "work/rat-dance/source-FILJpZiAFo0.mp4",
-  "title": "RAT DANCE Tutorial #ratdance #trend #dance #chesstypebeat #dancetutorial",
+  "title": "source-FILJpZiAFo0.mp4",
   "start": 8.625,
   "end": 12.625,
   "speed_factor": 1.0,
@@ -22,8 +22,8 @@
  },
  "arc_written": true,
  "files": {
-  "motion.json": "d2fab1de0754ba698a11d52d6c4dd27a88a35e66e80921ac680d517a933528cf",
-  "rat-dance-motion.html": "9decf5caec863aad30991cd01043b35edfc5328197bb932f8762a77e9d31edf9",
+  "motion.json": "48611bd57e9f2d00537ac751edebb13033915af1fb7b46627bdc3137581e9d08",
+  "rat-dance-motion.html": "27a2b06780d76d8fca267e88e445602683b3fef3b3b6b7c04950df9afa967621",
   "thumbs/f00.jpg": "8fab72493afe647cd6ba98e4914d6b733d31a85db8b23cadc2ffbe5e05f57ce6",
   "thumbs/f01.jpg": "cac12dc06b3a8fe58cde42e1414c0fafe5362428b7bb0bd15b643ea692d04f92",
   "thumbs/f02.jpg": "ff1af0a78ccba09b0b0a5ef3360f2469f031c01831040275c35f0d8c9d3aa2a2",
