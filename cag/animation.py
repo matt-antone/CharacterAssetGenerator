@@ -230,11 +230,20 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
 #: which also makes every per-frame measurement meaningless, because figure `n`
 #: is no longer frame `n`. 8 and 12 both came back clean with no repeats.
 #:
-#: 12 costs some resolution: its figures land ~344px tall against ~476px at 8,
-#: and the cell holds a ~390px character, so 12 is upscaled into the cell where
-#: 8 is downsampled into it. Twelve is chosen anyway because it covers a
-#: 24-frame set in two renders.
-FRAME_SHEET_SIZE = 12
+#: 12 costs resolution: its figures land ~344px tall against ~476px at 8, and
+#: the cell holds a ~390px character, so 12 is upscaled into the cell where 8 is
+#: downsampled into it. Twelve was chosen anyway, to cover a 24-frame set in two
+#: renders rather than three.
+#:
+#: That trade was wrong. Belter's dance at 12 came back with the dancer's white
+#: socks above the character's boots in 11 of 24 figures, and denim shorts in
+#: place of her jeans on the second sheet — while the prompt named the boots and
+#: the jeans positively and the key art beside it showed both. The costume
+#: anchor is a sentence and the photograph is a picture, and at 344px the
+#: picture stops being read as this performer's clothing and starts being read
+#: as the character's. Eight does not argue with the photograph; it makes each
+#: one big enough to read correctly.
+FRAME_SHEET_SIZE = 8
 FIGURES_PER_ROW = 4
 
 #: Draws allowed per sheet before the set is given up on.

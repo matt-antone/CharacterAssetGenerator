@@ -11,5 +11,20 @@
     "portrait-34": "views/portrait-34.png",
     "portrait-80": "views/portrait-80.png"
   },
-  "sets": {}
+  "sets": {
+    "dance": {
+      "frames": 24,
+      "fps": 12,
+      "columns": 8,
+      "sheet": "dance-sheet.png",
+      "proof": "dance-proof.gif"
+    },
+    "sing": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "sing-sheet.png",
+      "proof": "sing-proof.gif"
+    }
+  }
 }
