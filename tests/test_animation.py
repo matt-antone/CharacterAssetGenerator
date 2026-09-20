@@ -17,7 +17,7 @@ from cag.mask import pose_extent, stature
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
 
-SAMPLE = "tests/fixtures/sample-motion.json"
+SAMPLE = "motions/sample/motion.json"
 NOTE = "The microphone stays in the character-right hand for every frame."
 
 

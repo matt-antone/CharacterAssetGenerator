@@ -8,7 +8,7 @@ import pytest
 
 from cag.motion import Frame, library, read_bundle, MotionError, load_motion
 
-SAMPLE = "tests/fixtures/sample-motion.json"
+SAMPLE = "motions/sample/motion.json"
 
 
 def motion_sheet(tmp_path, **overrides):

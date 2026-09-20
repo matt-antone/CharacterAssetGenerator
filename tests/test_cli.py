@@ -19,7 +19,7 @@ from cag.spec import load_spec
 from tests.test_animation import fake_draw
 from tests.test_static_sheet import flat_cutout
 
-SAMPLE = "tests/fixtures/sample-motion.json"
+SAMPLE = "motions/sample/motion.json"
 
 
 @pytest.fixture

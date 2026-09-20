@@ -420,7 +420,7 @@ def test_stature_tracks_extent_across_a_real_traced_set():
     """The landmarks are 2D, so a limb angled at the camera foreshortens and
     stature alone wobbles by ~9%. `frame_scale` divides it by the extent, and
     that ratio is several times steadier, because both shrink together."""
-    motion = json.loads(Path("tests/fixtures/sample-motion.json").read_text())
+    motion = json.loads(Path("motions/sample/motion.json").read_text())
     poses = [frame["pts"] for frame in motion["frames"]]
     statures = [stature(pose, motion["body_h"]) for pose in poses]
     ratios = [

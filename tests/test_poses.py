@@ -52,11 +52,33 @@ def test_photo_cards_are_never_blown_up_past_their_shipped_size(tmp_path):
     assert lit.any(axis=1).sum() == 100
 
 
-def test_a_real_bundle_hands_over_one_photograph_per_frame():
-    bundle = read_bundle(Path("motions/shuffle-1"))
+SAMPLE = Path("motions/sample")
+
+
+def copied(tmp_path, drop=None, **manifest_overrides):
+    """The sample bundle in a temp directory, optionally missing one thumb."""
+    root = tmp_path / "bundle"
+    (root / "thumbs").mkdir(parents=True)
+    manifest = json.loads((SAMPLE / "manifest.json").read_text())
+    manifest.update(manifest_overrides)
+    if drop:
+        del manifest["files"][drop]
+    (root / "manifest.json").write_text(json.dumps(manifest))
+    (root / "motion.json").write_text((SAMPLE / "motion.json").read_text())
+    for name in manifest["files"]:
+        if name != "motion.json":
+            (root / name).write_bytes((SAMPLE / name).read_bytes())
+    return root
+
+
+def test_the_sample_bundle_hands_over_one_photograph_per_frame():
+    """motions/sample is the worked example of the input contract. If this fails,
+    the contract and the loader have drifted apart."""
+    bundle = read_bundle(SAMPLE)
     assert len(bundle.photos) == bundle.frame_count
     assert [p.name for p in bundle.photos] == [f"f{i:02d}.jpg" for i in range(bundle.frame_count)]
     assert bundle.load().photos == bundle.photos
+    assert bundle.load().has_poses, "every frame carries landmarks"
 
 
 def test_a_bundle_missing_a_photograph_carries_none_rather_than_mispairing(tmp_path):
@@ -65,21 +87,17 @@ def test_a_bundle_missing_a_photograph_carries_none_rather_than_mispairing(tmp_p
     There is no second pose reference to fall back to: the set is drawn from its
     cues alone, which is loud in the render rather than quietly half-sized.
     """
-    source = Path("motions/shuffle-1")
-    manifest = json.loads((source / "manifest.json").read_text())
-    manifest["files"] = {
-        name: value for name, value in manifest["files"].items() if name != "thumbs/f05.jpg"
-    }
-    (tmp_path / "manifest.json").write_text(json.dumps(manifest))
-    for name in manifest["files"]:
-        target = tmp_path / name
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes((source / name).read_bytes())
-    assert read_bundle(tmp_path).photos == ()
+    assert read_bundle(copied(tmp_path, drop="thumbs/f02.jpg")).photos == ()
 
 
-def test_a_spritesheet_in_the_manifest_is_ignored():
-    """MotionArtist still ships one; nothing here reads it."""
-    bundle = read_bundle(Path("motions/shuffle-1"))
+def test_an_unknown_manifest_key_is_ignored(tmp_path):
+    """A bundle may ship and declare a pose grid of its own; nothing here reads
+    it, and a key the loader does not know must not stop the bundle loading."""
+    bundle = read_bundle(copied(
+        tmp_path,
+        pose_grid={"cols": 4, "rows": 2, "tile_w": 60, "tile_h": 70},
+        seam_ratio=1.49,
+    ))
+    assert len(bundle.photos) == bundle.frame_count
     assert not hasattr(bundle, "poses")
     assert not hasattr(bundle.load(), "pose_layout")
