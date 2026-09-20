@@ -14,7 +14,6 @@ import json
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-from .poses import SheetLayout
 
 #: Drawn first, by the keyframer. Everything else is a tweener's in-between.
 LOCKED_ROLES = ("key", "pilot")
@@ -64,16 +63,10 @@ class MotionSheet:
     playback: str
     arc: str
     frames: tuple[Frame, ...]
-    #: The bundle's sprite sheet and where each frame sits on it. This is the
-    #: pose reference the keyframer is shown; a sheet read straight off disk
-    #: rather than out of a bundle has no sprite sheet and so carries neither.
-    poses: Path | None = None
-    pose_layout: SheetLayout | None = None
-    #: The traced video frames, one per motion frame. Preferred over the drawn
-    #: sprite sheet: measured against the trace, renders made from photographs
-    #: carry 0.9-1.2 of the movement in it, where the drawn cards carry 0.43-0.70
-    #: — the poses rank correctly either way, but the drawn ones come out small
-    #: enough to read as a sway rather than the motion that was traced.
+    #: The traced video frames, one per motion frame: the pose reference the
+    #: keyframer is shown. Measured against the trace, renders made from them
+    #: carry 0.9-1.2 of the movement in it. A sheet read straight off disk
+    #: rather than out of a bundle has none.
     photos: tuple[Path, ...] = ()
     #: Where the performer's floor sits, and their body height, both normalised.
     floor_y: float = 0.0
@@ -207,13 +200,8 @@ class Bundle:
     #: The manifest's own directory, and the motion data it names inside it.
     root: Path
     sheet: Path
-    #: The sprite sheet of every frame's figure, and the layout that cuts it up.
-    #: Both come from the manifest, so a bundle exported before sprite sheets
-    #: existed simply has no pose reference rather than a guessed one.
-    poses: Path | None = None
-    pose_layout: SheetLayout | None = None
     #: One traced video frame per motion frame, in order, when the bundle ships
-    #: a complete set. The preferred pose reference; see `photos` on MotionSheet.
+    #: a complete set. The pose reference; see `photos` on MotionSheet.
     photos: tuple[Path, ...] = ()
 
     def load(self) -> MotionSheet:
@@ -224,9 +212,7 @@ class Bundle:
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
                 f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
             )
-        return replace(
-            motion, poses=self.poses, pose_layout=self.pose_layout, photos=self.photos
-        )
+        return replace(motion, photos=self.photos)
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -255,20 +241,12 @@ def read_bundle(path: Path | str) -> Bundle:
             f"{manifest} names {len(named)} motion files; a bundle carries exactly one"
         )
 
-    # The sprite sheet is the pose reference. It is taken only when the manifest
-    # both names the image and declares its layout: without the layout the grid
-    # would have to be measured off the picture, which is cag guessing at
-    # MotionArtist's renderer instead of reading what it published.
-    drawn = [f for f in data["files"] if Path(f).name.endswith("-spritesheet.png")]
-    block = data.get("spritesheet")
-    poses = manifest.parent / drawn[0] if len(drawn) == 1 and block else None
-
-    # The traced frames themselves. A photograph of the performer carries what a
-    # drawn skeleton cannot — the whole body at once, at the size and commitment
-    # it was really done at — and renders drawn from it came back at 0.9-1.2 of
-    # the movement in the trace where skeleton cards sat at 0.43-0.70. Taken only
-    # when there is one per frame, in order: a partial set would silently pair
-    # figure n with the wrong frame.
+    # The traced frames. A photograph of the performer carries what a drawn
+    # skeleton cannot — the whole body at once, at the size and commitment it
+    # was really done at. Taken only when there is one per frame, in order: a
+    # partial set would silently pair figure n with the wrong frame, so it is
+    # dropped entirely and the set is drawn with no pose reference at all.
+    # A `spritesheet` block in the manifest is ignored; nothing reads it.
     thumbs = sorted(f for f in data["files"] if Path(f).parent.name == "thumbs")
     photos = (
         tuple(manifest.parent / f for f in thumbs)
@@ -285,8 +263,6 @@ def read_bundle(path: Path | str) -> Bundle:
         seam=str(data.get("seam", "")).strip(),
         root=manifest.parent,
         sheet=manifest.parent / named[0],
-        poses=poses,
-        pose_layout=SheetLayout.from_manifest(block) if poses else None,
         photos=photos,
     )
 

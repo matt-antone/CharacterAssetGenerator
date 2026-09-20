@@ -2,7 +2,7 @@ import numpy
 import pytest
 from PIL import Image, ImageSequence
 
-from cag.assemble import PORTRAIT_SIZES, PROOF_BACKDROP, gif_proof, portrait, split_sheet, sprite_sheet
+from cag.assemble import PORTRAIT_SIZES, PROOF_BACKDROP, gif_proof, portrait, split_frame_sheet, tile
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH
 
 
@@ -18,7 +18,7 @@ def cells(tmp_path, count=4):
 
 
 def test_sheet_is_a_strip_of_cells_in_order(tmp_path):
-    sheet = sprite_sheet(cells(tmp_path), tmp_path / "sheet.png")
+    sheet = tile(cells(tmp_path), tmp_path / "sheet.png")
     with Image.open(sheet) as image:
         assert image.size == (CELL_WIDTH * 4, CELL_HEIGHT)
         assert image.getpixel((CELL_WIDTH * 2 + 50, 50))[0] == 50  # third cell
@@ -26,17 +26,17 @@ def test_sheet_is_a_strip_of_cells_in_order(tmp_path):
 
 def test_sheet_survives_a_split_round_trip(tmp_path):
     paths = cells(tmp_path)
-    sheet = sprite_sheet(paths, tmp_path / "sheet.png")
-    for original, restored in zip(paths, split_sheet(sheet, len(paths))):
+    sheet = tile(paths, tmp_path / "sheet.png")
+    for original, restored in zip(paths, split_frame_sheet(sheet, len(paths))):
         with Image.open(original) as before:
             assert numpy.array_equal(numpy.array(before.convert("RGBA")), numpy.array(restored))
 
 
 def test_sheet_wraps_onto_rows(tmp_path):
-    sheet = sprite_sheet(cells(tmp_path), tmp_path / "sheet.png", columns=2)
+    sheet = tile(cells(tmp_path), tmp_path / "sheet.png", columns=2)
     with Image.open(sheet) as image:
         assert image.size == (CELL_WIDTH * 2, CELL_HEIGHT * 2)
-    restored = split_sheet(sheet, 4, columns=2)
+    restored = split_frame_sheet(sheet, 4, columns=2)
     assert restored[3].getpixel((50, 50))[0] == 70  # fourth cell, second row
 
 
@@ -44,7 +44,7 @@ def test_sheet_rejects_an_unregistered_cell(tmp_path):
     odd = tmp_path / "odd.png"
     Image.new("RGBA", (10, 10)).save(odd)
     with pytest.raises(ValueError, match=f"not the {CELL_WIDTH}x{CELL_HEIGHT} cell"):
-        sprite_sheet([odd], tmp_path / "sheet.png")
+        tile([odd], tmp_path / "sheet.png")
 
 
 def test_proof_loops_at_the_declared_rate(tmp_path):
@@ -64,7 +64,7 @@ def test_proof_flattens_transparency_onto_grey(tmp_path):
 
 def test_empty_input_is_rejected(tmp_path):
     with pytest.raises(ValueError, match="no cells"):
-        sprite_sheet([], tmp_path / "sheet.png")
+        tile([], tmp_path / "sheet.png")
     with pytest.raises(ValueError, match="no cells"):
         gif_proof([], tmp_path / "proof.gif", fps=4)
 

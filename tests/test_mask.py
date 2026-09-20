@@ -269,11 +269,11 @@ def figure_sheet(path, boxes, size=(400, 300)):
 
 
 def test_slice_sheet_finds_figures_in_reading_order(tmp_path):
-    from cag.mask import slice_sheet
+    from cag.mask import slice_frame_sheet
 
     # Two rows of two, the second row shifted so a fixed grid would miss it.
     boxes = [(20, 20, 80, 130), (150, 30, 220, 130), (40, 170, 90, 280), (250, 160, 330, 280)]
-    cells = slice_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 4)
+    cells = slice_frame_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 4)
     shades = [cell.getpixel((cell.width // 2, cell.height // 2))[0] for cell in cells]
     assert shades == [30, 50, 70, 90]
     for cell, (l, t, r, b) in zip(cells, boxes):
@@ -282,22 +282,22 @@ def test_slice_sheet_finds_figures_in_reading_order(tmp_path):
 
 
 def test_slice_sheet_bridges_a_gap_inside_one_figure(tmp_path):
-    from cag.mask import slice_sheet
+    from cag.mask import slice_frame_sheet
 
     # A raised arm 6px clear of the torso is still one figure.
     boxes = [(20, 40, 60, 130), (66, 20, 76, 80)]
-    cells = slice_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 1)
+    cells = slice_frame_sheet(figure_sheet(tmp_path / "sheet.png", boxes), 1)
     assert cells[0].width == 76 - 20 + 32
 
 
 def test_slice_sheet_rejects_the_wrong_figure_count(tmp_path):
-    from cag.mask import slice_sheet
+    from cag.mask import slice_frame_sheet
 
     with pytest.raises(MaskError, match="holds 2 figures, not 3"):
-        slice_sheet(figure_sheet(tmp_path / "sheet.png", [(20, 20, 60, 100), (100, 20, 140, 100)]), 3)
+        slice_frame_sheet(figure_sheet(tmp_path / "sheet.png", [(20, 20, 60, 100), (100, 20, 140, 100)]), 3)
 
 
-from cag.mask import slice_sheet  # noqa: E402
+from cag.mask import slice_frame_sheet  # noqa: E402
 
 
 def sheet_with_overlapping_rows(path, backdrop=(247, 4, 248)):
@@ -321,7 +321,7 @@ def sheet_with_overlapping_rows(path, backdrop=(247, 4, 248)):
 
 def test_a_raised_hand_beside_the_row_above_still_counts_eight_figures(tmp_path):
     sheet = sheet_with_overlapping_rows(tmp_path / "sheet-00.png")
-    assert len(slice_sheet(sheet, 8)) == 8
+    assert len(slice_frame_sheet(sheet, 8)) == 8
 
 
 def test_a_detached_piece_counts_with_its_figure_not_as_one(tmp_path):
@@ -332,7 +332,7 @@ def test_a_detached_piece_counts_with_its_figure_not_as_one(tmp_path):
         image.paste((0, 0, 0), (x + 20, 200, x + 80, 380))
     image.paste((0, 0, 0), (14, 2, 22, 8))  # a hair spike clear of the head
     sheet = image.save(p := tmp_path / "sheet-00.png") or p
-    assert len(slice_sheet(sheet, 8)) == 8
+    assert len(slice_frame_sheet(sheet, 8)) == 8
 
 
 def test_a_sheet_drawn_short_is_still_rejected(tmp_path):
@@ -342,7 +342,7 @@ def test_a_sheet_drawn_short_is_still_rejected(tmp_path):
         image.paste((0, 0, 0), (x, 10, x + 60, 190))
     sheet = image.save(p := tmp_path / "sheet-00.png") or p
     with pytest.raises(MaskError, match="holds 4 figures, not 8"):
-        slice_sheet(sheet, 8)
+        slice_frame_sheet(sheet, 8)
 
 
 def test_raised_arms_do_not_shrink_a_sheet_with_no_landmarks(tmp_path):
@@ -420,7 +420,7 @@ def test_stature_tracks_extent_across_a_real_traced_set():
     """The landmarks are 2D, so a limb angled at the camera foreshortens and
     stature alone wobbles by ~9%. `frame_scale` divides it by the extent, and
     that ratio is several times steadier, because both shrink together."""
-    motion = json.loads(Path("tests/fixtures/sample-motion.json").read_text())
+    motion = json.loads(Path("motions/sample/motion.json").read_text())
     poses = [frame["pts"] for frame in motion["frames"]]
     statures = [stature(pose, motion["body_h"]) for pose in poses]
     ratios = [

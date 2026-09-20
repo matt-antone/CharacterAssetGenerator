@@ -626,7 +626,7 @@ def _reading_order(figures: list[list[int]]) -> list[list[int]]:
     return ordered
 
 
-def slice_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> list[Image.Image]:
+def slice_frame_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXELS) -> list[Image.Image]:
     """Cut one render holding several figures into one source image per figure.
 
     Figures are found, never assumed: regions of character are followed through
@@ -661,7 +661,7 @@ def set_to_cells(
     floor_y: float,
     body_h: float,
     height_inches: float,
-    sheets: list[list[int]] | None = None,
+    frame_sheets: list[list[int]] | None = None,
     airborne: frozenset[int] = frozenset(),
 ) -> dict[int, Path]:
     """Register frames drawn together, one scale per sheet they were drawn on.
@@ -673,11 +673,11 @@ def set_to_cells(
     measured per sheet — the median of what each frame's pose says — and
     applied to every frame from it. Measuring every frame on its own, as
     `pose_to_cell` does, would put measurement noise back between frames the
-    generator had already drawn the same size. Two sheets of the same set do
+    generator had already drawn the same size. Two frame sheets of the same set do
     not share a magnification, though: the first came back 8% larger than the
     second, and one factor across both put a size pop at the seam.
 
-    `sheets` lists the frame indices drawn together; absent, every frame is
+    `frame_sheets` lists the frame indices drawn together; absent, every frame is
     taken as one sheet.
 
     A sheet with no landmarks has nothing to read a pose from, and the key
@@ -694,7 +694,7 @@ def set_to_cells(
     subjects = {index: cutout(source) for index, source in sorted(sources.items())}
     cells = {}
     home = home_x(poses)
-    for group in sheets or [list(subjects)]:
+    for group in frame_sheets or [list(subjects)]:
         if body_h and all(poses.get(index) for index in group):
             scale = statistics.median(
                 frame_scale(subjects[index], poses[index], floor_y, body_h, height_inches)

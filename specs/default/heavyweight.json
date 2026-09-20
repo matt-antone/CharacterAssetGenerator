@@ -1,7 +1,40 @@
 {
+  "id": "heavyweight",
   "name": "Heavyweight",
   "height": "6' 4\"",
-  "description": "A classically trained singer with the roster's largest mass and a dignified, formal presence. Very broad, block-like, heavy and centred with large formal hands; never sloppy, comic or hunched. His recognition cues are a bald crown, a full grey beard and moustache widening the head in hard deliberate tone bands, a very broad block-like torso, a centred white bow tie and shirt front, and large folded hands, all readable without facial detail; no headwear. He wears a steel evening coat with clear lapels and short coat tails, a centred white shirt front and white bow tie, dark formal trousers, and polished dark shoes. Headset, stand, cable, handheld prop, cane or weapon; his large hands stay folded or calmly overlapped at the front. His ready stance is heavy and grounded, feet set beneath the body, shoulders broad, chest open, hands calmly folded. Palette, as base/shadow/highlight per material: dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; steel #4A4E54 / #272A2E / #747982; shirt #F0EEE7 / #B9B7B0 / #FFFFFF; skin #A9684E / #68402F / #CD8A69; beard #77797D / #44464A / #B0B2B5. Weapon or cane; top hat or monocle; comic obesity; sloppy posture; exaggerated anger; detached prop; top hat, monocle, cane, or weapon; comic-obesity tailoring; sloppy open clothing; logos, text, or real brands.",
+  "description": "A classically trained singer with the roster's largest mass and a dignified, formal presence.",
+  "build": "Very broad, block-like, heavy and centred, with large formal hands; never sloppy, comic or hunched.",
+  "face": "A bald crown above a full grey beard and moustache that widen the head in hard deliberate tone bands.",
+  "outfit": "A steel evening coat with clear lapels and short coat tails, a centred white shirt front and white bow tie, dark formal trousers, and polished dark shoes. No headwear.",
+  "performance_style": "Heavy and grounded: feet set beneath the body, shoulders broad, chest open, and the large hands folded or calmly overlapped at the front.",
+  "recognition_cues": [
+    "a bald crown",
+    "a full grey beard and moustache widening the head in hard deliberate tone bands",
+    "a very broad block-like torso",
+    "a centred white bow tie and shirt front",
+    "large folded hands"
+  ],
+  "palette": [
+    "dark #20232B / #101217 / #3A3E48",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "steel #4A4E54 / #272A2E / #747982",
+    "shirt #F0EEE7 / #B9B7B0 / #FFFFFF",
+    "skin #A9684E / #68402F / #CD8A69",
+    "beard #77797D / #44464A / #B0B2B5"
+  ],
+  "avoid": [
+    "Weapon or cane",
+    "top hat or monocle",
+    "comic obesity",
+    "sloppy posture",
+    "exaggerated anger",
+    "detached prop",
+    "top hat, monocle, cane, or weapon",
+    "comic-obesity tailoring",
+    "sloppy open clothing",
+    "logos, text, or real brands",
+    "a headset, stand, cable, handheld prop, cane or weapon"
+  ],
   "animations": {
     "dance": "Dignified classical dance loop: make two heavy measured weight shifts, let the coat tails follow, open the folded hands briefly in a formal musical gesture, then return them calmly to the front.",
     "sing": "Formal vocal loop without a microphone: expand the broad chest for a sustained note, unfold one large hand from the front for a controlled phrase, then refold both hands in the centered stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",

@@ -67,11 +67,17 @@ are a per-render coin flip, not a broken set. Re-running the same `uv run cag bu
 redraws only the missing sets, because completed frames are cached and skipped,
 so repeated passes converge.
 
-## Keep the bible
+## The bible comes from the brief, not from a model
 
-`work/<slug>/bible.txt` is the locked visual description every frame was drawn
-against. When clearing artifacts for a fresh render, delete everything else
-under `work/<slug>/` and leave that file, unless a new identity is wanted.
+A brief that fills `build`, `face`, `hair`, `outfit` or `palette` assembles its
+own bible (`assemble_bible`, `cag/prompts.py`). Nothing is cached: the text is a
+function of the spec, so the spec is the record and git can show it to you. Edit
+the spec, not a file under `work/`.
+
+`work/<slug>/bible.txt` is only written for a brief that fills none of those
+fields, where a model still writes the paragraph and it is frozen so later sets
+quote the same identity. If such a file exists, keep it when clearing artifacts
+for a fresh render; for every brief in `specs/` it is ignored and stale.
 
 ## Never hand over `index.html` on its own
 
@@ -109,6 +115,86 @@ sets' sheets and GIFs are still on disk, untouched — only the page forgot them
 
 Finish with a full `uv run cag build <spec>` afterwards. Completed frames are cached and
 skipped, so it costs almost nothing and puts every set back on the page.
+
+## Installing a motion bundle
+
+Bundles arrive as zips. `library()` globs `motions/*/manifest.json`, so a zip in
+`motions/` is inert — nothing reads it and nothing warns you.
+
+Installing one is a single action with four parts. Doing three of them leaves
+the library lying:
+
+1. Extract into `motions/`, keeping the bundle's own directory name exactly.
+   **Never rename on the way in.** A bundle carries its name in three places —
+   the directory, the manifest's `name`, and the `name` inside `motion.json` —
+   and renaming one desyncs it from the other two. `library()` keys on the
+   manifest; the build log prints the motion sheet's copy.
+2. Delete the zip.
+3. Delete the bundle it supersedes. A re-cut arrives under its own trace name
+   and lands *beside* the old one rather than over it, so nothing breaks and a
+   brief still naming the old one silently renders the old motion. Silence is
+   the failure mode here.
+4. Repoint every brief that named the old bundle. A brief naming a bundle that
+   is gone fails loudly and by name; a brief naming a stale one does not fail.
+
+Then check it before trusting it:
+
+```bash
+.venv/bin/python -c "
+from cag.motion import library
+for n, b in sorted(library('motions').items()):
+    m = b.load()
+    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {b.playback} seam={b.seam!r} '
+          f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
+          f'travel={m.travel:.3f}')"
+```
+
+One pass catches everything that matters. A manifest that disagrees with its
+motion sheet raises. A short thumb set shows as `photos=0`, which means that set
+renders with no pose reference at all. `playback` must suit the set: a `loop`
+trace seams back to frame 0, a `one-shot` one does not, and driving a looping
+set from a one-shot cut gives a dance that plays once.
+
+A bundle's name is its trace — label, video id and start second — because a
+label alone is a genre. Two different dances once collided on `shuffle`, and the
+baselines measured against one silently came to refer to the other.
+
+`motions/sample` is the worked example of the format and the only motion fixture
+the tests use. It is not a trace; leave it installed.
+
+## Words
+
+Agreed with the MotionArtist repo after one word for two things caused three
+false reports between them. **Never write "sheet", "grid", "sprite sheet" or
+"spritesheet" unqualified** — in code, comments, filenames or conversation.
+
+A new term is named here before it is used.
+
+| term | what it is |
+| --- | --- |
+| **motion bundle** | `motions/<name>/`, identified by its manifest (`Bundle`) |
+| **manifest** | the bundle's `manifest.json` (`read_bundle`) |
+| **motion sheet** | the contents of `motion.json` (`MotionSheet`, `load_motion`). The one place "sheet" may appear, always qualified |
+| **traced sheet** / **written sheet** | a motion sheet from a bundle, versus one `cag/motion_writer.py` generated from the brief's prose. A written sheet has no traced frames and therefore no pose reference at all |
+| **traced frame** | one photograph of the performer, `thumbs/fNN.jpg` in a bundle |
+| **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
+| **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |
+| **pose reference** | the umbrella concept. Today always pose cards and pose grids made from traced frames; nothing else qualifies |
+| **frame sheet** | many frames of one character drawn in one render. The chunk renders under `work/<char>/source/<set>/`, and the deliverable at `outputs/<char>/<set>-sheet.png` |
+| **key art** | the approved character reference render |
+| **bible** | the identity text quoted into every prompt |
+| **set** | one animation: dance, sing, flinch, guard, entrance, victory, ko |
+
+`tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
+both the pose grid and the frame sheet, and is never a name for either.
+
+Retired, do not reintroduce: "sprite sheet" and "spritesheet" (they meant three
+different objects), and "skeleton" (the drawn-figure pose reference, deleted).
+
+cag tiles its own pose grid from a bundle's loose traced frames and ignores any
+grid the bundle ships pre-tiled. The tiling has to match the figure layout the
+same prompt asks for, and those constants are cag's render batch, not a property
+of the footage.
 
 ## graft skill
 

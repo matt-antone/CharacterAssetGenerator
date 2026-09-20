@@ -1,7 +1,50 @@
 {
+  "id": "spot",
   "name": "Spot",
   "height": "6' 1\"",
-  "description": "A big friendly werewolf who lives for the howling chorus of classic rock anthems; goofy, eager and loyal, more golden retriever than monster. Broad-chested and shaggy with long arms, a deep chest tapering to a narrower waist, and digitigrade wolf legs, standing upright and level like the rest of the roster with weight even over both feet; never crouched, hunched, prowling or on all fours. His recognition cues are a full wolf head with a long muzzle, tall pointed ears standing upright, a shaggy grey-brown coat with a lighter cream chest and muzzle, one dark brown patch around the character-left eye, a bushy tail, and a torn red plaid flannel shirt, all readable without facial detail. No hat or headwear. He wears a red plaid flannel shirt with the sleeves ripped off at the shoulders and a few ragged tears across the back, worn open over the cream chest fur, and faded blue jeans torn off raggedly at mid-shin; his large clawed wolf feet are bare, and a loose red bandana is knotted around his neck. The claws are short and blunt. His ready stance is upright and eager, feet planted, chest open, ears up, tail raised in a happy curve, the free character-left hand relaxed at the side, and a big open-mouthed friendly grin with the tongue just showing. Palette, as base/shadow/highlight per material: fur #7C6E62 / #463D36 / #A89A8C; cream fur #D8CBB4 / #A1937D / #F2E8D6; eye patch #4A3526 / #271B13 / #6E5240; plaid red #B3262B / #6E1418 / #DE4F52; plaid dark #20232B / #101217 / #3A3E48; denim #4A6A98 / #2A3F5E / #7896C2; bandana #C0302F / #751A1A / #E5625F; claws #3A3634 / #1C1A19 / #5E5A57; nose #1B1A1E; tongue #C9606B; eye amber #E0A030. Never draw: blood, gore or prey; bared fangs in a snarl, a threatening glare or raised hackles; long sharp or hooked claws; a crouched, hunched, prowling or four-legged posture; a full moon or night backdrop; human hair or a human face; shoes; a shirt left intact or buttoned closed; logos, text or real brands.",
+  "description": "A big friendly werewolf who lives for the howling chorus of classic rock anthems; goofy, eager and loyal, more golden retriever than monster.",
+  "build": "Broad-chested and shaggy with long arms, a deep chest tapering to a narrower waist, and digitigrade wolf legs. Stands upright and level like the rest of the roster, weight even over both feet.",
+  "face": "A full wolf head with a long muzzle, tall pointed ears standing upright, one dark brown patch around the character-left eye, amber eyes, and a big open-mouthed friendly grin with the tongue just showing.",
+  "hair": "A shaggy grey-brown coat with a lighter cream chest and muzzle, and a bushy tail. Fur, not human hair.",
+  "outfit": "A red plaid flannel shirt with the sleeves ripped off at the shoulders and a few ragged tears across the back, worn open over the cream chest fur. Faded blue jeans torn off raggedly at mid-shin. A loose red bandana knotted around his neck. His large clawed wolf feet are bare — he wears no footwear of any kind. The claws are short and blunt.",
+  "personality": "Goofy, eager and loyal. Reads as delighted to be on stage.",
+  "performance_style": "Upright and eager: feet planted, chest open, ears up, tail raised in a happy curve, the free character-left hand relaxed at the side.",
+  "recognition_cues": [
+    "full wolf head with a long muzzle",
+    "tall pointed ears standing upright",
+    "shaggy grey-brown coat with a lighter cream chest and muzzle",
+    "one dark brown patch around the character-left eye",
+    "a bushy tail",
+    "a torn red plaid flannel shirt"
+  ],
+  "palette": [
+    "fur #7C6E62 / #463D36 / #A89A8C",
+    "cream fur #D8CBB4 / #A1937D / #F2E8D6",
+    "eye patch #4A3526 / #271B13 / #6E5240",
+    "plaid red #B3262B / #6E1418 / #DE4F52",
+    "plaid dark #20232B / #101217 / #3A3E48",
+    "denim #4A6A98 / #2A3F5E / #7896C2",
+    "bandana #C0302F / #751A1A / #E5625F",
+    "claws #3A3634 / #1C1A19 / #5E5A57",
+    "nose #1B1A1E",
+    "tongue #C9606B",
+    "eye amber #E0A030"
+  ],
+  "avoid": [
+    "shoes, boots or any footwear",
+    "human hair or a human face",
+    "blood, gore or prey",
+    "bared fangs in a snarl, a threatening glare or raised hackles",
+    "long sharp or hooked claws",
+    "a crouched, hunched, prowling or four-legged posture",
+    "a full moon or night backdrop",
+    "a shirt left intact or buttoned closed",
+    "a hat or headwear",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
   "animations": {
     "dance": "Eager rock dance loop: bounce on the digitigrade legs through two happy side steps, let the tail wag and the ragged flannel flap, bob the head so the tall ears flop slightly, then bounce back into his upright eager stance.",
     "sing": {
@@ -15,8 +58,5 @@
     "entrance": "One-shot entrance: bound in with springy upright strides, skid to a happy stop, give a quick full-body shake that ruffles the fur and flannel, then plant into the upright ready stance with the tail curled high.",
     "victory": "One-shot song-finish celebration: throw the free fist overhead, tail wagging hard, let out one short triumphant howl with the muzzle up, then hold a proud upright pose with a big tongue-out grin.",
     "ko": "Non-contact performance defeat: he stays on his feet while the enthusiasm drains out of him — the tall ears droop flat to the sides, the tail sinks low between the legs, and his head hangs with the muzzle pointed toward the floor in a hangdog sulk. He holds a standing, visibly dejected finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, lying down, dropping to all fours or going to the ground. Do not imply a hit, injury or opponent."
-  },
-  "props": [
-    "mic"
-  ]
+  }
 }

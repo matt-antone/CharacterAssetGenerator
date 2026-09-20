@@ -17,6 +17,23 @@ from .geometry import parse_height
 from .style import DEFAULT_DETAIL_LEVEL, DETAIL_LEVELS
 
 HEIGHT_PATTERN = re.compile(r"^\d+'(\s*\d+\")?$")
+ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+#: The optional prose fields specs/character.schema.json publishes. A brief that
+#: fills them says a costume fact once, in its own field, instead of burying it
+#: in the description for a regex to dig back out.
+TEXT_FIELDS = (
+    "age",
+    "build",
+    "face",
+    "hair",
+    "outfit",
+    "prop",
+    "personality",
+    "performance_style",
+)
+#: The optional list fields, same schema, same reason.
+LIST_FIELDS = ("palette", "recognition_cues", "avoid")
 
 
 class SpecError(ValueError):
@@ -42,10 +59,25 @@ class CharacterSpec:
     motions: dict[str, str] = field(default_factory=dict)
     #: Rendering density on the ten-step scale. Nothing else about the look.
     detail_level: int = DEFAULT_DETAIL_LEVEL
+    #: The brief's own slug, when it names one. Otherwise the name makes it.
+    id: str = ""
+    #: TEXT_FIELDS, each empty unless the brief fills it.
+    age: str = ""
+    build: str = ""
+    face: str = ""
+    hair: str = ""
+    outfit: str = ""
+    prop: str = ""
+    personality: str = ""
+    performance_style: str = ""
+    #: LIST_FIELDS, each empty unless the brief fills it.
+    palette: tuple[str, ...] = ()
+    recognition_cues: tuple[str, ...] = ()
+    avoid: tuple[str, ...] = ()
 
     @property
     def slug(self) -> str:
-        return re.sub(r"[^a-z0-9]+", "-", self.name.lower()).strip("-")
+        return self.id or re.sub(r"[^a-z0-9]+", "-", self.name.lower()).strip("-")
 
     @property
     def height_inches(self) -> float:
@@ -62,7 +94,17 @@ def load_spec(path: Path | str) -> CharacterSpec:
     if not isinstance(data, dict):
         raise SpecError(f"{path} must contain a JSON object")
 
-    unknown = set(data) - {"name", "height", "description", "animations", "detail_level", "props"}
+    unknown = set(data) - {
+        "name",
+        "height",
+        "description",
+        "animations",
+        "detail_level",
+        "props",
+        "id",
+        *TEXT_FIELDS,
+        *LIST_FIELDS,
+    }
     if unknown:
         raise SpecError(f"{path} has unknown fields: {', '.join(sorted(unknown))}")
 
@@ -81,6 +123,10 @@ def load_spec(path: Path | str) -> CharacterSpec:
     if detail_level not in DETAIL_LEVELS:
         raise SpecError(f"{path} detail_level must be an integer 1-10, not {detail_level!r}")
 
+    identifier = data.get("id", "")
+    if not isinstance(identifier, str) or (identifier and not ID_PATTERN.match(identifier.strip())):
+        raise SpecError(f"{path} id must read like a slug, e.g. velvet-lou, not {identifier!r}")
+
     spec = CharacterSpec(
         data["name"].strip(),
         height,
@@ -90,10 +136,25 @@ def load_spec(path: Path | str) -> CharacterSpec:
         animation_props,
         motions,
         detail_level,
+        identifier.strip(),
+        **{key: _text(path, key, data[key]) for key in TEXT_FIELDS if key in data},
+        **{key: _text_list(path, key, data[key]) for key in LIST_FIELDS if key in data},
     )
     if not spec.slug:
         raise SpecError(f"{path} name has no usable characters")
     return spec
+
+
+def _text(path: Path, key: str, raw: object) -> str:
+    if not isinstance(raw, str) or not raw.strip():
+        raise SpecError(f"{path} {key} must be non-empty prose")
+    return raw.strip()
+
+
+def _text_list(path: Path, key: str, raw: object) -> tuple[str, ...]:
+    if isinstance(raw, str) or not isinstance(raw, (list, tuple)):
+        raise SpecError(f"{path} {key} must be a list of non-empty lines")
+    return tuple(_text(path, key, value) for value in raw)
 
 
 def _animations(

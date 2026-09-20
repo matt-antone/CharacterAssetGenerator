@@ -20,7 +20,15 @@ from langgraph.graph import END, START, StateGraph
 
 from .draw import draw
 from .mask import cutout, key_art_scale, mask_to_cell
-from .prompts import BIBLE_SYSTEM, KEY_VIEW, VIEWS, bible_request, view_prompt
+from .prompts import (
+    BIBLE_SYSTEM,
+    EMPTY_HANDS,
+    KEY_VIEW,
+    VIEWS,
+    assemble_bible,
+    bible_request,
+    view_prompt,
+)
 from .props import clauses
 from .sets import REQUIRED_VIEWS, wanted
 from .style import detail_frame
@@ -88,11 +96,15 @@ def approve(work_dir: Path) -> Path:
 def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
     """Lock the character's appearance in words before drawing anything.
 
-    A bible already on disk is the one every existing frame was drawn against,
-    so it is read back rather than rewritten. Asking for a second description of
-    the same brief returns different words, and a set rendered later would then
-    quote a different identity than the sets beside it.
+    A brief that states its own appearance assembles the bible from those
+    fields, and nothing is cached: the text is a function of the spec, so the
+    spec is the record, and it is a record git can show you. The freeze below
+    exists only for the model path, which is the only thing here that returns
+    different words when asked twice.
     """
+    assembled = assemble_bible(state["spec"])
+    if assembled:
+        return {"bible": assembled}
     record = state["work_dir"] / "bible.txt"
     if record.exists():
         return {"bible": record.read_text().strip()}
@@ -121,6 +133,47 @@ def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticStat
         references=[detail] if detail else [],
     )
     return {"sources": {KEY_VIEW: path}}
+
+
+def set_key_art(
+    spec: CharacterSpec,
+    set_name: str,
+    bible: str,
+    work_dir: Path,
+    key_art: Path,
+    draw_fn: Callable[..., Path] | None = None,
+) -> Path:
+    """The key art with this set's hands, drawn once per set that needs it.
+
+    The prop sits on the character in the key art, because that is where a
+    designer puts it. Every frame prompt then says to match the reference for
+    prop hand — so a set the brief draws empty-handed inherited the microphone
+    from its own reference, and nothing in the prompt contradicted the picture.
+    Belter's dance came back holding one in almost every figure while its
+    director note said, in the same prompt, that both hands were empty.
+
+    Words did not win that argument and were never going to: the reference is a
+    picture of the character holding it. So the set gets a reference whose hands
+    are its own. Drawn from the approved key art, so identity and scale come
+    with it, and skipped entirely for a set whose hands already match.
+    """
+    held = spec.animation_props.get(set_name, ())
+    if held == spec.props:
+        return key_art
+    dst = work_dir / "source" / f"{set_name}-key.png"
+    detail = detail_frame(spec.detail_level)
+    return (draw_fn or draw)(
+        view_prompt(
+            spec,
+            bible,
+            KEY_VIEW,
+            detail_level=spec.detail_level,
+            detail_reference=detail is not None,
+            props=clauses(held, set_name) if held else EMPTY_HANDS,
+        ),
+        dst,
+        references=[key_art, *([detail] if detail else [])],
+    )
 
 
 def check_approval(state: StaticState) -> StaticState:

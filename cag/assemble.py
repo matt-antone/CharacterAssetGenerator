@@ -1,6 +1,6 @@
 """Turn registered cells into the things a game and a reviewer actually use.
 
-The sprite sheet is the deliverable and keeps its alpha. The proof is a looping
+The frame sheet is the deliverable and keeps its alpha. The proof is a looping
 GIF flattened onto grey — it exists so a person can watch the motion and check
 the loop seam, which a grid of stills cannot show.
 """
@@ -19,7 +19,7 @@ from .geometry import CELL_HEIGHT, CELL_WIDTH
 PROOF_BACKDROP = (68, 68, 68)
 
 
-def sprite_sheet(
+def tile(
     cells: Sequence[Path | str],
     dst: Path | str,
     columns: int | None = None,
@@ -46,8 +46,8 @@ def sprite_sheet(
     return dst
 
 
-def split_sheet(sheet: Path | str, count: int, columns: int | None = None) -> list[Image.Image]:
-    """Cut a sprite sheet back into cells. The inverse of `sprite_sheet`."""
+def split_frame_sheet(sheet: Path | str, count: int, columns: int | None = None) -> list[Image.Image]:
+    """Cut a frame sheet back into cells. The inverse of `tile`."""
     columns = columns or count
     with Image.open(sheet) as image:
         image = image.convert("RGBA")
@@ -142,7 +142,7 @@ GALLERY = """<!doctype html>
 
 SET_BLOCK = """<h2>{set_name} &middot; {frames} frames at {fps} fps</h2>
 <figure><img src="{proof}" alt="{set_name} loop"><figcaption>proof, {fps} fps</figcaption></figure>
-<div class="sheet"><img src="{sheet}" alt="{set_name} sprite sheet"></div>
+<div class="sheet"><img src="{sheet}" alt="{set_name} frame sheet"></div>
 """
 
 
