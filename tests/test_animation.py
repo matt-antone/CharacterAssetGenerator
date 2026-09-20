@@ -464,3 +464,45 @@ def test_a_photographic_set_sends_the_lean_prompt():
         assert dropped not in lean
     assert "ankle boots" in lean and "quiff" in lean
     assert len(lean) < len(full)
+
+
+def test_the_director_is_told_what_the_set_holds_rather_than_left_to_guess(tmp_path):
+    """DIRECTOR_SYSTEM asks what the character holds, so silence is not an answer.
+
+    Asked with no prop information, the director answered from whatever the
+    identity text mentioned. That is how "Keep one wireless handheld microphone
+    in the character-right hand" became standing instruction for dance, ko and
+    victory on four characters the brief draws empty-handed in all three.
+    """
+    import json
+
+    class Recorder:
+        def __init__(self):
+            self.seen = []
+
+        def invoke(self, messages, *args, **kwargs):
+            self.seen.append(messages[-1].content)
+            return AIMessage(NOTE)
+
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Velvet Lou", "height": "5' 9\"", "description": "A lounge performer.",
+        "props": ["mic"],
+        "animations": {"sing": {"intent": "A held note.", "props": ["mic"]},
+                       "dance": "A club loop."},
+    }))
+    spec, motion = load_spec(brief), load_motion(SAMPLE)
+
+    def ask(set_name):
+        model = Recorder()
+        animation.direct({"spec": spec, "bible": "A lounge performer.", "motion": motion,
+                          "set_name": set_name, "work_dir": tmp_path / "lou"}, model)
+        return model.seen[0]
+
+    empty = ask("dance")
+    assert "Both of their hands are empty" in empty
+    assert "no microphone" in empty
+
+    held = ask("sing")
+    assert "Both of their hands are empty" not in held
+    assert "mic" in held.lower(), "the set that does hold one still says so"

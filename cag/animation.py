@@ -154,7 +154,10 @@ def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
             SystemMessage(DIRECTOR_SYSTEM),
             HumanMessage(
                 director_request(
-                    state["bible"], motion.arc, motion.fps, len(motion.frames), motion.view
+                    state["bible"], motion.arc, motion.fps, len(motion.frames), motion.view,
+                    # The brief already says what this set holds. The director
+                    # was reading it out of the identity text instead.
+                    prop_clause(state),
                 )
             ),
         ]

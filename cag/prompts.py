@@ -68,9 +68,23 @@ Use "character-left" and "character-right" for the character's own sides. Output
 instruction and nothing else."""
 
 
-def director_request(bible: str, arc: str, fps: int, frame_count: int, view: str) -> str:
+#: Said when a set carries no props. DIRECTOR_SYSTEM asks the director what the
+#: character holds, so silence is not an answer: left to guess, it answered from
+#: whatever the identity text happened to mention, which is how a microphone
+#: ended up standing instruction for `dance`, `ko` and `victory` on four
+#: characters that are drawn empty-handed in all three.
+EMPTY_HANDS = (
+    "The character holds nothing in this set. Both of their hands are empty and stay empty for "
+    "every frame: no microphone, no stand, no cable and no object of any kind."
+)
+
+
+def director_request(
+    bible: str, arc: str, fps: int, frame_count: int, view: str, props: str = ""
+) -> str:
     return (
         f"Character: {bible}\n\n"
+        f"{props or EMPTY_HANDS}\n\n"
         f"Set: {frame_count} frames at {fps} fps, drawn in the {view} view.\n\n"
         f"Performance arc: {arc}"
     )
