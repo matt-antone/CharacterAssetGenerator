@@ -69,7 +69,7 @@ def test_every_generation_prompt_carries_the_backdrop_clause():
     from cag.prompts import FRAME_VIEWS, frame_prompt, view_prompt
     from cag.spec import load_spec
 
-    spec = load_spec("specs/belter.json")
+    spec = load_spec("specs/default/belter.json")
     assert BACKDROP in view_prompt(spec, "B", "front")
     assert BACKDROP in frame_prompt(spec, "B", "N", FRAME_VIEWS["front"], "a cue", "key")
 
@@ -80,7 +80,7 @@ def test_every_frame_prompt_defends_the_prop_against_the_pose_cue():
     from cag.spec import load_spec
 
     prompt = frame_prompt(
-        load_spec("specs/belter.json"),
+        load_spec("specs/default/belter.json"),
         "B",
         "N",
         FRAME_VIEWS["front"],

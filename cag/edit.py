@@ -74,8 +74,12 @@ def update_manifest(out_dir: Path, sheet: str, fps: int, frames: int) -> None:
 
 
 def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
-    """The brief whose slug names this output folder, if one is in `specs`."""
-    for path in sorted(specs.glob("*.json")):
+    """The brief whose slug names this output folder, if one is in `specs`.
+
+    Searched all the way down: the roster is grouped into folders, and a brief
+    is found by the slug it carries rather than where it was filed.
+    """
+    for path in sorted(specs.rglob("*.json")):
         try:
             if load_spec(path).slug == Path(out_dir).resolve().name:
                 return path

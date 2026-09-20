@@ -8,8 +8,8 @@ Run every character that needs building at once, each as its own `uv run cag bui
 process. Do not queue them one at a time.
 
 ```bash
-for s in belter crooner diva heavyweight hype-man idol outlaw screamer; do
-  uv run cag build "specs/$s.json" --jobs 4 &
+for spec in specs/default/*.json; do
+  uv run cag build "$spec" --jobs 4 &
 done
 ```
 
@@ -27,7 +27,7 @@ started.
 
 A build draws the key art, then exits telling you it is waiting for approval.
 Nothing else — no projection views, no frames — is drawn until someone looks at
-`work/<slug>/source/key.png` and runs `uv run cag approve specs/<slug>.json`, then
+`work/<slug>/source/key.png` and runs `uv run cag approve specs/<set>/<slug>.json`, then
 builds again. A key art that is wrong gets deleted instead, and the next build
 redraws it. Show the user the key art and wait for their answer; do not approve
 on their behalf.

@@ -13,7 +13,7 @@
  "missing_frames": [],
  "source": {
   "url": "https://youtube.com/shorts/1h3Z2fhLz-s",
-  "file": "/Users/matthewantone/Development/MotionArtist/work/shuffle/source-1h3Z2fhLz-s.mp4",
+  "file": "work/shuffle/source-1h3Z2fhLz-s.mp4",
   "title": "Mini tutorial video. How to shuffle/cuttingshapes #tutorial #shuffledance",
   "start": 8.0,
   "end": 12.0,
@@ -22,8 +22,8 @@
  },
  "arc_written": true,
  "files": {
-  "motion.json": "9cb9e65f15d7b4cbb49917ba2bb15b950b9a6632805c16b2fe7a425d8204b3f5",
-  "shuffle-motion.html": "76f07ff53fbad5824d375bdec6170d85c620b2ab1905623d4c4334738918430e",
+  "motion.json": "a7ba00734c8f49311ac76d511ba716760d640dadcb6c75c387f088f765d6be61",
+  "shuffle-motion.html": "93c18f98b866b61586ddf1b3dede918d7fce27ba0332b25c72fa785d00a54c00",
   "thumbs/f00.jpg": "45212c2bbe8cbacd09b426a2e8f628cfc869113e1f78e462ba318fc43c137136",
   "thumbs/f01.jpg": "dbef383f9cb4962bd8e41a73b67e8fbcda587f6e3a2aa3e6ec20b0be53c3456b",
   "thumbs/f02.jpg": "d2fd1d2d5d5d94bd63b7d4e6a77c6995a84c278dd28c168fac47a08d16cd55e3",

@@ -9,7 +9,7 @@ from cag.motion_writer import parse, request, write_motion
 from cag.sets import SET_PLANS, plan_for
 from cag.spec import load_spec
 
-SPEC = load_spec("specs/belter.json")
+SPEC = load_spec("specs/default/belter.json")
 PLAN = plan_for("victory")
 
 
