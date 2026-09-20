@@ -1,7 +1,38 @@
 {
+  "id": "screamer",
   "name": "Screamer",
   "height": "6' 0\"",
-  "description": "A wiry punk karaoke singer in his thirties who always chooses the loudest song; jagged and theatrical without reading as violent. Wiry, angular, lean and spring-tensioned with thin bare arms and heavy grounded boots; never broad, soft or bulky. His recognition cues are six or seven separate asymmetric rigid amber hair spikes drawn as distinct angular wedges, wiry bare arms, an open free hand, and heavy planted boots, all readable without facial detail; never a mohawk or a soft hair mass. He wears a black sleeveless patched denim vest over a bare chest, a simple studded belt, black jeans with two small horizontal knee tears, and heavy black boots with amber laces; patches are abstract pixel shapes without readable text. His ready stance leans back from the waist with the lead boot forward, the rear boot set wide, knees flexed, the character-right hand clenched at chest height, and the free arm flung open with an open hand. Palette, as base/shadow/highlight per material: dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; amber #FF8A1E / #A84C0A / #FFC04F; denim #202126 / #0B0C0F / #41434B; skin #C17A57 / #77452F / #E4A17A; stud #777980 / #383A3F / #B6B8BD. Never draw: mohawk; soft hair; amber vest or jeans; readable tattoos or band names; blood or injury; clothing spikes beyond small belt studs; readable tattoos, patches, or band names.",
+  "description": "A wiry punk karaoke singer in his thirties who always chooses the loudest song; jagged and theatrical without reading as violent.",
+  "build": "Wiry, angular, lean and spring-tensioned with thin bare arms and heavy grounded boots; never broad, soft or bulky.",
+  "hair": "Six or seven separate asymmetric rigid amber hair spikes drawn as distinct angular wedges. Never a mohawk or a soft hair mass.",
+  "outfit": "A black sleeveless patched denim vest over a bare chest, a simple studded belt, black jeans with two small horizontal knee tears, and heavy black boots with amber laces. Patches are abstract pixel shapes without readable text.",
+  "performance_style": "Leans back from the waist with the lead boot forward, the rear boot set wide, knees flexed, the character-right hand clenched at chest height, and the free arm flung open with an open hand.",
+  "recognition_cues": [
+    "six or seven separate asymmetric rigid amber hair spikes drawn as distinct angular wedges",
+    "wiry bare arms",
+    "an open free hand",
+    "heavy planted boots"
+  ],
+  "palette": [
+    "dark #20232B / #101217 / #3A3E48",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "amber #FF8A1E / #A84C0A / #FFC04F",
+    "denim #202126 / #0B0C0F / #41434B",
+    "skin #C17A57 / #77452F / #E4A17A",
+    "stud #777980 / #383A3F / #B6B8BD"
+  ],
+  "avoid": [
+    "mohawk",
+    "soft hair",
+    "amber vest or jeans",
+    "readable tattoos or band names",
+    "blood or injury",
+    "clothing spikes beyond small belt studs",
+    "readable tattoos, patches, or band names"
+  ],
+  "props": [
+    "mic"
+  ],
   "animations": {
     "dance": "Punk karaoke dance loop: rock between the lead boot and wide rear boot, let the amber hair spikes and vest edge follow, punch the open free hand upward once, then return to the spring-tensioned opening without attacking.",
     "sing": {
@@ -15,8 +46,5 @@
     "entrance": "One-shot entrance: stride in with heavy boots and wiry tension, flare the open free hand and hair spikes toward the room, then land in the canonical leaned-back performance stance.",
     "victory": "One-shot performance finish: raise the open free hand in a theatrical acknowledgement, let the spikes and vest settle, then hold a loud proud balanced final pose.",
     "ko": "Non-contact performance defeat: he stays on his feet while the spring tension drops out of the wiry frame all at once — the thin bare arms go slack, the free hand opens and falls, and his head hangs low with the chin toward his chest. The amber hair spikes stay separate and angular as they tip forward He holds a standing, visibly defeated finish and remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply injury, impact, or an opponent."
-  },
-  "props": [
-    "mic"
-  ]
+  }
 }

@@ -1,7 +1,59 @@
 {
+  "id": "hex",
   "name": "Hex",
   "height": "5' 4\"",
-  "description": "An ancient, genuinely hideous witch with the sunniest disposition on the roster, who sings bouncy sixties girl-group pop and treats every chorus like a spell she is casting on the room; cheerful, mischievous and completely harmless. Small, bony and gnarled with knobbly knees and elbows, a bent bony back held upright, a scrawny neck and long crooked fingers ending in yellowed nails, standing upright and level like the rest of the roster with weight even over both feet; never a crouch, and never young, pretty, slim-waisted or glamorous. Her face is the point: warty sage-green skin gone leathery and deeply creased, a long hooked nose with a bulbous tip and a large hairy wart on it, a jutting pointed chin that nearly meets the nose, heavy sagging brows over small sunken yellow eyes, hollow cheeks, and a wide gap-toothed grin with two crooked teeth and the rest missing. Her recognition cues are that hooked warty nose and jutting chin in profile, a tall pointed black hat with a wide brim and a soft bent tip that flops forward, warty sage-green skin, thin stringy copper-grey hair in one ratty braid over the character-left shoulder, a shapeless black dress with a jagged hem and a small silver star stitched at the chest, purple-and-black striped stockings on stick-thin legs, and buckled black boots, all readable without facial detail. She wears a tall pointed black hat with a wide flat brim and a bent tip, a loose shapeless black dress with long belled sleeves, a jagged hem falling to mid-calf and a small silver star at the chest, a narrow deep-purple sash at the waist, purple-and-black horizontally striped stockings, and short buckled black boots with a low heel. Her ready stance is light and eager despite the bones, feet a little apart with one boot turned out, shoulders level, the free character-left hand raised beside the shoulder with the long crooked fingers spread mid-flourish, and a wide gap-toothed grin. Palette, as base/shadow/highlight per material: hat and dress #241F2E / #100E16 / #443C56; sash #5B3A8E / #2F1D4C / #8560BE; stripe purple #7A4FB5 / #432A66 / #A582D8; skin #93B08A / #4E6349 / #BDD4B3; warts #7B9470 / #44563E / #A6BC9C; hair #A98C6E / #5E4B38 / #D2BCA0; star silver #D6DAE2 / #9096A0 / #FFFFFF; boots #2A2620 / #131110 / #4C463C; buckle #C9AF5A / #7E6A2E / #EBD68F; nails #C6B573 / #7C6E38 / #E8DCA8; eye yellow #D9B64A; eye dark #1B1A1E; teeth #C9C2A6; lip #6E5150. Never draw: a young, pretty, cute, glamorous or sexy witch; smooth unlined skin, a small straight nose, a slim waist or an hourglass figure; a short, tight or low-cut dress, visible cleavage, midriff or thigh; a pin-up or glamour pose; heels above a low block; a broom, cauldron, wand, spellbook, potion or familiar; sparks, magic trails, glowing effects or floating objects; a hat that is short, rounded, brimless or missing; loose unbraided hair, or a braid in any colour but stringy copper-grey; pentagrams, occult sigils or ritual imagery; blood, gore, wounds, boils or anything that reads as injury or disease; a snarling, cackling or menacing expression; a crouched or stooped-over posture; any real actor's likeness or any film's costume design; logos, text or real brands.",
+  "description": "An ancient, genuinely hideous witch with the sunniest disposition on the roster, who sings bouncy sixties girl-group pop and treats every chorus like a spell she is casting on the room.",
+  "build": "Small, bony and gnarled with knobbly knees and elbows, a bent bony back held upright, a scrawny neck and long crooked fingers ending in yellowed nails, standing upright and level like the rest of the roster with weight even over both feet; never a crouch, and never young, pretty, slim-waisted or glamorous.",
+  "face": "Her face is the point: warty sage-green skin gone leathery and deeply creased, a long hooked nose with a bulbous tip and a large hairy wart on it, a jutting pointed chin that nearly meets the nose, heavy sagging brows over small sunken yellow eyes, hollow cheeks, and a wide gap-toothed grin with two crooked teeth and the rest missing.",
+  "hair": "Thin stringy copper-grey hair in one ratty braid over the character-left shoulder.",
+  "outfit": "A tall pointed black hat with a wide flat brim and a soft bent tip that flops forward, a loose shapeless black dress with long belled sleeves, a jagged hem falling to mid-calf and a small silver star stitched at the chest, a narrow deep-purple sash at the waist, purple-and-black horizontally striped stockings on stick-thin legs, and short buckled black boots with a low heel.",
+  "personality": "Cheerful, mischievous and completely harmless.",
+  "performance_style": "Light and eager despite the bones: feet a little apart with one boot turned out, shoulders level, the free character-left hand raised beside the shoulder with the long crooked fingers spread mid-flourish, and a wide gap-toothed grin.",
+  "recognition_cues": [
+    "a hooked warty nose and jutting pointed chin in profile",
+    "a tall pointed black hat with a wide brim and a soft bent tip that flops forward",
+    "warty sage-green skin",
+    "thin stringy copper-grey hair in one ratty braid over the character-left shoulder",
+    "a shapeless black dress with a jagged hem and a small silver star stitched at the chest",
+    "purple-and-black striped stockings on stick-thin legs",
+    "buckled black boots"
+  ],
+  "palette": [
+    "hat and dress #241F2E / #100E16 / #443C56",
+    "sash #5B3A8E / #2F1D4C / #8560BE",
+    "stripe purple #7A4FB5 / #432A66 / #A582D8",
+    "skin #93B08A / #4E6349 / #BDD4B3",
+    "warts #7B9470 / #44563E / #A6BC9C",
+    "hair #A98C6E / #5E4B38 / #D2BCA0",
+    "star silver #D6DAE2 / #9096A0 / #FFFFFF",
+    "boots #2A2620 / #131110 / #4C463C",
+    "buckle #C9AF5A / #7E6A2E / #EBD68F",
+    "nails #C6B573 / #7C6E38 / #E8DCA8",
+    "eye yellow #D9B64A",
+    "eye dark #1B1A1E",
+    "teeth #C9C2A6",
+    "lip #6E5150"
+  ],
+  "avoid": [
+    "a young, pretty, cute, glamorous or sexy witch",
+    "smooth unlined skin, a small straight nose, a slim waist or an hourglass figure",
+    "a short, tight or low-cut dress, visible cleavage, midriff or thigh",
+    "a pin-up or glamour pose",
+    "heels above a low block",
+    "a broom, cauldron, wand, spellbook, potion or familiar",
+    "sparks, magic trails, glowing effects or floating objects",
+    "a hat that is short, rounded, brimless or missing",
+    "loose unbraided hair, or a braid in any colour but stringy copper-grey",
+    "pentagrams, occult sigils or ritual imagery",
+    "blood, gore, wounds, boils or anything that reads as injury or disease",
+    "a snarling, cackling or menacing expression",
+    "a crouched or stooped-over posture",
+    "any real actor's likeness or any film's costume design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
   "animations": {
     "dance": {
       "intent": "Bouncy girl-group loop: step side-together-side on the low heels with the striped stockings flashing and the jagged hem swinging, let the free character-left hand trace a quick curling flourish at shoulder height with the crooked fingers leading, give the bony hips a light twist on the beat, then return to the eager opening stance. The hat stays on and the bent tip bobs with the head.",
@@ -20,8 +72,5 @@
     "entrance": "One-shot entrance: hobble in briskly with two quick light steps, stop, straighten the tall hat with the crooked free hand, flick the ratty braid back over the shoulder, then take her eager ready stance with the free hand rising into its flourish.",
     "victory": "One-shot song-finish celebration: throw both arms overhead and bounce up onto the toes with the braid and hat tip flying and the gap-toothed grin at its widest, then settle into a proud, beaming upright pose with the free hand on the bony hip.",
     "ko": "Non-contact performance defeat: she stays on her feet while the spark goes out of her — the bony shoulders drop, the belled sleeves hang off the thin arms, and her head tips low so the wide brim hides the eyes while the ratty braid swings forward. She holds a standing, visibly crestfallen finish with weight even over both boots. She remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent."
-  },
-  "props": [
-    "mic"
-  ]
+  }
 }

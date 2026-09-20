@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 
-from .spec import CharacterSpec
+from .spec import LIST_FIELDS, TEXT_FIELDS, CharacterSpec
 from .style import (
     BACKDROP,
     DEFAULT_DETAIL_LEVEL,
@@ -76,12 +76,34 @@ def director_request(bible: str, arc: str, fps: int, frame_count: int, view: str
     )
 
 
+#: The brief's own fields, sent to the bible writer as the facts it must keep.
+#: `prop` and `personality` stay out because BIBLE_SYSTEM forbids both: props are
+#: attached per set, and personality is not visible. Derived from the spec's own
+#: field lists so a field added there cannot be silently dropped here.
+BIBLE_FIELDS = tuple(
+    name for name in (*TEXT_FIELDS, *LIST_FIELDS) if name not in ("prop", "personality")
+)
+
+
 def bible_request(spec: CharacterSpec) -> str:
-    return (
-        f"Character: {spec.name}\n"
-        f"Height: {spec.height}\n"
-        f"Designer's brief: {spec.description}"
-    )
+    """The brief as the bible writer sees it: the pitch, then the stated facts.
+
+    A brief that fills none of the fields sends exactly what it always sent. One
+    that fills them stops relying on the writer to infer a costume it was never
+    told: the boots are in `outfit`, so the boots reach the paragraph.
+    """
+    facts = [
+        f"{name.replace('_', ' ').capitalize()}: "
+        + (value if isinstance(value, str) else "; ".join(value))
+        for name in BIBLE_FIELDS
+        if (value := getattr(spec, name))
+    ]
+    return "\n".join([
+        f"Character: {spec.name}",
+        f"Height: {spec.height}",
+        f"Designer's brief: {spec.description}",
+        *facts,
+    ])
 
 
 def view_prompt(

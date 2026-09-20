@@ -1,7 +1,40 @@
 {
+  "id": "hype-man",
   "name": "Hype Man",
   "height": "5' 10\"",
-  "description": "A hip-hop karaoke MC in his late twenties who treats the bar like a festival crowd; the roster's widest fighter. Very wide and kinetic, standing upright and level like the rest of the roster, with weight even over both feet; never narrow, never crouched or deeply coiled. His recognition cues are a straight flat-brim cap worn level over close-cropped hair, an oversized puffer mass, an upright level stance, chunky trainers, and a small shoulder towel, all readable without facial detail; the brim is rigid and never curved. He wears an oversized indigo puffer jacket with readable horizontal baffles, a plain white tee, loose black track pants with an indigo side stripe, chunky white high-top trainers, and one small folded performance towel over the rear shoulder. His ready stance is festival-crowd MC energy carried upright: standing tall and square with knees only lightly flexed, feet planted wide, shoulders level, spine vertical — the energy is in the width and the arms, not in a crouch. Palette, as base/shadow/highlight per material: dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; indigo #1D4EF1 / #102B91 / #5578FF; skin #8E5138 / #563020 / #B87250; cap #171A24 / #090B10 / #34394A; towel #D8D4C8 / #99958B / #F7F3E7. Never draw: curved cap brim; gold chains, grills, or cash; gang-sign hand shapes; narrow jacket; a crouched, coiled or low-slung stance; a forward-hunched torso; brand marks or legible text; narrow fitted jacket.",
+  "description": "A hip-hop karaoke MC in his late twenties who treats the bar like a festival crowd; the roster's widest fighter.",
+  "build": "Very wide and kinetic, standing upright and level like the rest of the roster with weight even over both feet; never narrow, never crouched or deeply coiled.",
+  "hair": "Close-cropped, worn under a cap.",
+  "outfit": "An oversized indigo puffer jacket with readable horizontal baffles, a plain white tee, loose black track pants with an indigo side stripe, chunky white high-top trainers, and one small folded performance towel over the rear shoulder. A straight flat-brim cap worn level: the brim is rigid and never curved.",
+  "performance_style": "Festival-crowd MC energy carried upright: standing tall and square with knees only lightly flexed, feet planted wide, shoulders level, spine vertical — the energy is in the width and the arms, not in a crouch.",
+  "recognition_cues": [
+    "a straight flat-brim cap worn level over close-cropped hair",
+    "an oversized puffer mass",
+    "an upright level stance",
+    "chunky trainers",
+    "a small shoulder towel"
+  ],
+  "palette": [
+    "dark #20232B / #101217 / #3A3E48",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "indigo #1D4EF1 / #102B91 / #5578FF",
+    "skin #8E5138 / #563020 / #B87250",
+    "cap #171A24 / #090B10 / #34394A",
+    "towel #D8D4C8 / #99958B / #F7F3E7"
+  ],
+  "avoid": [
+    "curved cap brim",
+    "gold chains, grills, or cash",
+    "gang-sign hand shapes",
+    "narrow jacket",
+    "a crouched, coiled or low-slung stance",
+    "a forward-hunched torso",
+    "brand marks or legible text",
+    "narrow fitted jacket"
+  ],
+  "props": [
+    "mic"
+  ],
   "animations": {
     "dance": "Festival-crowd dance loop: bounce through a wide low two-step, let the puffer baffles and shoulder towel follow, then coil naturally into frame 0.",
     "sing": {
@@ -15,8 +48,5 @@
     "entrance": "One-shot entrance: stride in with bouncy low energy, sweep the free hand toward the crowd, let the towel and puffer mass follow, then land in the wide coiled ready stance.",
     "victory": "One-shot song-finish celebration: spring upward from the low base, throw one open free-hand acknowledgement, then land in a wide, beaming upright pose.",
     "ko": "Non-contact performance defeat: he stays on his feet while the coiled kinetic energy drains away — the arms drop and go still, the oversized puffer mass settles, and his head hangs low with the chin toward his chest. The straight flat-brim cap tips forward with the head and stays fully readable, and he holds a standing, visibly deflated finish, planted where he would normally bounce. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
-  },
-  "props": [
-    "mic"
-  ]
+  }
 }

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import numpy
@@ -127,3 +128,39 @@ def test_a_bible_on_disk_is_reused_rather_than_rewritten(tmp_path):
     model = FakeMessagesListChatModel(responses=[AIMessage("A different performer entirely.")])
     state = static_sheet.write_bible({"spec": load_spec("tests/fixtures/velvet-lou.json"), "work_dir": work}, model)
     assert state["bible"] == BIBLE
+
+
+def test_the_bible_writer_is_told_the_costume_the_brief_states(tmp_path):
+    """The boots are in `outfit`, so the boots reach the paragraph.
+
+    Before the brief had fields, a costume fact only reached the bible if the
+    designer happened to write it into the description blob, and only reached a
+    prompt if a regex found it again afterwards.
+    """
+    from cag.prompts import bible_request
+    from cag.spec import load_spec as load
+
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Velvet Lou", "height": "5' 9\"", "description": "A lounge performer.",
+        "outfit": "Scuffed brown boots.", "avoid": ["trainers", "a hat"],
+        "prop": "A chrome microphone.", "personality": "Cheerful.",
+        "animations": {"dance": "A two-step loop."},
+    }))
+    request = bible_request(load(brief))
+    assert "Outfit: Scuffed brown boots." in request
+    assert "Avoid: trainers; a hat" in request
+    # BIBLE_SYSTEM forbids both: a prop named here would follow the character
+    # into every set, and personality is not visible.
+    assert "chrome microphone" not in request
+    assert "Cheerful" not in request
+
+
+def test_a_brief_with_no_fields_asks_for_the_bible_exactly_as_it_always_did():
+    from cag.prompts import bible_request
+    from cag.spec import load_spec as load
+
+    spec = load("tests/fixtures/velvet-lou.json")
+    assert bible_request(spec) == (
+        f"Character: {spec.name}\nHeight: {spec.height}\nDesigner's brief: {spec.description}"
+    )
