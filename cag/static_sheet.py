@@ -20,7 +20,7 @@ from langgraph.graph import END, START, StateGraph
 
 from .draw import draw
 from .mask import cutout, key_art_scale, mask_to_cell
-from .prompts import BIBLE_SYSTEM, KEY_VIEW, VIEWS, bible_request, view_prompt
+from .prompts import BIBLE_SYSTEM, KEY_VIEW, VIEWS, assemble_bible, bible_request, view_prompt
 from .props import clauses
 from .sets import REQUIRED_VIEWS, wanted
 from .style import detail_frame
@@ -88,11 +88,15 @@ def approve(work_dir: Path) -> Path:
 def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
     """Lock the character's appearance in words before drawing anything.
 
-    A bible already on disk is the one every existing frame was drawn against,
-    so it is read back rather than rewritten. Asking for a second description of
-    the same brief returns different words, and a set rendered later would then
-    quote a different identity than the sets beside it.
+    A brief that states its own appearance assembles the bible from those
+    fields, and nothing is cached: the text is a function of the spec, so the
+    spec is the record, and it is a record git can show you. The freeze below
+    exists only for the model path, which is the only thing here that returns
+    different words when asked twice.
     """
+    assembled = assemble_bible(state["spec"])
+    if assembled:
+        return {"bible": assembled}
     record = state["work_dir"] / "bible.txt"
     if record.exists():
         return {"bible": record.read_text().strip()}

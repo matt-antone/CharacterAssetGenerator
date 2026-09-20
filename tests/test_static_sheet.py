@@ -164,3 +164,27 @@ def test_a_brief_with_no_fields_asks_for_the_bible_exactly_as_it_always_did():
     assert bible_request(spec) == (
         f"Character: {spec.name}\nHeight: {spec.height}\nDesigner's brief: {spec.description}"
     )
+
+
+def test_a_brief_that_states_its_appearance_needs_no_model(tmp_path):
+    """And no freeze: the text is a function of the spec, so the spec is the record."""
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Velvet Lou", "height": "5' 9\"", "description": "A lounge performer.",
+        "build": "Lean.", "outfit": "Scuffed brown boots.", "palette": ["velvet #4A1E3C"],
+        "prop": "A chrome microphone.", "avoid": ["trainers"],
+        "animations": {"dance": "A two-step loop."},
+    }))
+    work = tmp_path / "lou"
+    work.mkdir()
+    (work / "bible.txt").write_text("A stale paragraph a model wrote once.\n")
+    model = FakeMessagesListChatModel(responses=[AIMessage("Another one entirely.")])
+
+    bible = static_sheet.write_bible({"spec": load_spec(brief), "work_dir": work}, model)["bible"]
+    assert "Scuffed brown boots." in bible
+    assert "velvet #4A1E3C" in bible
+    assert "stale paragraph" not in bible, "the spec outranks a cached model call"
+    # The leak this closes: every bible a model wrote for the roster named the
+    # microphone, and that sentence was quoted into sets drawn empty-handed.
+    assert "microphone" not in bible
+    assert "trainers" not in bible, "an avoid list in a render prompt draws the thing"

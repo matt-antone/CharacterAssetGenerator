@@ -85,6 +85,33 @@ BIBLE_FIELDS = tuple(
 )
 
 
+def assemble_bible(spec: CharacterSpec) -> str:
+    """The bible, written from the brief's own fields instead of by a model.
+
+    A brief that states its build, face, hair, outfit and palette has already
+    said everything the bible is for, so there is nothing left to infer and no
+    reason to spend a model call inferring it. That call was the only reason the
+    bible had to be frozen to a file: a second one returned different words.
+
+    `prop` is not here and cannot be. Every bible a model wrote for this roster
+    named the microphone despite BIBLE_SYSTEM forbidding it, and the sentence
+    was then quoted into the frames of `dance`, `ko` and `victory` — sets the
+    brief draws empty-handed, where nothing else in the prompt contradicted it.
+    Leaving the field out closes that structurally rather than by asking a model
+    to behave. `avoid` is out too: it is a list of things not to draw, and an
+    image generator handed one tends to draw them.
+
+    Empty for a brief that fills none of the fields; those still ask a model.
+    """
+    said = [spec.description, spec.build, spec.face, spec.hair, spec.outfit]
+    if not any(said[1:]):
+        return ""
+    body = " ".join(part for part in said if part)
+    if spec.palette:
+        body += " Colours, base/shadow/highlight per material: " + "; ".join(spec.palette) + "."
+    return body
+
+
 def bible_request(spec: CharacterSpec) -> str:
     """The brief as the bible writer sees it: the pitch, then the stated facts.
 
