@@ -36,6 +36,20 @@ class Frame:
     def is_locked(self) -> bool:
         return self.role in LOCKED_ROLES
 
+    @property
+    def instruction(self) -> str:
+        """What this frame is told to do: its cue, its note, and its pace.
+
+        The pace is traced off the footage — a frame the performer held, or one
+        they passed through fast. Without it a held frame is drawn as one more
+        in-between and the settle averages away.
+        """
+        said = {
+            "hold": "The pose settles here and does not travel.",
+            "fast": "A fast transition, not a hold.",
+        }.get(self.pace, "")
+        return " ".join(part for part in (self.cue, self.note, said) if part).strip()
+
 
 @dataclass(frozen=True)
 class MotionSheet:
@@ -48,14 +62,39 @@ class MotionSheet:
     #: Where the performer's floor sits, and their body height, both normalised.
     floor_y: float = 0.0
     body_h: float = 0.0
+    #: How the last frame meets the first. "clean" cuts back; anything else is
+    #: the tracer saying it does not, and the proof will show the jump.
+    seam: str = ""
 
     @property
     def has_poses(self) -> bool:
         return all(frame.pts for frame in self.frames)
 
     @property
+    def travel(self) -> float:
+        """Mean joint travel over the loop, in body heights.
+
+        How much movement the sheet actually holds, independent of where it
+        goes: a crouch and a sideways sway both count. 0.0 for a sheet with no
+        landmarks, which has nothing to measure.
+        """
+        if not self.has_poses or not self.body_h:
+            return 0.0
+        spans = []
+        for joint in {name for frame in self.frames for name in frame.pts}:
+            seen = [frame.pts[joint] for frame in self.frames if joint in frame.pts]
+            xs, ys = [p[0] for p in seen], [p[1] for p in seen]
+            spans.append(max(max(xs) - min(xs), max(ys) - min(ys)) / self.body_h)
+        return sum(spans) / len(spans) if spans else 0.0
+
+    @property
     def loops(self) -> bool:
         return self.playback == "loop"
+
+    @property
+    def seams_cleanly(self) -> bool:
+        """A loop the tracer did not flag. An unset seam is not a complaint."""
+        return not self.loops or self.seam in ("", "clean")
 
     @property
     def locked(self) -> tuple[Frame, ...]:
@@ -116,4 +155,96 @@ def load_motion(path: Path | str) -> MotionSheet:
         frames=frames,
         floor_y=float(data.get("floor_y", 0.0)),
         body_h=float(data.get("body_h", 0.0)),
+        seam=str(data.get("seam", "")).strip(),
     )
+
+
+#: The file that says a directory is a motion bundle, and what is in it.
+BUNDLE = "manifest.json"
+
+#: Bundle layouts this reads. A bundle that declares anything else is refused
+#: rather than guessed at.
+SCHEMAS = ("motion-artist/1",)
+
+
+@dataclass(frozen=True)
+class Bundle:
+    """A traced motion bundle, read from its manifest.
+
+    The manifest is the bundle: it declares the layout, the header a brief
+    picks a sheet by, and the files it contains. The motion data is whichever
+    file the manifest names — reaching straight for `motion.json` assumed a
+    filename no bundle ever promised.
+    """
+
+    name: str
+    title: str
+    fps: int
+    frame_count: int
+    playback: str
+    view: str
+    seam: str
+    #: The manifest's own directory, and the motion data it names inside it.
+    root: Path
+    sheet: Path
+
+    def load(self) -> MotionSheet:
+        """The sheet itself, checked against the header that advertised it."""
+        motion = load_motion(self.sheet)
+        if (motion.fps, len(motion.frames)) != (self.fps, self.frame_count):
+            raise MotionError(
+                f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
+                f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
+            )
+        return motion
+
+
+def read_bundle(path: Path | str) -> Bundle:
+    """Read one bundle's manifest."""
+    path = Path(path)
+    manifest = path / BUNDLE if path.is_dir() else path
+    try:
+        data = json.loads(manifest.read_text())
+    except FileNotFoundError:
+        raise MotionError(f"{manifest} is not there; a motion bundle is its manifest") from None
+    except json.JSONDecodeError as exc:
+        raise MotionError(f"{manifest} is not valid JSON: {exc}") from exc
+
+    schema = data.get("schema")
+    if schema not in SCHEMAS:
+        raise MotionError(
+            f"{manifest} declares schema {schema!r}; this reads {', '.join(SCHEMAS)}"
+        )
+    missing = {"fps", "frame_count", "playback", "view", "files"} - set(data)
+    if missing:
+        raise MotionError(f"{manifest} is missing {', '.join(sorted(missing))}")
+
+    named = [f for f in data["files"] if Path(f).name == "motion.json"]
+    if len(named) != 1:
+        raise MotionError(
+            f"{manifest} names {len(named)} motion files; a bundle carries exactly one"
+        )
+    return Bundle(
+        name=data.get("name", manifest.parent.name),
+        title=data.get("title", ""),
+        fps=int(data["fps"]),
+        frame_count=int(data["frame_count"]),
+        playback=data["playback"],
+        view=data["view"],
+        seam=str(data.get("seam", "")).strip(),
+        root=manifest.parent,
+        sheet=manifest.parent / named[0],
+    )
+
+
+def library(root: Path | str) -> dict[str, Bundle]:
+    """Every motion bundle under `root`, by the name a brief would call it.
+
+    Found by manifest, not by guessing at filenames. A bundle that will not
+    read raises: skipping quietly made a library that had lost three of its
+    four sheets read as a library of one.
+    """
+    return {
+        bundle.name: bundle
+        for bundle in (read_bundle(p) for p in sorted(Path(root).glob(f"*/{BUNDLE}")))
+    }

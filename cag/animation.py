@@ -8,6 +8,7 @@ cross-fade, no optical flow, no frame grid used as a creative source.
 
 from __future__ import annotations
 
+import hashlib
 from functools import partial
 from pathlib import Path
 from typing import Callable, TypedDict
@@ -22,6 +23,7 @@ from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
 from .mask import MaskError, pose_to_cell, set_to_cells, slice_sheet
 from .motion import Frame, MotionSheet
 from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, sheet_prompt
+from .props import clauses
 from .skeleton import write_skeletons
 from .style import detail_frame
 from .spec import CharacterSpec
@@ -52,6 +54,16 @@ def frame_path(state: AnimationState, kind: str, index: int) -> Path:
     return state["work_dir"] / kind / state["set_name"] / f"{index:02d}.png"
 
 
+def prop_clause(state: AnimationState) -> str:
+    """What this character holds in this set, or "" for empty hands.
+
+    A set the brief gives no props is drawn empty-handed. That is how a prop is
+    kept out of one set without being taken off the character everywhere.
+    """
+    held = state["spec"].animation_props.get(state["set_name"], ())
+    return clauses(held, state["set_name"]) if held else ""
+
+
 def view_clause(state: AnimationState) -> str:
     view = state["motion"].view
     if view not in FRAME_VIEWS:
@@ -77,10 +89,29 @@ def set_note_path(state: AnimationState) -> Path:
     return state["work_dir"] / "motion" / f"{state['set_name']}.note.txt"
 
 
-def _every_source_drawn(state: AnimationState) -> bool:
-    return all(
-        frame_path(state, "source", frame.index).exists() for frame in state["motion"].frames
-    )
+def motion_stamp(state: AnimationState) -> Path:
+    return state["work_dir"] / "source" / state["set_name"] / "motion.sha"
+
+
+def motion_digest(motion: MotionSheet) -> str:
+    """Everything the drawing reads off the sheet: the view and every frame's cue."""
+    frames = "\n".join(f"{f.index}\t{f.role}\t{f.cue}\t{f.note}" for f in motion.frames)
+    return hashlib.sha256(f"{motion.view}\n{frames}".encode()).hexdigest()
+
+
+def sources_are_current(state: AnimationState) -> bool:
+    """Frames on disk that this motion sheet would only draw again the same way.
+
+    Reuse used to key on the frame index alone, so handing a set a different
+    sheet with the same frame numbers silently kept the old art: a traced sheet
+    swapped in for a written one re-masked renders drawn from the prose it was
+    meant to replace. A stamp that is missing counts as current, so a roster
+    drawn before this existed keeps its renders instead of redrawing itself.
+    """
+    if not all(frame_path(state, "source", f.index).exists() for f in state["motion"].frames):
+        return False
+    stamp = motion_stamp(state)
+    return not stamp.exists() or stamp.read_text().strip() == motion_digest(state["motion"])
 
 
 def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
@@ -91,12 +122,14 @@ def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
     needs no note at all, and asking for one spends a model call per set on
     every rebuild — a re-mask of the whole roster was paying for thirty-two.
     A note that is asked for is kept, so the next run does not ask again.
+
+    The note binds one motion source, naming its arc, rate, length and view, so
+    it is only kept while the frames it was written for are the ones on disk.
+    A set about to be redrawn from a different sheet asks for a new one.
     """
     record = set_note_path(state)
-    if record.exists():
-        return {"set_note": record.read_text().strip()}
-    if _every_source_drawn(state):
-        return {"set_note": ""}
+    if sources_are_current(state):
+        return {"set_note": record.read_text().strip() if record.exists() else ""}
     motion = state["motion"]
     reply = model.invoke(
         [
@@ -121,7 +154,7 @@ def _draw_frame(
     draw_fn: Callable[..., Path],
 ) -> Path:
     spec = state["spec"]
-    cue = f"{frame.cue} {frame.note}".strip()
+    cue = frame.instruction
     pose = state.get("poses", {}).get(frame.index)
     detail = detail_frame(spec.detail_level)
     prompt = frame_prompt(
@@ -134,6 +167,7 @@ def _draw_frame(
         pose_reference=pose is not None,
         detail_level=spec.detail_level,
         detail_reference=detail is not None,
+        props=prop_clause(state),
     )
     # The pose goes last, because the prompt calls it "the last reference image".
     references = [*references, *( [detail] if detail else [] ), *([pose] if pose else [])]
@@ -194,6 +228,8 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
     detail = detail_frame(spec.detail_level)
     sources = {}
     sheets = []
+    digest = motion_digest(motion)
+    reusable = sources_are_current(state)
     for start in range(0, len(motion.frames), SHEET_FRAMES):
         chunk = motion.frames[start : start + SHEET_FRAMES]
         sheets.append([frame.index for frame in chunk])
@@ -203,10 +239,10 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
         drawn_already = {
             frame.index: frame_path(state, "source", frame.index) for frame in chunk
         }
-        if all(path.exists() for path in drawn_already.values()):
+        if reusable and all(path.exists() for path in drawn_already.values()):
             sources.update(drawn_already)
             continue
-        cues = [(frame.role, f"{frame.cue} {frame.note}".strip()) for frame in chunk]
+        cues = [(frame.role, frame.instruction) for frame in chunk]
         pose_grid = None
         if poses:
             pose_grid = sprite_sheet(
@@ -224,9 +260,16 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
             per_row=FIGURES_PER_ROW,
+            props=prop_clause(state),
         )
         references = [state["key_art"], *([detail] if detail else []), *([pose_grid] if pose_grid else [])]
-        path = state["work_dir"] / "source" / state["set_name"] / f"sheet-{start:02d}.png"
+        # The render is of this chunk of this sheet, so the name says so. `draw` keeps
+        # any render already at the path it is given, which is what resumes an
+        # interrupted set — but under a name that only counted frames, a different
+        # motion sheet resumed into the last one's art and sliced it up as its own.
+        path = (
+            state["work_dir"] / "source" / state["set_name"] / f"sheet-{start:02d}-{digest[:8]}.png"
+        )
         # A sheet with the wrong figure count cannot be salvaged frame by frame, so it is drawn
         # again. Each draw is an independent roll: at the rate measured over a full eight-character
         # run, two tries lost about one set in six and four lose closer to one in forty. Only a
@@ -246,6 +289,9 @@ def sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
             source = frame_path(state, "source", frame.index)
             cell.save(source, format="PNG")
             sources[frame.index] = source
+    stamp = motion_stamp(state)
+    stamp.parent.mkdir(parents=True, exist_ok=True)
+    stamp.write_text(motion_digest(motion) + "\n")
     return {"sources": sources, "sheets": sheets}
 
 

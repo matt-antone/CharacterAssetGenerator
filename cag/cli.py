@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import shutil
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -10,11 +11,11 @@ from functools import partial
 from pathlib import Path
 
 from .animation import build_animation_graph
-from .assemble import PORTRAIT_SIZES, gallery, gif_proof, portrait, sprite_sheet
+from .assemble import MANIFEST, PORTRAIT_SIZES, gallery, gif_proof, manifest, portrait, sprite_sheet
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
-from .motion import load_motion
+from .motion import BUNDLE, MotionError, library, load_motion, read_bundle
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
 from .sets import plan_for, wanted
@@ -29,15 +30,47 @@ from .static_sheet import (
 #: Wrap long sets so the sheet stays a reasonable shape to open.
 SHEET_COLUMNS = 8
 
+#: Where a sheet a brief names by name is looked up, laid out as MotionArtist
+#: lays them out: <root>/<name>/motion.json. Sheets live in this repo, not in
+#: the checkout that traced them — a brief that outlives its footage still
+#: builds, and a sheet cannot be cleaned away from under the roster.
+MOTION_ROOT = Path("motions")
+
+#: What a brief writes instead of a sheet name to have one chosen for it.
+AUTO = "auto"
+
 
 def log(message: str) -> None:
     print(message, file=sys.stderr, flush=True)
 
 
-def motion_for(spec: CharacterSpec, set_name: str, work_dir: Path, supplied: Path | None):
-    """A traced sheet when one was supplied, otherwise one written from the brief."""
+def motion_for(
+    spec: CharacterSpec,
+    set_name: str,
+    work_dir: Path,
+    supplied: Path | None,
+    motion_root: Path = MOTION_ROOT,
+):
+    """The sheet this set is drawn from: supplied, named by the brief, or written.
+
+    `--motion` is the operator pointing at one file for this run, so it wins over
+    what the brief names, the same way `--set` wins over the config.
+    """
     if supplied:
         return load_motion(supplied)
+    named = spec.motions.get(set_name)
+    if named == AUTO:
+        name, bundle = auto_sheet(spec, set_name, motion_root)
+        log(f"[{set_name}] auto: the {name!r} sheet")
+        return bundle.load()
+    if named:
+        bundle = motion_root / named
+        if not (bundle / BUNDLE).exists():
+            raise MotionError(
+                f"{spec.name} names the {named!r} motion sheet for {set_name}, "
+                f"but there is no bundle at {bundle}"
+            )
+        return read_bundle(bundle).load()
     intent = spec.animations.get(set_name)
     if not intent:
         raise KeyError(f"{spec.name} has no {set_name!r} animation in their brief")
@@ -51,6 +84,28 @@ def motion_for(spec: CharacterSpec, set_name: str, work_dir: Path, supplied: Pat
     )
 
 
+def auto_sheet(spec: CharacterSpec, set_name: str, motion_root: Path) -> tuple[str, "Bundle"]:
+    """Choose a traced sheet for a set whose brief did not name one.
+
+    Every traced sheet reads as a coherent performance — that is what tracing
+    buys, and it is the difference a written sheet cannot make up. So this
+    spreads the library across the roster rather than ranking it: the same
+    character keeps the same dance between runs, and twelve of them do not all
+    dance the same one. Which sheet suits which character is a choreography
+    call, and a brief that makes it names the sheet instead.
+    """
+    sheets = library(motion_root)
+    if not sheets:
+        raise MotionError(
+            f"{spec.name} asks for an automatic sheet for {set_name}, "
+            f"but there are none under {motion_root}"
+        )
+    names = sorted(sheets)
+    seed = hashlib.sha256(f"{spec.slug}\t{set_name}".encode()).hexdigest()
+    name = names[int(seed, 16) % len(names)]
+    return name, sheets[name]
+
+
 def render_set(
     spec: CharacterSpec,
     set_name: str,
@@ -59,10 +114,16 @@ def render_set(
     supplied: Path | None,
     sheet_mode: bool = True,
     draw_backend: str = "codex",
+    motion_root: Path = MOTION_ROOT,
 ) -> dict:
     """Draw and mask one animation set. Safe to run alongside other sets."""
-    motion = motion_for(spec, set_name, work_dir, supplied)
+    motion = motion_for(spec, set_name, work_dir, supplied, motion_root)
     log(f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, {motion.view} view")
+    if not motion.seams_cleanly:
+        # The tracer compared the last frame to the first and they do not meet.
+        # Nothing downstream can fix that, so it is said once, where it is chosen.
+        log(f"[{set_name}] the {motion.name!r} sheet loops on a {motion.seam!r} seam: "
+            "the proof will jump from the last frame back to the first")
     # None keeps callers pointed at each module's own `draw` name (unpatched, that's
     # the seam tests replace) instead of forcing a swap when nothing was asked for.
     draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
@@ -90,6 +151,7 @@ def build(
     jobs: int = 1,
     sheet_mode: bool = True,
     draw_backend: str = "codex",
+    motion_root: Path = MOTION_ROOT,
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -134,6 +196,7 @@ def build(
                     motion_path,
                     sheet_mode,
                     draw_backend,
+                    motion_root,
                 )
                 for name in chosen
             }
@@ -151,10 +214,11 @@ def build(
             "set_name": name,
             "frames": len(cells),
             "fps": motion.fps,
+            "columns": min(SHEET_COLUMNS, len(cells)),
             "sheet": f"{name}-sheet.png",
             "proof": f"{name}-proof.gif",
         }
-        sprite_sheet(cells, out_dir / block["sheet"], columns=min(SHEET_COLUMNS, len(cells)))
+        sprite_sheet(cells, out_dir / block["sheet"], columns=block["columns"])
         gif_proof(cells, out_dir / block["proof"], motion.fps, loop=motion.loops)
         sets.append(block)
 
@@ -163,6 +227,7 @@ def build(
         views[f"portrait-{units}"] = Path("views") / f"portrait-{units}.png"
         portrait(static["cells"][KEY_VIEW], out_dir / views[f"portrait-{units}"], size)
 
+    manifest(out_dir / MANIFEST, spec.name, spec.height, views, sets)
     page = gallery(
         out_dir / "index.html",
         spec.name,
@@ -199,6 +264,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_false",
         help="draw one render per frame instead of one sheet per set",
     )
+    build_parser.add_argument(
+        "--motion-root",
+        type=Path,
+        default=MOTION_ROOT,
+        help=f"where sheets a brief names by name are found (default {MOTION_ROOT})",
+    )
     build_parser.add_argument("--work", type=Path, default=Path("work"))
     build_parser.add_argument("--out", type=Path, default=Path("outputs"))
     build_parser.add_argument(
@@ -207,6 +278,11 @@ def main(argv: list[str] | None = None) -> int:
         default="codex",
         help="CLI agent that draws the art: codex (ChatGPT sub) or agy (Antigravity sub)",
     )
+
+    motions_parser = sub.add_parser(
+        "motions", help="list the traced sheets a brief can name"
+    )
+    motions_parser.add_argument("--motion-root", type=Path, default=MOTION_ROOT)
 
     approve_parser = sub.add_parser(
         "approve", help="sign off on a character's key art so the rest can be drawn"
@@ -223,6 +299,24 @@ def main(argv: list[str] | None = None) -> int:
     edit_parser.add_argument("--port", type=int, default=8765)
 
     args = parser.parse_args(argv)
+    if args.command == "motions":
+        sheets = library(args.motion_root)
+        if not sheets:
+            log(f"no motion sheets under {args.motion_root}")
+            return 1
+        print(
+            f"{'name':16s} {'title':18s} {'frames':>6} {'fps':>4} {'view':>7} "
+            f"{'travel':>7}  {'poses':5s}  seam"
+        )
+        for name, bundle in sorted(sheets.items()):
+            # The header is the manifest's; travel and poses are only in the landmarks.
+            motion = bundle.load()
+            print(
+                f"{name:16s} {bundle.title[:18]:18s} {bundle.frame_count:6d} "
+                f"{bundle.fps:4d} {bundle.view:>7s} {motion.travel:7.3f}  "
+                f"{'yes' if motion.has_poses else 'no':5s}  {bundle.seam or '-'}"
+            )
+        return 0
     if args.command == "edit":
         serve(args.out, args.port)
         return 0
@@ -239,6 +333,7 @@ def main(argv: list[str] | None = None) -> int:
         args.jobs,
         args.sheet_mode,
         args.draw_backend,
+        args.motion_root,
     )
     return 0
 

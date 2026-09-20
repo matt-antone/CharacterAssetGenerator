@@ -1,0 +1,37 @@
+{
+  "name": "microphone",
+  "summary": "One wireless handheld microphone, held in one hand. No cord, no stand, no second microphone.",
+  "draw": {
+    "shape": "A handheld stick microphone: a rounded mesh grille head above a straight tapered barrel, roughly the length of the character's own hand plus half again. The grille is the widest part and reads as a distinct ball against the barrel.",
+    "material": "Brushed metal barrel with a darker mesh grille, lightly specular.",
+    "palette": {
+      "base": "#6F747C",
+      "shadow": "#34383E",
+      "highlight": "#B5BAC0"
+    },
+    "readability": "Drawn in full and clearly readable in every frame, never a smudge, a stub, or a shape that merges into the costume behind it."
+  },
+  "hold": {
+    "hands": {
+      "character-right": "The fist wraps the barrel below the grille, fingers closed around it, thumb along the side. The grille end always leads."
+    },
+    "orientation": "The grille end faces the mouth. Raised, it points up and inward toward the face; lowered, it stays head-up with the grille still the leading end. It never points away from the character, and never reads upside down.",
+    "rest": "At the upper torso, grille up, unless the set below or the brief says otherwise."
+  },
+  "carriage": {
+    "dance": "The microphone does not need to point at the face. The prop hand and arm are free to move with the dance, the grille still leading.",
+    "sing": "Brought toward the mouth for the sustained phrase, grille to the lips, kept readable against the face rather than covering it.",
+    "flinch": "Stays controlled at the upper torso through the reaction.",
+    "guard": "Kept upright in the prop hand while the free arm shields the torso.",
+    "entrance": "Lifted once in acknowledgement, then settled at the upper torso.",
+    "victory": "Raised with the celebration, still upright, grille up.",
+    "ko": "Lowers to hang loosely at the side, still in the prop hand, grille still up."
+  },
+  "never": [
+    "in the character-left hand, or swapped between hands across a set",
+    "a cord, cable or microphone stand",
+    "a second or duplicate microphone",
+    "replaced by a bare fist, an open hand or an empty hand in any frame, whatever the arm is doing",
+    "held by the grille, or pointed away from the character"
+  ]
+}

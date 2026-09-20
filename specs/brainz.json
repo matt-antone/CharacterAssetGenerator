@@ -1,14 +1,42 @@
 {
   "name": "Brainz",
   "height": "5' 6\"",
-  "description": "A goth mad scientist in her early thirties who sings dark synth-pop and dramatic new-wave covers with gleeful, wide-eyed intensity; brilliant, a little unhinged, and delighted by her own genius. Slim and wiry with sharp elbows and quick, twitchy energy, standing upright and level with weight even over both feet; never hunched, sinister or crone-like. Her recognition cues are a jet-black blunt bob with straight-cut bangs and one electric-violet streak on the character-right side, round brass-rimmed goggles with green lenses pushed up onto her forehead, a long white lab coat worn open and flaring at the hem, black lipstick, and black platform boots, all readable without facial detail. The goggles sit on the forehead above the bangs and are never worn over the eyes. She wears a long white lab coat with rolled-up cuffs and a few faint green stains near the hem, open over a fitted black lace-trimmed corset top, a short black pleated skirt over black-and-violet striped tights, black elbow-length rubber lab gloves, and chunky black lace-up platform boots with thick soles. She holds one wireless handheld microphone upright in her gloved character-right hand; no cord, no stand. Her ready stance has feet planted a little apart, one hip cocked, the lab coat hanging open, chin tipped down with a wide delighted grin, and the gloved free character-left hand raised at shoulder height with fingers splayed in a eureka gesture. Palette, as base/shadow/highlight per material: lab coat #ECEBE6 / #B2B0A8 / #FFFFFF; stains #7FBF4A / #4A7A26 / #B2E27F; dark #20232B / #101217 / #3A3E48; gloves #1B1A1E / #0B0B0D / #434148; violet #7A3FC4 / #45207A / #A87AE8; brass #B5893A / #6E5020 / #E0B96A; goggle lens #5FD08A / #2F7A4E / #A2F0BE; skin #E2CEC4 / #AE958A / #F5E7E0; hair #151418 / #08080A / #3C3A42; lip #1B1A1E; eye white #F3EEE8; eye dark #2A1E36. Never draw: goggles worn over the eyes; any headwear other than the goggles; beakers, flasks, syringes, brains, body parts or lab equipment in her hands or on her body; blood, gore or dissection imagery; a sinister sneer, a cackle with a hunched back or a witch silhouette; a closed or buttoned lab coat; pastel or colourful hair beyond the single violet streak; the microphone in the character-left hand; a microphone cord, stand or duplicate microphone; logos, text or real brands.",
+  "description": "A goth mad scientist in her early thirties who sings dark synth-pop and dramatic new-wave covers with gleeful, wide-eyed intensity; brilliant, a little unhinged, and delighted by her own genius. Slim and wiry with sharp elbows and quick, twitchy energy, standing upright and level with weight even over both feet; never hunched, sinister or crone-like. Her recognition cues are a jet-black blunt bob with straight-cut bangs and one electric-violet streak on the character-right side, round brass-rimmed goggles with green lenses pushed up onto her forehead, a long white lab coat worn open and flaring at the hem, black lipstick, and black platform boots, all readable without facial detail. The goggles sit on the forehead above the bangs and are never worn over the eyes. She wears a long white lab coat with rolled-up cuffs and a few faint green stains near the hem, open over a fitted black lace-trimmed corset top, a short black pleated skirt over black-and-violet striped tights, black elbow-length rubber lab gloves, and chunky black lace-up platform boots with thick soles. Her ready stance has feet planted a little apart, one hip cocked, the lab coat hanging open, chin tipped down with a wide delighted grin, and the gloved free character-left hand raised at shoulder height with fingers splayed in a eureka gesture. Palette, as base/shadow/highlight per material: lab coat #ECEBE6 / #B2B0A8 / #FFFFFF; stains #7FBF4A / #4A7A26 / #B2E27F; dark #20232B / #101217 / #3A3E48; gloves #1B1A1E / #0B0B0D / #434148; violet #7A3FC4 / #45207A / #A87AE8; brass #B5893A / #6E5020 / #E0B96A; goggle lens #5FD08A / #2F7A4E / #A2F0BE; skin #E2CEC4 / #AE958A / #F5E7E0; hair #151418 / #08080A / #3C3A42; lip #1B1A1E; eye white #F3EEE8; eye dark #2A1E36. Never draw: goggles worn over the eyes; any headwear other than the goggles; beakers, flasks, syringes, brains, body parts or lab equipment in her hands or on her body; blood, gore or dissection imagery; a sinister sneer, a cackle with a hunched back or a witch silhouette; a closed or buttoned lab coat; pastel or colourful hair beyond the single violet streak; logos, text or real brands.",
   "animations": {
-    "dance": "Twitchy new-wave dance loop: jerk the shoulders and elbows in sharp robotic beats, snap the head so the blunt bob swings, kick one platform boot out and back so the open lab coat flares, then return to the cocked-hip opening stance with the microphone upright in the character-right hand.",
-    "sing": "Manic synth-pop vocal loop: lean in with wide eyes, bring the microphone in the character-right hand to the black lips for a dramatic phrase, splay the gloved free fingers beside the goggles as if the idea just struck her, then snap back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+    "dance": {
+      "intent": "Twitchy new-wave dance loop: jerk the shoulders and elbows in sharp robotic beats, snap the head so the blunt bob swings, kick one platform boot out and back so the open lab coat flares",
+      "props": [
+        "mic"
+      ]
+    },
+    "sing": {
+      "intent": "Manic synth-pop vocal loop: lean in with wide eyes, splay the gloved free fingers beside the goggles as if the idea just struck her, then snap back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
     "flinch": "Brief room-sound startle: she jolts as if from a small static shock, shoulders snapping up, bob and lab coat flicking out, goggles staying on the forehead, then she shakes it off with a delighted grin and resettles. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder toward the room and pull the open lab coat across the torso with the gloved free hand like a shield, keeping the microphone upright in the character-right hand, then hold a steady wary finish. Not a combat action.",
+    "guard": {
+      "intent": "One-shot stage self-protection: turn one shoulder toward the room and pull the open lab coat across the torso with the gloved free hand like a shield, then hold a steady wary finish. Not a combat action.",
+      "props": [
+        "mic"
+      ]
+    },
     "entrance": "One-shot entrance: stride in briskly with the lab coat flaring behind, stop, push the goggles firmly up onto the forehead with the gloved free hand, then strike the cocked-hip ready stance with a eureka gesture.",
-    "victory": "One-shot song-finish celebration: throw both arms up in triumph with the microphone raised, the lab coat flaring wide, tip the head back in a gleeful 'it's alive' laugh, then hold a proud, grinning pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the manic energy drains out of her — the shoulders slump, the lab coat hangs limp and straight, and her head hangs low with the chin toward the corset top, the bob falling forward and the goggles still on the forehead. The microphone hangs loosely at her side in her gloved character-right hand, and she holds a standing, visibly deflated finish with weight even over both platform boots. She remains standing in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply a hit, injury, explosion or opponent."
-  }
+    "victory": {
+      "intent": "The lab coat flaring wide, tip the head back in a gleeful 'it's alive' laugh, then hold a proud, grinning pose.",
+      "props": [
+        "mic"
+      ]
+    },
+    "ko": {
+      "intent": "Non-contact performance defeat: she stays on her feet while the manic energy drains out of her — the shoulders slump, the lab coat hangs limp and straight, and her head hangs low with the chin toward the corset top, the bob falling forward and the goggles still on the forehead. She holds a standing, visibly deflated finish with weight even over both platform boots. She remains standing in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply a hit, injury, explosion or opponent.",
+      "props": [
+        "mic"
+      ]
+    }
+  },
+  "props": [
+    "mic"
+  ]
 }

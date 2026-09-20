@@ -7,6 +7,7 @@ the loop seam, which a grid of stills cannot show.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Sequence
 
@@ -137,6 +138,39 @@ SET_BLOCK = """<h2>{set_name} &middot; {frames} frames at {fps} fps</h2>
 <figure><img src="{proof}" alt="{set_name} loop"><figcaption>proof, {fps} fps</figcaption></figure>
 <div class="sheet"><img src="{sheet}" alt="{set_name} sprite sheet"></div>
 """
+
+
+MANIFEST = "manifest.json"
+
+
+def manifest(dst: Path | str, name: str, height: str, views: dict, sets: list) -> Path:
+    """What a front end needs to play this character: fps, frame counts, file names.
+
+    The fps here is the one the frames were rendered for, and `cag edit` rewrites
+    it when a proof is rebuilt at another rate, so the front end never has to
+    guess a playback speed.
+    """
+    dst = Path(dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    dst.write_text(
+        json.dumps(
+            {
+                "name": name,
+                "height": height,
+                "cell": [CELL_WIDTH, CELL_HEIGHT],
+                "views": {view: str(path) for view, path in views.items()},
+                "sets": {
+                    block["set_name"]: {
+                        key: block[key] for key in ("frames", "fps", "columns", "sheet", "proof")
+                    }
+                    for block in sets
+                },
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+    return dst
 
 
 def gallery(dst: Path | str, name: str, height: str, description: str, views: dict, sets: list) -> Path:

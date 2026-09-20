@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KaraokeParty prop",
+  "description": "Everything needed to draw one handheld prop and hold it consistently across a set. Prose, not identifiers: every value is read into a render prompt.",
+  "type": "object",
+  "required": [
+    "name",
+    "summary",
+    "draw",
+    "hold"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "$ref": "#/$defs/text"
+    },
+    "summary": {
+      "$ref": "#/$defs/text",
+      "description": "One sentence naming the prop and its defining constraints."
+    },
+    "draw": {
+      "type": "object",
+      "description": "What the prop looks like, independent of who is holding it.",
+      "required": [
+        "shape"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "shape": {
+          "$ref": "#/$defs/text",
+          "description": "Form and proportion. Sized against the character's own body, never in pixels or inches — the generator cannot follow a measurement."
+        },
+        "material": {
+          "$ref": "#/$defs/text"
+        },
+        "palette": {
+          "$ref": "#/$defs/palette"
+        },
+        "readability": {
+          "$ref": "#/$defs/text",
+          "description": "What must stay legible about it at cell size."
+        }
+      }
+    },
+    "hold": {
+      "type": "object",
+      "description": "How the character carries it. Each hand on the prop names what that hand does, so a two-handed prop describes both.",
+      "required": [
+        "hands"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hands": {
+          "$ref": "#/$defs/hands"
+        },
+        "orientation": {
+          "$ref": "#/$defs/text",
+          "description": "Which end leads and where it points, so the prop cannot come back reversed."
+        },
+        "rest": {
+          "$ref": "#/$defs/text",
+          "description": "Default carry when no animation set says otherwise. A brief may contradict this for one character."
+        }
+      }
+    },
+    "carriage": {
+      "type": "object",
+      "description": "How the prop is carried in each animation set. A set left out falls back to hold.rest.",
+      "additionalProperties": false,
+      "properties": {
+        "dance": {
+          "$ref": "#/$defs/text"
+        },
+        "sing": {
+          "$ref": "#/$defs/text"
+        },
+        "flinch": {
+          "$ref": "#/$defs/text"
+        },
+        "guard": {
+          "$ref": "#/$defs/text"
+        },
+        "entrance": {
+          "$ref": "#/$defs/text"
+        },
+        "victory": {
+          "$ref": "#/$defs/text"
+        },
+        "ko": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "never": {
+      "type": "array",
+      "description": "What the prop must never do or become, including going missing.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "hands": {
+      "type": "object",
+      "description": "What each hand on the prop does, keyed by the character's own side. One key for a one-handed prop, two for a two-handed one. Never screen-left or screen-right.",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "character-left": {
+          "$ref": "#/$defs/text"
+        },
+        "character-right": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "palette": {
+      "type": "object",
+      "description": "Base, shadow and highlight for the prop's main material.",
+      "required": [
+        "base",
+        "shadow",
+        "highlight"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "$ref": "#/$defs/hex"
+        },
+        "shadow": {
+          "$ref": "#/$defs/hex"
+        },
+        "highlight": {
+          "$ref": "#/$defs/hex"
+        }
+      }
+    },
+    "hex": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    }
+  }
+}

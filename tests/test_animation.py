@@ -1,3 +1,4 @@
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -14,7 +15,7 @@ from cag.skeleton import pose_extent, stature
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
 
-SAMPLE = "/Users/matthewantone/Development/MotionArtist/work/sample/motion.json"
+SAMPLE = "tests/fixtures/sample-motion.json"
 NOTE = "The microphone stays in the character-right hand for every frame."
 
 
@@ -346,5 +347,35 @@ def test_a_sheet_with_the_wrong_figure_count_is_kept_and_redrawn(tmp_path, monke
         }
     )
     assert sorted(result["cells"]) == list(range(16))
-    assert (tmp_path / "lou/source/dance/sheet-00.rejected-0.png").exists()
-    assert (tmp_path / "lou/source/dance/sheet-00.png").exists()
+    sheets = tmp_path / "lou/source/dance"
+    assert list(sheets.glob("sheet-00-*.rejected-0.png"))
+    assert list(sheets.glob("sheet-00-*.png"))
+
+
+def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_run, tmp_path):
+    """Reuse keys on the sheet, not the frame numbers.
+
+    A traced sheet swapped in for a written one shares frame indices with it, so
+    an index-only cache kept every render drawn from the prose it replaced.
+    """
+    before = len(fake_sheet_draw.calls)
+    swapped = load_motion(SAMPLE)
+    moved = tuple(
+        replace(frame, cue=f"{frame.cue} arms overhead") for frame in swapped.frames
+    )
+    state = {
+        "spec": load_spec("tests/fixtures/velvet-lou.json"),
+        "bible": "A lounge performer.",
+        "key_art": tmp_path / "key.png",
+        "scale": 2.875,
+        "set_name": "dance",
+        "work_dir": tmp_path / "lou",
+        "set_note": NOTE,
+        "poses": {},
+    }
+
+    animation.sheet({**state, "motion": swapped}, draw_fn=fake_sheet_draw)
+    assert len(fake_sheet_draw.calls) == before, "the same sheet must not redraw"
+
+    animation.sheet({**state, "motion": replace(swapped, frames=moved)}, draw_fn=fake_sheet_draw)
+    assert len(fake_sheet_draw.calls) > before, "a changed sheet must redraw"

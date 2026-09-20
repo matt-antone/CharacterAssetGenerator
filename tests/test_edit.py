@@ -1,3 +1,4 @@
+import json
 from io import BytesIO
 
 import pytest
@@ -54,7 +55,7 @@ def test_server_only_takes_saves_from_its_own_page(tmp_path):
 
     def post(origin):
         request = urllib.request.Request(
-            f"http://127.0.0.1:{port}/?name=hop-sheet.png&fps=4", data=png, method="POST"
+            f"http://127.0.0.1:{port}/save?name=hop-sheet.png&fps=4&folder={tmp_path.name}", data=png, method="POST"
         )
         if origin:
             request.add_header("Origin", origin)
@@ -84,8 +85,24 @@ def test_locate_tells_characters_apart_by_contents(tmp_path, monkeypatch):
 
     tom = (tmp_path / "tall-tom" / "dance-sheet.png").read_bytes()
     assert locate(tmp_path, "dance-sheet.png", tom) == {
-        "folder": "tall-tom", "height": "6'", "row": 133  # 528 - 72in at 560px / 102in
+        "folder": "tall-tom", "height": "6'", "row": 133, "fps": None  # 528 - 72in at 560px/102in
     }
     belter = (tmp_path / "belter" / "dance-sheet.png").read_bytes()
     assert locate(tmp_path, "dance-sheet.png", belter)["row"] is None  # no brief for belter
     assert locate(tmp_path / "belter", "dance-sheet.png", tom) is None
+
+
+def test_save_updates_the_manifest_fps(tmp_path):
+    from cag.assemble import MANIFEST, manifest
+
+    paths = cells(tmp_path, count=2)
+    sprite_sheet(paths, tmp_path / "hop-sheet.png")
+    block = {"set_name": "hop", "frames": 2, "fps": 12, "columns": 2,
+             "sheet": "hop-sheet.png", "proof": "hop-proof.gif"}
+    manifest(tmp_path / MANIFEST, "Tall Tom", "6'", {}, [block])
+
+    save_sheet(tmp_path, "hop-sheet.png", (tmp_path / "hop-sheet.png").read_bytes(), 8)
+    written = json.loads((tmp_path / MANIFEST).read_text())
+    assert written["sets"]["hop"]["fps"] == 8
+    assert written["sets"]["hop"]["frames"] == 2
+    assert written["cell"] == [CELL_WIDTH, CELL_HEIGHT]

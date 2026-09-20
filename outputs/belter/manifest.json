@@ -1,0 +1,25 @@
+{
+  "name": "Belter",
+  "height": "5' 7\"",
+  "cell": [
+    560,
+    560
+  ],
+  "views": {
+    "key": "views/key.png",
+    "front": "views/front.png",
+    "back": "views/back.png",
+    "profile": "views/profile.png",
+    "portrait-34": "views/portrait-34.png",
+    "portrait-80": "views/portrait-80.png"
+  },
+  "sets": {
+    "dance": {
+      "frames": 32,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "dance-sheet.png",
+      "proof": "dance-proof.gif"
+    }
+  }
+}

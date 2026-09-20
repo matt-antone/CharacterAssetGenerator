@@ -60,6 +60,10 @@
     "animations": {
       "$ref": "#/$defs/animationDescriptions"
     },
+    "props": {
+      "$ref": "#/$defs/propNames",
+      "description": "Props the character holds in the key art and the projection views."
+    },
     "palette": {
       "$ref": "#/$defs/textList"
     },
@@ -82,19 +86,44 @@
         "$ref": "#/$defs/text"
       }
     },
+    "propNames": {
+      "type": "array",
+      "description": "Props held here, by name, each a file in props/. Empty hands are an empty list or no list at all.",
+      "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" }
+    },
+    "animation": {
+      "description": "The performance intent as prose, or that prose plus the traced motion sheet that drives the set. A sheet is named, never pathed: the pipeline knows where sheets live, and \"auto\" has one chosen.",
+      "oneOf": [
+        { "$ref": "#/$defs/text" },
+        {
+          "type": "object",
+          "required": ["intent"],
+          "additionalProperties": false,
+          "properties": {
+            "intent": { "$ref": "#/$defs/text" },
+            "props": { "$ref": "#/$defs/propNames" },
+            "motion": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+              "description": "Name of a traced MotionArtist sheet, e.g. \"zs-loop\", or \"auto\" to have one chosen."
+            }
+          }
+        }
+      ]
+    },
     "animationDescriptions": {
       "type": "object",
-      "description": "Required character-specific performance intent for every supported animation. Values are normal prose, not identifiers.",
+      "description": "Required character-specific performance intent for every supported animation. Prose, not identifiers \u2014 optionally alongside the name of a traced motion sheet to drive the set.",
       "required": ["dance", "sing", "flinch", "guard", "entrance", "victory", "ko"],
       "additionalProperties": false,
       "properties": {
-        "dance": { "$ref": "#/$defs/text" },
-        "sing": { "$ref": "#/$defs/text" },
-        "flinch": { "$ref": "#/$defs/text" },
-        "guard": { "$ref": "#/$defs/text" },
-        "entrance": { "$ref": "#/$defs/text" },
-        "victory": { "$ref": "#/$defs/text" },
-        "ko": { "$ref": "#/$defs/text" }
+        "dance": { "$ref": "#/$defs/animation" },
+        "sing": { "$ref": "#/$defs/animation" },
+        "flinch": { "$ref": "#/$defs/animation" },
+        "guard": { "$ref": "#/$defs/animation" },
+        "entrance": { "$ref": "#/$defs/animation" },
+        "victory": { "$ref": "#/$defs/animation" },
+        "ko": { "$ref": "#/$defs/animation" }
       }
     }
   }

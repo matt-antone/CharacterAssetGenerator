@@ -1,14 +1,37 @@
 {
   "name": "Diva",
   "height": "5' 9\"",
-  "description": "A statuesque R&B vocalist in her thirties whose restraint reads as control; the roster's narrowest vertical silhouette. Tall, narrow and vertically composed beneath a fitted gown; never wide, squat or pin-up exaggerated. Her recognition cues are a tall narrow sculptural updo in pure black hair, with hard tone bands and a clean crown, an unbroken floor-length gown column, and a short rear train, all readable without facial detail; no wide hair mass, no headwear. She wears a deep indigo-violet floor-length one-shoulder satin gown, fitted through the bodice, falling in a straight column and pooling into a short rear train; feet and legs stay hidden; one pair of simple hoop earrings. She holds one slim wireless handheld microphone vertically at chin height in her character-right hand; no cord, no stand. Her ready stance is grounded beneath the gown with subtly flexed knees and staggered feet implied by the hem, chin level, the character-right hand holding the microphone forward at chin height, and the free palm flat at the sternum. Palette, as base/shadow/highlight per material: dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; metal #6F747C / #34383E / #B5BAC0; indigo-violet #382480 / #1C1240 / #6854C8; skin #9B573F / #603426 / #C77A5B; hair, black #141418 / #070709 / #3C3C44; earring #C7A84B / #796526 / #F1D776. Never draw: purple, violet, plum, blue or any tinted hair — the hair is black, and its highlight bands stay neutral grey rather than picking up the gown's colour; wide hair; visible feet or legs; feather boa, fan, sunglasses, tiara, or fur; glossy gradient satin; exaggerated pin-up proportions; microphone cable, stand, or duplicate microphone; cleavage-focused construction; logos, text, or real brands.",
+  "description": "A statuesque R&B vocalist in her thirties whose restraint reads as control; the roster's narrowest vertical silhouette. Tall, narrow and vertically composed beneath a fitted gown; never wide, squat or pin-up exaggerated. Her recognition cues are a tall narrow sculptural updo in pure black hair, with hard tone bands and a clean crown, an unbroken floor-length gown column, and a short rear train, all readable without facial detail; no wide hair mass, no headwear. She wears a deep indigo-violet floor-length one-shoulder satin gown, fitted through the bodice, falling in a straight column and pooling into a short rear train; feet and legs stay hidden; one pair of simple hoop earrings. Her ready stance is grounded beneath the gown with subtly flexed knees and staggered feet implied by the hem, chin level, the character-right hand forward at chin height, and the free palm flat at the sternum. Palette, as base/shadow/highlight per material: dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; metal #6F747C / #34383E / #B5BAC0; indigo-violet #382480 / #1C1240 / #6854C8; skin #9B573F / #603426 / #C77A5B; hair, black #141418 / #070709 / #3C3C44; earring #C7A84B / #796526 / #F1D776. Never draw: purple, violet, plum, blue or any tinted hair — the hair is black, and its highlight bands stay neutral grey rather than picking up the gown's colour; wide hair; visible feet or legs; feather boa, fan, sunglasses, tiara, or fur; glossy gradient satin; exaggerated pin-up proportions; cleavage-focused construction; logos, text, or real brands.",
   "animations": {
-    "dance": "Elegant R&B dance loop: shift weight beneath the unbroken gown column, trace a small arm and shoulder phrase, let the short rear train follow, then return to the poised chin-level opening without exposing legs or feet. microphone does not need to be pointed at face and microphone arm is free to move",
-    "sing": "Restrained vocal loop: hold the slim microphone in the character-right hand at chin height, breathe through a subtle torso rise, move the free palm from sternum into one precise phrase gesture, then restore the statuesque stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+    "dance": {
+      "intent": "Elegant R&B dance loop: shift weight beneath the unbroken gown column, trace a small arm and shoulder phrase, let the short rear train follow, then return to the poised chin-level opening without exposing legs or feet.",
+      "props": [
+        "mic"
+      ]
+    },
+    "sing": {
+      "intent": "Breathe through a subtle torso rise, move the free palm from sternum into one precise phrase gesture, then restore the statuesque stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
     "flinch": "Brief room-sound surprise: the sculptural updo and shoulders react subtly, the gown column remains controlled, then she re-centers with the rear palm at the sternum. No opponent or impact.",
-    "guard": "One-shot stage self-protection: draw the rear arm across the bodice, angle the torso within the gown column, keep the microphone vertical, then hold a calm protected final pose. Not combat.",
+    "guard": {
+      "intent": "One-shot stage self-protection: draw the rear arm across the bodice, angle the torso within the gown column, then hold a calm protected final pose. Not combat.",
+      "props": [
+        "mic"
+      ]
+    },
     "entrance": "One-shot entrance: glide into frame with the gown train following, acknowledge the room with a minimal arm sweep, then settle into a tall vertical singing stance with no visible feet or legs.",
     "victory": "One-shot song-finish celebration: lift the free arm in a precise elegant acknowledgement, let the rear train settle, then hold a tall composed final silhouette.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the tall line softens — the shoulders round forward and her head hangs low with the chin dropped, the sculptural updo tipping forward with it. The microphone lowers from chin height in her character-right hand and she holds a standing, visibly stricken finish. The gown stays an unbroken floor-length column throughout. She remains standing in every frame — no kneeling, crouching, sitting, sinking, or going to the ground, and no legs shown. Do not imply injury, impact, or an opponent."
-  }
+    "ko": {
+      "intent": "Non-contact performance defeat: she stays on her feet while the tall line softens — the shoulders round forward and her head hangs low with the chin dropped, the sculptural updo tipping forward with it. She holds a standing, visibly stricken finish. The gown stays an unbroken floor-length column throughout. She remains standing in every frame — no kneeling, crouching, sitting, sinking, or going to the ground, and no legs shown. Do not imply injury, impact, or an opponent.",
+      "props": [
+        "mic"
+      ]
+    }
+  },
+  "props": [
+    "mic"
+  ]
 }
