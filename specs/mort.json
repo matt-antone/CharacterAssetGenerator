@@ -1,0 +1,52 @@
+{
+  "name": "Mort",
+  "height": "5' 2\"",
+  "description": "A city zookeeper of twenty-odd years and a courtly doo-wop crooner on his nights off, who kept feeding his animals well into the apocalypse, died somewhere in it, and still turns out for karaoke night in the uniform he worked and died in; polite, unhurried and quietly delighted to be back on a stage. Short and round with a low centre of gravity, a heavy pot belly straining the shirt buttons and hanging over the belt, short arms and legs, small feet and soft sloping shoulders, standing upright and level like the rest of the roster with weight even over both feet; never hunched, shambling, lurching or menacing. He is the shortest figure on the roster and reads wider than he is tall through the middle. He is unmistakably a corpse, not a man in makeup: the body is soft and heavy while the head is drawn and dead. His recognition cues are dead flesh-grey skin mottled with blue-green patches and dark veins standing out at the temples, throat, hands and the slab of the belly, a face fallen in over the bone with hollow cheeks, heavy dark rings around clouded milk-white eyes with pinprick pupils, grey lips shrunk back off long teeth in a permanent closed-mouth grin, a thinning matted side-parted pompadour with bare patches at the temples and one lock fallen loose over the forehead, a heavy pot belly the uniform shirt cannot contain, a faded khaki short-sleeve zoo uniform shirt with epaulettes and a blank oval patch on the character-left sleeve, a battered wide-brim khaki bush hat pushed back off the forehead, a big ring of keys and a stubby handset clipped to a wide leather belt, thick cloth-and-tape guards wound around both forearms, and a canvas feed bag on a wide strap crossing the chest above the belly to the character-left hip, all readable without facial detail. His own skin is dry, dusty and drawn tight over the skull, never wet, torn, split or wounded, and his uniform and gear are worn and mended, never bloodied. He wears a faded khaki short-sleeve zoo uniform shirt with two chest pockets, epaulettes, a blank oval sleeve patch and the buttons straining over the belly, with a dried white boutonniere still pinned to one pocket, olive cargo trousers cinched under the belly with a wide leather belt carrying a big key ring and a stubby handset, scuffed lace-up work boots wound with tape at the ankles, layered cloth-and-tape guards on both forearms, and a battered wide-brim khaki bush hat with a frayed brim, pushed back so the face stays clear. His ready stance is upright and easy, feet planted a little apart under the weight, shoulders level, chin slightly lifted, the free character-left hand open at waist height, and a closed-lip contented half-smile. Palette, as base/shadow/highlight per material: skin #9FAD9C / #56624F / #C6D0BF; mottling #7C8C82 / #454E47 / #A4B2A6; veins #55676B / #2E3A3D / #7E9094; lips #6E6068 / #3D343B / #948691; teeth #D8D2B8 / #9A937C / #F0ECDA; eye clouded #DAD9CE / #9A9A8E / #F4F3EB; eye pupil #1B1A1E; khaki shirt #B5A379 / #6E6046 / #DCCDA6; bush hat #A8946A / #625740 / #D0BE94; cargo trousers #5F6446 / #343827 / #8B9070; leather belt #6B4F33 / #3B2A1A / #96734E; canvas feed bag #6A6551 / #3B3830 / #948D74; tape #9BA0A6 / #5C6066 / #C8CDD2; metal keys and handset #6F747C / #34383E / #B5BAC0; boots #4A3F35 / #241E19 / #716354; hair #6E6656 / #3B372E / #9B9384; boutonniere #E8E4D6 / #B0AA97 / #FFFFFF. Never draw: living, healthy, rosy or tanned skin; clear white eyes with ordinary irises; a full head of neat glossy hair; a tuxedo, dinner jacket, bow tie or formalwear of any kind; a police, army, ranger or security uniform, body armour, a gas mask or a respirator; blood, gore, open wounds, torn flesh, exposed bone, ribs or organs on Mort himself; bites, scratches, bandages or anything that reads as injury on him; blood or spatter on his skin, his gear or the ground; maggots, flies or dripping rot; a firearm, bat, blade, axe, net, pole or any weapon; a microphone of any kind; an animal, a cage, a leash or a zoo enclosure; a hat worn low enough to hide the eyes; arms stretched straight out in front in a zombie walk; a hunched, shambling or lurching posture; a hungry, snarling or biting face, or reaching for anyone; a tall, lean or average build, or a flat stomach; graves, headstones, coffins, wreckage or a ruined-city backdrop; any limb of his own missing or detached; any real actor's likeness or any film's makeup design; readable text or lettering on the sleeve patch; logos, text or real brands.",
+  "animations": {
+    "dance": {
+      "intent": "Easy doo-wop step loop: rock from one taped boot to the other in a smooth side-together-side with the belly leading the weight shift, let the free character-left hand sweep out in a slow flourish at hip height with the feed bag swinging on its strap and the keys jingling at the belt, dip one shoulder on the offbeat, then return to the upright opening stance. Smooth and old-fashioned, never a lurch or a shamble.",
+      "props": [
+        "arm"
+      ]
+    },
+    "sing": {
+      "intent": "Open-air doo-wop loop: he holds nothing to his face and yells the part straight up into the room — tip the head back so the hat brim lifts clear, open the mouth wide off the long teeth for a sustained vowel with the belly pushing the note, raise the free character-left hand open beside the ear as though listening for the harmony above him, then settle back into his ready stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "arm"
+      ]
+    },
+    "flinch": {
+      "intent": "Brief room-sound startle: the soft shoulders hitch up, the clouded eyes go wide in their dark rings and the hat brim jolts, the free hand opens, then he settles the feed-bag strap back onto his shoulder and resettles into his upright stance. No opponent, strike or contact.",
+      "props": [
+        "arm"
+      ]
+    },
+    "guard": {
+      "intent": "One-shot stage self-protection: turn one shoulder forward and raise the taped character-left forearm flat in front of the face like a man shielding his eyes from a spotlight, then hold a steady upright finish. Not a combat action.",
+      "props": [
+        "arm"
+      ]
+    },
+    "entrance": {
+      "intent": "One-shot entrance: stroll in with an unhurried rolling step, stop, push the hat brim back with the free hand, touch the dried boutonniere on the shirt pocket, give the room a courteous nod, then take the upright ready stance.",
+      "props": [
+        "arm"
+      ]
+    },
+    "victory": {
+      "intent": "One-shot song-finish celebration: sweep both arms wide and high in a delighted old-fashioned rise onto the toes of the taped boots, the hat staying on, then settle into a proud, beaming upright pose with the free hand pressed to the shirt pocket.",
+      "props": [
+        "arm"
+      ]
+    },
+    "ko": {
+      "intent": "Non-contact performance defeat: he stays on his feet while the charm drains out of him — the soft shoulders drop, the short arms hang at his sides, and his head tips low under the hat brim with the chin toward the collar while the loose lock falls over the forehead. He holds a standing, visibly dejected finish with weight even over both boots. He remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent.",
+      "props": [
+        "arm"
+      ]
+    }
+  },
+  "props": [
+    "arm"
+  ]
+}
