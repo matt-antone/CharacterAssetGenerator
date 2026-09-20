@@ -21,6 +21,7 @@ from langgraph.graph import END, START, StateGraph
 from .draw import draw
 from .mask import cutout, key_art_scale, mask_to_cell
 from .prompts import BIBLE_SYSTEM, KEY_VIEW, VIEWS, bible_request, view_prompt
+from .props import clauses
 from .sets import REQUIRED_VIEWS, wanted
 from .style import detail_frame
 from .spec import CharacterSpec
@@ -114,6 +115,7 @@ def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticStat
             KEY_VIEW,
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
+            props=clauses(spec.props, None),
         ),
         source_path(state["work_dir"], KEY_VIEW),
         references=[detail] if detail else [],
@@ -154,6 +156,7 @@ def draw_projection(state: StaticState, draw_fn: Callable[..., Path]) -> StaticS
                 view,
                 detail_level=spec.detail_level,
                 detail_reference=detail is not None,
+                props=clauses(spec.props, None),
             ),
             source_path(state["work_dir"], view),
             references=[key_art, detail] if detail else [key_art],

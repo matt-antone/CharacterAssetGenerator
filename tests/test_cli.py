@@ -1,5 +1,9 @@
 """End to end through the CLI, with the model and the image tool faked out."""
 
+import shutil
+from dataclasses import replace
+from pathlib import Path
+
 import pytest
 
 from cag.geometry import CELL_HEIGHT, CELL_WIDTH
@@ -8,10 +12,12 @@ from langchain_core.messages import AIMessage
 from PIL import Image, ImageSequence
 
 from cag import animation, cli, mask, static_sheet
+from cag.motion import MotionError
+from cag.spec import load_spec
 from tests.test_animation import fake_draw
 from tests.test_static_sheet import flat_cutout
 
-SAMPLE = "/Users/matthewantone/Development/MotionArtist/work/sample/motion.json"
+SAMPLE = "tests/fixtures/sample-motion.json"
 
 
 @pytest.fixture
@@ -107,3 +113,63 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
     assert (out / "index.html").exists()
     assert not list(out.glob("*.gif"))
     assert len(fake_draw.calls) == 4
+
+
+def test_a_named_sheet_is_found_under_the_motion_root(tmp_path):
+    """The brief names a choreography; the pipeline knows where sheets live."""
+    root = tmp_path / "work"
+    (root / "zs-loop").mkdir(parents=True)
+    shutil.copy(SAMPLE, root / "zs-loop" / "motion.json")
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": "zs-loop"})
+
+    motion = cli.motion_for(spec, "dance", tmp_path / "work_dir", None, root)
+
+    assert motion.frames, "the named sheet drives the set"
+
+
+def test_a_named_sheet_that_is_not_there_says_so(tmp_path):
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": "nope"})
+    with pytest.raises(MotionError, match="nope"):
+        cli.motion_for(spec, "dance", tmp_path / "work_dir", None, tmp_path / "work")
+
+
+def test_the_motion_flag_wins_over_the_sheet_the_brief_names(tmp_path):
+    """`--motion` is the operator pointing at one file for this run."""
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": "nope"})
+
+    motion = cli.motion_for(spec, "dance", tmp_path / "w", Path(SAMPLE), tmp_path / "gone")
+
+    assert motion.frames, "the flag is used and the missing named sheet never looked for"
+
+
+def _library(tmp_path, *names):
+    root = tmp_path / "sheets"
+    for name in names:
+        (root / name).mkdir(parents=True)
+        shutil.copy(SAMPLE, root / name / "motion.json")
+    return root
+
+
+def test_auto_keeps_a_character_on_the_same_sheet_between_runs(tmp_path):
+    root = _library(tmp_path, "a-loop", "b-loop", "c-loop")
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": cli.AUTO})
+
+    first = cli.auto_sheet(spec, "dance", root)[0]
+
+    assert cli.auto_sheet(spec, "dance", root)[0] == first
+
+
+def test_auto_spreads_the_library_across_a_roster(tmp_path):
+    """Twelve characters must not all come back dancing the same dance."""
+    root = _library(tmp_path, "a-loop", "b-loop", "c-loop")
+    base = load_spec("tests/fixtures/velvet-lou.json")
+    picks = {
+        cli.auto_sheet(replace(base, name=f"Singer {n}"), "dance", root)[0] for n in range(12)
+    }
+    assert len(picks) > 1, f"every character landed on the same sheet: {picks}"
+
+
+def test_auto_with_an_empty_library_says_so(tmp_path):
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": cli.AUTO})
+    with pytest.raises(MotionError, match="none under"):
+        cli.motion_for(spec, "dance", tmp_path / "w", None, tmp_path / "empty")

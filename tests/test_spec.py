@@ -64,3 +64,53 @@ def test_detail_level_defaults_and_validates(tmp_path):
     for bad in (0, 11, "four", 4.5):
         with pytest.raises(SpecError, match="detail_level must be"):
             load_spec(write(tmp_path, detail_level=bad))
+
+
+def test_an_animation_may_name_the_sheet_that_drives_it(tmp_path):
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+        "animations": {"dance": {"intent": "A club loop.", "motion": "zs-loop"},
+                       "sing": "A held note."},
+    }))
+    spec = load_spec(brief)
+    assert spec.animations == {"dance": "A club loop.", "sing": "A held note."}
+    assert spec.motions == {"dance": "zs-loop"}
+
+
+def test_a_brief_names_a_sheet_and_never_points_at_a_file(tmp_path):
+    """A path in a brief only builds on the machine it was written on."""
+    for bad in ("../MotionArtist/work/zs-loop", "/abs/zs-loop", "./zs-loop"):
+        brief = tmp_path / "c.json"
+        brief.write_text(json.dumps({
+            "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+            "animations": {"dance": {"intent": "A club loop.", "motion": bad}},
+        }))
+        with pytest.raises(SpecError, match="not a path"):
+            load_spec(brief)
+
+
+def test_props_are_named_for_the_key_art_and_per_animation(tmp_path):
+    """A prop named for sing and not for dance is how it is kept out of dance."""
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+        "props": ["mic"],
+        "animations": {"sing": {"intent": "A held note.", "props": ["mic"]},
+                       "dance": "A club loop."},
+    }))
+    spec = load_spec(brief)
+    assert spec.props == ("mic",)
+    assert spec.animation_props == {"sing": ("mic",)}
+    assert spec.animation_props.get("dance", ()) == (), "empty hands in dance"
+
+
+def test_a_brief_names_props_and_never_points_at_files(tmp_path):
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+        "props": ["../props/mic"],
+        "animations": {"dance": "A club loop."},
+    }))
+    with pytest.raises(SpecError, match="not a prop"):
+        load_spec(brief)

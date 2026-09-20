@@ -54,6 +54,23 @@ class MotionSheet:
         return all(frame.pts for frame in self.frames)
 
     @property
+    def travel(self) -> float:
+        """Mean joint travel over the loop, in body heights.
+
+        How much movement the sheet actually holds, independent of where it
+        goes: a crouch and a sideways sway both count. 0.0 for a sheet with no
+        landmarks, which has nothing to measure.
+        """
+        if not self.has_poses or not self.body_h:
+            return 0.0
+        spans = []
+        for joint in {name for frame in self.frames for name in frame.pts}:
+            seen = [frame.pts[joint] for frame in self.frames if joint in frame.pts]
+            xs, ys = [p[0] for p in seen], [p[1] for p in seen]
+            spans.append(max(max(xs) - min(xs), max(ys) - min(ys)) / self.body_h)
+        return sum(spans) / len(spans) if spans else 0.0
+
+    @property
     def loops(self) -> bool:
         return self.playback == "loop"
 
@@ -117,3 +134,16 @@ def load_motion(path: Path | str) -> MotionSheet:
         floor_y=float(data.get("floor_y", 0.0)),
         body_h=float(data.get("body_h", 0.0)),
     )
+
+
+def library(root: Path | str) -> dict[str, MotionSheet]:
+    """Every traced sheet under `root`, by the name a brief would call it.
+
+    MotionArtist keeps one sheet per directory, so the directory name is the
+    name. A sheet that will not load raises: skipping it quietly made a library
+    that had lost three of its four sheets read as a library of one.
+    """
+    return {
+        path.parent.name: load_motion(path)
+        for path in sorted(Path(root).glob("*/motion.json"))
+    }

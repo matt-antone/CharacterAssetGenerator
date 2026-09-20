@@ -4,7 +4,7 @@ import pytest
 
 from cag.motion import MotionError, load_motion
 
-SAMPLE = "/Users/matthewantone/Development/MotionArtist/work/sample/motion.json"
+SAMPLE = "tests/fixtures/sample-motion.json"
 
 
 def sheet(tmp_path, **overrides):

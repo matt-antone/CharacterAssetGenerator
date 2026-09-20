@@ -8,7 +8,7 @@ from PIL import Image
 
 from cag.skeleton import SIZE, crown, pose_box, pose_extent, skeleton, stature, write_skeletons
 
-SAMPLE = Path("/Users/matthewantone/Development/MotionArtist/work/sample/motion.json")
+SAMPLE = Path("tests/fixtures/sample-motion.json")
 MOTION = json.loads(SAMPLE.read_text())
 POSES = [frame["pts"] for frame in MOTION["frames"]]
 

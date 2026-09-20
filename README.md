@@ -23,11 +23,37 @@ manifest's fps — `cag edit` rewrites it when a save rebuilds the proof at
 another rate, so it always matches the GIF beside it. Sets render across `--jobs` lanes, and one that fails
 does not take the others down with it.
 
-A single set, against a traced [MotionArtist](https://github.com/matt-antone/MotionArtist)
-sheet instead of a written one:
+By default a set writes its own sheet from the brief's prose, and nothing below
+is needed. A brief that wants a traced
+[MotionArtist](https://github.com/matt-antone/MotionArtist) sheet instead names
+one, and every build picks it up:
+
+```json
+"dance": { "intent": "Refined lounge sway loop...", "motion": "shuffle" }
+```
+
+`"motion": "auto"` has one chosen instead, spread across the roster so a cast
+does not all dance the same and stable so a character keeps its dance between
+runs. See what there is to name with:
 
 ```bash
-uv run cag build specs/crooner.json --set dance --motion ../MotionArtist/work/sample/motion.json
+uv run cag motions
+```
+
+It names the sheet, never the file. Sheets live in `motions/<name>/motion.json`
+in this repo, so a brief is portable and a sheet cannot be cleaned away from
+under the roster by the checkout that traced it. Adding one is a copy — the
+`motion.json` alone, not the footage beside it:
+
+```bash
+cp ../MotionArtist/work/shuffle/motion.json motions/shuffle/motion.json
+```
+
+`--motion-root` reads them from somewhere else, and `--motion` points one run at
+one file, overriding whatever the brief names:
+
+```bash
+uv run cag build specs/crooner.json --set dance --motion ../MotionArtist/work/shuffle/motion.json
 ```
 
 ## How it runs
@@ -47,7 +73,10 @@ references what it locks:
 Each set needs a motion sheet first. MotionArtist traces those from real
 footage, but only some sets have footage — so for the rest a motion director
 writes the frame plan from the brief's prose intent (`cag/motion_writer.py`),
-in the same shape MotionArtist emits. The graph below cannot tell where a
+in the same shape MotionArtist emits. Dance is the set worth tracing: a written
+one reads as a character standing still with the arms moving, because prose
+flattens a pose back towards neutral and only a traced sheet carries the
+landmarks `poses` needs. The graph below cannot tell where a
 sheet came from, with one exception noted in `poses`.
 
 Then each animation set, drawn the way a studio draws one:

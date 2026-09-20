@@ -27,12 +27,14 @@ BIBLE_SYSTEM = """You are a character designer writing a model sheet description
 illustrator who will draw the same character many times and must not deviate.
 
 Write one paragraph of 120-180 words describing only what is visible: build, posture, face, \
-hair, skin, clothing with exact colours, footwear, and any handheld prop. Name the character's \
-own side for anything asymmetric, using the words "character-left" and "character-right" \
-(never "left", "right", "screen-left" or "screen-right"). State the prop hand explicitly.
+hair, skin, clothing with exact colours, and footwear. Name the character's own side for \
+anything asymmetric, using the words "character-left" and "character-right" (never "left", \
+"right", "screen-left" or "screen-right").
 
 Do not describe background, lighting, mood, camera, pose, action, or art style. Do not invent \
-a name or backstory. Output the paragraph and nothing else."""
+a name or backstory. Say nothing about anything the character is holding: props are authored \
+separately and attached per set, and a prop named here would follow the character into every \
+set whether they carry it there or not. Output the paragraph and nothing else."""
 
 VIEWS = {
     "key": "Front-left three-quarter view, the character's body angled so they face screen-left.",
@@ -87,6 +89,7 @@ def view_prompt(
     pose: str | None = None,
     detail_level: int = DEFAULT_DETAIL_LEVEL,
     detail_reference: bool = False,
+    props: str = "",
 ) -> str:
     """Prompt for one static view of the character."""
     if view not in VIEWS:
@@ -104,6 +107,7 @@ def view_prompt(
         part for part in [
             f"Draw {spec.name}.",
             bible,
+            props,
             VIEWS[view],
             stance,
             f"{STYLE} {STANDING}",
@@ -146,12 +150,14 @@ def frame_prompt(
     pose_reference: bool = False,
     detail_level: int = DEFAULT_DETAIL_LEVEL,
     detail_reference: bool = False,
+    props: str = "",
 ) -> str:
     """Prompt for one animation frame."""
     return "\n\n".join(
         part for part in [
             f"Draw one animation frame of {spec.name}.",
             bible,
+            props,
             set_note,
             view_clause,
             f"Pose for this frame ({role}): {cue}",
@@ -188,6 +194,7 @@ def sheet_prompt(
     detail_level: int = DEFAULT_DETAIL_LEVEL,
     detail_reference: bool = False,
     per_row: int = 4,
+    props: str = "",
 ) -> str:
     """Prompt for one render holding a whole animation sequence.
 
@@ -209,6 +216,7 @@ def sheet_prompt(
             f"Draw {spec.name} {len(cues)} times in one image, as the consecutive frames of one "
             "animation.",
             bible,
+            props,
             set_note,
             view_clause,
             f"Draw this on a wide landscape canvas, wider than it is tall. {layout} in "
