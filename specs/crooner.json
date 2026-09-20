@@ -2,50 +2,20 @@
   "name": "Crooner",
   "height": "6' 2\"",
   "detail_level": 4,
-  "description": "An unflappable lounge singer in his fifties: lean, tall, narrow and controlled, entirely at ease in the room. Long clean jacket and trouser lines, low relaxed shoulders; never broad, squat or heavily coiled. His recognition cues are a hard jet-black slick side part with one sharp highlight band, a narrow dinner-jacket line, a black bow tie hanging undone, No hat or headwear. He wears a bright moss dinner jacket with satin peak lapels, a cream dress shirt with an open collar, black dress trousers with a satin side stripe, and polished black loafers. Angled upward and inward toward his mouth; His ready stance has narrow staggered feet with both knees slightly flexed, chin raised, one shoulder angled forward, and the character-right hand at chest height. Palette, as base/shadow/highlight per material: moss #0D7039 / #074522 / #2FA55E; cream #E6D9BC / #B9A98B / #FFF4D9; dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; metal #6F747C / #34383E / #B5BAC0; skin #B97855 / #754631 / #D99A75; hair #171719 / #080809 / #424248. Never draw: a broad or squat build; large hair; a fully tied bow tie; an exuberant grin; an aggressive fist; flashy jewellery; logos, text or real brands.",
+  "description": "An unflappable lounge singer in his fifties: lean, tall, narrow and controlled, entirely at ease in the room. Long clean jacket and trouser lines, low relaxed shoulders; never broad, squat or heavily coiled. His recognition cues are a hard jet-black slick side part with one sharp highlight band, a narrow dinner-jacket line, a black bow tie hanging undone, No hat or headwear. He wears a bright moss dinner jacket with satin peak lapels, a cream dress shirt with an open collar, black dress trousers with a satin side stripe, and polished black loafers. Angled upward and inward toward his mouth; His ready stance has narrow staggered feet with both knees slightly flexed, chin raised, one shoulder angled forward, and the character-right hand at chest height. Palette, as base/shadow/highlight per material: moss #0D7039 / #074522 / #2FA55E; cream #E6D9BC / #B9A98B / #FFF4D9; dark #20232B / #101217 / #3A3E48; white #F1EEE5 / #BDB9AE / #FFFFFF; skin #B97855 / #754631 / #D99A75; hair #171719 / #080809 / #424248. Never draw: a broad or squat build; large hair; a fully tied bow tie; an exuberant grin; an aggressive fist; flashy jewellery; logos, text or real brands.",
   "animations": {
-    "dance": {
-      "intent": "Refined lounge sway loop: settle the weight through restrained heel-and-toe shifts, let the dinner jacket and undone bow tie follow subtly, and return to the narrow staggered opening stance. The free character-left arm carries the gesture.",
-      "props": [
-        "mic"
-      ]
-    },
+    "dance": "Refined lounge sway loop: settle the weight through restrained heel-and-toe shifts, let the dinner jacket and undone bow tie follow subtly, and return to the narrow staggered opening stance. The free character-left arm carries the gesture.",
     "sing": {
       "intent": "Controlled crooner vocal loop: keep the chin high, make one small shoulder turn, then recover without losing his poised stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [
         "mic"
       ]
     },
-    "flinch": {
-      "intent": "Brief unexpected room-sound reaction: the eyes and shoulders tighten for a beat, then he restores his unflappable lounge posture. No contact or opponent.",
-      "props": [
-        "mic"
-      ]
-    },
-    "guard": {
-      "intent": "One-shot stage self-protection: turn one shoulder forward, then hold a composed final stance. Not a fight pose.",
-      "props": [
-        "mic"
-      ]
-    },
-    "entrance": {
-      "intent": "One-shot entrance: walk in with measured long steps, straighten the dinner-jacket line and dangling bow tie, then take the canonical staggered stance.",
-      "props": [
-        "mic"
-      ]
-    },
-    "victory": {
-      "intent": "One-shot performance finish: make a contained bow and one free-hand acknowledgement, then rise into a tall",
-      "props": [
-        "mic"
-      ]
-    },
-    "ko": {
-      "intent": "Non-contact performance defeat: he stays on his feet while the unflappable control drains out of him — the shoulders slump forward without breaking the dinner-jacket line, and his head hangs low with the chin toward his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent.",
-      "props": [
-        "mic"
-      ]
-    }
+    "flinch": "Brief unexpected room-sound reaction: the eyes and shoulders tighten for a beat, then he restores his unflappable lounge posture. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward, then hold a composed final stance. Not a fight pose.",
+    "entrance": "One-shot entrance: walk in with measured long steps, straighten the dinner-jacket line and dangling bow tie, then take the canonical staggered stance.",
+    "victory": "One-shot performance finish: make a contained bow and one free-hand acknowledgement, then rise into a tall settled finish.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the unflappable control drains out of him — the shoulders slump forward without breaking the dinner-jacket line, and his head hangs low with the chin toward his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   },
   "props": [
     "mic"

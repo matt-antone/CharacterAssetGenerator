@@ -1,0 +1,39 @@
+{
+  "name": "severed arm",
+  "summary": "Somebody else's arm, carried in one hand as a keepsake. It is never sung into: the character sings into the air. One arm, never a second, never attached to anyone.",
+  "draw": {
+    "shape": "A human forearm and slack hand, torn away above the elbow, about as long as the character's own forearm and clearly thinner than it. The fingers hang loose and slightly curled, and the hand end is always the leading end, so the silhouette reads as an arm rather than a club.",
+    "material": "Dull dead skin a shade greyer than the character's own, with a ragged sleeve cuff of torn cloth at the elbow end. The torn end is a dark flat stump under that cuff: no bone, no organs, no wet detail, no drips.",
+    "palette": {
+      "base": "#8C9A93",
+      "shadow": "#4E5A55",
+      "highlight": "#B8C4BD"
+    },
+    "readability": "The hand and the five fingers stay legible at cell size against the costume, never a smudge, a stub, or a shape that merges into the body behind it."
+  },
+  "hold": {
+    "hands": {
+      "character-right": "The fist wraps the arm at the torn end, fingers closed around it, thumb along the side, carried the way a man carries something he means to keep. The hand end always leads."
+    },
+    "orientation": "The hand end leads, fingers hanging loose. Raised, it points up and away from the face; lowered, it stays hand-up with the fingers still the leading end. It never comes to the mouth, never points away from the character, and never reads upside down.",
+    "rest": "At the upper torso, hand end up, unless the set below or the brief says otherwise."
+  },
+  "carriage": {
+    "dance": "The arm does not need to point at the face. The prop hand is free to move with the dance, the hand end still leading and the fingers swinging loose.",
+    "sing": "Held down and out to the side through the whole phrase, well clear of the face, the slack fingers swinging a little with the effort. It never comes up to the mouth.",
+    "flinch": "Stays controlled at the upper torso through the reaction.",
+    "guard": "Kept upright in the prop hand while the free arm shields the torso.",
+    "entrance": "Lifted once in acknowledgement, the slack hand flopping, then settled at the upper torso.",
+    "victory": "Raised with the celebration, still upright, hand end up.",
+    "ko": "Lowers to hang loosely at the side, still in the prop hand, hand end still up."
+  },
+  "never": [
+    "in the character-left hand, or swapped between hands across a set",
+    "brought to the mouth, sung into, or held like a microphone",
+    "swung, brandished or used as a club or a weapon",
+    "bleeding, dripping, spattering, or marking the character, the costume or the ground",
+    "showing bone, muscle, organs or any open wound at the torn end",
+    "a second arm, a leg, a head, a whole body, or any figure it might still be attached to",
+    "replaced by a bare fist, an open hand or an empty hand in any frame, whatever the arm is doing"
+  ]
+}
