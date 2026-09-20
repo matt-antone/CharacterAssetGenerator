@@ -10,3 +10,7 @@ work/
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
 .fallow/
+
+# A traced sheet is kept unpacked; the export bundle beside it is the same
+# files again, so it is not tracked.
+motions/*.zip
