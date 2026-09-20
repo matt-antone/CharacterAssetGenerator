@@ -18,13 +18,6 @@
       "columns": 8,
       "sheet": "dance-sheet.png",
       "proof": "dance-proof.gif"
-    },
-    "sing": {
-      "frames": 16,
-      "fps": 8,
-      "columns": 8,
-      "sheet": "sing-sheet.png",
-      "proof": "sing-proof.gif"
     }
   }
 }
