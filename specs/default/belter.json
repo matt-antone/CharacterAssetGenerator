@@ -40,7 +40,7 @@
   "animations": {
     "dance": {
       "intent": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow. The character-right hand and arm are free to move.",
-      "motion": "shuffle"
+      "motion": "shuffle-2"
     },
     "sing": {
       "intent": "Planted power-ballad vocal loop: brace through the legs, use one compact free-hand emphasis, then settle back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
