@@ -114,3 +114,42 @@ def test_a_brief_names_props_and_never_points_at_files(tmp_path):
     }))
     with pytest.raises(SpecError, match="not a prop"):
         load_spec(brief)
+
+
+def test_a_brief_may_fill_the_fields_the_schema_publishes(tmp_path):
+    """The published schema's optional fields load, so a costume fact can be
+    stated once in its own field instead of buried in the description."""
+    spec = load_spec(write(
+        tmp_path,
+        id="velvet-lou",
+        outfit="Scuffed brown boots and a velvet jacket.",
+        hair="A dark quiff.",
+        avoid=["trainers", "a hat"],
+        palette=["velvet #4A1E3C"],
+    ))
+    assert spec.outfit.startswith("Scuffed brown boots")
+    assert spec.hair == "A dark quiff."
+    assert spec.avoid == ("trainers", "a hat")
+    assert spec.palette == ("velvet #4A1E3C",)
+    assert spec.slug == "velvet-lou"
+
+
+def test_the_published_fields_stay_optional():
+    """Every brief written before the fields existed still loads unchanged."""
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    assert (spec.outfit, spec.hair, spec.avoid, spec.id) == ("", "", (), "")
+    assert spec.slug == "velvet-lou"
+
+
+@pytest.mark.parametrize(
+    "overrides, message",
+    [
+        ({"outfit": "  "}, "outfit must be non-empty prose"),
+        ({"avoid": "trainers"}, "avoid must be a list"),
+        ({"avoid": ["trainers", ""]}, "avoid must be non-empty prose"),
+        ({"id": "Velvet Lou"}, "id must read like a slug"),
+    ],
+)
+def test_rejects_half_filled_fields(tmp_path, overrides, message):
+    with pytest.raises(SpecError, match=message):
+        load_spec(write(tmp_path, **overrides))
