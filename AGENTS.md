@@ -89,6 +89,52 @@ sets' sheets and GIFs are still on disk, untouched — only the page forgot them
 Finish with a full `uv run cag build <spec>` afterwards. Completed frames are cached and
 skipped, so it costs almost nothing and puts every set back on the page.
 
+## Installing a motion bundle
+
+Bundles arrive as zips. `library()` globs `motions/*/manifest.json`, so a zip in
+`motions/` is inert — nothing reads it and nothing warns you.
+
+Installing one is a single action with four parts. Doing three of them leaves
+the library lying:
+
+1. Extract into `motions/`, keeping the bundle's own directory name exactly.
+   **Never rename on the way in.** A bundle carries its name in three places —
+   the directory, the manifest's `name`, and the `name` inside `motion.json` —
+   and renaming one desyncs it from the other two. `library()` keys on the
+   manifest; the build log prints the motion sheet's copy.
+2. Delete the zip.
+3. Delete the bundle it supersedes. A re-cut arrives under its own trace name
+   and lands *beside* the old one rather than over it, so nothing breaks and a
+   brief still naming the old one silently renders the old motion. Silence is
+   the failure mode here.
+4. Repoint every brief that named the old bundle. A brief naming a bundle that
+   is gone fails loudly and by name; a brief naming a stale one does not fail.
+
+Then check it before trusting it:
+
+```bash
+.venv/bin/python -c "
+from cag.motion import library
+for n, b in sorted(library('motions').items()):
+    m = b.load()
+    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {b.playback} seam={b.seam!r} '
+          f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
+          f'travel={m.travel:.3f}')"
+```
+
+One pass catches everything that matters. A manifest that disagrees with its
+motion sheet raises. A short thumb set shows as `photos=0`, which means that set
+renders with no pose reference at all. `playback` must suit the set: a `loop`
+trace seams back to frame 0, a `one-shot` one does not, and driving a looping
+set from a one-shot cut gives a dance that plays once.
+
+A bundle's name is its trace — label, video id and start second — because a
+label alone is a genre. Two different dances once collided on `shuffle`, and the
+baselines measured against one silently came to refer to the other.
+
+`motions/sample` is the worked example of the format and the only motion fixture
+the tests use. It is not a trace; leave it installed.
+
 ## Words
 
 Agreed with the MotionArtist repo after one word for two things caused three
