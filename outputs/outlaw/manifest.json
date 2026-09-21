@@ -1,0 +1,46 @@
+{
+  "name": "Outlaw",
+  "height": "5' 11\"",
+  "cell": [
+    560,
+    560
+  ],
+  "views": {
+    "key": "views/key.png",
+    "front": "views/front.png",
+    "back": "views/back.png",
+    "profile": "views/profile.png",
+    "portrait-34": "views/portrait-34.png",
+    "portrait-80": "views/portrait-80.png"
+  },
+  "sets": {
+    "dance": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "dance-sheet.png",
+      "proof": "dance-proof.gif"
+    },
+    "ko": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "ko-sheet.png",
+      "proof": "ko-proof.gif"
+    },
+    "sing": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "sing-sheet.png",
+      "proof": "sing-proof.gif"
+    },
+    "victory": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "victory-sheet.png",
+      "proof": "victory-proof.gif"
+    }
+  }
+}

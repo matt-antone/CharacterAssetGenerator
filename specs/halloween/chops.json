@@ -49,10 +49,11 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Heavy headbang loop: plant the boots wide, swing the masked head down and up so the stringy hair sweeps forward and back, rock the weight from one boot to the other with the knees loose, and pump the free gloved character-right fist at shoulder height, then return to the tall square opening stance. Loose and enthusiastic, never a stalk or a lunge.",
+      "intent": "Heavy metal two-step loop: plant the boots wide and swing the weight from one to the other, cross the character-right boot behind on the second beat, let the stringy hair sway with the shift, and swing the free gloved character-right arm out wide and down with the step, then return to the tall square opening stance. Loose and enthusiastic, never a stalk or a lunge.",
       "props": [
         "knife"
-      ]
+      ],
+      "motion": "twostep-Qpp24-RInl4-3.8s"
     },
     "sing": {
       "intent": "Arena-metal loop: lean the mask back for a long roaring line with the chest expanding, throw the free gloved character-right hand up with the fingers spread, then settle back into his tall square stance. The mask stays on; the mouth slot and the head angle must visibly move across the loop so he unmistakably reads as singing.",

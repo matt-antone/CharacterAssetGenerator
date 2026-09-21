@@ -21,12 +21,26 @@
       "sheet": "dance-sheet.png",
       "proof": "dance-proof.gif"
     },
+    "ko": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "ko-sheet.png",
+      "proof": "ko-proof.gif"
+    },
     "sing": {
       "frames": 16,
       "fps": 8,
       "columns": 8,
       "sheet": "sing-sheet.png",
       "proof": "sing-proof.gif"
+    },
+    "victory": {
+      "frames": 16,
+      "fps": 8,
+      "columns": 8,
+      "sheet": "victory-sheet.png",
+      "proof": "victory-proof.gif"
     }
   }
 }
