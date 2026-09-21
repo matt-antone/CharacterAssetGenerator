@@ -2,27 +2,37 @@
 
 Instructions for agents working in this repo.
 
-## Do not merge the photo pose path before one real render
+## The photo pose path, and what its one real render showed
 
-On `pose-reference-from-sprite-sheet`, a bundle that ships one thumbnail per
-frame now uses those photographs as the pose reference, and a photographic set
-sends a leaner prompt — the bible, the director's note and every per-frame cue
-are dropped. It measures far better on amplitude, which is what decides whether
-a set reads as a dance or a sway. **It has never produced a real render through
-`cag build`.** Every number behind it came from scratch scripts that
-hand-assembled their prompts, and the shipped code assembles them differently.
+A bundle that ships one thumbnail per frame uses those photographs as the pose
+reference, and a photographic set sends a leaner prompt — the bible, the
+director's note and every per-frame cue are dropped.
 
-Run one 12-frame set end to end before this reaches main, and check four things:
+This merged once it had produced a real render through `cag build`, because
+until then every number behind it came from scratch scripts that hand-assembled
+their prompts differently from the shipped code. That run was belter's `dance`,
+24 frames from `shuffle-1-b0ARQ5kM85Y-13.6s`, three renders of eight figures:
 
-1. Photo cards in frame order, and the photograph wording in the prompt rather
-   than the pose-diagram wording.
-2. Zero overlapping figure boxes — every figure inside its own cell.
-3. The character's costume surviving onto a foot that is off the floor. Before
-   the costume anchor, a lifted foot came back wearing the reference dancer's
-   white trainer, 2 of 16 figures.
-4. Identity across a chunk boundary: does figure 13 look like figure 1? Scale is
-   already proven fine there — a 2.0x drawn-size difference registers down to a
-   4px spread — but nothing measures identity and nothing warns.
+1. **Photo cards in frame order, photograph wording.** 24 cards in order, and
+   the prompt says "strip of photographs of a real performer" — not the
+   pose-diagram wording, which no longer exists.
+2. **No overlapping figure boxes.** Eight figures sliced cleanly from each of
+   three sheets.
+3. **Costume surviving onto a lifted foot.** White pixels in the lower 45% of a
+   figure: 0 of 24. Bare leg: 0 of 24. Belter's palette holds no white, so
+   either reading is unambiguous bleed from the performer in the photograph.
+4. **Identity across a chunk boundary.** Figures 7, 8, 15 and 16 measured
+   0.93-0.98x figure 0's height with a mean colour delta at or under 8.1.
+
+What that run does **not** establish, and nobody should claim it does:
+
+- **Pose fidelity has no floor on the current trace.** Every recorded baseline
+  was measured on a clip that has since been deleted, so no number says whether
+  a rendered dance reads as that dance. Establish a fresh floor before judging
+  any further prompt or reference change.
+- **It is one roll.** The same clip measured zero costume bleed at twelve
+  figures a render on one roll and eleven of twenty-four on the next. Roll twice
+  before calling any of these numbers settled.
 
 Ruled out with measurements, do not re-open: fixing torso rotation through
 prompting. A frame traced at 28 degrees of body yaw comes back square-on in
