@@ -23,6 +23,7 @@ from .mask import cutout, key_art_scale, mask_to_cell
 from .prompts import (
     BIBLE_SYSTEM,
     EMPTY_HANDS,
+    KEY_FRAME_VIEW,
     KEY_VIEW,
     VIEWS,
     assemble_bible,
@@ -142,8 +143,9 @@ def set_key_art(
     work_dir: Path,
     key_art: Path,
     draw_fn: Callable[..., Path] | None = None,
+    view: str = KEY_FRAME_VIEW,
 ) -> Path:
-    """The key art with this set's hands, drawn once per set that needs it.
+    """The key art with this set's hands and facing, drawn once per set that needs it.
 
     The prop sits on the character in the key art, because that is where a
     designer puts it. Every frame prompt then says to match the reference for
@@ -156,17 +158,24 @@ def set_key_art(
     picture of the character holding it. So the set gets a reference whose hands
     are its own. Drawn from the approved key art, so identity and scale come
     with it, and skipped entirely for a set whose hands already match.
+
+    Facing is the same argument again, with a picture on the other side. The key
+    art is a three-quarter view; a set traced in profile was still drawn against
+    it, and the one photograph in the reference list beat the view clause every
+    time — profile frames came back at three-quarters. So a set whose motion
+    faces another way gets its reference redrawn at that facing, and the
+    three-quarter key art is not among the frame references at all.
     """
     held = spec.animation_props.get(set_name, ())
-    if held == spec.props:
+    if held == spec.props and view == KEY_FRAME_VIEW:
         return key_art
-    dst = work_dir / "source" / f"{set_name}-key.png"
+    dst = work_dir / "source" / f"{set_name}-key-{view.replace('/', '-')}.png"
     detail = detail_frame(spec.detail_level)
     return (draw_fn or draw)(
         view_prompt(
             spec,
             bible,
-            KEY_VIEW,
+            KEY_VIEW if view == KEY_FRAME_VIEW else view,
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
             props=clauses(held, set_name) if held else EMPTY_HANDS,

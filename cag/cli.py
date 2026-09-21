@@ -131,8 +131,9 @@ def render_set(
     # The reference this set is drawn against has this set's hands, not the key
     # art's: a prop on the character follows it into every frame that quotes it.
     key_art = set_key_art(
-        spec, set_name, static["bible"], work_dir, static["sources"][KEY_VIEW], draw_fn
+        spec, set_name, static["bible"], work_dir, static["sources"][KEY_VIEW], draw_fn, motion.view
     )
+    log(f"[{set_name}] reference: {key_art.name}")
     animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
         {
             "spec": spec,

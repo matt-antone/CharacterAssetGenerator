@@ -221,8 +221,17 @@ def test_a_set_whose_hands_differ_gets_its_own_key_art(tmp_path):
 
     # dance is drawn empty-handed, so it gets a reference with empty hands.
     path = static_sheet.set_key_art(spec, "dance", "B", tmp_path, key_art, fake_draw)
-    assert path.name == "dance-key.png"
-    prompt, references = drawn["dance-key.png"]
+    assert path.name == "dance-key-3-4.png"
+    prompt, references = drawn["dance-key-3-4.png"]
     assert "Both of their hands are empty" in prompt
     assert "Microphone:" not in prompt, "the prop clause is replaced, not added to"
     assert key_art in references, "identity and scale come from the approved key art"
+
+    # sing's hands match, but a set traced in profile still needs a reference at
+    # its own facing: the three-quarter key art is what the frames drift toward.
+    path = static_sheet.set_key_art(spec, "sing", "B", tmp_path, key_art, fake_draw, "left")
+    assert path.name == "sing-key-left.png"
+    prompt, references = drawn["sing-key-left.png"]
+    assert "Strict side profile" in prompt and "screen-left" in prompt
+    assert "Mic:" in prompt or "mic" in prompt.lower(), "the set's own props are drawn in"
+    assert key_art in references
