@@ -22,7 +22,14 @@ from .draw import DrawError, draw
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
 from .mask import MaskError, home_x, pose_to_cell, set_to_cells, slice_frame_sheet
 from .motion import Frame, MotionSheet
-from .prompts import DIRECTOR_SYSTEM, FRAME_VIEWS, director_request, frame_prompt, frame_sheet_prompt
+from .prompts import (
+    DIRECTOR_SYSTEM,
+    EMPTY_HANDS,
+    FRAME_VIEWS,
+    director_request,
+    frame_prompt,
+    frame_sheet_prompt,
+)
 from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos
 from .props import clauses
 from .style import detail_frame
@@ -60,13 +67,18 @@ def frame_path(state: AnimationState, kind: str, index: int) -> Path:
 
 
 def prop_clause(state: AnimationState) -> str:
-    """What this character holds in this set, or "" for empty hands.
+    """What this character holds in this set, or the empty-hands instruction.
 
     A set the brief gives no props is drawn empty-handed. That is how a prop is
     kept out of one set without being taken off the character everywhere.
+
+    Saying nothing is not the same as saying empty, and this was the last path
+    still saying nothing: the director and the per-set key art already send
+    EMPTY_HANDS, so a hand rising near the face came back holding a microphone
+    only in the frames themselves.
     """
     held = state["spec"].animation_props.get(state["set_name"], ())
-    return clauses(held, state["set_name"]) if held else ""
+    return clauses(held, state["set_name"]) if held else EMPTY_HANDS
 
 
 def view_clause(state: AnimationState) -> str:

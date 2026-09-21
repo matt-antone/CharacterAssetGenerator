@@ -14,6 +14,7 @@ from cag import animation, mask
 from cag.geometry import ANIM_CONTACT_ROW, anim_subject_height_px
 from cag.motion import load_motion
 from cag.mask import pose_extent, stature
+from cag.prompts import EMPTY_HANDS
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
 
@@ -501,3 +502,22 @@ def test_the_director_is_told_what_the_set_holds_rather_than_left_to_guess(tmp_p
     held = ask("sing")
     assert "Both of their hands are empty" not in held
     assert "mic" in held.lower(), "the set that does hold one still says so"
+
+
+def test_a_set_without_props_sends_the_empty_hands_instruction():
+    """Saying nothing let the model draw a microphone back in.
+
+    The director and the per-set key art already sent EMPTY_HANDS; the frames
+    did not, so a traced hand rising near the face came back holding a mic.
+    """
+    spec = load_spec("specs/default/diva.json")
+    state = {"spec": replace(spec, animation_props={}), "set_name": "dance"}
+    assert animation.prop_clause(state) == EMPTY_HANDS
+
+
+def test_a_set_with_props_still_names_them():
+    spec = load_spec("specs/default/diva.json")
+    state = {"spec": replace(spec, animation_props={"dance": ("mic",)}), "set_name": "dance"}
+    clause = animation.prop_clause(state)
+    assert "microphone" in clause.lower()
+    assert clause != EMPTY_HANDS
