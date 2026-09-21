@@ -56,6 +56,10 @@ FRAME_VIEWS = {
     "3/4": VIEWS["key"],
 }
 
+#: The frame view the key art is already drawn at: a set traced at this facing
+#: needs no reference of its own.
+KEY_FRAME_VIEW = "3/4"
+
 DIRECTOR_SYSTEM = """You are the motion director for one animation set.
 
 You are given a character description and the performance arc of a motion source. Write two to \
@@ -156,8 +160,13 @@ def view_prompt(
     detail_reference: bool = False,
     props: str = "",
 ) -> str:
-    """Prompt for one static view of the character."""
-    if view not in VIEWS:
+    """Prompt for one static view of the character.
+
+    `view` names a static view or a MotionArtist frame facing, so a set can be
+    given a reference drawn at its own facing rather than the key art's.
+    """
+    line = VIEWS.get(view) or FRAME_VIEWS.get(view)
+    if line is None:
         raise KeyError(f"unknown view {view!r}")
     stance = pose or (
         # Deliberately defers to the description. Inventing a stance here
@@ -173,7 +182,7 @@ def view_prompt(
             f"Draw {spec.name}.",
             bible,
             props,
-            VIEWS[view],
+            line,
             stance,
             f"{STYLE} {STANDING}",
             BACKDROP,
