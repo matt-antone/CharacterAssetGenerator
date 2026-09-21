@@ -1,0 +1,4036 @@
+{
+ "schema": "motion-artist/2",
+ "title": "Shuffle 4",
+ "name": "shuffle-4-Us5Zf6LwmKo-2.9s",
+ "source": {
+  "url": "https://youtube.com/shorts/Us5Zf6LwmKo",
+  "file": "work/shuffle-4/source-Us5Zf6LwmKo.mp4",
+  "title": "Mini tutorial. How to shuffle/cuttingshapes. #tutorial #shuffle #shuffledance",
+  "start": 2.88,
+  "end": 4.88,
+  "speed_factor": 1.0,
+  "duration": 14.0
+ },
+ "exaggerate": 1.25,
+ "stabilized": false,
+ "fps": 12,
+ "frame_count": 24,
+ "playback": "loop",
+ "view": "front",
+ "seam": "clean",
+ "seam_ratio": 1.37,
+ "missing_frames": [],
+ "arc": "A two-beat cross-behind phrase danced almost entirely off the character-right foot. It opens on a held key: weight stacked on the character-right leg, character-left foot already off the floor, character-right forearm up near shoulder height as the anticipation. Through frames 1-5 the character-left knee folds tighter and tighter and the leg swings across and behind the standing leg while the character-right heel peels off the floor — the drive is the pelvis turning against the shoulders, not the foot.\n\nFrames 6-13 are the recovery and the breath of the phrase: both feet come down onto their balls, heels lifted, legs long, arms hanging quiet. This is the stillest stretch in the loop and should read as a held settle, not as dead frames — the weight rocks between the balls of the feet while nothing else moves.\n\nFrames 14-20 re-attack: the arms snap up and out, the character-left knee folds again and the cross repeats, deeper this time, with the character-right leg passing behind. Frames 21-23 unwind — legs straighten, arms drop long, and the weight begins transferring toward the character-left foot so the loop lands back on frame 0's stacked character-right stance with no visible cut.",
+ "frames": [
+  {
+   "i": 0,
+   "t": 2.88,
+   "role": "key",
+   "pace": "steady",
+   "energy": 1.33,
+   "cue": "Weight on the character-right foot, character-left foot lifted. legs straight. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm at shoulder height, elbow bent ~90°, by the side. torso upright. head forward.",
+   "note": "Hit pose. Character-right forearm up at shoulder height is the anticipation — do not soften it.",
+   "features": {
+    "yaw": 2,
+    "view": "front",
+    "reach_L": 0.34,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.21,
+    "arm_R": "character-right arm at shoulder height, elbow bent ~90°, by the side",
+    "knee_L": 158,
+    "knee_R": 153,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "legs straight",
+    "overlap": "",
+    "feet": "",
+    "lean_deg": -4,
+    "torso": "torso upright",
+    "twist_deg": 4,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": null,
+    "limbs": {
+     "legL": "level",
+     "legR": "level",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2879,
+     0.1532,
+     -0.0326
+    ],
+    "eyeL": [
+     0.2996,
+     0.143,
+     -0.028
+    ],
+    "eyeR": [
+     0.2747,
+     0.141,
+     -0.0292
+    ],
+    "earL": [
+     0.3071,
+     0.1514,
+     0.0145
+    ],
+    "earR": [
+     0.2612,
+     0.1489,
+     0.0127
+    ],
+    "shL": [
+     0.3396,
+     0.2413,
+     0.0302
+    ],
+    "shR": [
+     0.219,
+     0.2443,
+     0.0356
+    ],
+    "elL": [
+     0.341,
+     0.3382,
+     0.0423
+    ],
+    "elR": [
+     0.1933,
+     0.3487,
+     -0.0212
+    ],
+    "wrL": [
+     0.3801,
+     0.4093,
+     0.0056
+    ],
+    "wrR": [
+     0.1934,
+     0.2417,
+     -0.1202
+    ],
+    "pinkyL": [
+     0.3951,
+     0.434,
+     0.0016
+    ],
+    "pinkyR": [
+     0.1897,
+     0.2163,
+     -0.1411
+    ],
+    "indexL": [
+     0.3898,
+     0.431,
+     -0.0154
+    ],
+    "indexR": [
+     0.1968,
+     0.2042,
+     -0.1362
+    ],
+    "hipL": [
+     0.3297,
+     0.4279,
+     -0.0052
+    ],
+    "hipR": [
+     0.2517,
+     0.4302,
+     0.0052
+    ],
+    "knL": [
+     0.4124,
+     0.5976,
+     -0.0151
+    ],
+    "knR": [
+     0.1915,
+     0.6031,
+     -0.0146
+    ],
+    "anL": [
+     0.4549,
+     0.7636,
+     0.0409
+    ],
+    "anR": [
+     0.1405,
+     0.7422,
+     0.0424
+    ],
+    "heelL": [
+     0.4403,
+     0.7802,
+     0.0414
+    ],
+    "heelR": [
+     0.148,
+     0.7564,
+     0.044
+    ],
+    "toeL": [
+     0.4798,
+     0.8249,
+     -0.0172
+    ],
+    "toeR": [
+     0.1056,
+     0.8176,
+     -0.014
+    ]
+   }
+  },
+  {
+   "i": 1,
+   "t": 2.963,
+   "role": "key",
+   "pace": "steady",
+   "energy": 1.01,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm at chest height, elbow bent ~90°, by the side. torso upright. character-left hip raised. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -8,
+    "view": "front",
+    "reach_L": 0.33,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.07,
+    "arm_R": "character-right arm at chest height, elbow bent ~90°, by the side",
+    "knee_L": 103,
+    "knee_R": 157,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "",
+    "feet": "",
+    "lean_deg": -2,
+    "torso": "torso upright",
+    "twist_deg": 0,
+    "twist": "",
+    "hips": "character-left hip raised",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "level",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2929,
+     0.1263,
+     -0.073
+    ],
+    "eyeL": [
+     0.3057,
+     0.1128,
+     -0.0684
+    ],
+    "eyeR": [
+     0.2747,
+     0.1107,
+     -0.0704
+    ],
+    "earL": [
+     0.3126,
+     0.1188,
+     -0.0221
+    ],
+    "earR": [
+     0.2572,
+     0.1156,
+     -0.0298
+    ],
+    "shL": [
+     0.3303,
+     0.2097,
+     0.0109
+    ],
+    "shR": [
+     0.2163,
+     0.2014,
+     -0.0112
+    ],
+    "elL": [
+     0.3292,
+     0.3159,
+     0.0537
+    ],
+    "elR": [
+     0.1427,
+     0.2914,
+     -0.0515
+    ],
+    "wrL": [
+     0.3683,
+     0.3976,
+     0.0333
+    ],
+    "wrR": [
+     0.2089,
+     0.2551,
+     -0.1328
+    ],
+    "pinkyL": [
+     0.3873,
+     0.4206,
+     0.0279
+    ],
+    "pinkyR": [
+     0.2238,
+     0.2528,
+     -0.1521
+    ],
+    "indexL": [
+     0.3846,
+     0.4147,
+     0.0083
+    ],
+    "indexR": [
+     0.235,
+     0.2496,
+     -0.1517
+    ],
+    "hipL": [
+     0.3185,
+     0.3998,
+     0.0069
+    ],
+    "hipR": [
+     0.2393,
+     0.4095,
+     -0.0069
+    ],
+    "knL": [
+     0.4181,
+     0.496,
+     -0.1093
+    ],
+    "knR": [
+     0.2316,
+     0.5853,
+     -0.0318
+    ],
+    "anL": [
+     0.4125,
+     0.6603,
+     -0.0666
+    ],
+    "anR": [
+     0.2051,
+     0.749,
+     0.0142
+    ],
+    "heelL": [
+     0.3919,
+     0.6835,
+     -0.0655
+    ],
+    "heelR": [
+     0.2068,
+     0.7668,
+     0.0147
+    ],
+    "toeL": [
+     0.4409,
+     0.7586,
+     -0.1161
+    ],
+    "toeR": [
+     0.2079,
+     0.8469,
+     -0.0484
+    ]
+   }
+  },
+  {
+   "i": 2,
+   "t": 3.047,
+   "role": "pilot",
+   "pace": "steady",
+   "energy": 1.34,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. on the ball of the character-right foot, heel lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm at waist height, elbow bent ~90°, by the side. torso upright. character-left hip raised. character-right shoulder raised. hips turned character-right against the shoulders. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -14,
+    "view": "front",
+    "reach_L": 0.27,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.24,
+    "arm_R": "character-right arm at waist height, elbow bent ~90°, by the side",
+    "knee_L": 68,
+    "knee_R": 162,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": 1,
+    "torso": "torso upright",
+    "twist_deg": -11,
+    "twist": "hips turned character-right against the shoulders",
+    "hips": "character-left hip raised",
+    "shoulders": "character-right shoulder raised",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "level",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.295,
+     0.1387,
+     -0.1015
+    ],
+    "eyeL": [
+     0.3106,
+     0.1265,
+     -0.0965
+    ],
+    "eyeR": [
+     0.2785,
+     0.1211,
+     -0.1002
+    ],
+    "earL": [
+     0.3183,
+     0.1343,
+     -0.0469
+    ],
+    "earR": [
+     0.2605,
+     0.1249,
+     -0.0587
+    ],
+    "shL": [
+     0.3299,
+     0.232,
+     -0.0007
+    ],
+    "shR": [
+     0.2123,
+     0.2077,
+     -0.036
+    ],
+    "elL": [
+     0.33,
+     0.3422,
+     0.044
+    ],
+    "elR": [
+     0.1233,
+     0.2762,
+     -0.0501
+    ],
+    "wrL": [
+     0.3625,
+     0.4163,
+     0.0052
+    ],
+    "wrR": [
+     0.1837,
+     0.3276,
+     -0.1091
+    ],
+    "pinkyL": [
+     0.3807,
+     0.4558,
+     -0.0064
+    ],
+    "pinkyR": [
+     0.2011,
+     0.3514,
+     -0.1288
+    ],
+    "indexL": [
+     0.3777,
+     0.4421,
+     -0.0213
+    ],
+    "indexR": [
+     0.2113,
+     0.3383,
+     -0.1331
+    ],
+    "hipL": [
+     0.3056,
+     0.4215,
+     0.0196
+    ],
+    "hipR": [
+     0.2291,
+     0.4326,
+     -0.0196
+    ],
+    "knL": [
+     0.4258,
+     0.4507,
+     -0.0932
+    ],
+    "knR": [
+     0.2488,
+     0.6164,
+     -0.0317
+    ],
+    "anL": [
+     0.3684,
+     0.6023,
+     -0.0325
+    ],
+    "anR": [
+     0.2361,
+     0.8074,
+     0.018
+    ],
+    "heelL": [
+     0.3442,
+     0.6117,
+     -0.0285
+    ],
+    "heelR": [
+     0.233,
+     0.8266,
+     0.0185
+    ],
+    "toeL": [
+     0.3784,
+     0.6728,
+     -0.0627
+    ],
+    "toeR": [
+     0.2701,
+     0.8731,
+     -0.0483
+    ]
+   }
+  },
+  {
+   "i": 3,
+   "t": 3.13,
+   "role": "key",
+   "pace": "steady",
+   "energy": 0.6,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee folded tight. on the ball of the character-right foot, heel lifted. character-left arm at waist height, elbow slightly bent, by the side. character-right arm at waist height, elbow slightly bent, out to the side. torso upright. character-left hip raised. head turned character-left.",
+   "note": "Deepest fold of the first cross; character-left knee folded tight, head turned character-left.",
+   "features": {
+    "yaw": -37,
+    "view": "3/4",
+    "reach_L": -0.0,
+    "arm_L": "character-left arm at waist height, elbow slightly bent, by the side",
+    "reach_R": 0.92,
+    "arm_R": "character-right arm at waist height, elbow slightly bent, out to the side",
+    "knee_L": 37,
+    "knee_R": 162,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee folded tight",
+    "overlap": "",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": -1,
+    "torso": "torso upright",
+    "twist_deg": -2,
+    "twist": "",
+    "hips": "character-left hip raised",
+    "shoulders": "",
+    "head": "head turned character-left"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "level",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2965,
+     0.1857,
+     -0.0915
+    ],
+    "eyeL": [
+     0.3094,
+     0.1717,
+     -0.086
+    ],
+    "eyeR": [
+     0.2785,
+     0.1709,
+     -0.095
+    ],
+    "earL": [
+     0.3138,
+     0.1778,
+     -0.0389
+    ],
+    "earR": [
+     0.2608,
+     0.1768,
+     -0.0731
+    ],
+    "shL": [
+     0.3126,
+     0.2603,
+     0.0193
+    ],
+    "shR": [
+     0.2181,
+     0.2597,
+     -0.0647
+    ],
+    "elL": [
+     0.2999,
+     0.356,
+     0.0702
+    ],
+    "elR": [
+     0.1209,
+     0.3202,
+     -0.0552
+    ],
+    "wrL": [
+     0.3123,
+     0.4463,
+     0.039
+    ],
+    "wrR": [
+     0.1312,
+     0.4325,
+     -0.0652
+    ],
+    "pinkyL": [
+     0.3168,
+     0.4792,
+     0.0316
+    ],
+    "pinkyR": [
+     0.1268,
+     0.4639,
+     -0.0765
+    ],
+    "indexL": [
+     0.315,
+     0.4786,
+     0.0159
+    ],
+    "indexR": [
+     0.1425,
+     0.4627,
+     -0.0857
+    ],
+    "hipL": [
+     0.3004,
+     0.4718,
+     0.0292
+    ],
+    "hipR": [
+     0.2355,
+     0.4899,
+     -0.0292
+    ],
+    "knL": [
+     0.4229,
+     0.4052,
+     -0.0852
+    ],
+    "knR": [
+     0.2759,
+     0.6462,
+     -0.0238
+    ],
+    "anL": [
+     0.355,
+     0.5438,
+     -0.0314
+    ],
+    "anR": [
+     0.2407,
+     0.8046,
+     0.0328
+    ],
+    "heelL": [
+     0.3337,
+     0.5562,
+     -0.0275
+    ],
+    "heelR": [
+     0.2337,
+     0.8287,
+     0.0359
+    ],
+    "toeL": [
+     0.3626,
+     0.6149,
+     -0.05
+    ],
+    "toeR": [
+     0.2776,
+     0.8714,
+     -0.0172
+    ]
+   }
+  },
+  {
+   "i": 4,
+   "t": 3.213,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 1.24,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee folded tight. The character-right leg passes behind the character-left. on the ball of the character-right foot, heel lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, out to the side. torso upright. character-left hip raised. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -30,
+    "view": "3/4",
+    "reach_L": 0.09,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 1.05,
+    "arm_R": "character-right arm low by the hip, elbow straight, out to the side",
+    "knee_L": 53,
+    "knee_R": 161,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee folded tight",
+    "overlap": "The character-right leg passes behind the character-left",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": 0,
+    "torso": "torso upright",
+    "twist_deg": -6,
+    "twist": "",
+    "hips": "character-left hip raised",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "level",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2917,
+     0.1623,
+     -0.0734
+    ],
+    "eyeL": [
+     0.2998,
+     0.1456,
+     -0.0687
+    ],
+    "eyeR": [
+     0.2759,
+     0.147,
+     -0.0751
+    ],
+    "earL": [
+     0.3048,
+     0.1487,
+     -0.0241
+    ],
+    "earR": [
+     0.2587,
+     0.1508,
+     -0.0446
+    ],
+    "shL": [
+     0.3203,
+     0.2318,
+     0.0262
+    ],
+    "shR": [
+     0.2169,
+     0.2334,
+     -0.0343
+    ],
+    "elL": [
+     0.3014,
+     0.3329,
+     0.0798
+    ],
+    "elR": [
+     0.1369,
+     0.3133,
+     -0.0281
+    ],
+    "wrL": [
+     0.3294,
+     0.4396,
+     0.043
+    ],
+    "wrR": [
+     0.1082,
+     0.4405,
+     -0.04
+    ],
+    "pinkyL": [
+     0.3372,
+     0.4765,
+     0.034
+    ],
+    "pinkyR": [
+     0.0958,
+     0.4682,
+     -0.0489
+    ],
+    "indexL": [
+     0.3346,
+     0.4735,
+     0.0198
+    ],
+    "indexR": [
+     0.1018,
+     0.4705,
+     -0.0612
+    ],
+    "hipL": [
+     0.3024,
+     0.4471,
+     0.0258
+    ],
+    "hipR": [
+     0.236,
+     0.4594,
+     -0.0258
+    ],
+    "knL": [
+     0.4215,
+     0.4337,
+     -0.0912
+    ],
+    "knR": [
+     0.2739,
+     0.6375,
+     -0.0349
+    ],
+    "anL": [
+     0.3333,
+     0.5649,
+     -0.0425
+    ],
+    "anR": [
+     0.2468,
+     0.8028,
+     0.016
+    ],
+    "heelL": [
+     0.2858,
+     0.5739,
+     -0.0392
+    ],
+    "heelR": [
+     0.2425,
+     0.8311,
+     0.0183
+    ],
+    "toeL": [
+     0.3347,
+     0.6323,
+     -0.0623
+    ],
+    "toeR": [
+     0.2695,
+     0.8724,
+     -0.0328
+    ]
+   }
+  },
+  {
+   "i": 5,
+   "t": 3.297,
+   "role": "key",
+   "pace": "steady",
+   "energy": 0.88,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. The character-left leg passes behind the character-right. on the ball of the character-right foot, heel lifted. character-left arm at waist height, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, out to the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -21,
+    "view": "front",
+    "reach_L": 0.26,
+    "arm_L": "character-left arm at waist height, elbow slightly bent, by the side",
+    "reach_R": 0.89,
+    "arm_R": "character-right arm low by the hip, elbow straight, out to the side",
+    "knee_L": 83,
+    "knee_R": 158,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": -4,
+    "torso": "torso upright",
+    "twist_deg": -5,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "level",
+     "legR": "near",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2879,
+     0.1211,
+     -0.1093
+    ],
+    "eyeL": [
+     0.2971,
+     0.1044,
+     -0.105
+    ],
+    "eyeR": [
+     0.2729,
+     0.1035,
+     -0.1097
+    ],
+    "earL": [
+     0.302,
+     0.1089,
+     -0.0547
+    ],
+    "earR": [
+     0.2566,
+     0.1074,
+     -0.0705
+    ],
+    "shL": [
+     0.3215,
+     0.1935,
+     0.0013
+    ],
+    "shR": [
+     0.209,
+     0.2006,
+     -0.0469
+    ],
+    "elL": [
+     0.3112,
+     0.3054,
+     0.0456
+    ],
+    "elR": [
+     0.1502,
+     0.2989,
+     -0.0305
+    ],
+    "wrL": [
+     0.3503,
+     0.3809,
+     -0.0043
+    ],
+    "wrR": [
+     0.1087,
+     0.406,
+     -0.0553
+    ],
+    "pinkyL": [
+     0.3731,
+     0.4055,
+     -0.0169
+    ],
+    "pinkyR": [
+     0.0924,
+     0.4422,
+     -0.0634
+    ],
+    "indexL": [
+     0.3728,
+     0.3977,
+     -0.0372
+    ],
+    "indexR": [
+     0.0964,
+     0.4449,
+     -0.0805
+    ],
+    "hipL": [
+     0.3152,
+     0.4036,
+     0.0199
+    ],
+    "hipR": [
+     0.2433,
+     0.4086,
+     -0.0199
+    ],
+    "knL": [
+     0.4005,
+     0.5197,
+     -0.0337
+    ],
+    "knR": [
+     0.291,
+     0.588,
+     -0.0534
+    ],
+    "anL": [
+     0.2946,
+     0.5832,
+     0.0593
+    ],
+    "anR": [
+     0.2848,
+     0.768,
+     -0.0219
+    ],
+    "heelL": [
+     0.2562,
+     0.5867,
+     0.0665
+    ],
+    "heelR": [
+     0.2838,
+     0.7849,
+     -0.0204
+    ],
+    "toeL": [
+     0.2815,
+     0.6559,
+     0.0532
+    ],
+    "toeR": [
+     0.2955,
+     0.862,
+     -0.0693
+    ]
+   }
+  },
+  {
+   "i": 6,
+   "t": 3.38,
+   "role": "pilot",
+   "pace": "steady",
+   "energy": 1.41,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee slightly bent. The character-left leg passes behind the character-right. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, out to the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -17,
+    "view": "front",
+    "reach_L": 0.38,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.87,
+    "arm_R": "character-right arm low by the hip, elbow straight, out to the side",
+    "knee_L": 120,
+    "knee_R": 156,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee slightly bent",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "",
+    "lean_deg": -6,
+    "torso": "torso upright",
+    "twist_deg": -4,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "far",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2799,
+     0.1119,
+     -0.0779
+    ],
+    "eyeL": [
+     0.2921,
+     0.0984,
+     -0.0721
+    ],
+    "eyeR": [
+     0.2632,
+     0.098,
+     -0.0761
+    ],
+    "earL": [
+     0.2996,
+     0.1069,
+     -0.018
+    ],
+    "earR": [
+     0.2493,
+     0.1056,
+     -0.0308
+    ],
+    "shL": [
+     0.3247,
+     0.2041,
+     0.0312
+    ],
+    "shR": [
+     0.212,
+     0.2012,
+     -0.0083
+    ],
+    "elL": [
+     0.3186,
+     0.319,
+     0.0701
+    ],
+    "elR": [
+     0.1603,
+     0.3094,
+     0.0141
+    ],
+    "wrL": [
+     0.3676,
+     0.3974,
+     0.0101
+    ],
+    "wrR": [
+     0.1139,
+     0.4052,
+     -0.0153
+    ],
+    "pinkyL": [
+     0.388,
+     0.4195,
+     -0.0043
+    ],
+    "pinkyR": [
+     0.0985,
+     0.4353,
+     -0.0259
+    ],
+    "indexL": [
+     0.3879,
+     0.4177,
+     -0.0254
+    ],
+    "indexR": [
+     0.1016,
+     0.4388,
+     -0.0418
+    ],
+    "hipL": [
+     0.3267,
+     0.4115,
+     0.0159
+    ],
+    "hipR": [
+     0.2535,
+     0.4135,
+     -0.0159
+    ],
+    "knL": [
+     0.3413,
+     0.596,
+     -0.0229
+    ],
+    "knR": [
+     0.2996,
+     0.5972,
+     -0.0496
+    ],
+    "anL": [
+     0.2456,
+     0.7122,
+     0.068
+    ],
+    "anR": [
+     0.3277,
+     0.7692,
+     -0.0122
+    ],
+    "heelL": [
+     0.2263,
+     0.7104,
+     0.074
+    ],
+    "heelR": [
+     0.335,
+     0.7944,
+     -0.0102
+    ],
+    "toeL": [
+     0.2406,
+     0.7713,
+     0.0503
+    ],
+    "toeR": [
+     0.3488,
+     0.8462,
+     -0.0535
+    ]
+   }
+  },
+  {
+   "i": 7,
+   "t": 3.463,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 0.75,
+   "cue": "Weight centred over both feet. character-left knee slightly bent. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm at waist height, elbow slightly bent, out to the side. torso upright. character-left hip raised. hips turned character-right against the shoulders. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -23,
+    "view": "3/4",
+    "reach_L": 0.46,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.71,
+    "arm_R": "character-right arm at waist height, elbow slightly bent, out to the side",
+    "knee_L": 149,
+    "knee_R": 159,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "character-left knee slightly bent",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": -8,
+    "torso": "torso upright",
+    "twist_deg": -12,
+    "twist": "hips turned character-right against the shoulders",
+    "hips": "character-left hip raised",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2767,
+     0.1648,
+     -0.0851
+    ],
+    "eyeL": [
+     0.2866,
+     0.1507,
+     -0.0768
+    ],
+    "eyeR": [
+     0.2567,
+     0.1518,
+     -0.0822
+    ],
+    "earL": [
+     0.2942,
+     0.1559,
+     -0.0121
+    ],
+    "earR": [
+     0.2433,
+     0.1591,
+     -0.033
+    ],
+    "shL": [
+     0.3228,
+     0.2585,
+     0.0396
+    ],
+    "shR": [
+     0.2102,
+     0.2567,
+     -0.0112
+    ],
+    "elL": [
+     0.3318,
+     0.3663,
+     0.0778
+    ],
+    "elR": [
+     0.1829,
+     0.3618,
+     -0.0126
+    ],
+    "wrL": [
+     0.3742,
+     0.4497,
+     0.0262
+    ],
+    "wrR": [
+     0.1304,
+     0.4358,
+     -0.0645
+    ],
+    "pinkyL": [
+     0.3971,
+     0.4744,
+     0.0132
+    ],
+    "pinkyR": [
+     0.1103,
+     0.4547,
+     -0.0803
+    ],
+    "indexL": [
+     0.3907,
+     0.4735,
+     -0.0078
+    ],
+    "indexR": [
+     0.1119,
+     0.4563,
+     -0.0925
+    ],
+    "hipL": [
+     0.3298,
+     0.458,
+     0.0253
+    ],
+    "hipR": [
+     0.2588,
+     0.4654,
+     -0.0253
+    ],
+    "knL": [
+     0.2909,
+     0.6419,
+     0.0379
+    ],
+    "knR": [
+     0.3122,
+     0.6317,
+     -0.0812
+    ],
+    "anL": [
+     0.2276,
+     0.7786,
+     0.1237
+    ],
+    "anR": [
+     0.3599,
+     0.8058,
+     -0.0766
+    ],
+    "heelL": [
+     0.2085,
+     0.7901,
+     0.1284
+    ],
+    "heelR": [
+     0.3698,
+     0.8295,
+     -0.0784
+    ],
+    "toeL": [
+     0.2369,
+     0.852,
+     0.103
+    ],
+    "toeR": [
+     0.3718,
+     0.878,
+     -0.1324
+    ]
+   }
+  },
+  {
+   "i": 8,
+   "t": 3.547,
+   "role": "inbetween",
+   "pace": "hold",
+   "energy": 0.38,
+   "cue": "Weight centred over both feet. legs straight. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, out to the side. torso upright. hips turned character-right against the shoulders. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -17,
+    "view": "front",
+    "reach_L": 0.34,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.64,
+    "arm_R": "character-right arm low by the hip, elbow straight, out to the side",
+    "knee_L": 168,
+    "knee_R": 157,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "legs straight",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": -4,
+    "torso": "torso upright",
+    "twist_deg": -16,
+    "twist": "hips turned character-right against the shoulders",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "far",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2753,
+     0.1829,
+     -0.0491
+    ],
+    "eyeL": [
+     0.2873,
+     0.1681,
+     -0.0407
+    ],
+    "eyeR": [
+     0.2576,
+     0.1694,
+     -0.0447
+    ],
+    "earL": [
+     0.296,
+     0.1773,
+     0.0183
+    ],
+    "earR": [
+     0.2469,
+     0.1796,
+     0.0053
+    ],
+    "shL": [
+     0.3332,
+     0.2802,
+     0.0537
+    ],
+    "shR": [
+     0.2145,
+     0.278,
+     0.0168
+    ],
+    "elL": [
+     0.3381,
+     0.3953,
+     0.0789
+    ],
+    "elR": [
+     0.1877,
+     0.3884,
+     0.0262
+    ],
+    "wrL": [
+     0.3731,
+     0.487,
+     0.0305
+    ],
+    "wrR": [
+     0.1381,
+     0.48,
+     -0.0055
+    ],
+    "pinkyL": [
+     0.3899,
+     0.5109,
+     0.0202
+    ],
+    "pinkyR": [
+     0.1157,
+     0.501,
+     -0.0166
+    ],
+    "indexL": [
+     0.3867,
+     0.5103,
+     -0.0005
+    ],
+    "indexR": [
+     0.1171,
+     0.5047,
+     -0.031
+    ],
+    "hipL": [
+     0.3213,
+     0.4817,
+     0.0223
+    ],
+    "hipR": [
+     0.2555,
+     0.4847,
+     -0.0223
+    ],
+    "knL": [
+     0.2729,
+     0.6656,
+     0.0242
+    ],
+    "knR": [
+     0.3166,
+     0.6378,
+     -0.1029
+    ],
+    "anL": [
+     0.2108,
+     0.8182,
+     0.0606
+    ],
+    "anR": [
+     0.3676,
+     0.8278,
+     -0.13
+    ],
+    "heelL": [
+     0.1981,
+     0.8371,
+     0.0594
+    ],
+    "heelR": [
+     0.366,
+     0.8473,
+     -0.1355
+    ],
+    "toeL": [
+     0.2416,
+     0.8767,
+     0.0247
+    ],
+    "toeR": [
+     0.3835,
+     0.8906,
+     -0.1894
+    ]
+   }
+  },
+  {
+   "i": 9,
+   "t": 3.63,
+   "role": "inbetween",
+   "pace": "hold",
+   "energy": 0.27,
+   "cue": "Weight centred over both feet. legs straight. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. hips turned character-right against the shoulders. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -13,
+    "view": "front",
+    "reach_L": 0.24,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.4,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 168,
+    "knee_R": 165,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "legs straight",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": -1,
+    "torso": "torso upright",
+    "twist_deg": -14,
+    "twist": "hips turned character-right against the shoulders",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "far",
+     "armR": "far"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2759,
+     0.1616,
+     -0.0527
+    ],
+    "eyeL": [
+     0.2898,
+     0.1466,
+     -0.0459
+    ],
+    "eyeR": [
+     0.2619,
+     0.1465,
+     -0.0479
+    ],
+    "earL": [
+     0.3029,
+     0.1588,
+     0.0073
+    ],
+    "earR": [
+     0.2509,
+     0.158,
+     0.0038
+    ],
+    "shL": [
+     0.3437,
+     0.2652,
+     0.0441
+    ],
+    "shR": [
+     0.2189,
+     0.2639,
+     0.0151
+    ],
+    "elL": [
+     0.3417,
+     0.3786,
+     0.0632
+    ],
+    "elR": [
+     0.2027,
+     0.3878,
+     0.0352
+    ],
+    "wrL": [
+     0.3737,
+     0.4767,
+     0.0058
+    ],
+    "wrR": [
+     0.1693,
+     0.4954,
+     0.0121
+    ],
+    "pinkyL": [
+     0.3921,
+     0.5006,
+     -0.0071
+    ],
+    "pinkyR": [
+     0.1464,
+     0.5238,
+     0.002
+    ],
+    "indexL": [
+     0.3897,
+     0.5007,
+     -0.0273
+    ],
+    "indexR": [
+     0.1524,
+     0.5263,
+     -0.0154
+    ],
+    "hipL": [
+     0.319,
+     0.4706,
+     0.0186
+    ],
+    "hipR": [
+     0.2514,
+     0.4728,
+     -0.0186
+    ],
+    "knL": [
+     0.2787,
+     0.6556,
+     0.0191
+    ],
+    "knR": [
+     0.3095,
+     0.6424,
+     -0.0823
+    ],
+    "anL": [
+     0.2099,
+     0.8124,
+     0.0543
+    ],
+    "anR": [
+     0.3592,
+     0.8263,
+     -0.105
+    ],
+    "heelL": [
+     0.196,
+     0.8343,
+     0.0526
+    ],
+    "heelR": [
+     0.3673,
+     0.8497,
+     -0.1106
+    ],
+    "toeL": [
+     0.2372,
+     0.8814,
+     0.0138
+    ],
+    "toeR": [
+     0.3674,
+     0.8911,
+     -0.1657
+    ]
+   }
+  },
+  {
+   "i": 10,
+   "t": 3.713,
+   "role": "key",
+   "pace": "hold",
+   "energy": 0.23,
+   "cue": "Weight centred over both feet. legs straight. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. head forward.",
+   "note": "Quietest frame of the loop — a held settle on the balls of both feet, feet about shoulder width apart.",
+   "features": {
+    "yaw": -9,
+    "view": "front",
+    "reach_L": 0.27,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.26,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 168,
+    "knee_R": 169,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "legs straight",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": -1,
+    "torso": "torso upright",
+    "twist_deg": -8,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "level",
+     "legR": "near",
+     "armL": "far",
+     "armR": "far"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2793,
+     0.1535,
+     -0.0654
+    ],
+    "eyeL": [
+     0.2947,
+     0.1392,
+     -0.0582
+    ],
+    "eyeR": [
+     0.2647,
+     0.1388,
+     -0.0595
+    ],
+    "earL": [
+     0.3084,
+     0.1513,
+     -0.0018
+    ],
+    "earR": [
+     0.2543,
+     0.1492,
+     -0.0018
+    ],
+    "shL": [
+     0.3462,
+     0.2606,
+     0.0363
+    ],
+    "shR": [
+     0.2209,
+     0.2522,
+     0.0148
+    ],
+    "elL": [
+     0.3474,
+     0.3708,
+     0.0541
+    ],
+    "elR": [
+     0.2098,
+     0.3753,
+     0.0388
+    ],
+    "wrL": [
+     0.3798,
+     0.4632,
+     -0.0064
+    ],
+    "wrR": [
+     0.1879,
+     0.484,
+     0.0198
+    ],
+    "pinkyL": [
+     0.4025,
+     0.4856,
+     -0.0213
+    ],
+    "pinkyR": [
+     0.1649,
+     0.5174,
+     0.009
+    ],
+    "indexL": [
+     0.3998,
+     0.4855,
+     -0.0414
+    ],
+    "indexR": [
+     0.1764,
+     0.5202,
+     -0.0082
+    ],
+    "hipL": [
+     0.3206,
+     0.4637,
+     0.0122
+    ],
+    "hipR": [
+     0.2508,
+     0.4673,
+     -0.0122
+    ],
+    "knL": [
+     0.2772,
+     0.6518,
+     0.0002
+    ],
+    "knR": [
+     0.3022,
+     0.6402,
+     -0.0537
+    ],
+    "anL": [
+     0.2086,
+     0.8101,
+     0.0269
+    ],
+    "anR": [
+     0.3539,
+     0.8121,
+     -0.0604
+    ],
+    "heelL": [
+     0.1989,
+     0.8292,
+     0.0242
+    ],
+    "heelR": [
+     0.3672,
+     0.84,
+     -0.0644
+    ],
+    "toeL": [
+     0.2245,
+     0.8801,
+     -0.0224
+    ],
+    "toeR": [
+     0.3572,
+     0.8811,
+     -0.1198
+    ]
+   }
+  },
+  {
+   "i": 11,
+   "t": 3.797,
+   "role": "inbetween",
+   "pace": "hold",
+   "energy": 0.33,
+   "cue": "Weight centred over both feet. legs straight. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -9,
+    "view": "front",
+    "reach_L": 0.35,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.21,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 160,
+    "knee_R": 154,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "legs straight",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": 1,
+    "torso": "torso upright",
+    "twist_deg": -6,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "level",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2826,
+     0.1626,
+     -0.1029
+    ],
+    "eyeL": [
+     0.2994,
+     0.1465,
+     -0.0979
+    ],
+    "eyeR": [
+     0.2678,
+     0.1476,
+     -0.0987
+    ],
+    "earL": [
+     0.3136,
+     0.1583,
+     -0.0445
+    ],
+    "earR": [
+     0.2581,
+     0.1578,
+     -0.0439
+    ],
+    "shL": [
+     0.3532,
+     0.2675,
+     0.0016
+    ],
+    "shR": [
+     0.226,
+     0.261,
+     -0.019
+    ],
+    "elL": [
+     0.3549,
+     0.3776,
+     0.0217
+    ],
+    "elR": [
+     0.216,
+     0.387,
+     0.0063
+    ],
+    "wrL": [
+     0.3975,
+     0.4616,
+     -0.0333
+    ],
+    "wrR": [
+     0.1987,
+     0.492,
+     -0.0199
+    ],
+    "pinkyL": [
+     0.4159,
+     0.4842,
+     -0.0472
+    ],
+    "pinkyR": [
+     0.1781,
+     0.5252,
+     -0.0326
+    ],
+    "indexL": [
+     0.4123,
+     0.4828,
+     -0.0668
+    ],
+    "indexR": [
+     0.1858,
+     0.5265,
+     -0.0472
+    ],
+    "hipL": [
+     0.3227,
+     0.4753,
+     0.0111
+    ],
+    "hipR": [
+     0.2522,
+     0.4733,
+     -0.0111
+    ],
+    "knL": [
+     0.2792,
+     0.6519,
+     0.0182
+    ],
+    "knR": [
+     0.3,
+     0.6378,
+     -0.0634
+    ],
+    "anL": [
+     0.2136,
+     0.8082,
+     0.0916
+    ],
+    "anR": [
+     0.3533,
+     0.8122,
+     -0.0404
+    ],
+    "heelL": [
+     0.2017,
+     0.8315,
+     0.0941
+    ],
+    "heelR": [
+     0.3611,
+     0.8338,
+     -0.0414
+    ],
+    "toeL": [
+     0.2321,
+     0.8787,
+     0.048
+    ],
+    "toeR": [
+     0.3517,
+     0.8823,
+     -0.102
+    ]
+   }
+  },
+  {
+   "i": 12,
+   "t": 3.88,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 0.79,
+   "cue": "Weight centred over both feet. legs straight. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. hips turned character-right against the shoulders. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -13,
+    "view": "front",
+    "reach_L": 0.47,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.35,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 162,
+    "knee_R": 150,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "legs straight",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": 1,
+    "torso": "torso upright",
+    "twist_deg": -10,
+    "twist": "hips turned character-right against the shoulders",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "level",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2875,
+     0.1789,
+     -0.1036
+    ],
+    "eyeL": [
+     0.3036,
+     0.165,
+     -0.0977
+    ],
+    "eyeR": [
+     0.2729,
+     0.164,
+     -0.0996
+    ],
+    "earL": [
+     0.316,
+     0.1765,
+     -0.0424
+    ],
+    "earR": [
+     0.263,
+     0.1741,
+     -0.0465
+    ],
+    "shL": [
+     0.3489,
+     0.2791,
+     0.0065
+    ],
+    "shR": [
+     0.2306,
+     0.274,
+     -0.0234
+    ],
+    "elL": [
+     0.3507,
+     0.3972,
+     0.0303
+    ],
+    "elR": [
+     0.2247,
+     0.4003,
+     -0.0012
+    ],
+    "wrL": [
+     0.4041,
+     0.4805,
+     -0.0191
+    ],
+    "wrR": [
+     0.1894,
+     0.501,
+     -0.0293
+    ],
+    "pinkyL": [
+     0.4288,
+     0.5008,
+     -0.0305
+    ],
+    "pinkyR": [
+     0.1703,
+     0.5343,
+     -0.0419
+    ],
+    "indexL": [
+     0.4237,
+     0.4998,
+     -0.0515
+    ],
+    "indexR": [
+     0.1751,
+     0.5353,
+     -0.0565
+    ],
+    "hipL": [
+     0.3196,
+     0.4844,
+     0.0164
+    ],
+    "hipR": [
+     0.2508,
+     0.4819,
+     -0.0164
+    ],
+    "knL": [
+     0.2801,
+     0.6599,
+     0.0297
+    ],
+    "knR": [
+     0.3091,
+     0.6449,
+     -0.0824
+    ],
+    "anL": [
+     0.2151,
+     0.8091,
+     0.1037
+    ],
+    "anR": [
+     0.3616,
+     0.8214,
+     -0.0684
+    ],
+    "heelL": [
+     0.1979,
+     0.8244,
+     0.1063
+    ],
+    "heelR": [
+     0.3697,
+     0.848,
+     -0.0699
+    ],
+    "toeL": [
+     0.2333,
+     0.8694,
+     0.0655
+    ],
+    "toeR": [
+     0.3589,
+     0.8856,
+     -0.1282
+    ]
+   }
+  },
+  {
+   "i": 13,
+   "t": 3.963,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 0.95,
+   "cue": "Weight centred over both feet. character-right knee slightly bent. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm at waist height, elbow slightly bent, out to the side. character-right arm at waist height, elbow slightly bent, out to the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -6,
+    "view": "front",
+    "reach_L": 0.79,
+    "arm_L": "character-left arm at waist height, elbow slightly bent, out to the side",
+    "reach_R": 0.87,
+    "arm_R": "character-right arm at waist height, elbow slightly bent, out to the side",
+    "knee_L": 157,
+    "knee_R": 138,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "character-right knee slightly bent",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": 3,
+    "torso": "torso upright",
+    "twist_deg": -10,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": null,
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "near",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.2911,
+     0.2089,
+     -0.1168
+    ],
+    "eyeL": [
+     0.3063,
+     0.1958,
+     -0.1093
+    ],
+    "eyeR": [
+     0.2775,
+     0.1959,
+     -0.1102
+    ],
+    "earL": [
+     0.3181,
+     0.2083,
+     -0.0484
+    ],
+    "earR": [
+     0.2674,
+     0.2064,
+     -0.0475
+    ],
+    "shL": [
+     0.3543,
+     0.3098,
+     -0.001
+    ],
+    "shR": [
+     0.2327,
+     0.3096,
+     -0.0153
+    ],
+    "elL": [
+     0.3641,
+     0.4279,
+     0.0132
+    ],
+    "elR": [
+     0.2313,
+     0.4205,
+     0.0038
+    ],
+    "wrL": [
+     0.4504,
+     0.4648,
+     -0.0462
+    ],
+    "wrR": [
+     0.1263,
+     0.4408,
+     -0.0348
+    ],
+    "pinkyL": [
+     0.4756,
+     0.4748,
+     -0.0578
+    ],
+    "pinkyR": [
+     0.1008,
+     0.4473,
+     -0.0474
+    ],
+    "indexL": [
+     0.4757,
+     0.4729,
+     -0.0774
+    ],
+    "indexR": [
+     0.1004,
+     0.4412,
+     -0.0617
+    ],
+    "hipL": [
+     0.3172,
+     0.5106,
+     0.0111
+    ],
+    "hipR": [
+     0.2499,
+     0.5133,
+     -0.0111
+    ],
+    "knL": [
+     0.2737,
+     0.6706,
+     0.031
+    ],
+    "knR": [
+     0.3038,
+     0.6514,
+     -0.1067
+    ],
+    "anL": [
+     0.2122,
+     0.8064,
+     0.122
+    ],
+    "anR": [
+     0.3628,
+     0.8108,
+     -0.0874
+    ],
+    "heelL": [
+     0.1999,
+     0.822,
+     0.1268
+    ],
+    "heelR": [
+     0.3695,
+     0.8335,
+     -0.088
+    ],
+    "toeL": [
+     0.2337,
+     0.863,
+     0.0891
+    ],
+    "toeR": [
+     0.3621,
+     0.8772,
+     -0.1453
+    ]
+   }
+  },
+  {
+   "i": 14,
+   "t": 4.047,
+   "role": "pilot",
+   "pace": "fast",
+   "energy": 1.8,
+   "cue": "Weight centred over both feet. legs straight. The character-left leg passes behind the character-right. on the balls of both feet, heels lifted. character-left arm at waist height, elbow bent ~90°, out to the side. character-right arm at chest height, elbow bent ~90°, out to the side. torso upright. head forward.",
+   "note": "The re-attack. Both arms snap up and out on the beat; this is the sharpest change in the set.",
+   "features": {
+    "yaw": -13,
+    "view": "front",
+    "reach_L": 0.94,
+    "arm_L": "character-left arm at waist height, elbow bent ~90°, out to the side",
+    "reach_R": 0.8,
+    "arm_R": "character-right arm at chest height, elbow bent ~90°, out to the side",
+    "knee_L": 159,
+    "knee_R": 163,
+    "airborne": false,
+    "weight": "weight centred over both feet",
+    "legs": "legs straight",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "on the balls of both feet, heels lifted",
+    "lean_deg": 1,
+    "torso": "torso upright",
+    "twist_deg": -9,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.292,
+     0.1894,
+     -0.0894
+    ],
+    "eyeL": [
+     0.3058,
+     0.1774,
+     -0.0817
+    ],
+    "eyeR": [
+     0.2785,
+     0.1764,
+     -0.0836
+    ],
+    "earL": [
+     0.3162,
+     0.1875,
+     -0.0198
+    ],
+    "earR": [
+     0.2687,
+     0.1851,
+     -0.0249
+    ],
+    "shL": [
+     0.3515,
+     0.2861,
+     0.0328
+    ],
+    "shR": [
+     0.2333,
+     0.2829,
+     0.0038
+    ],
+    "elL": [
+     0.3743,
+     0.3907,
+     0.0534
+    ],
+    "elR": [
+     0.215,
+     0.3861,
+     -0.0167
+    ],
+    "wrL": [
+     0.4624,
+     0.4128,
+     -0.0129
+    ],
+    "wrR": [
+     0.1383,
+     0.3311,
+     -0.107
+    ],
+    "pinkyL": [
+     0.4869,
+     0.4133,
+     -0.0243
+    ],
+    "pinkyR": [
+     0.1174,
+     0.309,
+     -0.1296
+    ],
+    "indexL": [
+     0.4887,
+     0.4094,
+     -0.0467
+    ],
+    "indexR": [
+     0.1198,
+     0.2989,
+     -0.1345
+    ],
+    "hipL": [
+     0.3226,
+     0.4802,
+     0.0135
+    ],
+    "hipR": [
+     0.2568,
+     0.4804,
+     -0.0135
+    ],
+    "knL": [
+     0.2778,
+     0.656,
+     0.0216
+    ],
+    "knR": [
+     0.3076,
+     0.6388,
+     -0.0306
+    ],
+    "anL": [
+     0.2242,
+     0.7913,
+     0.0953
+    ],
+    "anR": [
+     0.3625,
+     0.7924,
+     -0.0012
+    ],
+    "heelL": [
+     0.2077,
+     0.8085,
+     0.0977
+    ],
+    "heelR": [
+     0.3685,
+     0.8147,
+     -0.0011
+    ],
+    "toeL": [
+     0.254,
+     0.8502,
+     0.0599
+    ],
+    "toeR": [
+     0.3559,
+     0.8522,
+     -0.0495
+    ]
+   }
+  },
+  {
+   "i": 15,
+   "t": 4.13,
+   "role": "key",
+   "pace": "steady",
+   "energy": 0.69,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee slightly bent. The character-left leg passes behind the character-right. character-left arm at waist height, elbow bent ~90°, out to the side. character-right arm at shoulder height, elbow bent ~90°, by the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -13,
+    "view": "front",
+    "reach_L": 0.65,
+    "arm_L": "character-left arm at waist height, elbow bent ~90°, out to the side",
+    "reach_R": 0.37,
+    "arm_R": "character-right arm at shoulder height, elbow bent ~90°, by the side",
+    "knee_L": 128,
+    "knee_R": 159,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee slightly bent",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "",
+    "lean_deg": -1,
+    "torso": "torso upright",
+    "twist_deg": 2,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "level",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3007,
+     0.1412,
+     -0.0451
+    ],
+    "eyeL": [
+     0.313,
+     0.13,
+     -0.0399
+    ],
+    "eyeR": [
+     0.2854,
+     0.1289,
+     -0.0418
+    ],
+    "earL": [
+     0.3211,
+     0.1368,
+     0.0091
+    ],
+    "earR": [
+     0.274,
+     0.1348,
+     0.0052
+    ],
+    "shL": [
+     0.3498,
+     0.2282,
+     0.0544
+    ],
+    "shR": [
+     0.2329,
+     0.2275,
+     0.0253
+    ],
+    "elL": [
+     0.3564,
+     0.3303,
+     0.0975
+    ],
+    "elR": [
+     0.1931,
+     0.3318,
+     -0.0273
+    ],
+    "wrL": [
+     0.4262,
+     0.3438,
+     0.062
+    ],
+    "wrR": [
+     0.1902,
+     0.2227,
+     -0.1349
+    ],
+    "pinkyL": [
+     0.4509,
+     0.3468,
+     0.0565
+    ],
+    "pinkyR": [
+     0.1884,
+     0.196,
+     -0.1564
+    ],
+    "indexL": [
+     0.4555,
+     0.341,
+     0.0391
+    ],
+    "indexR": [
+     0.1955,
+     0.1835,
+     -0.1527
+    ],
+    "hipL": [
+     0.3301,
+     0.4221,
+     0.0075
+    ],
+    "hipR": [
+     0.2574,
+     0.4181,
+     -0.0075
+    ],
+    "knL": [
+     0.321,
+     0.6021,
+     -0.0188
+    ],
+    "knR": [
+     0.2973,
+     0.5894,
+     -0.0252
+    ],
+    "anL": [
+     0.259,
+     0.7336,
+     0.074
+    ],
+    "anR": [
+     0.3245,
+     0.7455,
+     0.0232
+    ],
+    "heelL": [
+     0.2434,
+     0.7382,
+     0.0793
+    ],
+    "heelR": [
+     0.329,
+     0.7599,
+     0.0257
+    ],
+    "toeL": [
+     0.2463,
+     0.801,
+     0.046
+    ],
+    "toeR": [
+     0.3228,
+     0.8173,
+     -0.0217
+    ]
+   }
+  },
+  {
+   "i": 16,
+   "t": 4.213,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 1.24,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. The character-left leg passes behind the character-right. character-left arm at waist height, elbow bent ~90°, out to the side. character-right arm at shoulder height, elbow bent ~90°, by the side. torso upright. character-right hip raised. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -17,
+    "view": "front",
+    "reach_L": 0.54,
+    "arm_L": "character-left arm at waist height, elbow bent ~90°, out to the side",
+    "reach_R": 0.21,
+    "arm_R": "character-right arm at shoulder height, elbow bent ~90°, by the side",
+    "knee_L": 94,
+    "knee_R": 156,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "The character-left leg passes behind the character-right",
+    "feet": "",
+    "lean_deg": 2,
+    "torso": "torso upright",
+    "twist_deg": -7,
+    "twist": "",
+    "hips": "character-right hip raised",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "far",
+     "legR": "near",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3054,
+     0.1163,
+     -0.0571
+    ],
+    "eyeL": [
+     0.3185,
+     0.1031,
+     -0.0512
+    ],
+    "eyeR": [
+     0.2879,
+     0.102,
+     -0.0532
+    ],
+    "earL": [
+     0.3275,
+     0.1112,
+     -0.001
+    ],
+    "earR": [
+     0.2759,
+     0.1101,
+     -0.0047
+    ],
+    "shL": [
+     0.3547,
+     0.2117,
+     0.053
+    ],
+    "shR": [
+     0.2379,
+     0.206,
+     0.0122
+    ],
+    "elL": [
+     0.3452,
+     0.3239,
+     0.0997
+    ],
+    "elR": [
+     0.1833,
+     0.3045,
+     -0.0395
+    ],
+    "wrL": [
+     0.4177,
+     0.3386,
+     0.0539
+    ],
+    "wrR": [
+     0.213,
+     0.2284,
+     -0.156
+    ],
+    "pinkyL": [
+     0.443,
+     0.3433,
+     0.0453
+    ],
+    "pinkyR": [
+     0.2198,
+     0.2117,
+     -0.1796
+    ],
+    "indexL": [
+     0.4458,
+     0.3372,
+     0.0256
+    ],
+    "indexR": [
+     0.2267,
+     0.1992,
+     -0.1791
+    ],
+    "hipL": [
+     0.3252,
+     0.413,
+     0.0182
+    ],
+    "hipR": [
+     0.2534,
+     0.4061,
+     -0.0182
+    ],
+    "knL": [
+     0.3586,
+     0.5766,
+     -0.0061
+    ],
+    "knR": [
+     0.2979,
+     0.5776,
+     -0.0593
+    ],
+    "anL": [
+     0.2558,
+     0.645,
+     0.1047
+    ],
+    "anR": [
+     0.3096,
+     0.7652,
+     -0.0342
+    ],
+    "heelL": [
+     0.2315,
+     0.638,
+     0.1138
+    ],
+    "heelR": [
+     0.3128,
+     0.7938,
+     -0.0331
+    ],
+    "toeL": [
+     0.2539,
+     0.71,
+     0.1062
+    ],
+    "toeR": [
+     0.3244,
+     0.8395,
+     -0.0801
+    ]
+   }
+  },
+  {
+   "i": 17,
+   "t": 4.297,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 1.21,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. on the ball of the character-right foot, heel lifted. character-left arm at waist height, elbow slightly bent, by the side. character-right arm at waist height, elbow slightly bent, by the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -11,
+    "view": "front",
+    "reach_L": 0.24,
+    "arm_L": "character-left arm at waist height, elbow slightly bent, by the side",
+    "reach_R": -0.06,
+    "arm_R": "character-right arm at waist height, elbow slightly bent, by the side",
+    "knee_L": 72,
+    "knee_R": 150,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": 1,
+    "torso": "torso upright",
+    "twist_deg": -2,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "near",
+     "armL": "level",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3089,
+     0.1343,
+     -0.0965
+    ],
+    "eyeL": [
+     0.3249,
+     0.1214,
+     -0.0899
+    ],
+    "eyeR": [
+     0.2903,
+     0.1186,
+     -0.0921
+    ],
+    "earL": [
+     0.3337,
+     0.1296,
+     -0.035
+    ],
+    "earR": [
+     0.2775,
+     0.1259,
+     -0.0419
+    ],
+    "shL": [
+     0.3575,
+     0.231,
+     0.0093
+    ],
+    "shR": [
+     0.2294,
+     0.2253,
+     -0.0189
+    ],
+    "elL": [
+     0.3476,
+     0.3463,
+     0.0448
+    ],
+    "elR": [
+     0.1869,
+     0.3366,
+     -0.0378
+    ],
+    "wrL": [
+     0.3889,
+     0.398,
+     -0.0141
+    ],
+    "wrR": [
+     0.2367,
+     0.365,
+     -0.1157
+    ],
+    "pinkyL": [
+     0.4042,
+     0.4113,
+     -0.0298
+    ],
+    "pinkyR": [
+     0.2526,
+     0.3774,
+     -0.1385
+    ],
+    "indexL": [
+     0.4063,
+     0.4021,
+     -0.0498
+    ],
+    "indexR": [
+     0.2618,
+     0.3676,
+     -0.143
+    ],
+    "hipL": [
+     0.3295,
+     0.4333,
+     0.0108
+    ],
+    "hipR": [
+     0.2503,
+     0.4327,
+     -0.0108
+    ],
+    "knL": [
+     0.4043,
+     0.5229,
+     -0.0939
+    ],
+    "knR": [
+     0.3006,
+     0.6053,
+     -0.0558
+    ],
+    "anL": [
+     0.294,
+     0.5816,
+     -0.0052
+    ],
+    "anR": [
+     0.2949,
+     0.7952,
+     -0.0142
+    ],
+    "heelL": [
+     0.2855,
+     0.6029,
+     0.0022
+    ],
+    "heelR": [
+     0.2944,
+     0.8208,
+     -0.0127
+    ],
+    "toeL": [
+     0.3021,
+     0.6761,
+     -0.0251
+    ],
+    "toeR": [
+     0.3024,
+     0.8663,
+     -0.0734
+    ]
+   }
+  },
+  {
+   "i": 18,
+   "t": 4.38,
+   "role": "key",
+   "pace": "steady",
+   "energy": 0.43,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee folded tight. The character-right leg passes behind the character-left. on the ball of the character-right foot, heel lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. character-left hip raised. head forward.",
+   "note": "Deepest fold of the second cross, character-right leg behind. Feet closer together than frame 10.",
+   "features": {
+    "yaw": -20,
+    "view": "front",
+    "reach_L": 0.07,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.29,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 42,
+    "knee_R": 159,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee folded tight",
+    "overlap": "The character-right leg passes behind the character-left",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": 0,
+    "torso": "torso upright",
+    "twist_deg": 0,
+    "twist": "",
+    "hips": "character-left hip raised",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "level",
+     "armL": "level",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3122,
+     0.1537,
+     -0.0939
+    ],
+    "eyeL": [
+     0.3246,
+     0.1411,
+     -0.0877
+    ],
+    "eyeR": [
+     0.2947,
+     0.1385,
+     -0.0924
+    ],
+    "earL": [
+     0.3331,
+     0.1468,
+     -0.0396
+    ],
+    "earR": [
+     0.2783,
+     0.1455,
+     -0.0548
+    ],
+    "shL": [
+     0.3521,
+     0.2518,
+     0.005
+    ],
+    "shR": [
+     0.2325,
+     0.2528,
+     -0.04
+    ],
+    "elL": [
+     0.3404,
+     0.37,
+     0.0339
+    ],
+    "elR": [
+     0.2011,
+     0.3648,
+     -0.0307
+    ],
+    "wrL": [
+     0.3603,
+     0.471,
+     -0.0206
+    ],
+    "wrR": [
+     0.1984,
+     0.4734,
+     -0.0448
+    ],
+    "pinkyL": [
+     0.3708,
+     0.5046,
+     -0.0345
+    ],
+    "pinkyR": [
+     0.1936,
+     0.5057,
+     -0.0554
+    ],
+    "indexL": [
+     0.3668,
+     0.5024,
+     -0.0492
+    ],
+    "indexR": [
+     0.2001,
+     0.504,
+     -0.0676
+    ],
+    "hipL": [
+     0.3347,
+     0.4668,
+     0.016
+    ],
+    "hipR": [
+     0.2529,
+     0.4768,
+     -0.016
+    ],
+    "knL": [
+     0.4128,
+     0.4611,
+     -0.1041
+    ],
+    "knR": [
+     0.3009,
+     0.6461,
+     -0.0227
+    ],
+    "anL": [
+     0.3228,
+     0.5645,
+     -0.0309
+    ],
+    "anR": [
+     0.2869,
+     0.8175,
+     0.0381
+    ],
+    "heelL": [
+     0.2948,
+     0.5621,
+     -0.0249
+    ],
+    "heelR": [
+     0.28,
+     0.8459,
+     0.0422
+    ],
+    "toeL": [
+     0.3196,
+     0.6271,
+     -0.051
+    ],
+    "toeR": [
+     0.3075,
+     0.8825,
+     -0.0148
+    ]
+   }
+  },
+  {
+   "i": 19,
+   "t": 4.463,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 1.0,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. The character-right leg passes behind the character-left. on the ball of the character-right foot, heel lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. character-left hip raised. character-right shoulder raised. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -18,
+    "view": "front",
+    "reach_L": 0.14,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.38,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 65,
+    "knee_R": 161,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "The character-right leg passes behind the character-left",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": 2,
+    "torso": "torso upright",
+    "twist_deg": -7,
+    "twist": "",
+    "hips": "character-left hip raised",
+    "shoulders": "character-right shoulder raised",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": "R",
+    "limbs": {
+     "legL": "near",
+     "legR": "near",
+     "armL": "far",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.315,
+     0.1384,
+     -0.0703
+    ],
+    "eyeL": [
+     0.3271,
+     0.1266,
+     -0.0652
+    ],
+    "eyeR": [
+     0.3017,
+     0.1238,
+     -0.0695
+    ],
+    "earL": [
+     0.3361,
+     0.1381,
+     -0.0213
+    ],
+    "earR": [
+     0.2867,
+     0.1327,
+     -0.0335
+    ],
+    "shL": [
+     0.3583,
+     0.241,
+     0.0165
+    ],
+    "shR": [
+     0.2376,
+     0.2287,
+     -0.0245
+    ],
+    "elL": [
+     0.3474,
+     0.3595,
+     0.0529
+    ],
+    "elR": [
+     0.211,
+     0.3419,
+     -0.0192
+    ],
+    "wrL": [
+     0.3751,
+     0.4664,
+     0.0076
+    ],
+    "wrR": [
+     0.191,
+     0.4643,
+     -0.0351
+    ],
+    "pinkyL": [
+     0.389,
+     0.5029,
+     -0.0017
+    ],
+    "pinkyR": [
+     0.1765,
+     0.4983,
+     -0.0434
+    ],
+    "indexL": [
+     0.3868,
+     0.5022,
+     -0.0175
+    ],
+    "indexR": [
+     0.1852,
+     0.5011,
+     -0.0585
+    ],
+    "hipL": [
+     0.3325,
+     0.4442,
+     0.0201
+    ],
+    "hipR": [
+     0.2518,
+     0.4541,
+     -0.0201
+    ],
+    "knL": [
+     0.418,
+     0.457,
+     -0.0961
+    ],
+    "knR": [
+     0.2953,
+     0.6369,
+     -0.0402
+    ],
+    "anL": [
+     0.342,
+     0.5742,
+     -0.0439
+    ],
+    "anR": [
+     0.2896,
+     0.823,
+     0.0036
+    ],
+    "heelL": [
+     0.3165,
+     0.6056,
+     -0.0414
+    ],
+    "heelR": [
+     0.2847,
+     0.8506,
+     0.0042
+    ],
+    "toeL": [
+     0.3463,
+     0.6556,
+     -0.0738
+    ],
+    "toeR": [
+     0.3067,
+     0.8897,
+     -0.0553
+    ]
+   }
+  },
+  {
+   "i": 20,
+   "t": 4.547,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 1.08,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee bent ~90°. The character-right leg passes behind the character-left. on the ball of the character-right foot, heel lifted. character-left arm low by the hip, elbow slightly bent, by the side. character-right arm low by the hip, elbow straight, by the side. torso upright. character-left hip raised. character-right shoulder raised. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -6,
+    "view": "front",
+    "reach_L": -0.26,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, by the side",
+    "reach_R": 0.3,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 83,
+    "knee_R": 161,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee bent ~90°",
+    "overlap": "The character-right leg passes behind the character-left",
+    "feet": "on the ball of the character-right foot, heel lifted",
+    "lean_deg": 2,
+    "torso": "torso upright",
+    "twist_deg": -4,
+    "twist": "",
+    "hips": "character-left hip raised",
+    "shoulders": "character-right shoulder raised",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": null,
+    "limbs": {
+     "legL": "near",
+     "legR": "level",
+     "armL": "level",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3177,
+     0.1169,
+     -0.0802
+    ],
+    "eyeL": [
+     0.3324,
+     0.1052,
+     -0.0757
+    ],
+    "eyeR": [
+     0.3016,
+     0.1017,
+     -0.0779
+    ],
+    "earL": [
+     0.3424,
+     0.1112,
+     -0.0314
+    ],
+    "earR": [
+     0.2899,
+     0.1054,
+     -0.0358
+    ],
+    "shL": [
+     0.3636,
+     0.2119,
+     -0.0021
+    ],
+    "shR": [
+     0.2372,
+     0.1972,
+     -0.0166
+    ],
+    "elL": [
+     0.3353,
+     0.3171,
+     0.0294
+    ],
+    "elR": [
+     0.2178,
+     0.3113,
+     -0.0041
+    ],
+    "wrL": [
+     0.3302,
+     0.4077,
+     -0.0049
+    ],
+    "wrR": [
+     0.1995,
+     0.4218,
+     -0.0206
+    ],
+    "pinkyL": [
+     0.3433,
+     0.4408,
+     -0.0142
+    ],
+    "pinkyR": [
+     0.1846,
+     0.4497,
+     -0.0285
+    ],
+    "indexL": [
+     0.3455,
+     0.4319,
+     -0.0286
+    ],
+    "indexR": [
+     0.1949,
+     0.4523,
+     -0.0433
+    ],
+    "hipL": [
+     0.3315,
+     0.411,
+     0.0089
+    ],
+    "hipR": [
+     0.252,
+     0.422,
+     -0.0089
+    ],
+    "knL": [
+     0.4134,
+     0.4606,
+     -0.125
+    ],
+    "knR": [
+     0.2691,
+     0.5983,
+     -0.025
+    ],
+    "anL": [
+     0.3726,
+     0.6093,
+     -0.0716
+    ],
+    "anR": [
+     0.2853,
+     0.797,
+     0.0225
+    ],
+    "heelL": [
+     0.3523,
+     0.6145,
+     -0.0693
+    ],
+    "heelR": [
+     0.2872,
+     0.8189,
+     0.023
+    ],
+    "toeL": [
+     0.3887,
+     0.6834,
+     -0.1188
+    ],
+    "toeR": [
+     0.313,
+     0.8636,
+     -0.0469
+    ]
+   }
+  },
+  {
+   "i": 21,
+   "t": 4.63,
+   "role": "key",
+   "pace": "steady",
+   "energy": 0.68,
+   "cue": "Weight on the character-right foot, character-left foot lifted. character-left knee slightly bent, character-right knee slightly bent. character-left arm low by the hip, elbow straight, inside the shoulder. character-right arm low by the hip, elbow straight, by the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": 0,
+    "view": "front",
+    "reach_L": -0.39,
+    "arm_L": "character-left arm low by the hip, elbow straight, inside the shoulder",
+    "reach_R": 0.34,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 123,
+    "knee_R": 147,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "character-left knee slightly bent, character-right knee slightly bent",
+    "overlap": "",
+    "feet": "",
+    "lean_deg": 3,
+    "torso": "torso upright",
+    "twist_deg": -10,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": null,
+    "limbs": {
+     "legL": "near",
+     "legR": "near",
+     "armL": "level",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3152,
+     0.1007,
+     -0.0634
+    ],
+    "eyeL": [
+     0.331,
+     0.0888,
+     -0.057
+    ],
+    "eyeR": [
+     0.2985,
+     0.0862,
+     -0.0583
+    ],
+    "earL": [
+     0.341,
+     0.095,
+     -0.0061
+    ],
+    "earR": [
+     0.2868,
+     0.0889,
+     -0.0067
+    ],
+    "shL": [
+     0.3585,
+     0.1881,
+     0.0119
+    ],
+    "shR": [
+     0.239,
+     0.1813,
+     0.0114
+    ],
+    "elL": [
+     0.3295,
+     0.2953,
+     0.0222
+    ],
+    "elR": [
+     0.2195,
+     0.2943,
+     0.0239
+    ],
+    "wrL": [
+     0.3123,
+     0.3734,
+     -0.0116
+    ],
+    "wrR": [
+     0.1985,
+     0.4054,
+     0.0041
+    ],
+    "pinkyL": [
+     0.3085,
+     0.404,
+     -0.0231
+    ],
+    "pinkyR": [
+     0.1777,
+     0.43,
+     -0.006
+    ],
+    "indexL": [
+     0.308,
+     0.4065,
+     -0.0378
+    ],
+    "indexR": [
+     0.1847,
+     0.4325,
+     -0.021
+    ],
+    "hipL": [
+     0.3275,
+     0.3808,
+     0.0087
+    ],
+    "hipR": [
+     0.2464,
+     0.3853,
+     -0.0087
+    ],
+    "knL": [
+     0.4202,
+     0.5059,
+     -0.0693
+    ],
+    "knR": [
+     0.2382,
+     0.5542,
+     -0.0882
+    ],
+    "anL": [
+     0.4199,
+     0.6896,
+     -0.0436
+    ],
+    "anR": [
+     0.2237,
+     0.7367,
+     -0.0722
+    ],
+    "heelL": [
+     0.3997,
+     0.707,
+     -0.0459
+    ],
+    "heelR": [
+     0.2259,
+     0.7488,
+     -0.0742
+    ],
+    "toeL": [
+     0.4656,
+     0.7594,
+     -0.0973
+    ],
+    "toeR": [
+     0.2261,
+     0.8157,
+     -0.132
+    ]
+   }
+  },
+  {
+   "i": 22,
+   "t": 4.713,
+   "role": "pilot",
+   "pace": "steady",
+   "energy": 1.65,
+   "cue": "Weight on the character-right foot, character-left foot lifted. legs straight. character-left arm low by the hip, elbow straight, inside the shoulder. character-right arm low by the hip, elbow straight, by the side. torso upright. head forward.",
+   "note": "",
+   "features": {
+    "yaw": -1,
+    "view": "front",
+    "reach_L": -0.39,
+    "arm_L": "character-left arm low by the hip, elbow straight, inside the shoulder",
+    "reach_R": 0.44,
+    "arm_R": "character-right arm low by the hip, elbow straight, by the side",
+    "knee_L": 155,
+    "knee_R": 155,
+    "airborne": false,
+    "weight": "weight on the character-right foot, character-left foot lifted",
+    "legs": "legs straight",
+    "overlap": "",
+    "feet": "",
+    "lean_deg": 2,
+    "torso": "torso upright",
+    "twist_deg": -6,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": null,
+    "limbs": {
+     "legL": "near",
+     "legR": "near",
+     "armL": "level",
+     "armR": "level"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3101,
+     0.1106,
+     -0.0833
+    ],
+    "eyeL": [
+     0.3261,
+     0.099,
+     -0.0768
+    ],
+    "eyeR": [
+     0.2924,
+     0.0954,
+     -0.0784
+    ],
+    "earL": [
+     0.3373,
+     0.1072,
+     -0.0246
+    ],
+    "earR": [
+     0.2799,
+     0.1016,
+     -0.0265
+    ],
+    "shL": [
+     0.3537,
+     0.1977,
+     -0.0017
+    ],
+    "shR": [
+     0.2368,
+     0.1972,
+     -0.0031
+    ],
+    "elL": [
+     0.3187,
+     0.3,
+     0.0123
+    ],
+    "elR": [
+     0.2158,
+     0.3155,
+     0.0116
+    ],
+    "wrL": [
+     0.3086,
+     0.3956,
+     -0.0304
+    ],
+    "wrR": [
+     0.1857,
+     0.4191,
+     -0.0091
+    ],
+    "pinkyL": [
+     0.3175,
+     0.4201,
+     -0.0446
+    ],
+    "pinkyR": [
+     0.1661,
+     0.4372,
+     -0.0187
+    ],
+    "indexL": [
+     0.3134,
+     0.4368,
+     -0.0608
+    ],
+    "indexR": [
+     0.1739,
+     0.4387,
+     -0.0355
+    ],
+    "hipL": [
+     0.3294,
+     0.3941,
+     0.0053
+    ],
+    "hipR": [
+     0.2475,
+     0.3945,
+     -0.0053
+    ],
+    "knL": [
+     0.4212,
+     0.5482,
+     -0.0433
+    ],
+    "knR": [
+     0.2142,
+     0.5645,
+     -0.0601
+    ],
+    "anL": [
+     0.4585,
+     0.7356,
+     -0.0261
+    ],
+    "anR": [
+     0.1725,
+     0.7343,
+     -0.0405
+    ],
+    "heelL": [
+     0.4515,
+     0.7541,
+     -0.0298
+    ],
+    "heelR": [
+     0.1762,
+     0.7513,
+     -0.0426
+    ],
+    "toeL": [
+     0.5018,
+     0.7963,
+     -0.0864
+    ],
+    "toeR": [
+     0.1447,
+     0.8087,
+     -0.0989
+    ]
+   }
+  },
+  {
+   "i": 23,
+   "t": 4.797,
+   "role": "inbetween",
+   "pace": "steady",
+   "energy": 1.37,
+   "cue": "Weight on the character-left foot, character-right foot lifted. legs straight. on the ball of the character-left foot, heel lifted. character-left arm low by the hip, elbow slightly bent, across the body in front of the torso. character-right arm low by the hip, elbow straight, out to the side. torso upright. head forward.",
+   "note": "Loop seam. Weight already rolling toward the character-left foot so it flows back into frame 0.",
+   "features": {
+    "yaw": 3,
+    "view": "front",
+    "reach_L": -0.58,
+    "arm_L": "character-left arm low by the hip, elbow slightly bent, across the body in front of the torso",
+    "reach_R": 0.63,
+    "arm_R": "character-right arm low by the hip, elbow straight, out to the side",
+    "knee_L": 160,
+    "knee_R": 151,
+    "airborne": false,
+    "weight": "weight on the character-left foot, character-right foot lifted",
+    "legs": "legs straight",
+    "overlap": "",
+    "feet": "on the ball of the character-left foot, heel lifted",
+    "lean_deg": 1,
+    "torso": "torso upright",
+    "twist_deg": -2,
+    "twist": "",
+    "hips": "",
+    "shoulders": "",
+    "head": "head forward"
+   },
+   "depth": {
+    "near_side": null,
+    "limbs": {
+     "legL": "level",
+     "legR": "level",
+     "armL": "near",
+     "armR": "near"
+    }
+   },
+   "pts": {
+    "nose": [
+     0.3045,
+     0.166,
+     -0.1598
+    ],
+    "eyeL": [
+     0.3228,
+     0.1549,
+     -0.1546
+    ],
+    "eyeR": [
+     0.2874,
+     0.1512,
+     -0.1564
+    ],
+    "earL": [
+     0.3352,
+     0.1673,
+     -0.0986
+    ],
+    "earR": [
+     0.2755,
+     0.163,
+     -0.1031
+    ],
+    "shL": [
+     0.3534,
+     0.248,
+     -0.0647
+    ],
+    "shR": [
+     0.2361,
+     0.2575,
+     -0.0574
+    ],
+    "elL": [
+     0.3184,
+     0.3514,
+     -0.0448
+    ],
+    "elR": [
+     0.2064,
+     0.3695,
+     -0.0343
+    ],
+    "wrL": [
+     0.2853,
+     0.4558,
+     -0.083
+    ],
+    "wrR": [
+     0.1618,
+     0.4779,
+     -0.049
+    ],
+    "pinkyL": [
+     0.2863,
+     0.4896,
+     -0.0978
+    ],
+    "pinkyR": [
+     0.1381,
+     0.4933,
+     -0.0569
+    ],
+    "indexL": [
+     0.2809,
+     0.4928,
+     -0.1131
+    ],
+    "indexR": [
+     0.1436,
+     0.4954,
+     -0.0747
+    ],
+    "hipL": [
+     0.3363,
+     0.4464,
+     -0.0009
+    ],
+    "hipR": [
+     0.2491,
+     0.4514,
+     0.0009
+    ],
+    "knL": [
+     0.4204,
+     0.6275,
+     -0.0189
+    ],
+    "knR": [
+     0.1869,
+     0.6183,
+     -0.0282
+    ],
+    "anL": [
+     0.4809,
+     0.8003,
+     0.03
+    ],
+    "anR": [
+     0.1131,
+     0.7746,
+     0.0315
+    ],
+    "heelL": [
+     0.4745,
+     0.8215,
+     0.0296
+    ],
+    "heelR": [
+     0.1179,
+     0.7925,
+     0.0331
+    ],
+    "toeL": [
+     0.5117,
+     0.8576,
+     -0.0356
+    ],
+    "toeR": [
+     0.0797,
+     0.844,
+     -0.0301
+    ]
+   }
+  }
+ ],
+ "floor_y": 0.8825,
+ "body_h": 0.7371
+}
