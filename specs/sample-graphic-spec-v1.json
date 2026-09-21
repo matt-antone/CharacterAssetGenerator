@@ -1,7 +1,6 @@
 {
   "name": "The Belter",
   "height": "5' 7\"",
-  "detail_level": 5,
   "description": "A sample power-ballad singer in her forties with a broad, low, braced arcade build and a confident performance-ready expression without aggression. Her recognition cue is that her wavy auburn hair mass is visibly wider than her shoulders; no hat or headwear. She wears a structured crimson performance jacket, a dark fitted top, high-waisted dark trousers, a crimson waist accent, and chunky dark ankle boots. She holds one wireless handheld microphone upright in her character-right hand; no cord, no stand. Her ready stance has flexed knees, a broad torso braced over a low centre, feet planted, and the free hand compact and relaxed. Never draw: slim, upright, dainty, youth-coded, or elderly-caricature proportions; microphone in the character-left hand, duplicated, corded, or on a stand.",
   "animations": {
     "dance": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow, then return to the low braced opening stance with the microphone upright in the character-right hand.",

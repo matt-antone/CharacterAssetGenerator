@@ -95,9 +95,15 @@ DETAIL_LEVELS = {
 
 DEFAULT_DETAIL_LEVEL = 10
 
-#: The one approved detail sample that survived the old repo. Levels without a
-#: frame of their own still get their written description.
-DETAIL_FRAMES = {4: Path(__file__).parent / "references" / "detail-level-04.png"}
+#: The approved detail samples. Levels without a frame of their own still get
+#: their written description — but the words alone do not hold: crooner, drawn
+#: at level 10 on the description alone, came back at the same rendering density
+#: as his old level-4 renders. Level 10 is the house default, so it gets the
+#: picture: Belter's approved key art, the render the look was signed off on.
+DETAIL_FRAMES = {
+    4: Path(__file__).parent / "references" / "detail-level-04.png",
+    10: Path(__file__).parent / "references" / "detail-level-10.png",
+}
 
 
 def detail_frame(level: int) -> Path | None:
