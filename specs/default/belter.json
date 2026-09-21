@@ -39,7 +39,7 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow. The character-right hand and arm are free to move.",
+      "intent": "Grounded power-ballad dance loop: shift through two wide side steps, let the auburn hair and jacket follow.",
       "motion": "shuffle-1-b0ARQ5kM85Y-13.6s"
     },
     "sing": {

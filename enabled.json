@@ -4,8 +4,8 @@
   "views": {
     "key": true,
     "front": true,
-    "back": false,
-    "profile": false
+    "back": true,
+    "profile": true
   },
 
   "animations": {
