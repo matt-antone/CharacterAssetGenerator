@@ -35,7 +35,10 @@
     "mic"
   ],
   "animations": {
-    "dance": "Elegant R&B dance loop: shift weight beneath the unbroken gown column, trace a small arm and shoulder phrase, let the short rear train follow, then return to the poised chin-level opening without exposing legs or feet.",
+    "dance": {
+      "intent": "Elegant R&B dance loop: shift weight beneath the unbroken gown column, trace a small arm and shoulder phrase, let the short rear train follow, then return to the poised chin-level opening without exposing legs or feet.",
+      "motion": "shift-twist-HRi95ZhyNqM-250.9s"
+    },
     "sing": {
       "intent": "Restrained vocal loop: breathe through a subtle torso rise, move the free palm from sternum into one precise phrase gesture, then restore the statuesque stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [

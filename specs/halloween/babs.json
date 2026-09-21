@@ -45,7 +45,10 @@
     "mic"
   ],
   "animations": {
-    "dance": "Angular theatrical dance loop: make two small gliding steps beneath the gown, snap the head crisply side to side like a startled bird with the hair tower staying vertical, sweep the free character-left arm through a stiff flourish, then return to her tall poised opening stance.",
+    "dance": {
+      "intent": "Angular theatrical dance loop: make two small gliding steps beneath the gown, snap the head crisply side to side like a startled bird with the hair tower staying vertical, sweep the free character-left arm through a stiff flourish, then return to her tall poised opening stance.",
+      "motion": "shuffle-4-Us5Zf6LwmKo-2.9s"
+    },
     "sing": {
       "intent": "Grand torch-song vocal loop: raise the chin, extend the free hand outward in a slow dramatic reach, then draw it back into her poised ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [
