@@ -36,7 +36,10 @@
     "mic"
   ],
   "animations": {
-    "dance": "Festival-crowd dance loop: bounce through a wide low two-step, let the puffer baffles and shoulder towel follow, then coil naturally into frame 0.",
+    "dance": {
+      "intent": "Festival-crowd dance loop: bounce through a wide low two-step, let the puffer baffles and shoulder towel follow, then coil naturally into frame 0.",
+      "motion": "cabbage-patch-UUUY1vR57Go-12.7s"
+    },
     "sing": {
       "intent": "MC vocal loop: keep the low wide base, pulse the knees and shoulders, then recover into the coiled stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [

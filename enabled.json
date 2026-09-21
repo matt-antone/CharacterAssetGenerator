@@ -14,7 +14,7 @@
     "flinch": false,
     "guard": false,
     "entrance": false,
-    "victory": false,
-    "ko": false
+    "victory": true,
+    "ko": true
   }
 }
