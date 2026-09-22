@@ -89,8 +89,12 @@ def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
 
 
 def folders(root: Path) -> list[Path]:
-    """Where sheets may live: the folder `cag edit` was given, and the ones inside it."""
-    return [root, *sorted(p for p in root.iterdir() if p.is_dir())]
+    """Where sheets may live: the folder `cag edit` was given, and every folder under it.
+
+    All the way down, not one level: packages are filed by theme, so a
+    character's folder is `outputs/<theme>/<slug>`.
+    """
+    return [root, *sorted(p for p in root.rglob("*") if p.is_dir())]
 
 
 def frame_sheet_fps(out_dir: Path, sheet: str) -> int | None:
