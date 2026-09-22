@@ -14,7 +14,7 @@ from cag import animation, mask
 from cag.geometry import ANIM_CONTACT_ROW, anim_subject_height_px
 from cag.motion import load_motion
 from cag.mask import pose_extent, stature
-from cag.prompts import EMPTY_HANDS
+from cag.prompts import CARRY_REFERENCE, EMPTY_HANDS
 from cag.spec import load_spec
 from tests.test_static_sheet import flat_cutout
 
@@ -272,6 +272,45 @@ def test_sheet_mode_slices_figures_back_in_frame_order(sheet_run):
         with Image.open(sheet_run["sources"][index]) as source:
             shades.append(source.getpixel((source.width // 2, source.height // 2))[0])
     assert shades == [20 + 10 * (i % animation.FRAME_SHEET_SIZE) for i in range(16)]
+
+
+def test_each_sheet_continues_from_the_last_figure_of_the_one_before(sheet_run):
+    """Sheets are independent renders of one set, which is where costume wanders.
+    Every sheet but the first is shown the frame drawn immediately before it, and
+    is told so — behind the key art and never in the pose grid's last slot."""
+    first, second = fake_frame_sheet_draw.calls
+    carry = sheet_run["sources"][animation.FRAME_SHEET_SIZE - 1]
+    assert carry not in first["refs"] and CARRY_REFERENCE not in first["prompt"]
+    assert second["refs"][1] == carry and second["refs"][-1] != carry
+    assert CARRY_REFERENCE in second["prompt"]
+
+
+def test_the_first_sheet_continues_from_the_set_before_it(tmp_path, monkeypatch):
+    """A build chains its sets, so a set is handed the last frame of the one before
+    it and its opening sheet continues from that instead of from the key art alone."""
+    fake_frame_sheet_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art, before = tmp_path / "key.png", tmp_path / "before.png"
+    for path in (key_art, before):
+        Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(path)
+    animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]),
+        draw_fn=fake_frame_sheet_draw,
+        frame_sheet_mode=True,
+    ).invoke(
+        {
+            "spec": load_spec("tests/fixtures/velvet-lou.json"),
+            "bible": "A lounge performer.",
+            "key_art": key_art,
+            "carry": before,
+            "scale": 2.875,
+            "motion": posed(load_motion(SAMPLE), tmp_path),
+            "set_name": "dance",
+            "work_dir": tmp_path / "lou",
+        }
+    )
+    first = fake_frame_sheet_draw.calls[0]
+    assert first["refs"][1] == before and CARRY_REFERENCE in first["prompt"]
 
 
 def test_sheet_mode_registers_every_frame_at_one_scale(sheet_run):

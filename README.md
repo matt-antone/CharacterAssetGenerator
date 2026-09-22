@@ -4,7 +4,7 @@ Turns a short character brief into game-ready sprite assets: a projection sheet
 of static views, and a masked animation set per animation the brief names.
 
 ```bash
-uv run cag build specs/default/belter.json --jobs 4
+uv run cag build specs/default/belter.json
 ```
 
 The first run stops after the key art and waits for a human. Look at
@@ -20,8 +20,8 @@ sprite sheet and a GIF proof for each of the brief's seven sets, a gallery page
 tying them together, and a `manifest.json` for the front end: cell size, view
 paths, and per set the frame count, columns, fps and file names. Play from the
 manifest's fps — `cag edit` rewrites it when a save rebuilds the proof at
-another rate, so it always matches the GIF beside it. Sets render across `--jobs` lanes, and one that fails
-does not take the others down with it.
+another rate, so it always matches the GIF beside it. Sets render in order, each drawn from the key art and
+from the last frame of the set before it, and one that fails does not take the others down with it.
 
 By default a set writes its own sheet from the brief's prose, and nothing below
 is needed. A brief that wants a traced

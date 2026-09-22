@@ -49,6 +49,10 @@ class AnimationState(TypedDict, total=False):
     set_note: str
     #: Pose reference per frame index, when the sheet carries poses.
     poses: dict[int, Path]
+    #: The last frame of the set drawn before this one, when the build chains
+    #: its sets. The first sheet of this set continues from it exactly as its
+    #: own later sheets continue from each other.
+    carry: Path
     #: Whether those references are photographs of the performer rather than
     #: drawn figures. They are described very differently to the generator: one
     #: is a person to copy a pose off and take nothing else from, the other a
@@ -279,6 +283,14 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
     frame_sheets = []
     digest = motion_digest(motion)
     reusable = sources_are_current(state)
+    #: The last figure of the sheet before this one. Each sheet is an independent
+    #: render off the same key art, so the second one has never seen the first and
+    #: wanders: this carries the character as actually drawn a moment earlier.
+    #: Continuity only — the prompt says to take no pose from it, because the
+    #: single-frame path measured a second figure reference outvoting the pose
+    #: cards and flattening the movement. The set before this one, when there was
+    #: one, hands over its last frame to start the chain off.
+    carry: Path | None = state.get("carry")
     for start in range(0, len(motion.frames), FRAME_SHEET_SIZE):
         chunk = motion.frames[start : start + FRAME_SHEET_SIZE]
         frame_sheets.append([frame.index for frame in chunk])
@@ -290,6 +302,7 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
         }
         if reusable and all(path.exists() for path in drawn_already.values()):
             sources.update(drawn_already)
+            carry = drawn_already[chunk[-1].index]
             continue
         cues = [(frame.role, frame.instruction) for frame in chunk]
         pose_grid = None
@@ -312,8 +325,14 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
             per_row=FIGURES_PER_ROW,
             props=prop_clause(state),
             photographic=state.get("photographic", False),
+            carry_reference=carry is not None,
         )
-        references = [state["key_art"], *([detail] if detail else []), *([pose_grid] if pose_grid else [])]
+        references = [
+            state["key_art"],
+            *([carry] if carry else []),
+            *([detail] if detail else []),
+            *([pose_grid] if pose_grid else []),
+        ]
         # The render is of this chunk of this sheet, so the name says so. `draw` keeps
         # any render already at the path it is given, which is what resumes an
         # interrupted set — but under a name that only counted frames, a different
@@ -340,6 +359,7 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
             source = frame_path(state, "source", frame.index)
             cell.save(source, format="PNG")
             sources[frame.index] = source
+        carry = sources[chunk[-1].index]
     stamp = motion_stamp(state)
     stamp.parent.mkdir(parents=True, exist_ok=True)
     stamp.write_text(motion_digest(motion) + "\n")
