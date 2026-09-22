@@ -45,6 +45,22 @@ the space around it.
 Write no other file. Reply with the filename and nothing else."""
 
 
+#: `INSTRUCTIONS` for a render that is a place rather than a character. A
+#: location is delivered whole and nothing is ever cut out of it, so the magenta
+#: contract is not just unnecessary here, it is the wrong picture — what has to
+#: be checked instead is that the room came back empty.
+SCENE_INSTRUCTIONS = """Generate exactly one image with your built-in image generation tool and \
+save it to {filename} in the working directory. You will shorten this message to write the \
+tool's prompt; when you do, keep everything said about what must not appear in full, and \
+shorten the description of the place first.
+
+Then view {filename} and check it. There must be no person, character, figure, silhouette or \
+crowd anywhere in it, however small or far away, and no text, logo, watermark or signature. If \
+any of that came out, generate the image again until it is gone.
+
+Write no other file. Reply with the filename and nothing else."""
+
+
 #: How much the border may vary and still count as one flat backdrop, as a
 #: per-channel spread across the sampled band. Scenery behind the character
 #: breaks the cutout.
@@ -159,6 +175,7 @@ def draw(
     attempts: int = 2,
     reuse: bool = True,
     backend: Backend = "codex",
+    scene: bool = False,
 ) -> Path:
     """Generate one image for `prompt` and save it at `out_path`.
 
@@ -169,6 +186,9 @@ def draw(
     ChatGPT subscription) or `agy` (the Antigravity subscription). One at a
     time — there is no fallback between them.
 
+    `scene` draws a place instead of a character: no magenta backdrop is asked
+    for and none is checked for, because nothing is cut out of a location.
+
     A render that already exists is kept, never redrawn and never overwritten,
     so a run interrupted at frame twelve resumes at frame twelve. Delete the
     file to force a redraw, or pass `reuse=False` to make its presence an error.
@@ -177,10 +197,11 @@ def draw(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if out_path.exists():
         if reuse:
-            return _verify(out_path)
+            return _verify(out_path, backdrop=not scene)
         raise DrawError(f"{out_path} already exists; refusing to overwrite a source")
 
-    full_prompt = f"{prompt}\n\n{INSTRUCTIONS.format(filename=out_path.name)}"
+    instructions = SCENE_INSTRUCTIONS if scene else INSTRUCTIONS
+    full_prompt = f"{prompt}\n\n{instructions.format(filename=out_path.name)}"
     argv, run_kwargs = _CALL_BUILDERS[backend](full_prompt, out_path, references)
 
     # Written before the call, so a frame that comes back wrong can be read back
@@ -206,7 +227,7 @@ def draw(
             continue
         if out_path.exists():
             try:
-                return _verify(out_path)
+                return _verify(out_path, backdrop=not scene)
             except DrawError as error:
                 # This attempt is unusable, so clear it and draw again.
                 out_path.unlink(missing_ok=True)
@@ -216,13 +237,15 @@ def draw(
     raise DrawError(f"could not draw {out_path.name}: {last_error}")
 
 
-def _verify(path: Path) -> Path:
+def _verify(path: Path, backdrop: bool = True) -> Path:
     """Check a render is usable. Never deletes — the caller decides that."""
+    usable, why_not = True, ""
     try:
         with Image.open(path) as image:
             image.verify()
-        with Image.open(path) as image:
-            usable, why_not = backdrop_is_usable(image)
+        if backdrop:
+            with Image.open(path) as image:
+                usable, why_not = backdrop_is_usable(image)
     except Exception as exc:  # PIL raises a grab-bag of types here
         raise DrawError(f"{path.name} is not a readable image: {exc}") from exc
     if not usable:

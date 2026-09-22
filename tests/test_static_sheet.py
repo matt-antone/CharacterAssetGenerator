@@ -30,6 +30,12 @@ def fake_draw(prompt, out_path, references=(), **kwargs):
     return out_path
 
 
+def character_calls():
+    """Every render of the character. The location is a place and obeys none of
+    the character contract: no bible, no key art, no magenta."""
+    return [call for call in fake_draw.calls if call["out"].stem != "location"]
+
+
 def flat_cutout(src):
     """Stand in for Vision: the fakes are flat PNGs, so key out the magenta."""
     pixels = numpy.array(Image.open(src).convert("RGBA"))
@@ -75,20 +81,20 @@ def test_approval_does_not_carry_over_to_redrawn_key_art(tmp_path):
 
 
 def test_draws_key_art_before_the_projection_views(run):
-    order = [call["out"].stem for call in fake_draw.calls]
+    order = [call["out"].stem for call in character_calls()]
     assert order[0] == KEY_VIEW
     assert sorted(order[1:]) == sorted(static_sheet.projection_views())
 
 
 def test_projection_views_reference_the_key_art(run):
     key_art = fake_draw.calls[0]["out"]
-    assert all(call["refs"][0] == key_art for call in fake_draw.calls[1:])
+    assert all(call["refs"][0] == key_art for call in character_calls()[1:])
 
 
 def test_every_view_names_its_detail_level_and_the_arcade_style(run):
     from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
 
-    for call in fake_draw.calls:
+    for call in character_calls():
         assert f"detail level {DEFAULT_DETAIL_LEVEL}" in call["prompt"]
         assert "32-bit arcade sprite art" in call["prompt"]
         assert "character-left and character-right" in call["prompt"]
@@ -99,13 +105,13 @@ def test_the_detail_sample_rides_along_only_when_the_level_has_one(run):
     from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
 
     sample = detail_frame(DEFAULT_DETAIL_LEVEL)
-    for call in fake_draw.calls:
+    for call in character_calls():
         names = [Path(p).name for p in call["refs"]]
         assert (sample.name in names) if sample else (not any("detail-level" in n for n in names))
 
 
 def test_every_prompt_quotes_the_locked_bible(run):
-    assert all(BIBLE in call["prompt"] for call in fake_draw.calls)
+    assert all(BIBLE in call["prompt"] for call in character_calls())
 
 
 def test_produces_a_registered_cell_for_every_view_left_on(run):
@@ -235,3 +241,32 @@ def test_a_set_whose_hands_differ_gets_its_own_key_art(tmp_path):
     assert "Strict side profile" in prompt and "screen-left" in prompt
     assert "Mic:" in prompt or "mic" in prompt.lower(), "the set's own props are drawn in"
     assert key_art in references
+
+
+def test_the_location_is_drawn_whole_and_never_masked(run):
+    """A place, not a view: no references, no magenta, and nothing cut out of it."""
+    drawn = next(call for call in fake_draw.calls if call["out"].stem == "location")
+
+    assert drawn["refs"] == [], "a picture of a figure in the reference list draws a figure back"
+    assert "Magenta" not in drawn["prompt"]
+    assert BIBLE not in drawn["prompt"]
+    assert run["location"] == drawn["out"]
+    assert "location" not in run["cells"]
+
+
+def test_a_brief_with_no_location_draws_none(tmp_path, monkeypatch):
+    from dataclasses import replace
+
+    fake_draw.calls = []
+    monkeypatch.setattr(static_sheet, "cutout", flat_cutout)
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    graph = static_sheet.build_static_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(BIBLE)]), draw_fn=fake_draw
+    )
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), location="")
+    state = {"spec": spec, "work_dir": tmp_path / "lou"}
+    with pytest.raises(static_sheet.ApprovalRequired):
+        graph.invoke(state)
+    static_sheet.approve(tmp_path / "lou")
+
+    assert "location" not in graph.invoke(state)

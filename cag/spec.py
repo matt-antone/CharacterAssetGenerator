@@ -31,6 +31,7 @@ TEXT_FIELDS = (
     "prop",
     "personality",
     "performance_style",
+    "location",
 )
 #: The optional list fields, same schema, same reason.
 LIST_FIELDS = ("palette", "recognition_cues", "avoid")
@@ -70,6 +71,10 @@ class CharacterSpec:
     prop: str = ""
     personality: str = ""
     performance_style: str = ""
+    #: Where this character performs, as prose. Their background plate is drawn
+    #: from it, and nothing else in the pipeline reads it: it is the one authored
+    #: field that never reaches a render of the character themselves.
+    location: str = ""
     #: LIST_FIELDS, each empty unless the brief fills it.
     palette: tuple[str, ...] = ()
     recognition_cues: tuple[str, ...] = ()

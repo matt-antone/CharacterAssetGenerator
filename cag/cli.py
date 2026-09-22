@@ -10,7 +10,16 @@ from functools import partial
 from pathlib import Path
 
 from .animation import build_animation_graph
-from .assemble import MANIFEST, PORTRAIT_SIZES, gallery, gif_proof, manifest, portrait, tile
+from .assemble import (
+    MANIFEST,
+    PORTRAIT_SIZES,
+    gallery,
+    gif_proof,
+    location,
+    manifest,
+    portrait,
+    tile,
+)
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
@@ -221,6 +230,11 @@ def build(
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(static["cells"][view], destination)
 
+    background = None
+    if static.get("location"):
+        background = "location.png"
+        log(f"[location] {spec.name}: {location(static['location'], out_dir / background)}")
+
     results = []
     if chosen:
         log(f"[sets] {' -> '.join(chosen)}, each drawn from the one before it")
@@ -268,7 +282,7 @@ def build(
         views[f"portrait-{units}"] = Path("views") / f"portrait-{units}.png"
         portrait(static["cells"][KEY_VIEW], out_dir / views[f"portrait-{units}"], size)
 
-    manifest(out_dir / MANIFEST, spec.name, spec.height, views, sets)
+    manifest(out_dir / MANIFEST, spec.name, spec.height, views, sets, background)
     page = gallery(
         out_dir / "index.html",
         spec.name,
@@ -276,6 +290,7 @@ def build(
         spec.description,
         {view: str(path) for view, path in views.items()},
         sets,
+        background,
     )
     log(str(page))
     return page

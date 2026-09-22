@@ -69,6 +69,50 @@ BACKDROP = (
 
 
 
+#: How a background looks. The same arcade contract as `STYLE` with everything
+#: about a figure taken out: a location has no silhouette to outline and no body
+#: to keep whole, and "full body, head to feet" said of a room puts a performer
+#: in it.
+SCENE_STYLE = (
+    "Mid-1990s 32-bit arcade background art, the Capcom Street Fighter Alpha and Marvel vs "
+    "Capcom generation rather than Street Fighter 2. A visible pixel grid and hard "
+    "nearest-neighbour edges, with no antialiasing, no gradients, no airbrushing and no soft "
+    "glow — but a far richer palette than the 16-bit era: four to six discrete banded tones per "
+    "material, with deliberate rim light along lit edges and reflected colour inside the "
+    "shadows. Every surface is built from flat banded shapes, never photographic texture."
+)
+
+#: What a background must not contain. A stage drawn in this style attracts a
+#: performer standing on it, and a painted-in one cannot be removed later: the
+#: character is a separate cell composited over this.
+SCENE_EMPTY = (
+    "Draw the place and nothing else: no people, no characters, no figures, no silhouettes and "
+    "no crowd, not even small, blurred or far off in the distance. Nothing stands in the middle "
+    "of the frame and nothing in the foreground covers it — a character is composited in there "
+    "later and must not be hidden. No text, letters, numbers, logos, watermarks, signatures, "
+    "frame lines or borders."
+)
+
+#: The plate is 16:9 and the app's stage is 12:7, sized off height and centred,
+#: so a strip at each side is cropped away: 1152 x 12/7 is 1975 of the plate's
+#: 2048 pixels, leaving about 36 a side. Narrow, but it is always the sides, so
+#: anything that says which place this is belongs away from them.
+SCENE_SAFE_AREA = (
+    "A narrow strip down the far left and far right of the canvas will be cropped off when this "
+    "is shown. Keep everything that matters inside the middle of the frame: whatever identifies "
+    "the place, and anything a viewer is meant to read. The edges carry continuation of the room "
+    "only — wall, floor, drape, foliage — nothing that is missed when it is cut."
+)
+
+#: `VIEWPOINT` again, said of a room. A location shot from above or below cannot
+#: hold a character drawn level and square, and the composite gives the mismatch
+#: away immediately.
+SCENE_VIEWPOINT = (
+    "The viewer stands at a performer's eye level, square to the space and not tilted, looking "
+    "straight ahead into it. The floor runs to the bottom edge of the frame, so a character "
+    "standing at the centre has somewhere to stand."
+)
+
 #: Put in every generation prompt, word for word, exactly as the old profile
 #: required. It is the one clause that keeps a prop in the right hand.
 SIDE_LANGUAGE = (
