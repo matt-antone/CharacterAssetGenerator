@@ -39,6 +39,26 @@ MOTION_ROOT = Path("motions")
 #: What a brief writes instead of a sheet name to have one chosen for it.
 AUTO = "auto"
 
+#: Where briefs are filed. The folder a brief sits in inside this root is its
+#: theme, and the package lands under a folder of that name.
+SPECS_ROOT = Path("specs")
+
+
+def out_for(out_root: Path, spec_path: Path, slug: str, specs_root: Path = SPECS_ROOT) -> Path:
+    """Where this brief's package lands: `<out>/<theme>/<slug>`.
+
+    The theme is the folder the brief is filed in under `specs/` —
+    `specs/halloween/mort.json` writes `outputs/halloween/mort/`. Anything else
+    — a brief loose in `specs/`, a fixture, a one-off passed by path — has no
+    theme and writes `outputs/<slug>/` as before.
+
+    Only a folder's *name* is ever used, never its path, so a brief reached
+    through `..` or from outside the repo still writes inside the output folder.
+    """
+    parent = spec_path.resolve().parent
+    theme = parent.name if parent.parent == specs_root.resolve() else ""
+    return out_root / theme / slug
+
 
 def log(message: str) -> None:
     print(message, file=sys.stderr, flush=True)
@@ -174,7 +194,7 @@ def build(
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
-    out_dir = out_root / spec.slug
+    out_dir = out_for(out_root, spec_path, spec.slug)
     # An explicit --set is the operator asking for that set by name, so it overrides the
     # config. Without one, the config decides which of the brief's animations are drawn.
     chosen = set_names if set_names is not None else wanted(sorted(spec.animations), "animations")

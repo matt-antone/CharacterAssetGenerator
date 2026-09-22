@@ -188,3 +188,17 @@ def test_auto_with_an_empty_library_says_so(tmp_path):
     spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": cli.AUTO})
     with pytest.raises(MotionError, match="none under"):
         cli.motion_for(spec, "dance", tmp_path / "w", None, tmp_path / "empty")
+
+
+def test_out_for_files_a_package_under_its_theme(tmp_path):
+    specs, out = tmp_path / "specs", Path("outputs")
+    (specs / "halloween").mkdir(parents=True)
+
+    themed = cli.out_for(out, specs / "halloween" / "mort.json", "mort", specs)
+    loose = cli.out_for(out, specs / "belter.json", "belter", specs)
+    outside = cli.out_for(out, tmp_path / "elsewhere" / "oneoff.json", "oneoff", specs)
+
+    assert themed == out / "halloween" / "mort"
+    assert loose == out / "belter"  # no theme folder for a brief filed loose
+    assert outside == out / "oneoff"  # a folder outside specs/ is not a theme
+    assert out.resolve() in themed.resolve().parents  # never outside the output folder

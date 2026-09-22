@@ -46,6 +46,10 @@ repo's own `work/`. A branch or a worktree renders only to try something out:
 its art is scratch, it is never the version anyone ships, and a package built
 there is not a package the roster has. Land the code first, then render.
 
+A package is filed by theme: the folder a brief sits in inside `specs/` names the
+folder its render lands in, so `specs/halloween/mort.json` writes
+`outputs/halloween/mort/`. A brief filed loose in `specs/` writes `outputs/<slug>/`.
+
 `outputs/` is not tracked. A build writes it wherever it is told to, and the
 committed copy was 256 files that changed on every re-render.
 
@@ -102,7 +106,7 @@ for a fresh render; for every brief in `specs/` it is ignored and stale.
 
 ## Never hand over `index.html` on its own
 
-`outputs/<slug>/index.html` points at its pictures with relative paths —
+`outputs/<theme>/<slug>/index.html` points at its pictures with relative paths —
 `views/key.png`, `dance-sheet.png`. They resolve only while the file sits in its
 own directory next to `views/` and the sheets. Send the bare `.html` to the user
 and all twelve images break; the page arrives as text on a dark background and
@@ -115,7 +119,7 @@ Deliver it one of two ways:
   HTML asks for:
 
   ```
-  Artifact(file_path: "outputs/crooner/index.html", root: "outputs/crooner",
+  Artifact(file_path: "outputs/default/crooner/index.html", root: "outputs/default/crooner",
            files: {"views/key.png": "views/key.png", "dance-sheet.png": "dance-sheet.png", ...})
   ```
 
@@ -130,7 +134,7 @@ The same trap catches any copy of the page: moving `index.html` anywhere without
 ## `--set` rewrites the gallery to just that set
 
 `uv run cag build <spec> --set victory` re-renders one set, which is what you want when
-only that set is wrong. But it also rewrites `outputs/<slug>/index.html` from
+only that set is wrong. But it also rewrites `outputs/<theme>/<slug>/index.html` from
 the sets that ran, so the page comes back listing `victory` alone. The other
 sets' sheets and GIFs are still on disk, untouched — only the page forgot them.
 
@@ -201,7 +205,7 @@ A new term is named here before it is used.
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
 | **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |
 | **pose reference** | the umbrella concept. Today always pose cards and pose grids made from traced frames; nothing else qualifies |
-| **frame sheet** | many frames of one character drawn in one render. The chunk renders under `work/<char>/source/<set>/`, and the deliverable at `outputs/<char>/<set>-sheet.png` |
+| **frame sheet** | many frames of one character drawn in one render. The chunk renders under `work/<char>/source/<set>/`, and the deliverable at `outputs/<theme>/<char>/<set>-sheet.png` |
 | **key art** | the approved character reference render |
 | **bible** | the identity text quoted into every prompt |
 | **set** | one animation: dance, sing, flinch, guard, entrance, victory, ko |

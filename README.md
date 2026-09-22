@@ -15,7 +15,7 @@ again for a redraw:
 uv run cag approve specs/default/belter.json
 ```
 
-Once approved, that writes `outputs/belter/`: four projection cells under `views/`, then a
+Once approved, that writes `outputs/default/belter/`: four projection cells under `views/`, then a
 sprite sheet and a GIF proof for each of the brief's seven sets, a gallery page
 tying them together, and a `manifest.json` for the front end: cell size, view
 paths, and per set the frame count, columns, fps and file names. Play from the
