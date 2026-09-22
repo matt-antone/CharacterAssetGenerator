@@ -286,6 +286,19 @@ PHOTO_SHEET_REFERENCE = (
     "including on a foot that is off the floor."
 )
 
+#: What the sheet before this one is doing in the reference list. A set longer
+#: than one sheet is drawn as several independent renders off the same key art,
+#: and independent is what they came back as: the second sheet is where the
+#: costume wanders, because nothing in it had seen the first. Its last figure
+#: comes along as the character actually drawn a moment earlier — continuity of
+#: costume and colour, never of pose, which is why it says so twice.
+CARRY_REFERENCE = (
+    "One reference image is a single figure on a magenta backdrop: this character as already "
+    "drawn in an earlier frame of this same production. It is there for continuity, not for a "
+    "pose. Match its costume, colour, hair, footwear and proportion, and take nothing of its "
+    "pose, stance, limb positions or facing from it."
+)
+
 #: Sheet-mode counterpart to `STANCE_REFERENCE`, said of every figure at once.
 STANCE_SHEET_REFERENCE = (
     "The key art shows the character in one stance only; that stance is not locked. Stance and "
@@ -343,6 +356,7 @@ def frame_sheet_prompt(
     per_row: int = 4,
     props: str = "",
     photographic: bool = False,
+    carry_reference: bool = False,
 ) -> str:
     """Prompt for one render holding a whole animation sequence.
 
@@ -398,6 +412,7 @@ def frame_sheet_prompt(
             detail_clause(detail_level),
             DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
             PHOTO_SHEET_REFERENCE if pose_reference else "",
+            CARRY_REFERENCE if carry_reference else "",
             STANCE_SHEET_REFERENCE,
             # A set with nothing to hold has no prop to keep, and arguing for one invites it in.
             PROP_CONTINUITY if props else "",

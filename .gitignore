@@ -2,6 +2,9 @@
 __pycache__/
 *.pyc
 work/
+
+# Rendered packages. Built on main from committed code, never tracked.
+outputs/
 .omc/
 .pytest_cache/
 .DS_Store

@@ -6,7 +6,6 @@ import argparse
 import hashlib
 import shutil
 import sys
-from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from pathlib import Path
 
@@ -116,8 +115,15 @@ def render_set(
     frame_sheet_mode: bool = True,
     draw_backend: str = "codex",
     motion_root: Path = MOTION_ROOT,
+    carry: Path | None = None,
 ) -> dict:
-    """Draw and mask one animation set. Safe to run alongside other sets."""
+    """Draw and mask one animation set, continuing from the set drawn before it.
+
+    `carry` is that set's last frame. It rides along with this set's key art as
+    a picture of the character as actually drawn a moment ago, and this set
+    hands its own last frame on in turn. That chain is why the sets are drawn in
+    order rather than in parallel lanes.
+    """
     motion = motion_for(spec, set_name, work_dir, supplied, motion_root)
     log(f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, {motion.view} view")
     if not motion.seams_cleanly:
@@ -143,10 +149,17 @@ def render_set(
             "motion": motion,
             "set_name": set_name,
             "work_dir": work_dir,
+            **({"carry": carry} if carry else {}),
         }
     )
     log(f"[{set_name}] done")
-    return {"set_name": set_name, "motion": motion, "cells": animated["cells"]}
+    sources = animated["sources"]
+    return {
+        "set_name": set_name,
+        "motion": motion,
+        "cells": animated["cells"],
+        "last": sources[max(sources)],
+    }
 
 
 def build(
@@ -155,7 +168,6 @@ def build(
     set_names: list[str] | None,
     work_root: Path,
     out_root: Path,
-    jobs: int = 1,
     frame_sheet_mode: bool = True,
     draw_backend: str = "codex",
     motion_root: Path = MOTION_ROOT,
@@ -191,11 +203,14 @@ def build(
 
     results = []
     if chosen:
-        log(f"[sets] {', '.join(chosen)} across {min(jobs, len(chosen))} lane(s)")
-        with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
-            futures = {
-                name: pool.submit(
-                    render_set,
+        log(f"[sets] {' -> '.join(chosen)}, each drawn from the one before it")
+        # Each set continues from the last frame of the set before it, so they are drawn
+        # in order. A set asked for on its own starts from the key art, as the first one
+        # does: the chain is what a full build has, not a promise every invocation keeps.
+        carry = None
+        for name in chosen:
+            try:
+                result = render_set(
                     spec,
                     name,
                     static,
@@ -204,14 +219,13 @@ def build(
                     frame_sheet_mode,
                     draw_backend,
                     motion_root,
+                    carry,
                 )
-                for name in chosen
-            }
-            for name, future in futures.items():
-                try:
-                    results.append(future.result())
-                except Exception as error:  # one bad set must not lose the others
-                    log(f"[{name}] FAILED: {error}")
+            except Exception as error:  # one bad set must not lose the others
+                log(f"[{name}] FAILED: {error}")
+                continue
+            results.append(result)
+            carry = result["last"]
 
     sets = []
     for result in sorted(results, key=lambda r: chosen.index(r["set_name"])):
@@ -261,9 +275,6 @@ def main(argv: list[str] | None = None) -> int:
     )
     build_parser.add_argument(
         "--motion", type=Path, help="a traced MotionArtist motion.json, for a single --set"
-    )
-    build_parser.add_argument(
-        "--jobs", type=int, default=1, help="sets to render at once (default 1)"
     )
     build_parser.add_argument(
         "--per-frame",
@@ -337,7 +348,6 @@ def main(argv: list[str] | None = None) -> int:
         args.set_names,
         args.work,
         args.out,
-        args.jobs,
         args.frame_sheet_mode,
         args.draw_backend,
         args.motion_root,

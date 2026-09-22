@@ -39,6 +39,16 @@ prompting. A frame traced at 28 degrees of body yaw comes back square-on in
 every condition tried — 1, 4, 8 and 12 figures per render, photographs or
 skeletons, and three separate rewordings.
 
+## Real renders happen on main
+
+A render that counts is drawn on `main`, from the committed code, into the
+repo's own `work/`. A branch or a worktree renders only to try something out:
+its art is scratch, it is never the version anyone ships, and a package built
+there is not a package the roster has. Land the code first, then render.
+
+`outputs/` is not tracked. A build writes it wherever it is told to, and the
+committed copy was 256 files that changed on every re-render.
+
 ## Build characters in parallel
 
 Run every character that needs building at once, each as its own `uv run cag build`
@@ -46,12 +56,13 @@ process. Do not queue them one at a time.
 
 ```bash
 for spec in specs/default/*.json; do
-  uv run cag build "$spec" --jobs 4 &
+  uv run cag build "$spec" &
 done
 ```
 
-`--jobs` parallelises the animation sets within one character. Both levels of
-parallelism are wanted.
+Characters are the unit of parallelism. Within one character the sets are drawn
+in order, each continuing from the last frame of the set before it, so there is
+nothing to parallelise there.
 
 ## Launch builds as tracked background tasks
 
