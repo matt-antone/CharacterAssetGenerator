@@ -93,6 +93,17 @@ SCENE_EMPTY = (
     "frame lines or borders."
 )
 
+#: The plate is 16:9 and the app's stage is 12:7, sized off height and centred,
+#: so a strip at each side is cropped away: 1152 x 12/7 is 1975 of the plate's
+#: 2048 pixels, leaving about 36 a side. Narrow, but it is always the sides, so
+#: anything that says which place this is belongs away from them.
+SCENE_SAFE_AREA = (
+    "A narrow strip down the far left and far right of the canvas will be cropped off when this "
+    "is shown. Keep everything that matters inside the middle of the frame: whatever identifies "
+    "the place, and anything a viewer is meant to read. The edges carry continuation of the room "
+    "only — wall, floor, drape, foliage — nothing that is missed when it is cut."
+)
+
 #: `VIEWPOINT` again, said of a room. A location shot from above or below cannot
 #: hold a character drawn level and square, and the composite gives the mismatch
 #: away immediately.

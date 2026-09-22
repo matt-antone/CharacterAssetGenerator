@@ -225,6 +225,7 @@ def test_the_location_prompt_asks_for_an_empty_room_and_never_the_bible(built):
 
     assert spec.location in prompt
     assert "no people, no characters, no figures" in prompt
+    assert "cropped off when this is shown" in prompt  # the central 12:7 is the safe area
     # The costume must not reach a background prompt: a room in the character's
     # own colours is a room they disappear into.
     assert "velvet jacket" not in prompt

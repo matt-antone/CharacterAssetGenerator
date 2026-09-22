@@ -205,7 +205,7 @@ A new term is named here before it is used.
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
 | **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |
 | **pose reference** | the umbrella concept. Today always pose cards and pose grids made from traced frames; nothing else qualifies |
-| **location** | the character's background: one 2048x1152 plate drawn from the brief's `location` prose, with no character in it. The only render that is not on magenta and never goes through the mask — the character cell is composited over it |
+| **location** | the character's background: one 2048x1152 plate drawn from the brief's `location` prose, with no character in it. Shown cropped to the central 12:7, so the far left and right edges are croppable and carry nothing load-bearing. The only render that is not on magenta and never goes through the mask — the character cell is composited over it |
 | **frame sheet** | many frames of one character drawn in one render. The chunk renders under `work/<char>/source/<set>/`, and the deliverable at `outputs/<theme>/<char>/<set>-sheet.png` |
 | **key art** | the approved character reference render |
 | **bible** | the identity text quoted into every prompt |
