@@ -1,5 +1,6 @@
 import json
 from io import BytesIO
+from pathlib import Path
 
 import pytest
 from PIL import Image, ImageSequence
@@ -106,3 +107,24 @@ def test_save_updates_the_manifest_fps(tmp_path):
     assert written["sets"]["hop"]["fps"] == 8
     assert written["sets"]["hop"]["frames"] == 2
     assert written["cell"] == [CELL_WIDTH, CELL_HEIGHT]
+
+
+def test_edit_finds_the_output_tree_from_inside_a_package(tmp_path, monkeypatch):
+    from cag.edit import locate, out_root
+
+    package = tmp_path / "outputs" / "halloween" / "tall-tom"
+    package.mkdir(parents=True)
+    (tmp_path / "specs").mkdir()
+    (tmp_path / "specs" / "x.json").write_text(
+        '{"name": "Tall Tom", "height": "6\'", "description": "d"}'
+    )
+    png = BytesIO()
+    Image.new("RGBA", (560, 560), (255, 0, 0, 255)).save(png, format="PNG")
+    (package / "dance-sheet.png").write_bytes(png.getvalue())
+
+    monkeypatch.chdir(package)  # `cag edit` run from inside one character's folder
+    root = out_root(Path("outputs"))  # the default, which is no folder from here
+    assert root == (tmp_path / "outputs").resolve()
+    found = locate(root, "dance-sheet.png", png.getvalue())
+    assert found["folder"] == "halloween/tall-tom"
+    assert found["height"] == "6'"  # the roster found beside the tree, not under the cwd
