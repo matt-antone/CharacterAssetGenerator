@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 from .geometry import CELL_HEIGHT, CELL_WIDTH
 
@@ -121,6 +121,29 @@ def portrait(key_cell: Path | str, dst: Path | str, size: int) -> Path:
     return dst
 
 
+#: Delivery size for a location: 2K, 16:9. The one asset not cut to cell
+#: geometry — a background is shown behind the whole screen, not in a cell, and
+#: the app reuses it at several sizes, so it ships at the largest of them.
+LOCATION_SIZE = (2048, 1152)
+
+
+def location(source: Path | str, dst: Path | str, size: tuple[int, int] = LOCATION_SIZE) -> Path:
+    """The background at delivery size: cropped to 16:9 from the centre, then scaled.
+
+    Nearest-neighbour, like the portraits. The art is a pixel grid, and any
+    smoother filter turns the hard edges the style is built on into mush.
+
+    Cropped rather than squashed: a generator asked for 16:9 returns something
+    near it, not exactly it, and stretching that changes every proportion in the
+    room.
+    """
+    dst = Path(dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with Image.open(source) as image:
+        ImageOps.fit(image.convert("RGB"), size, Image.Resampling.NEAREST).save(dst)
+    return dst
+
+
 GALLERY = """<!doctype html>
 <meta charset="utf-8"><title>{name}</title>
 <style>
@@ -134,10 +157,17 @@ GALLERY = """<!doctype html>
    conic-gradient(#2a2a31 25%,#23232a 0 50%,#2a2a31 0 75%,#23232a 0) 0 0/24px 24px;
    border-radius:4px;max-width:100%}}
  .views img{{height:280px;width:auto}} .sheet{{overflow-x:auto}}
+ .location img{{width:100%;height:auto;max-width:960px}}
 </style>
 <h1>{name}</h1><p>{height} &middot; {description}</p>
 <h2>Projection</h2><div class="views">{views}</div>
+{location}
 {sets}
+"""
+
+LOCATION_BLOCK = """<h2>Location</h2>
+<div class="location"><figure><img src="{location}" alt="location">
+<figcaption>background, {width}&times;{height}</figcaption></figure></div>
 """
 
 SET_BLOCK = """<h2>{set_name} &middot; {frames} frames at {fps} fps</h2>
@@ -149,7 +179,14 @@ SET_BLOCK = """<h2>{set_name} &middot; {frames} frames at {fps} fps</h2>
 MANIFEST = "manifest.json"
 
 
-def manifest(dst: Path | str, name: str, height: str, views: dict, sets: list) -> Path:
+def manifest(
+    dst: Path | str,
+    name: str,
+    height: str,
+    views: dict,
+    sets: list,
+    location: str | None = None,
+) -> Path:
     """What a front end needs to play this character: fps, frame counts, file names.
 
     The fps here is the one the frames were rendered for, and `cag edit` rewrites
@@ -165,6 +202,13 @@ def manifest(dst: Path | str, name: str, height: str, views: dict, sets: list) -
                 "height": height,
                 "cell": [CELL_WIDTH, CELL_HEIGHT],
                 "views": {view: str(path) for view, path in views.items()},
+                # Beside the views, never among them: the views are transparent
+                # cells cut to `cell`, and this is an opaque 2K background.
+                **(
+                    {"location": {"file": location, "size": list(LOCATION_SIZE)}}
+                    if location
+                    else {}
+                ),
                 "sets": {
                     block["set_name"]: {
                         key: block[key] for key in ("frames", "fps", "columns", "sheet", "proof")
@@ -179,7 +223,15 @@ def manifest(dst: Path | str, name: str, height: str, views: dict, sets: list) -
     return dst
 
 
-def gallery(dst: Path | str, name: str, height: str, description: str, views: dict, sets: list) -> Path:
+def gallery(
+    dst: Path | str,
+    name: str,
+    height: str,
+    description: str,
+    views: dict,
+    sets: list,
+    location: str | None = None,
+) -> Path:
     """A page for looking at what came out. Paths are relative to `dst`."""
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -191,6 +243,13 @@ def gallery(dst: Path | str, name: str, height: str, description: str, views: di
             views="".join(
                 f'<figure><img src="{path}" alt="{view}"><figcaption>{view}</figcaption></figure>'
                 for view, path in views.items()
+            ),
+            location=(
+                LOCATION_BLOCK.format(
+                    location=location, width=LOCATION_SIZE[0], height=LOCATION_SIZE[1]
+                )
+                if location
+                else ""
             ),
             sets="".join(SET_BLOCK.format(**block) for block in sets),
         )

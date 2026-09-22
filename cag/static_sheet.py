@@ -28,6 +28,7 @@ from .prompts import (
     VIEWS,
     assemble_bible,
     bible_request,
+    location_prompt,
     view_prompt,
 )
 from .props import clauses
@@ -51,6 +52,9 @@ class StaticState(TypedDict, total=False):
     cells: dict[str, Path]
     #: Source-pixels-to-cell-pixels factor, measured once from the key art.
     scale: float
+    #: The character's background, drawn whole. Not in `sources`: everything
+    #: there gets cut out, and a location is the render that must not be.
+    location: Path
 
 
 def source_path(work_dir: Path, view: str) -> Path:
@@ -226,6 +230,24 @@ def draw_projection(state: StaticState, draw_fn: Callable[..., Path]) -> StaticS
     return {"sources": sources}
 
 
+def draw_location(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
+    """Draw the place this character performs, for a brief that names one.
+
+    The only render in the pipeline with no character in it, so it takes no
+    references: not the key art, not the detail frame. Both are pictures of a
+    figure on magenta, and handing either to a prompt asking for an empty room
+    is asking for the figure back.
+    """
+    spec = state["spec"]
+    if not spec.location:
+        return {}
+    return {
+        "location": draw_fn(
+            location_prompt(spec), source_path(state["work_dir"], "location"), scene=True
+        )
+    }
+
+
 def mask_views(state: StaticState) -> StaticState:
     return {
         "cells": {
@@ -244,12 +266,14 @@ def build_static_graph(model: BaseChatModel, draw_fn: Callable[..., Path] | None
     graph.add_node("approval", check_approval)
     graph.add_node("scale", measure_scale)
     graph.add_node("projection", partial(draw_projection, draw_fn=draw_fn))
+    graph.add_node("location", partial(draw_location, draw_fn=draw_fn))
     graph.add_node("mask", mask_views)
     graph.add_edge(START, "bible")
     graph.add_edge("bible", "key_art")
     graph.add_edge("key_art", "approval")
     graph.add_edge("approval", "scale")
     graph.add_edge("scale", "projection")
-    graph.add_edge("projection", "mask")
+    graph.add_edge("projection", "location")
+    graph.add_edge("location", "mask")
     graph.add_edge("mask", END)
     return graph.compile()

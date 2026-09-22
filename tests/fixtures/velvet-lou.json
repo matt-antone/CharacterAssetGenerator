@@ -4,5 +4,6 @@
   "description": "A cheerful lounge performer in a deep green velvet jacket over a cream shirt, with a tall dark quiff, a thin moustache, and a relaxed stage presence. Holds a chrome handheld microphone in his character-right hand at all times.",
   "animations": {
     "dance": "Relaxed club two-step that rocks the hips side to side and returns naturally to frame 0."
-  }
+  },
+  "location": "A small hotel cocktail lounge after midnight: a curved bar in dark polished wood along the back wall, brass rail, rows of bottles lit from below, a scatter of empty round tables with low amber lamps, and heavy burgundy drapes at the sides."
 }

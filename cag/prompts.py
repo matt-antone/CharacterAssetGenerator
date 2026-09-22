@@ -17,6 +17,9 @@ from .style import (
     BACKDROP,
     DEFAULT_DETAIL_LEVEL,
     DETAIL_REFERENCE,
+    SCENE_EMPTY,
+    SCENE_STYLE,
+    SCENE_VIEWPOINT,
     SIDE_LANGUAGE,
     STANDING,
     STYLE,
@@ -95,11 +98,16 @@ def director_request(
 
 
 #: The brief's own fields, sent to the bible writer as the facts it must keep.
-#: `prop` and `personality` stay out because BIBLE_SYSTEM forbids both: props are
-#: attached per set, and personality is not visible. Derived from the spec's own
-#: field lists so a field added there cannot be silently dropped here.
+#: `prop`, `personality` and `location` stay out because BIBLE_SYSTEM forbids all
+#: three: props are attached per set, personality is not visible, and background
+#: is the one thing the bible must never mention — it is quoted into every
+#: character render, where a described room would get drawn behind the figure and
+#: break the cutout. Derived from the spec's own field lists so a field added
+#: there cannot be silently dropped here.
 BIBLE_FIELDS = tuple(
-    name for name in (*TEXT_FIELDS, *LIST_FIELDS) if name not in ("prop", "personality")
+    name
+    for name in (*TEXT_FIELDS, *LIST_FIELDS)
+    if name not in ("prop", "personality", "location")
 )
 
 
@@ -148,6 +156,30 @@ def bible_request(spec: CharacterSpec) -> str:
         f"Height: {spec.height}",
         f"Designer's brief: {spec.description}",
         *facts,
+    ])
+
+
+def location_prompt(spec: CharacterSpec) -> str:
+    """Prompt for the character's location: the place they perform, without them.
+
+    The one prompt in the pipeline that does not ask for a magenta backdrop,
+    because nothing is cut out of it — a location is delivered whole and the
+    character cell is composited over it.
+
+    The bible is not quoted here and neither is the palette. Both describe the
+    costume, and a room painted in a character's own colours is a room they
+    vanish into.
+    """
+    if not spec.location:
+        raise KeyError(f"{spec.name} has no location in their brief")
+    return "\n\n".join([
+        f"Draw the place {spec.name} performs: a background plate, with no character in it.",
+        spec.location,
+        SCENE_EMPTY,
+        "Draw this on a 16:9 landscape canvas, filled edge to edge.",
+        SCENE_STYLE,
+        SCENE_VIEWPOINT,
+        detail_clause(spec.detail_level),
     ])
 
 

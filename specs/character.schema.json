@@ -50,6 +50,10 @@
     "performance_style": {
       "$ref": "#/$defs/text"
     },
+    "location": {
+      "$ref": "#/$defs/text",
+      "description": "Where this character performs, as prose. Their background plate is drawn from it at 2048x1152, with no character in it. It is never quoted into a render of the character, so it may describe the room freely."
+    },
     "detail_level": {
       "type": "integer",
       "minimum": 1,

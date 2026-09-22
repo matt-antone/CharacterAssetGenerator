@@ -202,3 +202,31 @@ def test_out_for_files_a_package_under_its_theme(tmp_path):
     assert loose == out / "belter"  # no theme folder for a brief filed loose
     assert outside == out / "oneoff"  # a folder outside specs/ is not a theme
     assert out.resolve() in themed.resolve().parents  # never outside the output folder
+
+
+def test_builds_the_location_at_2k_and_lists_it(built):
+    from cag.assemble import LOCATION_SIZE
+
+    with Image.open(built / "location.png") as background:
+        assert background.size == LOCATION_SIZE
+        assert background.mode == "RGB"  # a background is opaque; only cells carry alpha
+
+    written = json.loads((built / "manifest.json").read_text())
+    assert written["location"] == {"file": "location.png", "size": list(LOCATION_SIZE)}
+    assert "location" not in written["views"]  # not a view: it is not a cell and is not cut out
+    assert 'src="location.png"' in (built / "index.html").read_text()
+
+
+def test_the_location_prompt_asks_for_an_empty_room_and_never_the_bible(built):
+    from cag.prompts import location_prompt
+
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    prompt = location_prompt(spec)
+
+    assert spec.location in prompt
+    assert "no people, no characters, no figures" in prompt
+    # The costume must not reach a background prompt: a room in the character's
+    # own colours is a room they disappear into.
+    assert "velvet jacket" not in prompt
+    assert spec.location not in "".join(call["prompt"] for call in fake_draw.calls
+                                        if "location" not in call["out"].name)
