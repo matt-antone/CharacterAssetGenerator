@@ -77,8 +77,15 @@ def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
     """The brief whose slug names this output folder, if one is in `specs`.
 
     Searched all the way down: the roster is grouped into folders, and a brief
-    is found by the slug it carries rather than where it was filed.
+    is found by the slug it carries rather than where it was filed. Run from
+    inside a package there is no `specs/` below the cwd, so the roster is looked
+    for beside the output tree instead.
     """
+    if not specs.is_dir():
+        specs = next(
+            (p / "specs" for p in Path(out_dir).resolve().parents if (p / "specs").is_dir()),
+            specs,
+        )
     for path in sorted(specs.rglob("*.json")):
         try:
             if load_spec(path).slug == Path(out_dir).resolve().name:
@@ -86,6 +93,22 @@ def find_spec(out_dir: Path, specs: Path = Path("specs")) -> Path | None:
         except ValueError:
             continue  # the schema, or a brief that doesn't load
     return None
+
+
+def out_root(given: Path) -> Path:
+    """The output tree to serve, wherever `cag edit` was run from.
+
+    Packages are filed `outputs/<theme>/<slug>`, so the tree to serve is the
+    `outputs` folder above: run from inside a package, the default `outputs/`
+    is no folder at all, and a package folder passed by hand would otherwise
+    hide the rest of the cast.
+    """
+    path = given.resolve()
+    for folder in (path, *path.parents):
+        if folder.name == "outputs" and folder.is_dir():
+            return folder
+    # A tree filed somewhere else: a folder of sheets is served with its siblings.
+    return path.parent if any(path.glob("*-sheet.png")) else path
 
 
 def folders(root: Path) -> list[Path]:
@@ -137,8 +160,7 @@ def serve(out_dir: Path, port: int) -> None:
     # Any page the user visits can POST to localhost, and a rebound DNS name can
     # reach it too. Only our own origin, addressed by a local name, gets in.
     hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
-    if any(out_dir.glob("*-sheet.png")):  # one character's folder: serve its siblings too
-        out_dir = out_dir.parent
+    out_dir = out_root(out_dir)
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
