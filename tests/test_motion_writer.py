@@ -1,4 +1,5 @@
 import json
+from dataclasses import replace
 
 import pytest
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
@@ -88,6 +89,16 @@ def test_the_request_tells_a_loop_to_close_and_a_one_shot_to_stop():
     assert "settled resting state" in request(SPEC, "ko", "Fold safely.", plan_for("ko"))
 
 
+def test_a_pingpong_plan_asks_for_a_movement_with_two_ends(tmp_path):
+    """A written set bounces on the same word a traced one does."""
+    plan = replace(plan_for("dance"), playback="pingpong")
+    assert "pingpongs" in request(SPEC, "dance", "A two-step.", plan)
+
+    written = write_motion(model(motion_sheet()), SPEC, "dance", "A sway.", plan, tmp_path / "d.json")
+    assert written.playback == "pingpong"
+    assert not written.loops  # it turns around; it does not cut back to frame 0
+
+
 def test_every_set_in_the_belter_brief_has_a_plan():
-    assert set(SPEC.animations) <= set(SET_PLANS)
+    assert set(SPEC.sets) <= set(SET_PLANS)
     assert all(p.frame_count > 0 and p.fps > 0 for p in SET_PLANS.values())

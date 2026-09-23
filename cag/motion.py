@@ -23,6 +23,37 @@ class MotionError(ValueError):
     """Raised when a motion sheet cannot drive an animation set."""
 
 
+#: How a set repeats, in the one spelling everything downstream uses. Only a
+#: loop cuts from the last frame back to the first, so only a loop needs a
+#: clean seam; a pingpong turns around on its ends and plays back down the
+#: frames it just played, which cannot jump however the trace was cut.
+#:
+#: The keys are every word a sheet may arrive with. `one-shot` and `final-hold`
+#: are MotionArtist's (`extract --playback`), and both land on "once" here:
+#: whether a set holds its last frame is the set plan's call, not the trace's.
+#: `pingpong` as a word is ours, written by `write_motion` and by a brief. No
+#: trace says it: MotionArtist sends a loop with `pingpong: true` beside it,
+#: because the cells are a loop either way and the flag is a walk order.
+PLAYBACKS = {
+    "loop": "loop",
+    "pingpong": "pingpong",
+    "once": "once",
+    "one-shot": "once",
+    "oneshot": "once",
+    "final-hold": "once",
+}
+
+
+def playback_of(declared: str) -> str:
+    """Normalise what a sheet says about repetition, rather than guess at it."""
+    try:
+        return PLAYBACKS[str(declared).strip().lower()]
+    except KeyError:
+        raise MotionError(
+            f"unknown playback {declared!r}; a sheet plays {', '.join(PLAYBACKS)}"
+        ) from None
+
+
 @dataclass(frozen=True)
 class Frame:
     index: int
@@ -60,6 +91,7 @@ class MotionSheet:
     name: str
     fps: int
     view: str
+    #: One of the values in `PLAYBACKS`: "loop", "pingpong" or "once".
     playback: str
     arc: str
     frames: tuple[Frame, ...]
@@ -98,6 +130,7 @@ class MotionSheet:
 
     @property
     def loops(self) -> bool:
+        """Cuts from the last frame back to the first. A pingpong does not."""
         return self.playback == "loop"
 
     @property
@@ -156,11 +189,17 @@ def load_motion(path: Path | str) -> MotionSheet:
     if not any(frame.is_locked for frame in frames):
         raise MotionError(f"{path} has no key or pilot frames for the keyframer to draw")
 
+    # MotionArtist says a pingpong twice: `playback` stays the loop an unaware
+    # consumer would play, and `pingpong` is the boolean beside it saying the
+    # return leg reverses the out leg. One word from here on, because everything
+    # downstream asks the sheet a single question.
+    playback = "pingpong" if data.get("pingpong") else playback_of(data["playback"])
+
     return MotionSheet(
         name=data.get("name", path.parent.name),
         fps=int(data["fps"]),
         view=data["view"],
-        playback=data["playback"],
+        playback=playback,
         arc=data.get("arc", "").strip(),
         frames=frames,
         floor_y=float(data.get("floor_y", 0.0)),
@@ -188,13 +227,16 @@ class Bundle:
     picks a sheet by, and the files it contains. The motion data is whichever
     file the manifest names — reaching straight for `motion.json` assumed a
     filename no bundle ever promised.
+
+    It is a record of what was traced, not a config file. How a set plays is a
+    rule, and a rule is read off the motion sheet the manifest names — never off
+    the manifest, which would be a second place to write the same thing down.
     """
 
     name: str
     title: str
     fps: int
     frame_count: int
-    playback: str
     view: str
     seam: str
     #: The manifest's own directory, and the motion data it names inside it.
@@ -231,7 +273,7 @@ def read_bundle(path: Path | str) -> Bundle:
         raise MotionError(
             f"{manifest} declares schema {schema!r}; this reads {', '.join(SCHEMAS)}"
         )
-    missing = {"fps", "frame_count", "playback", "view", "files"} - set(data)
+    missing = {"fps", "frame_count", "view", "files"} - set(data)
     if missing:
         raise MotionError(f"{manifest} is missing {', '.join(sorted(missing))}")
 
@@ -258,7 +300,6 @@ def read_bundle(path: Path | str) -> Bundle:
         title=data.get("title", ""),
         fps=int(data["fps"]),
         frame_count=int(data["frame_count"]),
-        playback=data["playback"],
         view=data["view"],
         seam=str(data.get("seam", "")).strip(),
         root=manifest.parent,

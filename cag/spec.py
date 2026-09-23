@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from .geometry import parse_height
+from .motion import PLAYBACKS
 from .style import DEFAULT_DETAIL_LEVEL, DETAIL_LEVELS
 
 HEIGHT_PATTERN = re.compile(r"^\d+'(\s*\d+\")?$")
@@ -46,7 +47,9 @@ class CharacterSpec:
     name: str
     height: str
     description: str
-    #: Animation name -> prose intent, e.g. {"dance": "Relaxed two-step loop."}
+    #: Animation name -> prose intent, for the sets the brief itself prompts,
+    #: e.g. {"dance": "Relaxed two-step loop."} A set driven by a motion spec
+    #: is not in here; it is in `motions`. Ask `sets` for all of them.
     animations: dict[str, str] = field(default_factory=dict)
     #: Props the character holds in the key art and the projection views, by
     #: name. Empty hands for a performer who carries nothing.
@@ -58,6 +61,11 @@ class CharacterSpec:
     #: {"dance": "zs-loop"}. Naming a choreography is authoring; finding the file
     #: it lives in is the pipeline's job, so a brief stays portable between machines.
     motions: dict[str, str] = field(default_factory=dict)
+    #: Animation name -> how that set repeats, for a set that writes its own
+    #: sheet. Only here when this character's set differs from the pipeline
+    #: default in `cag/sets.py`; a set driven by a traced sheet is not here at
+    #: all, because the trace already carries it.
+    playbacks: dict[str, str] = field(default_factory=dict)
     #: Rendering density on the ten-step scale. Nothing else about the look.
     detail_level: int = DEFAULT_DETAIL_LEVEL
     #: The brief's own slug, when it names one. Otherwise the name makes it.
@@ -79,6 +87,11 @@ class CharacterSpec:
     palette: tuple[str, ...] = ()
     recognition_cues: tuple[str, ...] = ()
     avoid: tuple[str, ...] = ()
+
+    @property
+    def sets(self) -> tuple[str, ...]:
+        """Every animation set the brief has, whichever prompt drives each one."""
+        return tuple(sorted({*self.animations, *self.motions}))
 
     @property
     def slug(self) -> str:
@@ -121,7 +134,9 @@ def load_spec(path: Path | str) -> CharacterSpec:
     if not HEIGHT_PATTERN.match(height):
         raise SpecError(f"""{path} height must read like 5' 9" or 6', not {height!r}""")
 
-    animations, motions, animation_props = _animations(path, data.get("animations", {}))
+    animations, motions, animation_props, playbacks = _animations(
+        path, data.get("animations", {})
+    )
     props = _props(path, "props", data.get("props", ()))
 
     detail_level = data.get("detail_level", DEFAULT_DETAIL_LEVEL)
@@ -140,6 +155,7 @@ def load_spec(path: Path | str) -> CharacterSpec:
         props,
         animation_props,
         motions,
+        playbacks,
         detail_level,
         identifier.strip(),
         **{key: _text(path, key, data[key]) for key in TEXT_FIELDS if key in data},
@@ -164,45 +180,80 @@ def _text_list(path: Path, key: str, raw: object) -> tuple[str, ...]:
 
 def _animations(
     path: Path, raw: object
-) -> tuple[dict[str, str], dict[str, str], dict[str, tuple[str, ...]]]:
-    """Split each animation into its prose intent and the sheet it names, if any.
+) -> tuple[dict[str, str], dict[str, str], dict[str, tuple[str, ...]], dict[str, str]]:
+    """Split each animation into what drives it and what it holds.
 
-    An animation is either the prose on its own, as every brief wrote it before
-    this, or an object carrying that prose plus the name of a traced sheet to
-    drive it. The name is a name: a brief that spelled out where the sheet lives
-    would only build on the machine that path came from.
+    A set is driven by one prompt: the brief's own prose, or a traced motion
+    spec named by `motion`. Never both — two prompts for one set is two people
+    directing it, and the pipeline would have to pick. So `intent` and `motion`
+    are exclusive, and an animation that is bare prose is the first of the two.
+
+    `playback` is this character's loop rule, and belongs with `intent` for the
+    same reason: a motion spec already carries its own.
     """
     if not isinstance(raw, dict):
         raise SpecError(f"{path} animations must map a name to a description")
     intents: dict[str, str] = {}
     motions: dict[str, str] = {}
     props: dict[str, tuple[str, ...]] = {}
+    playbacks: dict[str, str] = {}
     for name, value in raw.items():
         if isinstance(value, str):
-            intent = value
-        elif isinstance(value, dict):
-            unknown = set(value) - {"intent", "motion", "props"}
-            if unknown:
-                raise SpecError(f"{path} {name} has unknown fields: {', '.join(sorted(unknown))}")
-            intent = value.get("intent")
-            sheet = value.get("motion")
-            if sheet is not None:
-                if not isinstance(sheet, str) or not sheet.strip():
-                    raise SpecError(f"{path} {name} motion must be a non-empty sheet name")
-                sheet = sheet.strip()
-                if "/" in sheet or "\\" in sheet or sheet.startswith("."):
-                    raise SpecError(
-                        f"{path} {name} motion must name a sheet, not a path: {sheet!r}"
-                    )
-                motions[name] = sheet
-            if "props" in value:
-                props[name] = _props(path, name, value["props"])
-        else:
+            value = {"intent": value}
+        elif not isinstance(value, dict):
             raise SpecError(f"{path} {name} must be a description or an object")
+
+        unknown = set(value) - {"intent", "motion", "props", "playback"}
+        if unknown:
+            raise SpecError(f"{path} {name} has unknown fields: {', '.join(sorted(unknown))}")
+        if ("intent" in value) == ("motion" in value):
+            raise SpecError(
+                f"{path} {name} needs an intent or a motion, not both and not neither: "
+                f"one set is driven by one prompt"
+            )
+
+        if "props" in value:
+            props[name] = _props(path, name, value["props"])
+
+        if "motion" in value:
+            if "playback" in value:
+                raise SpecError(
+                    f"{path} {name} names a motion and a playback; the motion spec carries "
+                    f"its own, so the brief does not get a second say"
+                )
+            motions[name] = _motion(path, name, value["motion"])
+            continue
+
+        if "playback" in value:
+            playbacks[name] = _playback(path, name, value["playback"])
+        intent = value["intent"]
         if not isinstance(intent, str) or not intent.strip():
             raise SpecError(f"{path} {name} needs a non-empty description")
         intents[name] = intent
-    return intents, motions, props
+    return intents, motions, props, playbacks
+
+
+def _motion(path: Path, where: str, raw: object) -> str:
+    """The traced sheet driving this set, named rather than pathed.
+
+    A brief that spelled out where the sheet lives would only build on the
+    machine that path came from.
+    """
+    if not isinstance(raw, str) or not raw.strip():
+        raise SpecError(f"{path} {where} motion must be a non-empty sheet name")
+    sheet = raw.strip()
+    if "/" in sheet or "\\" in sheet or sheet.startswith("."):
+        raise SpecError(f"{path} {where} motion must name a sheet, not a path: {sheet!r}")
+    return sheet
+
+
+def _playback(path: Path, where: str, raw: object) -> str:
+    """How this set repeats, in the one spelling the rest of the pipeline uses."""
+    if not isinstance(raw, str) or raw.strip().lower() not in PLAYBACKS:
+        raise SpecError(
+            f"{path} {where} playback must be one of {', '.join(PLAYBACKS)}, not {raw!r}"
+        )
+    return PLAYBACKS[raw.strip().lower()]
 
 
 def _props(path: Path, where: str, raw: object) -> tuple[str, ...]:

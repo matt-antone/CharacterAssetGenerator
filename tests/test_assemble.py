@@ -56,6 +56,21 @@ def test_proof_loops_at_the_declared_rate(tmp_path):
         assert gif.info["loop"] == 0
 
 
+def test_a_pingpong_proof_bounces_back_down_its_frames(tmp_path):
+    proof = gif_proof(cells(tmp_path), tmp_path / "proof.gif", fps=4, playback="pingpong")
+    with Image.open(proof) as gif:
+        # Four down and two back up: the ends are played once, not twice.
+        assert len(list(ImageSequence.Iterator(gif))) == 6
+        assert gif.info["loop"] == 0
+
+
+def test_a_one_shot_proof_plays_once(tmp_path):
+    proof = gif_proof(cells(tmp_path), tmp_path / "proof.gif", fps=4, playback="once")
+    with Image.open(proof) as gif:
+        assert len(list(ImageSequence.Iterator(gif))) == 4
+        assert gif.info.get("loop", 0) != 0
+
+
 def test_proof_flattens_transparency_onto_grey(tmp_path):
     proof = gif_proof(cells(tmp_path), tmp_path / "proof.gif", fps=4)
     with Image.open(proof) as gif:

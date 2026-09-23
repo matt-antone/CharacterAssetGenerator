@@ -169,7 +169,7 @@ Then check it before trusting it:
 from cag.motion import library
 for n, b in sorted(library('motions').items()):
     m = b.load()
-    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {b.playback} seam={b.seam!r} '
+    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {m.playback} seam={b.seam!r} '
           f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
           f'travel={m.travel:.3f}')"
 ```
@@ -177,8 +177,18 @@ for n, b in sorted(library('motions').items()):
 One pass catches everything that matters. A manifest that disagrees with its
 motion sheet raises. A short thumb set shows as `photos=0`, which means that set
 renders with no pose reference at all. `playback` must suit the set: a `loop`
-trace seams back to frame 0, a `one-shot` one does not, and driving a looping
-set from a one-shot cut gives a dance that plays once.
+trace seams back to frame 0, a `pingpong` turns around on its ends and plays
+back down the frames it just played, a `one-shot` does neither, and driving a
+looping set from a one-shot cut gives a dance that plays once.
+
+It is read off `motion.json` — the motion spec — and never off the manifest,
+which records what was traced rather than ruling on it. A pingpong arrives as
+two keys, `"playback": "loop"` with `"pingpong": true` beside it, because the
+straight loop is what an unaware consumer plays; `load_motion` folds them into
+the one word `pingpong`. `one-shot` and `final-hold` both read as `once` — what
+holds a set's last frame is the set plan's call, not the trace's. A set is driven by one
+prompt or the other: its motion spec, or the brief that writes it a sheet. The
+set plan in `cag/sets.py` is only the default for a brief that says nothing.
 
 A bundle's name is its trace — label, video id and start second — because a
 label alone is a genre. Two different dances once collided on `shuffle`, and the

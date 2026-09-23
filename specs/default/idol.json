@@ -35,7 +35,6 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Bright pop dance loop: make two light grounded steps with springy knees, alternate the two open empty hands in a clear choreographic phrase, let both separate ponytails follow, then return cleanly to frame 0.",
       "motion": "shuffle-2-b0ARQ5kM85Y-1.2s"
     },
     "sing": "Headset vocal loop: keep both hands visibly open, use small asymmetric pop choreography around a held note, breathe through the shoulders, then recover to the light grounded stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",

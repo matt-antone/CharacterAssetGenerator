@@ -48,7 +48,6 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Eager rock dance loop: bounce on the digitigrade legs through two happy side steps, let the tail wag and the ragged flannel flap, bob the head so the tall ears flop slightly, then bounce back into his upright eager stance.",
       "motion": "rat-dance-fast-FILJpZiAFo0-12.5s"
     },
     "sing": {

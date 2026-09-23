@@ -48,12 +48,13 @@ Output the JSON and nothing else."""
 
 
 def request(spec: CharacterSpec, set_name: str, intent: str, plan: SetPlan) -> str:
-    ending = (
-        "The set loops: the last frame must lead naturally back into frame 0 as one more step "
-        "of the same size."
-        if plan.loops
-        else "The set plays once and stops."
-    )
+    ending = {
+        "loop": "The set loops: the last frame must lead naturally back into frame 0 as one "
+        "more step of the same size.",
+        "pingpong": "The set pingpongs: it plays to the last frame and then back down the same "
+        "frames to frame 0. The first and last frames are the two ends of one movement, so "
+        "neither has to meet the other, and no frame between them may repeat its neighbour.",
+    }.get(plan.playback, "The set plays once and stops.")
     if plan.holds_final_frame:
         ending += " The last frame is a settled resting state the character holds."
     return (

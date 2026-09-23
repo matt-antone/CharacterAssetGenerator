@@ -54,6 +54,37 @@ def test_neighbours_of_a_one_shot_end_on_the_last_frame(tmp_path):
     assert motion.neighbours(motion.frames[3]) == (2, 3)
 
 
+def test_a_pingpong_is_not_a_loop_and_needs_no_seam(tmp_path):
+    motion = load_motion(motion_sheet(tmp_path, playback="pingpong", seam="needs blend"))
+    assert motion.playback == "pingpong"
+    assert not motion.loops  # it turns around on its last frame, it does not cut back
+    assert motion.seams_cleanly, "a pingpong has no seam to flag"
+
+
+def test_the_spellings_of_a_one_shot_land_on_one_word(tmp_path):
+    for spelling in ("once", "one-shot", "oneshot", "One-Shot"):
+        assert load_motion(motion_sheet(tmp_path, playback=spelling)).playback == "once"
+
+
+def test_a_pingpong_arrives_as_the_flag_beside_the_playback(tmp_path):
+    """MotionArtist writes `playback: loop` plus `pingpong: true`; cag reads one word."""
+    sheet = motion_sheet(tmp_path, playback="loop", pingpong=True, seam="needs blend")
+    motion = load_motion(sheet)
+    assert motion.playback == "pingpong"
+    assert not motion.loops
+    assert motion.seams_cleanly, "the return leg reverses the out leg; there is no jump"
+
+
+def test_motionartists_own_playback_words_are_taken_as_written(tmp_path):
+    for spelling, expected in (("loop", "loop"), ("one-shot", "once"), ("final-hold", "once")):
+        assert load_motion(motion_sheet(tmp_path, playback=spelling)).playback == expected
+
+
+def test_a_playback_nobody_can_play_is_refused(tmp_path):
+    with pytest.raises(MotionError, match="unknown playback"):
+        load_motion(motion_sheet(tmp_path, playback="pingpang"))
+
+
 @pytest.mark.parametrize(
     "overrides, message",
     [
@@ -118,6 +149,16 @@ def bundle_at(tmp_path, **overrides):
     manifest.update(overrides)
     (root / "manifest.json").write_text(json.dumps(manifest))
     return root
+
+
+def test_a_manifest_is_never_asked_how_a_set_plays(tmp_path):
+    """It records what was traced. The rule is the motion spec's, written down once."""
+    root = bundle_at(tmp_path)
+    header = json.loads((root / "manifest.json").read_text())
+    del header["playback"]
+    (root / "manifest.json").write_text(json.dumps(header))
+
+    assert read_bundle(root).load().playback == "loop"  # off the sheet, not the header
 
 
 def test_a_bundle_is_found_by_its_manifest(tmp_path):

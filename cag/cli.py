@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import shutil
 import sys
+from dataclasses import replace
 from functools import partial
 from pathlib import Path
 
@@ -84,6 +85,12 @@ def motion_for(
 
     `--motion` is the operator pointing at one file for this run, so it wins over
     what the brief names, the same way `--set` wins over the config.
+
+    However the sheet arrives, it is the sheet that says how the set plays: the
+    motion spec is a prompt like the brief is, and the rule belongs to whichever
+    of the two is driving. A set with a motion spec takes it from there; a set
+    writing its own takes it from the brief, or from the set plan when the brief
+    is silent. Never from both, so there is nothing to reconcile.
     """
     if supplied:
         return load_motion(supplied)
@@ -103,12 +110,15 @@ def motion_for(
     intent = spec.animations.get(set_name)
     if not intent:
         raise KeyError(f"{spec.name} has no {set_name!r} animation in their brief")
+    plan = plan_for(set_name)
+    if set_name in spec.playbacks:
+        plan = replace(plan, playback=spec.playbacks[set_name])
     return write_motion(
         ChatCodex(),
         spec,
         set_name,
         intent,
-        plan_for(set_name),
+        plan,
         work_dir / "motion" / f"{set_name}.json",
     )
 
@@ -154,7 +164,10 @@ def render_set(
     order rather than in parallel lanes.
     """
     motion = motion_for(spec, set_name, work_dir, supplied, motion_root)
-    log(f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, {motion.view} view")
+    log(
+        f"[{set_name}] {len(motion.frames)} frames at {motion.fps} fps, "
+        f"{motion.view} view, {motion.playback}"
+    )
     if not motion.seams_cleanly:
         # The tracer compared the last frame to the first and they do not meet.
         # Nothing downstream can fix that, so it is said once, where it is chosen.
@@ -206,7 +219,7 @@ def build(
     out_dir = out_for(out_root, spec_path, spec.slug)
     # An explicit --set is the operator asking for that set by name, so it overrides the
     # config. Without one, the config decides which of the brief's animations are drawn.
-    chosen = set_names if set_names is not None else wanted(sorted(spec.animations), "animations")
+    chosen = set_names if set_names is not None else wanted(list(spec.sets), "animations")
     if motion_path and len(chosen) != 1:
         raise SystemExit("--motion applies to a single --set; other sets write their own sheet")
 
@@ -269,12 +282,13 @@ def build(
             "set_name": name,
             "frames": len(cells),
             "fps": motion.fps,
+            "playback": motion.playback,
             "columns": min(SHEET_COLUMNS, len(cells)),
             "sheet": f"{name}-sheet.png",
             "proof": f"{name}-proof.gif",
         }
         tile(cells, out_dir / block["sheet"], columns=block["columns"])
-        gif_proof(cells, out_dir / block["proof"], motion.fps, loop=motion.loops)
+        gif_proof(cells, out_dir / block["proof"], motion.fps, block["playback"])
         sets.append(block)
 
     # Last, once every set is in: the portraits are cut from the key art, not drawn.

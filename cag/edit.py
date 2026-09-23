@@ -39,10 +39,12 @@ def save_frame_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Pa
         cells.pop()  # blank tail of the last row
 
     proof = dst.with_name(dst.name.replace("-sheet.png", "-proof.gif"))
-    loop = True
-    if proof.exists():  # keep whatever looping the build gave it
+    playback = frame_sheet_block(dst.parent, dst.name).get("playback")
+    if playback is None and proof.exists():
+        # A package built before the manifest carried playback: the old proof's
+        # own loop flag is all that is left of what the build decided.
         with Image.open(proof) as old:
-            loop = old.info.get("loop", 0) == 0
+            playback = "loop" if old.info.get("loop", 0) == 0 else "once"
 
     with tempfile.TemporaryDirectory() as tmp:
         paths = []
@@ -50,7 +52,7 @@ def save_frame_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Pa
             paths.append(Path(tmp) / f"{index:03d}.png")
             cell.save(paths[-1])
         dst.write_bytes(png)
-        gif_proof(paths, proof, fps, loop)
+        gif_proof(paths, proof, fps, playback or "loop")
     update_manifest(dst.parent, dst.name, fps, len(cells))
     return proof
 
@@ -120,15 +122,19 @@ def folders(root: Path) -> list[Path]:
     return [root, *sorted(p for p in root.rglob("*") if p.is_dir())]
 
 
-def frame_sheet_fps(out_dir: Path, sheet: str) -> int | None:
-    """The rate this sheet was rendered for, off the manifest the build wrote."""
+def frame_sheet_block(out_dir: Path, sheet: str) -> dict:
+    """What the manifest the build wrote says about this sheet.
+
+    Its rate, and how it repeats: an edit rebuilds the proof, and a proof that
+    came out of a pingpong has to go back in as one.
+    """
     path = out_dir / MANIFEST
     if not path.is_file():
-        return None
+        return {}
     for block in json.loads(path.read_text()).get("sets", {}).values():
         if block.get("sheet") == sheet:
-            return block.get("fps")
-    return None
+            return block
+    return {}
 
 
 def locate(root: Path, name: str, png: bytes) -> dict | None:
@@ -145,7 +151,7 @@ def locate(root: Path, name: str, png: bytes) -> dict | None:
                 "folder": folder.relative_to(root).as_posix(),
                 "height": None,
                 "row": None,
-                "fps": frame_sheet_fps(folder, path.name),
+                "fps": frame_sheet_block(folder, path.name).get("fps"),
             }
             spec_path = find_spec(folder)
             if spec_path is not None:

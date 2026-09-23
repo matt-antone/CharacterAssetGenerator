@@ -47,7 +47,6 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Angular theatrical dance loop: make two small gliding steps beneath the gown, snap the head crisply side to side like a startled bird with the hair tower staying vertical, sweep the free character-left arm through a stiff flourish, then return to her tall poised opening stance.",
       "motion": "shuffle-4-Us5Zf6LwmKo-2.9s"
     },
     "sing": {

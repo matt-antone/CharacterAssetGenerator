@@ -64,8 +64,14 @@ def split_frame_sheet(sheet: Path | str, count: int, columns: int | None = None)
         ]
 
 
-def gif_proof(cells: Sequence[Path | str], dst: Path | str, fps: int, loop: bool = True) -> Path:
-    """A watchable loop at the declared rate, flattened onto grey."""
+def gif_proof(
+    cells: Sequence[Path | str], dst: Path | str, fps: int, playback: str = "loop"
+) -> Path:
+    """A watchable proof at the declared rate, flattened onto grey.
+
+    A pingpong is written out as the bounce itself — the frames, then back down
+    with the two ends played once — because a GIF has no way to say "reverse".
+    """
     if fps <= 0:
         raise ValueError("fps must be positive")
     frames = []
@@ -76,6 +82,8 @@ def gif_proof(cells: Sequence[Path | str], dst: Path | str, fps: int, loop: bool
             frames.append(flat.convert("P", palette=Image.ADAPTIVE))
     if not frames:
         raise ValueError("no cells to assemble")
+    if playback == "pingpong":
+        frames += frames[-2:0:-1]
 
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -85,7 +93,7 @@ def gif_proof(cells: Sequence[Path | str], dst: Path | str, fps: int, loop: bool
         save_all=True,
         append_images=frames[1:],
         duration=round(1000 / fps),
-        loop=0 if loop else 1,
+        loop=0 if playback in ("loop", "pingpong") else 1,
     )
     return dst
 
@@ -171,7 +179,7 @@ LOCATION_BLOCK = """<h2>Location</h2>
 """
 
 SET_BLOCK = """<h2>{set_name} &middot; {frames} frames at {fps} fps</h2>
-<figure><img src="{proof}" alt="{set_name} loop"><figcaption>proof, {fps} fps</figcaption></figure>
+<figure><img src="{proof}" alt="{set_name} loop"><figcaption>proof, {fps} fps, {playback}</figcaption></figure>
 <div class="sheet"><img src="{sheet}" alt="{set_name} frame sheet"></div>
 """
 
@@ -191,7 +199,8 @@ def manifest(
 
     The fps here is the one the frames were rendered for, and `cag edit` rewrites
     it when a proof is rebuilt at another rate, so the front end never has to
-    guess a playback speed.
+    guess a playback speed. `playback` is how the set repeats — the sheet decides
+    it, and a pingpong has to be played back down rather than cut to frame 0.
     """
     dst = Path(dst)
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -211,7 +220,8 @@ def manifest(
                 ),
                 "sets": {
                     block["set_name"]: {
-                        key: block[key] for key in ("frames", "fps", "columns", "sheet", "proof")
+                        key: block[key]
+                        for key in ("frames", "fps", "playback", "columns", "sheet", "proof")
                     }
                     for block in sets
                 },
