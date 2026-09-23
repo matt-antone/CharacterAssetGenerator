@@ -158,6 +158,15 @@ def test_the_motion_flag_wins_over_the_sheet_the_brief_names(tmp_path):
     assert motion.frames, "the flag is used and the missing named sheet never looked for"
 
 
+def test_the_motion_flag_brings_the_bundles_traced_frames(tmp_path):
+    """Pointed at a bundle, `--motion` carries its photographs, not just its sheet."""
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+
+    motion = cli.motion_for(spec, "dance", tmp_path / "w", Path(SAMPLE), tmp_path / "gone")
+
+    assert motion.photos, "the traced frames are the pose reference; the flag must not drop them"
+
+
 def _bundle(root, name):
     """A motion bundle is its manifest and the files the manifest names."""
     (root / name).mkdir(parents=True)

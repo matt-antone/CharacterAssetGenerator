@@ -93,6 +93,13 @@ def motion_for(
     is silent. Never from both, so there is nothing to reconcile.
     """
     if supplied:
+        # A traced bundle is its manifest, and the manifest is what names the
+        # traced frames — so reading the sheet straight off disk left the pose
+        # photographs behind and drew the set from skeletons instead. A sheet
+        # written for a set has no manifest beside it and still loads bare.
+        manifest = (supplied if supplied.is_dir() else supplied.parent) / BUNDLE
+        if manifest.exists():
+            return read_bundle(manifest).load()
         return load_motion(supplied)
     named = spec.motions.get(set_name)
     if named == AUTO:
@@ -100,13 +107,13 @@ def motion_for(
         log(f"[{set_name}] auto: the {name!r} sheet")
         return bundle.load()
     if named:
-        bundle = motion_root / named
-        if not (bundle / BUNDLE).exists():
+        found = library(motion_root).get(named)
+        if not found:
             raise MotionError(
                 f"{spec.name} names the {named!r} motion sheet for {set_name}, "
-                f"but there is no bundle at {bundle}"
+                f"but no bundle under {motion_root} calls itself that"
             )
-        return read_bundle(bundle).load()
+        return found.load()
     intent = spec.animations.get(set_name)
     if not intent:
         raise KeyError(f"{spec.name} has no {set_name!r} animation in their brief")
