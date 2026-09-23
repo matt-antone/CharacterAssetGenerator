@@ -1,0 +1,61 @@
+{
+ "bundle": "motion-source",
+ "schema": "motion-artist/2",
+ "name": "club-01-4",
+ "title": "Club 01 4",
+ "fps": 4,
+ "frame_count": 8,
+ "playback": "loop",
+ "view": "front",
+ "pingpong": true,
+ "seam": "clean",
+ "seam_ratio": 1.49,
+ "stabilized": false,
+ "exaggerate": 1.25,
+ "performer": "female",
+ "view_frames": {
+  "front": 8
+ },
+ "missing_frames": [],
+ "source": {
+  "url": "https://www.youtube.com/watch?v=P4QeqpsY8v8",
+  "file": "work/src/crop-04.mp4",
+  "title": "crop-04.mp4",
+  "start": 88.13,
+  "end": 90.215,
+  "speed_factor": 1.04,
+  "duration": 102.14
+ },
+ "arc_written": true,
+ "files": {
+  "motion.json": "fe4f10f84372c47a7442dd33f62d0a2a96c8bb2c1d45a9bbd9c6effd83c4cfdc",
+  "club-01-4-motion.html": "c11b8d9ab2de3937c48c80d57e19b4d5f85d739b959682905496f09c5bd19c88",
+  "thumbs/f00.jpg": "21a4efce8d0b3ac42a24e57a5f0ffe61c579874c0d801cb0b2614ec2987c7bfc",
+  "thumbs/f01.jpg": "cfe383f13cfd867c6c1c702b2f8bef24f14f930ca6fbf0fe6900a0a8a5f22e99",
+  "thumbs/f02.jpg": "e9c48a53da4d8eca43b71276e961df2155cc5f4d933f28e5ee02259ae4cfb983",
+  "thumbs/f03.jpg": "40c7ab8fda398d2c702121b3bd094fe968f3e8368e6927fa57a022d87ad91083",
+  "thumbs/f04.jpg": "3585ea8dd720f688250e7b7fd2b0aca2fa428800757141b9d92bb8b0ed444251",
+  "thumbs/f05.jpg": "7289b874aa8a0bec3e5013932e966ed0e801e92ccda2b3627cf0c217983790ae",
+  "thumbs/f06.jpg": "b9e816b2f58ab1f0ad7071fb39b0b77db14675a0536857d778816c58e3c9d85d",
+  "thumbs/f07.jpg": "b76b66663bf4a0e7175705d877fe84d08c0ff398bc9b5e27b5662415d7531fc2",
+  "club-01-4-pose-grid.png": "679caabea90ae71d386f99f6785de2a95a284816f70e5b948d870dad060b383e"
+ },
+ "pose_grid": {
+  "cols": 4,
+  "rows": 2,
+  "frame_count": 8,
+  "scale": 1,
+  "tile_w": 208,
+  "tile_h": 386,
+  "cell_w": 200,
+  "cell_h": 356,
+  "label_h": 22,
+  "gap": 8,
+  "per_sheet": 12,
+  "sheets": 1,
+  "sheet_w": 824,
+  "sheet_h": 764,
+  "labeled": true,
+  "source": "thumbs"
+ }
+}
