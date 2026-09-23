@@ -170,6 +170,13 @@ def test_a_bundle_is_found_by_its_manifest(tmp_path):
     assert found["shuffle"].title == "Shuffle"
 
 
+def test_a_bundle_a_capture_session_nested_is_still_found(tmp_path):
+    """A session installs its clips as `club-01/club-01-4/`, one level deeper."""
+    bundle_at(tmp_path / "club-01")
+
+    assert list(library(tmp_path)) == ["shuffle"], "a one-level scan saw none of them"
+
+
 def test_a_directory_without_a_manifest_is_not_a_bundle(tmp_path):
     (tmp_path / "loose").mkdir()
     shutil.copy(SAMPLE, tmp_path / "loose" / "motion.json")

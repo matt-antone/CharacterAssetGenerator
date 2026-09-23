@@ -311,11 +311,13 @@ def read_bundle(path: Path | str) -> Bundle:
 def library(root: Path | str) -> dict[str, Bundle]:
     """Every motion bundle under `root`, by the name a brief would call it.
 
-    Found by manifest, not by guessing at filenames. A bundle that will not
-    read raises: skipping quietly made a library that had lost three of its
-    four sheets read as a library of one.
+    Found by manifest at any depth, not by guessing at filenames: a capture
+    session installs its clips as `dance-2/dance-2-4/`, and a one-level scan
+    saw none of them. A bundle that will not read raises: skipping quietly
+    made a library that had lost three of its four sheets read as a library
+    of one.
     """
     return {
         bundle.name: bundle
-        for bundle in (read_bundle(p) for p in sorted(Path(root).glob(f"*/{BUNDLE}")))
+        for bundle in (read_bundle(p) for p in sorted(Path(root).rglob(BUNDLE)))
     }
