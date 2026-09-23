@@ -50,7 +50,6 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Heavy metal two-step loop: plant the boots wide and swing the weight from one to the other, cross the character-right boot behind on the second beat, let the stringy hair sway with the shift, and swing the free gloved character-right arm out wide and down with the step, then return to the tall square opening stance. Loose and enthusiastic, never a stalk or a lunge.",
       "props": [
         "knife"
       ],

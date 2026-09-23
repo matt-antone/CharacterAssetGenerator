@@ -96,7 +96,7 @@
       "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" }
     },
     "animation": {
-      "description": "The performance intent as prose, or that prose plus the traced motion sheet that drives the set. A sheet is named, never pathed: the pipeline knows where sheets live, and \"auto\" has one chosen.",
+      "description": "What drives the set: this character's performance intent as prose, or the traced motion sheet that drives it instead. One or the other, never both \u2014 one set has one prompt. A sheet is named, never pathed: the pipeline knows where sheets live, and \"auto\" has one chosen.",
       "oneOf": [
         { "$ref": "#/$defs/text" },
         {
@@ -106,10 +106,22 @@
           "properties": {
             "intent": { "$ref": "#/$defs/text" },
             "props": { "$ref": "#/$defs/propNames" },
+            "playback": {
+              "enum": ["loop", "pingpong", "once", "one-shot", "oneshot"],
+              "description": "How this character's written set repeats. Left out, the set plan in cag/sets.py decides."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["motion"],
+          "additionalProperties": false,
+          "properties": {
+            "props": { "$ref": "#/$defs/propNames" },
             "motion": {
               "type": "string",
               "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
-              "description": "Name of a traced MotionArtist sheet, e.g. \"zs-loop\", or \"auto\" to have one chosen."
+              "description": "Name of a traced MotionArtist sheet, e.g. \"zs-loop\", or \"auto\" to have one chosen. The sheet carries its own playback, so a set driven by one does not take a playback here."
             }
           }
         }
@@ -117,7 +129,7 @@
     },
     "animationDescriptions": {
       "type": "object",
-      "description": "Required character-specific performance intent for every supported animation. Prose, not identifiers \u2014 optionally alongside the name of a traced motion sheet to drive the set.",
+      "description": "Every supported animation, each driven by one prompt: this character's performance intent as prose, or the name of a traced motion sheet that drives it instead.",
       "required": ["dance", "sing", "flinch", "guard", "entrance", "victory", "ko"],
       "additionalProperties": false,
       "properties": {

@@ -15,6 +15,7 @@ from PIL import Image, ImageSequence
 from cag import animation, cli, mask, static_sheet
 from cag.prompts import KEY_VIEW
 from cag.motion import MotionError
+from cag.sets import plan_for
 from cag.spec import load_spec
 from tests.test_animation import fake_draw
 from tests.test_static_sheet import flat_cutout
@@ -126,6 +127,20 @@ def test_a_named_sheet_is_found_under_the_motion_root(tmp_path):
     motion = cli.motion_for(spec, "dance", tmp_path / "work_dir", None, root)
 
     assert motion.frames, "the named sheet drives the set"
+
+
+def test_the_brief_sets_the_playback_of_a_set_that_writes_its_own_sheet(tmp_path, monkeypatch):
+    """The set plan is the default; this character's brief is the one that differs."""
+    plans = []
+    monkeypatch.setattr(cli, "write_motion", lambda *a, **kw: plans.append(a[4]))
+    lou = load_spec("tests/fixtures/velvet-lou.json")
+
+    cli.motion_for(replace(lou, playbacks={"dance": "pingpong"}), "dance",
+                   tmp_path / "w", None, tmp_path / "gone")
+    cli.motion_for(lou, "dance", tmp_path / "w", None, tmp_path / "gone")
+
+    # Two characters, one set: the brief decides, and a silent brief takes the plan.
+    assert [plan.playback for plan in plans] == ["pingpong", plan_for("dance").playback]
 
 
 def test_a_named_sheet_that_is_not_there_says_so(tmp_path):

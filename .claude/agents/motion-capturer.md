@@ -32,7 +32,9 @@ land in its `work/<name>/`, bundles in its `exports/`. cag's own repo is
 - **Warned exports do not ship.** Empty `arc` or a frame missing a pose — fix and
   re-export.
 - **`loop` playback wants both boundary frames on their feet.** `extract` warns
-  when either comes back airborne; pick another span.
+  when either comes back airborne; pick another span. A `--pingpong` capture
+  reverses at its ends rather than cutting, so a warned boundary is a turnaround
+  to look at rather than a jump — but it is still the pose the move pivots on.
 - Prefer a frame count divisible by 8 (cag draws 8 figures per render), failing
   that a multiple of 4.
 
@@ -58,7 +60,7 @@ Then verify before trusting it:
 from cag.motion import library
 for n, b in sorted(library('motions').items()):
     m = b.load()
-    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {b.playback} seam={b.seam!r} '
+    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {m.playback} seam={b.seam!r} '
           f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
           f'travel={m.travel:.3f}')"
 ```
@@ -67,6 +69,14 @@ for n, b in sorted(library('motions').items()):
 install. A manifest disagreeing with its motion sheet raises. `playback` must
 suit the set: a `one-shot` cut driving a looping set gives a dance that plays
 once.
+
+cag reads playback off `motion.json`, never off the manifest, and reads it as
+one word: `--pingpong` (which ships as `"playback": "loop"` plus
+`"pingpong": true`) becomes `pingpong`, while `one-shot` and `final-hold` both
+become `once`. It is no longer decoration downstream — a pingpong bundle makes
+cag write its proof GIF as the bounce, `0..N-1..1`, and carry `playback` into
+the package manifest for the game. So pick the flag on what the move does, not
+on what survives the trip.
 
 `motions/sample` is the format's worked example and the tests' only fixture.
 Leave it installed.

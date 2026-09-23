@@ -19,9 +19,11 @@ Once approved, that writes `outputs/default/belter/`: four projection cells unde
 `location.png` if the brief names a location, then a
 sprite sheet and a GIF proof for each of the brief's seven sets, a gallery page
 tying them together, and a `manifest.json` for the front end: cell size, view
-paths, and per set the frame count, columns, fps and file names. Play from the
-manifest's fps — `cag edit` rewrites it when a save rebuilds the proof at
-another rate, so it always matches the GIF beside it. Sets render in order, each drawn from the key art and
+paths, and per set the frame count, columns, fps, playback and file names. Play
+from the manifest's fps and playback — `cag edit` rewrites the fps when a save
+rebuilds the proof at another rate, so it always matches the GIF beside it.
+`playback` is `loop`, `pingpong` or `once`; a pingpong sheet holds its frames
+once and is played down and back up. Sets render in order, each drawn from the key art and
 from the last frame of the set before it, and one that fails does not take the others down with it.
 
 By default a set writes its own sheet from the brief's prose, and nothing below
@@ -30,8 +32,13 @@ is needed. A brief that wants a traced
 one, and every build picks it up:
 
 ```json
-"dance": { "intent": "Refined lounge sway loop...", "motion": "shuffle-1" }
+"dance": { "motion": "shuffle-1" }
 ```
+
+A set names a sheet *instead of* prose, never beside it: one set is driven by
+one prompt, and the traced sheet is a prompt — its arc and its per-frame cues
+are what the keyframer reads. A brief that writes both is refused rather than
+asked which of the two to follow.
 
 `"motion": "auto"` has one chosen instead, spread across the roster so a cast
 does not all dance the same and stable so a character keeps its dance between
@@ -40,6 +47,17 @@ runs. See what there is to name with:
 ```bash
 uv run cag motions
 ```
+
+A set with no traced sheet writes its own, and the brief is where that
+character's loop rule goes:
+
+```json
+"dance": { "intent": "Refined lounge sway loop...", "playback": "pingpong" }
+```
+
+`playback` is `loop`, `pingpong` or `once`. It is exclusive with `motion`: a
+traced sheet already carries how it plays, so a brief that sets both is refused
+rather than asked which to believe. Left out, the set plan decides.
 
 It names the sheet, never the file. Sheets live in `motions/<name>/` in this
 repo, so a brief is portable and a sheet cannot be cleaned away from under the
@@ -100,7 +118,12 @@ outlines twice as thick with sixteen chances for the costume to wander.
 Frame count, fps, view and playback come from the set's plan in `cag/sets.py`,
 not from the brief: `dance` and `sing` loop, `flinch`, `guard`, `entrance`,
 `victory` and `ko` run once. All seven are sixteen frames: `dance` plays at six
-fps, the rest at eight.
+fps, the rest at eight. The plan only decides for a set nobody traced: a traced
+bundle carries its own rate and playback and those win, because the frames were
+cut off footage at that speed and another rate is the dance at the wrong tempo.
+So how a set repeats is written down once, in whichever of the three places owns
+it: the trace, or this character's brief, or the plan. Belter's dance can
+pingpong while the crooner's loops without either of them touching `sets.py`.
 
 ## Every set needs a hand pass
 

@@ -66,16 +66,64 @@ def test_detail_level_defaults_and_validates(tmp_path):
             load_spec(write(tmp_path, detail_level=bad))
 
 
-def test_an_animation_may_name_the_sheet_that_drives_it(tmp_path):
+def test_an_animation_names_the_sheet_that_drives_it_instead_of_prose(tmp_path):
+    """One set, one prompt: the sheet drives dance, so the brief writes no intent for it."""
     brief = tmp_path / "c.json"
     brief.write_text(json.dumps({
         "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
-        "animations": {"dance": {"intent": "A club loop.", "motion": "zs-loop"},
-                       "sing": "A held note."},
+        "animations": {"dance": {"motion": "zs-loop"}, "sing": "A held note."},
     }))
     spec = load_spec(brief)
-    assert spec.animations == {"dance": "A club loop.", "sing": "A held note."}
+    assert spec.animations == {"sing": "A held note."}
     assert spec.motions == {"dance": "zs-loop"}
+    assert spec.sets == ("dance", "sing"), "both are the brief's sets, however each is driven"
+
+
+def test_a_set_is_driven_by_one_prompt_or_the_other(tmp_path):
+    for animation in ({"intent": "A club loop.", "motion": "zs-loop"}, {"props": ["mic"]}):
+        brief = tmp_path / "c.json"
+        brief.write_text(json.dumps({
+            "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+            "animations": {"dance": animation},
+        }))
+        with pytest.raises(SpecError, match="not both and not neither"):
+            load_spec(brief)
+
+
+def test_two_characters_can_play_the_same_set_differently(tmp_path):
+    """Belter's dance pingpongs, the crooner's loops, and neither is in the set plan."""
+    def brief(name, dance):
+        path = tmp_path / f"{name}.json"
+        path.write_text(json.dumps({
+            "name": name, "height": "5' 7\"", "description": "A singer.",
+            "animations": {"dance": {"intent": "A club sway.", **dance}},
+        }))
+        return load_spec(path)
+
+    assert brief("Belter", {"playback": "pingpong"}).playbacks == {"dance": "pingpong"}
+    assert brief("Crooner", {"playback": "one-shot"}).playbacks == {"dance": "once"}
+    assert brief("Quiet", {}).playbacks == {}
+
+
+def test_a_set_says_how_it_plays_in_one_place_only(tmp_path):
+    """A trace carries its own playback, so a brief driving one does not get a second say."""
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+        "animations": {"dance": {"motion": "zs-loop", "playback": "pingpong"}},
+    }))
+    with pytest.raises(SpecError, match="names a motion and a playback"):
+        load_spec(brief)
+
+
+def test_a_playback_nobody_can_play_is_refused(tmp_path):
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
+        "animations": {"dance": {"intent": "A club loop.", "playback": "boomerang"}},
+    }))
+    with pytest.raises(SpecError, match="playback must be one of"):
+        load_spec(brief)
 
 
 def test_a_brief_names_a_sheet_and_never_points_at_a_file(tmp_path):
@@ -84,7 +132,7 @@ def test_a_brief_names_a_sheet_and_never_points_at_a_file(tmp_path):
         brief = tmp_path / "c.json"
         brief.write_text(json.dumps({
             "name": "Belter", "height": "5' 7\"", "description": "A rock singer.",
-            "animations": {"dance": {"intent": "A club loop.", "motion": bad}},
+            "animations": {"dance": {"motion": bad}},
         }))
         with pytest.raises(SpecError, match="not a path"):
             load_spec(brief)

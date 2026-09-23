@@ -73,7 +73,6 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Full disco loop: step out wide onto one boot with the hips swinging and the apron pockets bouncing, drive the free character-right arm up and across in the big point-to-the-ceiling, point down across the opposite hip, then swing back to the squared opening stance. Loose, joyful and on the beat, never a lurch or a shamble.",
       "props": [
         "pigeon"
       ],

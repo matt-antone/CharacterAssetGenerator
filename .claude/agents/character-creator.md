@@ -50,13 +50,18 @@ drift, and removing that drift is the point of the schema.
 
 ## Animation intents
 
-Each set is prose (or an object with `intent`, optional `props`, optional
-`motion`). Write the performance, not an identifier. Conventions the existing
-cast holds and a new one should:
+Each set is prose, or an object. In the object `intent` and `motion` are
+exclusive — one set is driven by one prompt, and a brief writing both is
+refused. `props` goes with either; `playback` only with `intent`. Write the
+performance, not an identifier. Conventions the existing cast holds and a new
+one should:
 
 - **character-left / character-right only.** Never screen-left or screen-right.
 - `dance` and `sing` loop back to the opening stance; `entrance`, `guard`,
-  `victory` are one-shot and end on a held stance.
+  `victory` are one-shot and end on a held stance. Those are the defaults in
+  `cag/sets.py`. A set writing its own sheet may say otherwise with `playback`:
+  `loop`, `pingpong` or `once`. A set driven by a `motion` never carries one —
+  the sheet brings its own.
 - `flinch` and `ko` are non-contact: no opponent, no impact. A `ko` character
   stays standing on both feet in every frame unless the brief genuinely wants
   otherwise — say "no kneeling, crouching, sitting, sinking or going to the
@@ -70,8 +75,11 @@ cast holds and a new one should:
   description. A prop that does not exist yet is a prop-creator job; say so
   rather than inventing the field.
 - `motion` is a bundle name, never a path, e.g. `skate-UUUY1vR57Go-4.8s`, or
-  `"auto"` to have one chosen. List what exists with `uv run cag motions`, and
-  never guess a name — a brief naming a missing bundle fails the build.
+  `"auto"` to have one chosen. It replaces the set's prose rather than sitting
+  beside it: the sheet's own arc and per-frame cues are the prompt, so an
+  `intent` written next to it would be a second director. List what exists with
+  `uv run cag motions`, and never guess a name — a brief naming a missing bundle
+  fails the build.
 - A per-set `props` list overrides the character's, which is how a set gets a
   different prop or empty hands.
 

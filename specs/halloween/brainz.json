@@ -46,7 +46,6 @@
   ],
   "animations": {
     "dance": {
-      "intent": "Twitchy new-wave dance loop: jerk the shoulders and elbows in sharp robotic beats, snap the head so the blunt bob swings, kick one platform boot out and back so the open lab coat flares, then snap back to her upright opening stance.",
       "motion": "charleston-Qpp24-RInl4-14.4s"
     },
     "sing": {

@@ -16,7 +16,8 @@ from pathlib import Path
 class SetPlan:
     frame_count: int
     fps: int
-    #: "loop" seams back to frame 0; anything else runs once.
+    #: "loop" seams back to frame 0, "pingpong" plays up the frames and back
+    #: down them; anything else runs once. Same words a traced sheet uses.
     playback: str
     #: Which way the character faces, in MotionArtist's vocabulary.
     view: str

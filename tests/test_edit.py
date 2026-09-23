@@ -14,7 +14,7 @@ from tests.test_assemble import cells
 def test_save_overwrites_sheet_and_rebuilds_proof_without_blank_tail(tmp_path):
     paths = cells(tmp_path, count=3)
     sheet = tile(paths, tmp_path / "out" / "hop-sheet.png", columns=2)  # 4th cell blank
-    gif_proof(paths, tmp_path / "out" / "hop-proof.gif", fps=12, loop=False)
+    gif_proof(paths, tmp_path / "out" / "hop-proof.gif", fps=12, playback="once")
 
     with Image.open(sheet) as image:
         edited = image.copy()
@@ -30,6 +30,25 @@ def test_save_overwrites_sheet_and_rebuilds_proof_without_blank_tail(tmp_path):
         assert sum(1 for _ in ImageSequence.Iterator(gif)) == 3
         assert gif.info["duration"] == 100
         assert gif.info.get("loop", 0) != 0  # build said play once; the edit keeps it
+
+
+def test_save_rebuilds_a_pingpong_proof_as_a_pingpong(tmp_path):
+    """The sheet holds the frames once; how they are played comes off the manifest."""
+    from cag.assemble import MANIFEST, manifest
+
+    paths = cells(tmp_path, count=4)
+    tile(paths, tmp_path / "hop-sheet.png", columns=4)
+    manifest(tmp_path / MANIFEST, "Tall Tom", "6'", {}, [
+        {"set_name": "hop", "frames": 4, "fps": 12, "playback": "pingpong", "columns": 4,
+         "sheet": "hop-sheet.png", "proof": "hop-proof.gif"}
+    ])
+
+    proof = save_frame_sheet(
+        tmp_path, "hop-sheet.png", (tmp_path / "hop-sheet.png").read_bytes(), fps=8
+    )
+    with Image.open(proof) as gif:
+        assert len(list(ImageSequence.Iterator(gif))) == 6
+        assert gif.info["loop"] == 0
 
 
 def test_save_refuses_anything_but_an_existing_sheet(tmp_path):
@@ -98,7 +117,7 @@ def test_save_updates_the_manifest_fps(tmp_path):
 
     paths = cells(tmp_path, count=2)
     tile(paths, tmp_path / "hop-sheet.png")
-    block = {"set_name": "hop", "frames": 2, "fps": 12, "columns": 2,
+    block = {"set_name": "hop", "frames": 2, "fps": 12, "playback": "loop", "columns": 2,
              "sheet": "hop-sheet.png", "proof": "hop-proof.gif"}
     manifest(tmp_path / MANIFEST, "Tall Tom", "6'", {}, [block])
 
