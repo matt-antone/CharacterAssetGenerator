@@ -1,0 +1,77 @@
+{
+  "set": "club-01",
+  "url": "https://www.youtube.com/watch?v=P4QeqpsY8v8",
+  "source_fps": 23.976,
+  "clips": [
+    {
+      "name": "01",
+      "in_frame": 1850,
+      "out_frame": 1902,
+      "frames": 53,
+      "start": 77.119,
+      "end": 79.329,
+      "playback": "loop",
+      "pingpong": true,
+      "capture_fps": 6,
+      "capture_frames": 13,
+      "speed_factor": 1.02,
+      "export": "exports/club-01/01"
+    },
+    {
+      "name": "02",
+      "in_frame": 1913,
+      "out_frame": 1938,
+      "frames": 26,
+      "start": 79.746,
+      "end": 80.831,
+      "playback": "loop",
+      "pingpong": true,
+      "capture_fps": 7,
+      "capture_frames": 8,
+      "speed_factor": 0.949,
+      "export": "exports/club-01/02"
+    },
+    {
+      "name": "03",
+      "in_frame": 1985,
+      "out_frame": 2043,
+      "frames": 59,
+      "start": 82.749,
+      "end": 85.21,
+      "playback": "loop",
+      "pingpong": true,
+      "capture_fps": 5,
+      "capture_frames": 12,
+      "speed_factor": 1.025,
+      "export": "exports/club-01/03"
+    },
+    {
+      "name": "04",
+      "in_frame": 2114,
+      "out_frame": 2163,
+      "frames": 50,
+      "start": 88.13,
+      "end": 90.215,
+      "playback": "loop",
+      "pingpong": true,
+      "capture_fps": 4,
+      "capture_frames": 8,
+      "speed_factor": 1.043,
+      "export": "exports/club-01/04"
+    },
+    {
+      "name": "05",
+      "in_frame": 2228,
+      "out_frame": 2269,
+      "frames": 42,
+      "start": 92.884,
+      "end": 94.636,
+      "playback": "loop",
+      "pingpong": true,
+      "capture_fps": 7,
+      "capture_frames": 12,
+      "speed_factor": 1.022,
+      "export": "exports/club-01/05"
+    }
+  ]
+}

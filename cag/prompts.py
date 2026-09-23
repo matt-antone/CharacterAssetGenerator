@@ -64,6 +64,24 @@ FRAME_VIEWS = {
 #: needs no reference of its own.
 KEY_FRAME_VIEW = "3/4"
 
+#: Stance for a render the character performs from. Deliberately defers to the
+#: description: inventing a stance here overrode characters whose brief
+#: specified their own.
+READY_STANCE = (
+    "Use the character's own ready stance exactly as described above. If the description does "
+    "not give one, a relaxed stance with the arms readable and clear of the torso."
+)
+
+#: Stance for a projection view, whose whole job is being comparable to its
+#: siblings. Never for a set reference: the animation frames are drawn from
+#: that picture, and an even-weight arms-down base came back through every
+#: frame — Belter's dance swung its working arm a quarter as far as the motion
+#: source did.
+PROJECTION_STANCE = (
+    "The same neutral standing stance in every projection view: weight even on both "
+    "feet, arms hanging clear of the torso, so the views can be compared."
+)
+
 DIRECTOR_SYSTEM = """You are the motion director for one animation set.
 
 You are given a character description and the performance arc of a motion source. Write two to \
@@ -202,15 +220,7 @@ def view_prompt(
     line = VIEWS.get(view) or FRAME_VIEWS.get(view)
     if line is None:
         raise KeyError(f"unknown view {view!r}")
-    stance = pose or (
-        # Deliberately defers to the description. Inventing a stance here
-        # overrode characters whose brief specified their own.
-        "Use the character's own ready stance exactly as described above. If the description does "
-        "not give one, a relaxed stance with the arms readable and clear of the torso."
-        if view == KEY_VIEW
-        else "The same neutral standing stance in every projection view: weight even on both "
-        "feet, arms hanging clear of the torso, so the views can be compared."
-    )
+    stance = pose or (READY_STANCE if view == KEY_VIEW else PROJECTION_STANCE)
     return "\n\n".join(
         part for part in [
             f"Draw {spec.name}.",
