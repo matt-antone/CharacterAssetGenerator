@@ -45,9 +45,6 @@
     "mic"
   ],
   "animations": {
-    "dance": {
-      "motion": "shuffle-1-7"
-    },
     "sing": {
       "intent": "Manic synth-pop vocal loop: lean in with wide eyes, splay the gloved free fingers beside the goggles as if the idea just struck her, then snap back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [

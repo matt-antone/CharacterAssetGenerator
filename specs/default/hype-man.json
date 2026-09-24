@@ -37,9 +37,6 @@
     "mic"
   ],
   "animations": {
-    "dance": {
-      "motion": "club-male-1-1"
-    },
     "sing": {
       "intent": "MC vocal loop: keep the low wide base, pulse the knees and shoulders, then recover into the coiled stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [
