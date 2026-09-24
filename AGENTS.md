@@ -181,6 +181,16 @@ trace seams back to frame 0, a `pingpong` turns around on its ends and plays
 back down the frames it just played, a `one-shot` does neither, and driving a
 looping set from a one-shot cut gives a dance that plays once.
 
+Read `playback` before you read `seam`. A `seam` verdict of `needs blend` or
+`stalls` is a statement about a cut from the last frame back to the first, and a
+pingpong has no such cut — its return leg is the out leg reversed. **A pingpong
+never needs a blend.** `MotionSheet.seams_cleanly` already knows this and is True
+for every pingpong whatever the word says, so nothing warns and nothing is
+broken; the trap is a human or an agent reading the word out of the listing
+above and reporting clips as flawed, or ranking a set of pingpongs by seam
+quality. Both are wrong. A pingpong's ends only have to be drawable poses, which
+is the `airborne` column, not the seam.
+
 It is read off `motion.json` — the motion spec — and never off the manifest,
 which records what was traced rather than ruling on it. A pingpong arrives as
 two keys, `"playback": "loop"` with `"pingpong": true` beside it, because the

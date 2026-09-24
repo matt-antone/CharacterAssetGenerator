@@ -1,0 +1,62 @@
+{
+ "bundle": "motion-source",
+ "schema": "motion-artist/2",
+ "name": "club-05",
+ "title": "Club 05",
+ "fps": 10,
+ "frame_count": 8,
+ "playback": "loop",
+ "view": "front",
+ "pingpong": true,
+ "seam": "needs blend",
+ "seam_ratio": 4.48,
+ "stabilized": false,
+ "exaggerate": 1.25,
+ "performer": null,
+ "view_frames": {
+  "front": 6,
+  "3/4": 2
+ },
+ "missing_frames": [],
+ "source": {
+  "url": "https://www.youtube.com/watch?v=P4QeqpsY8v8",
+  "file": "work/howcast-club-dancing-tips-for-ladies-sexy-dance-moves/source-P4QeqpsY8v8.mp4",
+  "title": "source-P4QeqpsY8v8.mp4",
+  "start": 95.345,
+  "end": 96.096,
+  "speed_factor": 0.94,
+  "duration": 102.14
+ },
+ "arc_written": true,
+ "files": {
+  "motion.json": "ecd6c6961ee023767ff303d85fbfd434e695861cfc8a59923da9c8fbfa4964eb",
+  "club-05-motion.html": "24c1304f15f1b962c6ae27bfae4c6374657ba8f39d02993d1b489f655de11571",
+  "thumbs/f00.jpg": "6c1a234ed5d763e8f8e365bc745f19fb8f191c7ce5a6276673c6618fe2904da5",
+  "thumbs/f01.jpg": "7914d80e1b2b2d66e89f5fc69f6604e367fd0302bc0198b4b251a5102fb0bdfe",
+  "thumbs/f02.jpg": "f3fe11769ae863d6546f1bfea6b259a74fa667c691468eb5b79bcad058c58d74",
+  "thumbs/f03.jpg": "e3864727b3137c80f233c734103460308f261b6fd553927adee0f807874b02ee",
+  "thumbs/f04.jpg": "35d869676819459847b4072b854a98244fd5143c32817e5bcb0e3d984343b29d",
+  "thumbs/f05.jpg": "7a3755fa90a8d8c4fdef28289dc5ad304d40b8e9e3b046c4c453a57c966da150",
+  "thumbs/f06.jpg": "44e0ba00852ccab84f30084bbbe0bbcba1d6b6311c0a94463fa8396d02b1c08f",
+  "thumbs/f07.jpg": "02609efd50ed2c50667c21a83013efb4dda0114194b0a359efba18065c83fc02",
+  "club-05-pose-grid.png": "7615178698b534de1756946794c465a9ec4f7df896341dcfcedd566433b81f86"
+ },
+ "pose_grid": {
+  "cols": 4,
+  "rows": 2,
+  "frame_count": 8,
+  "scale": 1,
+  "tile_w": 208,
+  "tile_h": 142,
+  "cell_w": 200,
+  "cell_h": 112,
+  "label_h": 22,
+  "gap": 8,
+  "per_sheet": 12,
+  "sheets": 1,
+  "sheet_w": 824,
+  "sheet_h": 276,
+  "labeled": true,
+  "source": "thumbs"
+ }
+}
