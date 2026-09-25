@@ -124,9 +124,20 @@ def motion_stamp(state: AnimationState) -> Path:
 
 
 def motion_digest(motion: MotionSheet) -> str:
-    """Everything the drawing reads off the sheet: the view and every frame's cue."""
+    """Everything the drawing reads off the sheet: the view, every frame's cue, and
+    the pose photographs.
+
+    The photographs are the pose reference on the photo route, and the cues
+    never reach that prompt. Hashing the cues alone meant a bundle re-cut with
+    new photos and the same cues kept its old frames: every cast dance drawn
+    from the 200px thumbnails would have survived their replacement. A set with
+    no photographs hashes as it always did, so its stamp still matches.
+    """
     frames = "\n".join(f"{f.index}\t{f.role}\t{f.cue}\t{f.note}" for f in motion.frames)
-    return hashlib.sha256(f"{motion.view}\n{frames}".encode()).hexdigest()
+    digest = hashlib.sha256(f"{motion.view}\n{frames}".encode())
+    for photo in motion.photos:
+        digest.update(Path(photo).read_bytes())
+    return digest.hexdigest()
 
 
 def sources_are_current(state: AnimationState) -> bool:
