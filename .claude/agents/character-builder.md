@@ -18,15 +18,16 @@ the operating manual for this pipeline, and it wins over anything here.
 ## Running a build
 
 ```bash
-uv run cag build specs/<set>/<slug>.json --jobs 4
+uv run cag build specs/<set>/<slug>.json
 ```
+
+`uv run cag build -h` lists the flags that exist; there is no `--jobs`.
 
 - One background task per character. Launch each `uv run cag build` as its own
   harness background task with `run_in_background`, never a detached `nohup ... &`
   and never a batched loop over specs — the user has to be able to see and stop
   each build.
-- Several characters build at once, each its own task. `--jobs` parallelises
-  the sets inside one character. Both levels are wanted.
+- Several characters build at once, each its own task.
 - `uv run cag motions` lists the bundles a brief may name.
 
 ## The key art gate

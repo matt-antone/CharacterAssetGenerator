@@ -8,11 +8,9 @@ rescales and exaggerates them, and the photographs are what the generator saw.
 The measure is each bone's direction on screen. A bone's angle does not depend
 on its length, so a long-legged character dancing the same move scores the same
 as the performer; widths and joint positions do not have that property, and
-read costume and build as pose error. On Belter against club-01, renders from
-full-card photographs landed at 4.9-5.8 degrees mean across five runs, the
-same inputs rolled again — that spread is the generator's floor, and the band a
-new character should be read against. The same set drawn from 200px thumbnails
-tracked its arms at r +0.30.
+read costume and build as pose error. Belter's approved club-01 dance scores
+3.6 degrees mean, and that is the bar a new character is read against. The
+same set drawn from 200px thumbnails tracked its arms at r +0.30.
 """
 
 from __future__ import annotations
@@ -62,9 +60,32 @@ def angle_gap(a: float, b: float) -> float:
     return abs((a - b + 180) % 360 - 180)
 
 
+#: A bone shorter on screen than this share of the torso is pointing at or away
+#: from the camera, and its on-screen direction is tracker noise. Crooner's
+#: oldies-01 holds its forearms toward the lens at 0.05-0.37 of the torso, and
+#: scoring them read a close match as 18.9 degrees — 5.2 with them left out.
+FORESHORTENED = 0.25
+
+
+def _span(pts: dict[str, list[float]], a: str, b: str) -> float:
+    return math.dist(pts[a][:2], pts[b][:2])
+
+
+def _torso(pts: dict[str, list[float]]) -> float:
+    mid = lambda p, q: [(pts[p][0] + pts[q][0]) / 2, (pts[p][1] + pts[q][1]) / 2]  # noqa: E731
+    return math.dist(mid("shL", "shR"), mid("hipL", "hipR"))
+
+
 def bone_errors(drawn: dict[str, list[float]], traced: dict[str, list[float]]) -> dict[str, float]:
+    """Angle error per bone, leaving out any bone foreshortened in either figure."""
     got, want = bone_angles(drawn), bone_angles(traced)
-    return {name: angle_gap(got[name], want[name]) for name in BONES}
+    drawn_torso, traced_torso = _torso(drawn), _torso(traced)
+    return {
+        name: angle_gap(got[name], want[name])
+        for name, (a, b) in BONES.items()
+        if _span(drawn, a, b) >= FORESHORTENED * drawn_torso
+        and _span(traced, a, b) >= FORESHORTENED * traced_torso
+    }
 
 
 def trace(images: list[Path]) -> list[dict | None]:
@@ -99,19 +120,23 @@ def report(cells: list[Path], photos: list[Path]) -> str:
     """Per-frame bone-angle error of the drawn set against its photographs."""
     drawn, traced = trace(cells), trace(photos)
     lines = [f"{'frame':>5}  {'mean':>5}  worst"]
-    means = []
+    means, skipped = [], 0
     for index, (got, want) in enumerate(zip(drawn, traced)):
         if got is None or want is None:
             side = "character" if got is None else "photograph"
             lines.append(f"{index:5d}  {'-':>5}  no body found in the {side}")
             continue
         errors = bone_errors(got, want)
+        skipped += len(BONES) - len(errors)
+        if not errors:
+            lines.append(f"{index:5d}  {'-':>5}  every bone foreshortened")
+            continue
         worst = max(errors, key=errors.get)
         means.append(statistics.fmean(errors.values()))
         lines.append(f"{index:5d}  {means[-1]:5.1f}  {worst} {errors[worst]:.0f}°")
     if means:
         lines.append(
             f"set: mean {statistics.fmean(means):.1f}°, median frame {statistics.median(means):.1f}°"
-            f" over {len(means)} of {len(cells)} frames"
+            f" over {len(means)} of {len(cells)} frames; {skipped} foreshortened bones not scored"
         )
     return "\n".join(lines)

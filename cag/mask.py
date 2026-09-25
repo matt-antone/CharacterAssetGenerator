@@ -304,7 +304,12 @@ def register(
     else:
         source_x, cell_x = anchor
         offset_x = round(cell_x - (source_x - origin_left) * scale)
-    cell.paste(subject, (offset_x, contact_row + 1 - bottom))
+    # An airborne frame is lifted off the contact row, and a lift that pushes the
+    # crown past the top of the cell cut hype-man's head off on three hiphop-04
+    # frames. The figure stays whole; the lift gives way.
+    # ponytail: clamps the top only; a figure too tall for the cell still clips at the bottom.
+    offset_y = max(contact_row + 1 - bottom, -top)
+    cell.paste(subject, (offset_x, offset_y))
     return cell
 
 

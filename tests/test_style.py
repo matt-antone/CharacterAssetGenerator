@@ -121,3 +121,32 @@ def test_the_costume_anchor_defends_footwear_before_hair():
     assert "tall and lean" not in anchor  # only what a photograph can contradict
     assert "still wears the character's own footwear" in anchor
     assert costume_anchor("She is tall and lean. She looks cheerful.") == ""
+
+
+def test_the_costume_anchor_carries_the_whole_outfit_from_the_brief():
+    """Two bible sentences left Diva's gown out of her dance prompt, and against a
+    dancer in trousers she stepped a leg through a slit the gown does not have."""
+    from cag.prompts import costume_anchor
+
+    bible = "Low-heeled satin shoes in violet. Her hair is a high sculpted updo."
+    gown = "A floor-length one-shoulder gown falling in a straight column; legs stay hidden."
+    anchor = costume_anchor(bible, outfit=gown, hair="A high sculpted black updo.")
+    assert gown in anchor
+    assert "satin shoes" in anchor, "an outfit naming no footwear keeps the bible's"
+    assert "sculpted black updo" in anchor and "high sculpted updo" not in anchor
+    assert "keeps covering them" in anchor
+
+    shod = costume_anchor(bible, outfit="Jeans and chunky ankle boots.")
+    assert "satin shoes" not in shod, "the outfit's own footwear is enough"
+
+
+def test_the_key_art_quotes_the_brief_s_own_stance():
+    """READY_STANCE says "as described above"; without this the key art drew
+    arms hanging and seven halloween keys lost their signature gesture.
+    Projection views keep the neutral stance so they stay comparable."""
+    from cag.prompts import KEY_VIEW, view_prompt
+    from cag.spec import load_spec
+
+    spec = load_spec("specs/halloween/jack.json")
+    assert spec.performance_style in view_prompt(spec, "B", KEY_VIEW)
+    assert spec.performance_style not in view_prompt(spec, "B", "front")

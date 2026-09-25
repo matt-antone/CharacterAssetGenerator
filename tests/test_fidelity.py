@@ -25,6 +25,16 @@ def test_one_bent_forearm_is_the_only_error_and_its_size_is_the_bend():
     assert set(errors) == set(BONES)
 
 
+def test_a_forearm_pointed_at_the_camera_is_not_scored():
+    """A forearm toward the lens is a few pixels on screen, and its direction is
+    tracker noise: scoring it read a close match as a wild miss."""
+    toward = dict(POSE, wrL=[1.2, 0.41])  # 0.01 long against a 0.30 torso
+    errors = bone_errors(toward, POSE)
+    assert "forearm L" not in errors
+    assert "forearm L" not in bone_errors(POSE, toward), "either figure foreshortened skips it"
+    assert max(errors.values()) < 1e-9
+
+
 def test_angle_gap_wraps_around():
     assert angle_gap(179, -179) == 2
     assert angle_gap(-90, 90) == 180

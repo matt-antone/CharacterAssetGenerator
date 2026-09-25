@@ -79,6 +79,16 @@ def test_register_does_not_crash_when_subject_overflows_the_cell():
     assert subject_box(cell)[3] - 1 == CONTACT_ROW
 
 
+def test_a_lift_never_pushes_the_crown_out_of_the_cell():
+    """An airborne frame is lifted off the contact row; lifted far enough, the
+    head used to leave the top of the cell. The lift gives way instead."""
+    tall = figure(size=(100, 460), box=(40, 0, 60, 450))
+    cell = register(tall, 1.0, contact_row=300)
+    top, bottom = subject_box(cell)[1], subject_box(cell)[3]
+    assert top == 0
+    assert bottom - top == 450, "the whole figure is in the cell"
+
+
 def test_register_preserves_soft_edges():
     """Pasting must not multiply alpha by itself and eat antialiased pixels."""
     image = Image.new("RGBA", (20, 20), (0, 0, 0, 0))

@@ -220,7 +220,12 @@ def view_prompt(
     line = VIEWS.get(view) or FRAME_VIEWS.get(view)
     if line is None:
         raise KeyError(f"unknown view {view!r}")
-    stance = pose or (READY_STANCE if view == KEY_VIEW else PROJECTION_STANCE)
+    # The bible leaves `performance_style` out (it would pin every frame to one
+    # pose), so READY_STANCE's "described above" pointed at nothing and the key
+    # art fell back to arms hanging: seven of eight halloween keys lost their
+    # signature gesture. The key art is the one render that should quote it.
+    ready = " ".join(filter(None, [spec.performance_style, READY_STANCE]))
+    stance = pose or (ready if view == KEY_VIEW else PROJECTION_STANCE)
     return "\n\n".join(
         part for part in [
             f"Draw {spec.name}.",
@@ -365,29 +370,40 @@ FOOTWEAR_WORDS = ("boot", "shoe", "sneaker", "trainer", "sandal", "footwear", "h
 HAIR_WORDS = ("hair", "braid", "ponytail", "quiff", "curls")
 
 
-def costume_anchor(bible: str) -> str:
-    """The sentences of the bible a photographic pose reference will contradict.
+def costume_anchor(bible: str, outfit: str = "", hair: str = "") -> str:
+    """What the character wears, said where a photographic pose reference will
+    contradict it.
 
     Not the whole bible: carrying that into a sheet prompt is what compressed
     the movement in the first place. Only the parts a photograph of a different
     body will overwrite, said positively — the prompt was already forbidding the
     performer's clothing when the trainers arrived, so naming what the character
     wears is doing the work that the prohibition could not.
+
+    The brief's own `outfit` and `hair` fields come first. Two bible sentences,
+    footwear and hair, left the rest of the costume out: Diva's floor-length
+    gown never reached her dance prompt, and against a photograph of a dancer in
+    trousers she stepped a leg out through a slit the gown does not have. The
+    bible's footwear sentence still comes along when the outfit names none.
     """
     sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", bible) if part.strip()]
 
     def first(words: tuple[str, ...]) -> list[str]:
         return next(([s] for s in sentences if any(w in s.lower() for w in words)), [])
 
-    # ponytail: one sentence each, footwear before hair; a bible that buries
-    # either deeper wants a spec field rather than more parsing here.
-    kept = first(FOOTWEAR_WORDS) + first(HAIR_WORDS)
+    if outfit:
+        shod = any(w in outfit.lower() for w in FOOTWEAR_WORDS)
+        kept = [outfit] + ([] if shod else first(FOOTWEAR_WORDS)) + ([hair] if hair else first(HAIR_WORDS))
+    else:
+        kept = first(FOOTWEAR_WORDS) + first(HAIR_WORDS)
     if not kept:
         return ""
     return " ".join(kept) + (
         " That is what the character wears in every figure, whatever the pose. A foot lifted off "
         "the floor still wears the character's own footwear, drawn in full: never the footwear, "
-        "hair or clothing of anyone in the reference photographs, and never bare."
+        "hair or clothing of anyone in the reference photographs, and never bare. A garment that "
+        "covers the legs keeps covering them however the photographed legs move: no slit, split "
+        "or bare leg the outfit does not have."
     )
 
 
@@ -440,7 +456,7 @@ def frame_sheet_prompt(
         "viewer; only the pose changes from one to the next."
     )
     if photographic:
-        identity, standing, figures = costume_anchor(bible), "", sameness
+        identity, standing, figures = costume_anchor(bible, spec.outfit, spec.hair), "", sameness
     else:
         identity, standing, figures = bible, set_note, f"{sameness[:-1]}:\n{poses}"
     return "\n\n".join(
