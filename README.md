@@ -125,6 +125,54 @@ So how a set repeats is written down once, in whichever of the three places owns
 it: the trace, or this character's brief, or the plan. Belter's dance can
 pingpong while the crooner's loops without either of them touching `sets.py`.
 
+## Who draws
+
+Every render goes through one of two backends, picked per build:
+
+```bash
+uv run cag build specs/default/belter.json                        # codex, the default
+uv run cag build specs/default/belter.json --draw-backend comfy   # Comfy Cloud
+```
+
+`CAG_DRAW_BACKEND=comfy` makes comfy the default. The text calls (the bible
+where a brief does not assemble its own, a written motion sheet, the motion
+director) stay on codex either way.
+
+**codex** is an agent with an image tool: it is handed the prompt plus
+instructions to save the file and to redraw until the backdrop is magenta.
+
+**comfy** runs a ComfyUI workflow on [Comfy Cloud](https://cloud.comfy.org).
+It needs `COMFY_CLOUD_API_KEY`, made at platform.comfy.org (Standard plan or
+above). The workflow it runs is `comfy/workflow.json`, which ships with the
+repo: Nano Banana Pro at 2K, taking up to fourteen reference images and
+following a long prompt closely. Partner nodes like it bill to the same key.
+
+The model is the workflow's choice, not cag's, so changing models means changing
+that file, or pointing `--comfy-workflow` / `CAG_COMFY_WORKFLOW` at another one.
+To make one, build it in Comfy, export it with **Workflow > Export (API)**, and
+set these node inputs to placeholder strings. cag fills them in for each render:
+
+| Placeholder | Filled with |
+| --- | --- |
+| `$prompt` | the render's prompt. Required |
+| `$image1` .. `$imageN` | the reference images, in order, on `LoadImage` nodes. A render sends up to four: key art, the carried last frame, detail, the pose grid. The prompt calls the pose grid "the last reference image", so keep them in order |
+| `$seed` | a fresh random seed, so a redraw is a new roll |
+| `$width`, `$height` | the canvas in pixels: 1536x864 for a location, 1536x1024 for a frame sheet, 1024x1536 for a single figure |
+| `$aspect` | the same canvas as a ratio, `16:9`, `3:2` or `2:3`, for models that take one |
+
+A render with fewer references than there are slots drops the unused
+`LoadImage` nodes. A batch node left holding one image passes it straight
+through, and one left with none goes, so batched references shrink on their own.
+A render with more references than slots fails before anything is uploaded.
+
+Every reference is uploaded letterboxed onto a 1536 square, in its own border
+colour. ComfyUI batches images as one tensor and crops each to the first one's
+size to do it, which would cut the outer pose cards off a landscape pose grid
+batched behind portrait key art.
+
+The magenta check still applies: a render with scenery behind the character is
+drawn again, the same as under codex.
+
 ## Every set needs a hand pass
 
 Expect to nudge frames after a build. The generator draws a set's figures
@@ -182,11 +230,14 @@ the sheet and loses the edits**. Opened straight from disk instead of through
 
 ## Constraints this was built under
 
-- **No OpenAI API.** Both the model calls and the image generation go through
-  the local `codex` CLI on a ChatGPT subscription. `cag.chat_codex.ChatCodex` is
-  a LangChain `BaseChatModel` that shells out to `codex exec`.
-- **macOS only.** The cutout's fallback path is Apple's Vision framework
-  (`VNGenerateForegroundInstanceMaskRequest`) through pyobjc.
+- **No OpenAI API.** The model calls always go through the local `codex` CLI on
+  a ChatGPT subscription, and so does the image generation unless a build asks
+  for Comfy Cloud. `cag.chat_codex.ChatCodex` is a LangChain `BaseChatModel`
+  that shells out to `codex exec`.
+- **Vision is macOS only.** The cutout's fallback path is Apple's Vision
+  framework (`VNGenerateForegroundInstanceMaskRequest`) through pyobjc. pyobjc
+  installs only on macOS; elsewhere the chroma key does all the cutting, and a
+  render it cannot read fails instead of falling back.
 
 ## The look
 

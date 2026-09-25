@@ -467,7 +467,12 @@ def frame_sheet_prompt(
             props,
             standing,
             view_clause,
-            f"Draw this on a landscape canvas. {layout} No numbers, labels, frame lines or grid "
+            # More than four across is a set drawn whole (Comfy only), and eight
+            # figures across a plain landscape canvas left each one a slot too
+            # narrow for Belter's hair and mic arm: they ran together and would
+            # not slice. "Wide" is 21:9 there; see `cag.comfy.CANVASES`.
+            f"Draw this on a {'wide ' if columns > 4 else ''}landscape canvas. {layout} "
+            "No numbers, labels, frame lines or grid "
             "lines: only the figures on the backdrop.",
             figures,
             STYLE,
@@ -486,3 +491,22 @@ def frame_sheet_prompt(
             + (" and do not move the prop to the other hand." if props else "."),
         ] if part
     )
+
+
+#: The prompt for re-posing a set's approved reference into one traced frame's
+#: pose (`cag.comfy.POSE_WORKFLOW`). The first half is AnyPose's own wording, the
+#: phrasing its LoRAs were trained against. The rest is what a photograph of a
+#: real performer carries that must not come across: her clothes, her shoes, the
+#: street she danced in. It names no character, because the reference image
+#: already is one, and words only compete with it.
+POSE_EDIT = (
+    "Make the person in image 1 do the exact same pose of the person in image 2. Changing the "
+    "style and background of the image of the person in image 1 is undesirable, so don't do it. "
+    "The new pose should be pixel accurate to the pose we are trying to copy. The position of the "
+    "arms and head and legs should be the same as the pose we are trying to copy. "
+    "Keep everything else from image 1 exactly: its pixel-art style and black outline, the "
+    "character's face, hair, body, clothing and footwear, anything held in the hands, and the "
+    "flat pure magenta background. Take nothing from image 2 except the pose: not the performer's "
+    "clothes, hair, face or shoes, not the scenery, not the camera angle. Draw the whole figure, "
+    "head to feet, with nothing cropped."
+)

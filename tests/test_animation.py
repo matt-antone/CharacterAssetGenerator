@@ -579,3 +579,158 @@ def test_a_set_with_props_still_names_them():
     clause = animation.prop_clause(state)
     assert "microphone" in clause.lower()
     assert clause != EMPTY_HANDS
+
+
+def test_the_eight_figure_batching_is_unchanged():
+    for frames in (8, 13, 16, 22):
+        assert animation.sheet_layout(frames) == (8, 4)
+
+
+@pytest.mark.parametrize("frames, layout", [
+    (8, (8, 4)),     # a short set already fits one render as before
+    (13, (13, 7)),   # two rows
+    (16, (16, 8)),
+    (22, (22, 8)),   # three rows: 8, 8, 6
+    (24, (24, 8)),
+    (36, (18, 6)),   # too many for one render: two equal halves
+])
+def test_a_set_drawn_whole_goes_in_one_render_eight_to_a_row(frames, layout):
+    assert animation.sheet_layout(frames, animation.WHOLE_SET_SHEET) == layout
+
+
+@pytest.mark.parametrize("most, layout", [(4, (4, 2)), (6, (6, 3)), (2, (2, 2))])
+def test_small_batches_are_laid_out_near_square(most, layout):
+    assert animation.sheet_layout(16, most) == layout
+
+
+def test_the_batch_size_can_be_chosen_per_build():
+    from cag.cli import backend_state
+
+    assert backend_state("codex") == {}
+    assert backend_state("comfy")["frames_per_sheet"] == animation.WHOLE_SET_SHEET
+    assert backend_state("comfy", 4)["frames_per_sheet"] == 4
+    assert backend_state("comfy", 4)["detail_after_key"] is False
+
+
+def test_a_whole_set_is_one_render_with_a_matching_pose_grid(tmp_path, monkeypatch):
+    fake_frame_sheet_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    graph = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_frame_sheet_draw,
+        frame_sheet_mode=True,
+    )
+    result = graph.invoke({
+        "spec": load_spec("tests/fixtures/velvet-lou.json"),
+        "bible": "A lounge performer.",
+        "key_art": key_art,
+        "scale": 2.875,
+        "motion": posed(load_motion(SAMPLE), tmp_path),
+        "set_name": "dance",
+        "work_dir": tmp_path / "lou",
+        "frames_per_sheet": animation.WHOLE_SET_SHEET,
+    })
+    assert len(fake_frame_sheet_draw.calls) == 1
+    assert result["frame_sheets"] == [list(range(16))]
+    assert sorted(result["cells"]) == list(range(16))
+    grid = fake_frame_sheet_draw.calls[0]["refs"][-1]
+    with Image.open(grid) as image:
+        assert image.size == (CARD_WIDTH * 8, CARD_HEIGHT * 2), "the grid matches the layout asked for"
+
+
+@pytest.mark.parametrize("sheet_mode", [False, True])
+def test_under_comfy_frames_are_drawn_without_the_detail_sample(tmp_path, monkeypatch, sheet_mode):
+    """See `DETAIL_FRAMES`: Nano Banana copies the person out of the sample."""
+    from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
+
+    fake = fake_frame_sheet_draw if sheet_mode else fake_draw
+    fake.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    graph = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake,
+        frame_sheet_mode=sheet_mode,
+    )
+    graph.invoke({
+        "spec": load_spec("tests/fixtures/velvet-lou.json"),
+        "bible": "A lounge performer.",
+        "key_art": key_art,
+        "scale": 2.875,
+        "motion": posed(load_motion(SAMPLE), tmp_path),
+        "set_name": "dance",
+        "work_dir": tmp_path / "lou",
+        "detail_after_key": False,
+    })
+    sample = detail_frame(DEFAULT_DETAIL_LEVEL)
+    assert fake.calls
+    for call in fake.calls:
+        assert sample not in call["refs"]
+        assert "detail-level sample" not in call["prompt"]
+
+
+def test_a_traced_set_under_a_pose_workflow_is_drawn_frame_by_frame(tmp_path, monkeypatch):
+    """Each frame is the set's reference re-posed into its own photograph."""
+    from cag.prompts import POSE_EDIT
+
+    calls = []
+
+    def fake_pose_draw(prompt, out_path, references=(), **kwargs):
+        calls.append({"prompt": prompt, "out": Path(out_path), "refs": list(references), **kwargs})
+        return fake_draw(prompt, out_path, references)
+
+    fake_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    workflow = tmp_path / "pose-edit.json"
+    graph = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_pose_draw,
+        frame_sheet_mode=True,
+    )
+    result = graph.invoke({
+        "spec": load_spec("tests/fixtures/velvet-lou.json"),
+        "bible": "A lounge performer.",
+        "key_art": key_art,
+        "scale": 2.875,
+        "motion": posed(load_motion(SAMPLE), tmp_path),
+        "set_name": "dance",
+        "work_dir": tmp_path / "lou",
+        "pose_workflow": workflow,
+    })
+
+    assert len(calls) == 16, "one render per frame"
+    for index, call in enumerate(calls):
+        assert call["prompt"] == POSE_EDIT
+        assert call["workflow"] == workflow
+        assert call["refs"][0] == key_art, "the set's reference is image 1"
+        assert call["refs"][1].parts[-3:] == ("poses", "dance", f"{index:02d}.png"), "its pose card is image 2"
+        assert call["out"] == tmp_path / "lou" / "source" / "dance" / f"{index:02d}.png"
+    assert result["frame_sheets"] == [[n] for n in range(16)], "each frame at its own scale"
+    assert sorted(result["cells"]) == list(range(16))
+
+
+def test_a_written_set_under_a_pose_workflow_still_goes_on_a_frame_sheet(tmp_path, monkeypatch):
+    """No photographs, nothing to pose from."""
+    fake_frame_sheet_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    graph = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)]), draw_fn=fake_frame_sheet_draw,
+        frame_sheet_mode=True,
+    )
+    graph.invoke({
+        "spec": load_spec("tests/fixtures/velvet-lou.json"),
+        "bible": "A lounge performer.",
+        "key_art": key_art,
+        "scale": 2.875,
+        "motion": load_motion(SAMPLE),
+        "set_name": "sing",
+        "work_dir": tmp_path / "lou",
+        "pose_workflow": tmp_path / "pose-edit.json",
+        "frames_per_sheet": animation.WHOLE_SET_SHEET,
+    })
+    assert len(fake_frame_sheet_draw.calls) == 1
+    assert " 16 times in one image" in fake_frame_sheet_draw.calls[0]["prompt"]

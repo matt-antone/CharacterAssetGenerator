@@ -123,6 +123,10 @@ def test_a_render_with_scenery_behind_it_is_redrawn_not_kept(monkeypatch, tmp_pa
         draw("a singer", tmp_path / "art.png")
     assert len(attempts) == 2
     assert not (tmp_path / "art.png").exists()
+    # Each unusable attempt is kept aside to be looked at, never resumed from.
+    assert sorted(p.name for p in tmp_path.glob("art.unusable-*.png")) == [
+        "art.unusable-0.png", "art.unusable-1.png"
+    ]
 
 
 def test_verification_never_deletes_an_existing_render(tmp_path):
@@ -160,3 +164,17 @@ def test_scenery_is_refused_separately_from_colour():
     usable, why_not = backdrop_is_usable(scenery())
     assert not usable
     assert "scenery behind the character" in why_not
+
+
+def test_a_washed_out_magenta_is_refused():
+    """The key cuts costume away against an orchid backdrop, so it is drawn again."""
+    from cag.draw import backdrop_is_usable
+
+    # What Nano Banana painted behind two of Belter's frame sheets.
+    for colour in ((194, 80, 159), (203, 62, 184)):
+        usable, why_not = backdrop_is_usable(Image.new("RGB", (64, 64), colour))
+        assert not usable
+        assert "washed-out magenta" in why_not
+    # What it painted behind the rest, and what the prompt asks for.
+    for colour in ((252, 3, 250), (255, 0, 255)):
+        assert backdrop_is_usable(Image.new("RGB", (64, 64), colour))[0], colour

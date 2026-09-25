@@ -4,13 +4,16 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import shutil
 import sys
 from dataclasses import replace
 from functools import partial
 from pathlib import Path
+from typing import Callable
 
-from .animation import build_animation_graph
+from . import comfy
+from .animation import WHOLE_SET_SHEET, build_animation_graph
 from .assemble import (
     MANIFEST,
     PORTRAIT_SIZES,
@@ -160,9 +163,11 @@ def render_set(
     work_dir: Path,
     supplied: Path | None,
     frame_sheet_mode: bool = True,
-    draw_backend: str = "codex",
+    draw_fn: Callable[..., Path] | None = None,
     motion_root: Path = MOTION_ROOT,
     carry: Path | None = None,
+    backend: str = "codex",
+    frames_per_sheet: int | None = None,
 ) -> dict:
     """Draw and mask one animation set, continuing from the set drawn before it.
 
@@ -181,13 +186,11 @@ def render_set(
         # Nothing downstream can fix that, so it is said once, where it is chosen.
         log(f"[{set_name}] the {motion.name!r} sheet loops on a {motion.seam!r} seam: "
             "the proof will jump from the last frame back to the first")
-    # None keeps callers pointed at each module's own `draw` name (unpatched, that's
-    # the seam tests replace) instead of forcing a swap when nothing was asked for.
-    draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
     # The reference this set is drawn against has this set's hands, not the key
     # art's: a prop on the character follows it into every frame that quotes it.
     key_art = set_key_art(
-        spec, set_name, static["bible"], work_dir, static["sources"][KEY_VIEW], draw_fn, motion.view
+        spec, set_name, static["bible"], work_dir, static["sources"][KEY_VIEW], draw_fn,
+        motion.view, detail_after_key=backend == "codex",
     )
     log(f"[{set_name}] reference: {key_art.name}")
     animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
@@ -199,6 +202,7 @@ def render_set(
             "motion": motion,
             "set_name": set_name,
             "work_dir": work_dir,
+            **backend_state(backend, frames_per_sheet),
             **({"carry": carry} if carry else {}),
         }
     )
@@ -219,8 +223,10 @@ def build(
     work_root: Path,
     out_root: Path,
     frame_sheet_mode: bool = True,
-    draw_backend: str = "codex",
+    draw_fn: Callable[..., Path] | None = None,
     motion_root: Path = MOTION_ROOT,
+    backend: str = "codex",
+    frames_per_sheet: int | None = None,
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -233,9 +239,8 @@ def build(
 
     log(f"[static] {spec.name}: bible, key art, projection")
     try:
-        draw_fn = partial(draw, backend=draw_backend) if draw_backend != "codex" else None
         static = build_static_graph(ChatCodex(), draw_fn=draw_fn).invoke(
-            {"spec": spec, "work_dir": work_dir}
+            {"spec": spec, "work_dir": work_dir, "detail_after_key": backend == "codex"}
         )
     except ApprovalRequired as gate:
         raise SystemExit(
@@ -272,9 +277,11 @@ def build(
                     work_dir,
                     motion_path,
                     frame_sheet_mode,
-                    draw_backend,
+                    draw_fn,
                     motion_root,
                     carry,
+                    backend,
+                    frames_per_sheet,
                 )
             except Exception as error:  # one bad set must not lose the others
                 log(f"[{name}] FAILED: {error}")
@@ -349,9 +356,22 @@ def main(argv: list[str] | None = None) -> int:
     build_parser.add_argument("--out", type=Path, default=Path("outputs"))
     build_parser.add_argument(
         "--draw-backend",
-        choices=["codex", "agy"],
-        default="codex",
-        help="CLI agent that draws the art: codex (ChatGPT sub) or agy (Antigravity sub)",
+        choices=["codex", "comfy"],
+        default=os.environ.get("CAG_DRAW_BACKEND", "codex"),
+        help="what draws the art: codex (ChatGPT sub) or comfy (Comfy Cloud workflow). "
+        "Default: $CAG_DRAW_BACKEND, else codex",
+    )
+    build_parser.add_argument(
+        "--comfy-workflow",
+        type=Path,
+        help="API-format ComfyUI workflow for --draw-backend comfy. "
+        f"Default: $CAG_COMFY_WORKFLOW, else {comfy.DEFAULT_WORKFLOW}",
+    )
+    build_parser.add_argument(
+        "--frames-per-sheet",
+        type=int,
+        help="most frames drawn in one sheet-mode render. Default: 8 under codex, "
+        f"the whole set (up to {WHOLE_SET_SHEET}) under comfy",
     )
 
     motions_parser = sub.add_parser(
@@ -427,10 +447,53 @@ def main(argv: list[str] | None = None) -> int:
         args.work,
         args.out,
         args.frame_sheet_mode,
-        args.draw_backend,
+        draw_with(args.draw_backend, args.comfy_workflow),
         args.motion_root,
+        backend=args.draw_backend,
+        frames_per_sheet=args.frames_per_sheet,
     )
     return 0
+
+
+def backend_state(backend: str, frames_per_sheet: int | None = None) -> dict:
+    """How the graphs draw for this backend, where the backends differ.
+
+    Under Comfy, Nano Banana copies the person out of the detail sample (see
+    `DETAIL_FRAMES`), and its separate renders of one set drift apart in style,
+    so a set is drawn whole (see `WHOLE_SET_SHEET`). Codex keeps both as they
+    were measured. `frames_per_sheet`, when given, overrides either default.
+    """
+    state = {} if backend == "codex" else {
+        "detail_after_key": False,
+        "frames_per_sheet": WHOLE_SET_SHEET,
+        # A traced set is drawn a frame at a time by re-posing its reference; see
+        # `pose_edit_frames`. Only a written set still goes on a frame sheet.
+        "pose_workflow": comfy.POSE_WORKFLOW,
+    }
+    if frames_per_sheet:
+        state["frames_per_sheet"] = frames_per_sheet
+    return state
+
+
+def draw_with(backend: str, workflow: Path | None = None) -> Callable[..., Path] | None:
+    """The draw function a build hands its graphs, checked before anything is drawn.
+
+    None means codex, and keeps each module on its own `draw` name — the seam the
+    tests replace. Comfy's workflow and key are checked here, once, so a missing
+    one stops the build by name instead of failing every set in turn.
+    """
+    if backend == "codex":
+        return None
+    path = comfy.workflow_path(workflow)
+    try:
+        loaded = comfy.load_workflow(path)
+        comfy.load_workflow(comfy.POSE_WORKFLOW)
+        comfy.Client()
+    except comfy.ComfyError as error:
+        raise SystemExit(f"[comfy] {error}") from None
+    log(f"[comfy] drawing with {path}, {comfy.reference_slots(loaded)} reference slots; "
+        f"traced sets frame by frame with {comfy.POSE_WORKFLOW}")
+    return partial(draw, backend="comfy", workflow=path)
 
 
 if __name__ == "__main__":

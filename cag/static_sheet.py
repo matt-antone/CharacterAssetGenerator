@@ -56,6 +56,9 @@ class StaticState(TypedDict, total=False):
     #: The character's background, drawn whole. Not in `sources`: everything
     #: there gets cut out, and a location is the render that must not be.
     location: Path
+    #: Whether renders after the key art get the detail sample too, or only the
+    #: approved key art. Missing means true. See `DETAIL_FRAMES`.
+    detail_after_key: bool
 
 
 def source_path(work_dir: Path, view: str) -> Path:
@@ -149,6 +152,7 @@ def set_key_art(
     key_art: Path,
     draw_fn: Callable[..., Path] | None = None,
     view: str = KEY_FRAME_VIEW,
+    detail_after_key: bool = True,
 ) -> Path:
     """The key art with this set's hands and facing, drawn once per set that needs it.
 
@@ -175,7 +179,7 @@ def set_key_art(
     if held == spec.props and view == KEY_FRAME_VIEW:
         return key_art
     dst = work_dir / "source" / f"{set_name}-key-{view.replace('/', '-')}.png"
-    detail = detail_frame(spec.detail_level)
+    detail = detail_frame(spec.detail_level) if detail_after_key else None
     return (draw_fn or draw)(
         view_prompt(
             spec,
@@ -214,7 +218,7 @@ def measure_scale(state: StaticState) -> StaticState:
 def draw_projection(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
     spec = state["spec"]
     key_art = state["sources"][KEY_VIEW]
-    detail = detail_frame(spec.detail_level)
+    detail = detail_frame(spec.detail_level) if state.get("detail_after_key", True) else None
     sources = dict(state["sources"])
     for view in projection_views():
         sources[view] = draw_fn(

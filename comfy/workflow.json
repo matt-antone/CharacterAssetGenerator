@@ -1,0 +1,51 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "$image1" },
+    "_meta": { "title": "reference 1 (key art)" }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "$image2" },
+    "_meta": { "title": "reference 2" }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "$image3" },
+    "_meta": { "title": "reference 3" }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "$image4" },
+    "_meta": { "title": "reference 4 (pose grid, when there is one)" }
+  },
+  "5": {
+    "class_type": "BatchImagesNode",
+    "inputs": {
+      "images.image0": ["1", 0],
+      "images.image1": ["2", 0],
+      "images.image2": ["3", 0],
+      "images.image3": ["4", 0]
+    },
+    "_meta": { "title": "references, in the order the prompt names them" }
+  },
+  "6": {
+    "class_type": "GeminiImage2Node",
+    "inputs": {
+      "prompt": "$prompt",
+      "model": "gemini-3-pro-image-preview",
+      "seed": "$seed",
+      "aspect_ratio": "$aspect",
+      "resolution": "2K",
+      "response_modalities": "IMAGE",
+      "images": ["5", 0],
+      "system_prompt": "You are an image-generation engine for game sprite art. You must always produce exactly one image. Follow the user's instructions literally and completely: every constraint about style, palette, backdrop colour, figure count, layout and what must not appear is a hard requirement. Reference images are attached in the order the instructions name them; use each only for what the instructions say it is for. When the instructions ask for a magenta background, it must be pure, fully saturated #FF00FF (red 255, green 0, blue 255), flat and identical across the whole canvas: never a muted pink, orchid, mauve, violet or purple, and never matched to the background of a reference image or to a dimmer, more tasteful shade. Background removal depends on that exact colour. When several figures share one image, they stand on that one continuous background: never draw panel borders, cell outlines, dividing lines or boxes between or around them."
+    },
+    "_meta": { "title": "Nano Banana Pro" }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": { "images": ["6", 0], "filename_prefix": "cag" },
+    "_meta": { "title": "save" }
+  }
+}
