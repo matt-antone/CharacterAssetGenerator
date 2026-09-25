@@ -34,6 +34,7 @@ from .prompts import (
 )
 from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos
 from .props import clauses
+from .snap import snap_file
 from .style import detail_frame
 from .spec import CharacterSpec
 
@@ -70,6 +71,9 @@ class AnimationState(TypedDict, total=False):
     #: one frame per render. Set, a traced set is drawn that way instead of on a
     #: frame sheet; see `pose_edit_frames`.
     pose_workflow: Path
+    #: Put each re-posed frame back on the reference's pixel grid and palette
+    #: (see `cag.snap`): the pose workflow keeps the character, not the art.
+    snap_to_key: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
@@ -343,6 +347,8 @@ def pose_edit_frames(state: AnimationState, draw_fn: Callable[..., Path]) -> Ani
             references=[state["key_art"], state["poses"][frame.index]],
             workflow=state["pose_workflow"],
         )
+        if state.get("snap_to_key"):
+            snap_file(sources[frame.index], state["key_art"])
     stamp = motion_stamp(state)
     stamp.parent.mkdir(parents=True, exist_ok=True)
     stamp.write_text(motion_digest(motion) + "\n")

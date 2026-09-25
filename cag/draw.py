@@ -1,12 +1,14 @@
-"""Render a PNG with codex's built-in image generation or a Comfy Cloud workflow.
+"""Render a PNG with codex's built-in image generation or a ComfyUI workflow.
 
 Mechanism only. What to draw is decided upstream; this module gets the bytes on
 disk and confirms they are a real image. Sources always land on a magenta
 backdrop — the cutout happens later, once, in `cag.mask`.
 
-Two backends, one at a time: `codex` (the ChatGPT subscription, via `codex exec`,
-an agentic CLI with its own image tool) and `comfy` (a ComfyUI workflow run on
-Comfy Cloud, see `cag.comfy`).
+Backends, one at a time: `codex` (the ChatGPT subscription, via `codex exec`, an
+agentic CLI with its own image tool), and two that run a ComfyUI workflow, see
+`cag.comfy`: `comfy` on Comfy Cloud and `local` on a ComfyUI server of your own.
+The same workflow file runs on either, so long as its nodes and models are
+installed where it runs.
 """
 
 from __future__ import annotations
@@ -23,7 +25,15 @@ from PIL import Image
 from . import comfy
 from .style import OUTLINE
 
-Backend = Literal["codex", "comfy"]
+Backend = Literal["codex", "comfy", "local"]
+
+#: Every backend `draw` accepts, in the order the CLI offers them. A test holds
+#: this to `Backend`: the Comfy work once replaced a backend instead of adding
+#: beside it, and nothing noticed.
+BACKENDS: tuple[str, ...] = ("codex", "comfy", "local")
+
+#: The backends that run a ComfyUI workflow rather than an agent.
+WORKFLOW_BACKENDS = ("comfy", "local")
 
 
 INSTRUCTIONS = """Generate exactly one image with your built-in image generation tool and \
@@ -156,10 +166,13 @@ def _run_comfy(
     workflow: dict,
     timeout: int,
     scene: bool,
+    local: bool = False,
 ) -> str:
-    """One Comfy Cloud job. Returns why it failed, or "" if it saved an image."""
+    """One ComfyUI job. Returns why it failed, or "" if it saved an image."""
     try:
-        comfy.render(prompt, out_path, references, workflow, timeout, rules=not scene)
+        comfy.render(
+            prompt, out_path, references, workflow, timeout, rules=not scene, local=local
+        )
     except (comfy.ComfyError, httpx.HTTPError) as error:
         return str(error)
     return ""
@@ -182,8 +195,9 @@ def draw(
     key art, a neighbouring frame, whatever locks identity for this render.
 
     `backend` picks what does the drawing: `codex` (default, the ChatGPT
-    subscription) or `comfy` (the Comfy Cloud workflow at `workflow`, see
-    `cag.comfy`). One at a time — there is no fallback between them.
+    subscription), or the ComfyUI workflow at `workflow` run on Comfy Cloud
+    (`comfy`) or your own server (`local`), see `cag.comfy`. One at a time —
+    there is no fallback between them.
 
     `scene` draws a place instead of a character: no magenta backdrop is asked
     for and none is checked for, because nothing is cut out of a location.
@@ -199,7 +213,7 @@ def draw(
             return _verify(out_path, backdrop=not scene)
         raise DrawError(f"{out_path} already exists; refusing to overwrite a source")
 
-    if backend == "comfy":
+    if backend in WORKFLOW_BACKENDS:
         # A workflow is not an agent: nobody reads instructions about saving a
         # file or checking the backdrop, so only the prompt is sent. A backdrop
         # that comes back wrong is caught by `_verify` below and drawn again.
@@ -209,7 +223,9 @@ def draw(
         except comfy.ComfyError as error:
             raise DrawError(f"could not draw {out_path.name}: {error}") from error
         sent = prompt
-        run = partial(_run_comfy, prompt, out_path, references, loaded, timeout, scene)
+        run = partial(
+            _run_comfy, prompt, out_path, references, loaded, timeout, scene, backend == "local"
+        )
     else:
         instructions = SCENE_INSTRUCTIONS if scene else INSTRUCTIONS
         sent = f"{prompt}\n\n{instructions.format(filename=out_path.name)}"

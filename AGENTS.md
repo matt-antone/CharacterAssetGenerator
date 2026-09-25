@@ -84,6 +84,17 @@ builds again. A key art that is wrong gets deleted instead, and the next build
 redraws it. Show the user the key art and wait for their answer; do not approve
 on their behalf.
 
+## A build stops for text, and the session writes it
+
+cag calls no model for its text steps — the motion director, a written motion
+sheet, a bible a brief did not assemble. The AI running the session writes them.
+A step with no reply writes its prompt to `work/<slug>/text/<key>.prompt.md`,
+logs `waiting for text`, and stops that set and every set after it, since each
+starts from the last frame of the one before. Read the request, write the reply
+to `work/<slug>/text/<key>.md` beside it, and build again. `<key>` is a digest of
+the prompt, so a changed brief asks afresh. `CAG_TEXT_MODEL=codex` sends the text
+to the codex CLI instead.
+
 ## A failed set is normal, retry it
 
 A sheet render that comes back with the wrong figure count is rejected and

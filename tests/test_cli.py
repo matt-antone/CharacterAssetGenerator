@@ -31,7 +31,7 @@ def built(tmp_path, monkeypatch):
     monkeypatch.setattr(animation, "draw", fake_draw)
     monkeypatch.setattr(
         cli,
-        "ChatCodex",
+        "text_model",
         lambda *a, **kw: FakeMessagesListChatModel(
             responses=[AIMessage("A lounge performer."), AIMessage("Mic in the character-right hand.")]
         ),
@@ -58,7 +58,7 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
     monkeypatch.setattr(static_sheet, "draw", fake_draw)
     monkeypatch.setattr(
         cli,
-        "ChatCodex",
+        "text_model",
         lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
     )
     with pytest.raises(SystemExit) as stop:
@@ -102,7 +102,7 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
     monkeypatch.setattr(static_sheet, "draw", fake_draw)
     monkeypatch.setattr(
         cli,
-        "ChatCodex",
+        "text_model",
         lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
     )
     monkeypatch.setattr(cli, "write_motion", lambda *a, **kw: pytest.fail("no sheet needed"))

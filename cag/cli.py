@@ -12,6 +12,8 @@ from functools import partial
 from pathlib import Path
 from typing import Callable
 
+from langchain_core.language_models.chat_models import BaseChatModel
+
 from . import comfy
 from .animation import WHOLE_SET_SHEET, build_animation_graph
 from .assemble import (
@@ -25,7 +27,8 @@ from .assemble import (
     tile,
 )
 from .chat_codex import ChatCodex
-from .draw import draw
+from .chat_session import ChatSession, TextPending
+from .draw import BACKENDS, WORKFLOW_BACKENDS, draw
 from .edit import serve
 from .fidelity import report as fidelity_report
 from .motion import BUNDLE, MotionError, library, load_motion, read_bundle
@@ -125,7 +128,7 @@ def motion_for(
     if set_name in spec.playbacks:
         plan = replace(plan, playback=spec.playbacks[set_name])
     return write_motion(
-        ChatCodex(),
+        text_model(work_dir),
         spec,
         set_name,
         intent,
@@ -193,7 +196,7 @@ def render_set(
         motion.view, detail_after_key=backend == "codex",
     )
     log(f"[{set_name}] reference: {key_art.name}")
-    animated = build_animation_graph(ChatCodex(), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
+    animated = build_animation_graph(text_model(work_dir), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
         {
             "spec": spec,
             "bible": static["bible"],
@@ -239,7 +242,7 @@ def build(
 
     log(f"[static] {spec.name}: bible, key art, projection")
     try:
-        static = build_static_graph(ChatCodex(), draw_fn=draw_fn).invoke(
+        static = build_static_graph(text_model(work_dir), draw_fn=draw_fn).invoke(
             {"spec": spec, "work_dir": work_dir, "detail_after_key": backend == "codex"}
         )
     except ApprovalRequired as gate:
@@ -248,6 +251,8 @@ def build(
             f"  approve it:  uv run cag approve {spec_path}\n"
             f"  or redraw it: rm {gate} and build again"
         ) from None
+    except TextPending as pending:
+        raise SystemExit(f"[static] {spec.name}: {pending}") from None
 
     views = {}
     for view in [KEY_VIEW, *projection_views()]:
@@ -283,6 +288,15 @@ def build(
                     backend,
                     frames_per_sheet,
                 )
+            except TextPending as pending:
+                # Not a failure: the session's AI answers it and the build goes on.
+                # The chain stops here, because every later set starts from this
+                # one's last frame and would be drawn, and cached, from the wrong one.
+                log(f"[{name}] {pending}")
+                later = chosen[chosen.index(name) + 1 :]
+                if later:
+                    log(f"[sets] {', '.join(later)} wait for {name}")
+                break
             except Exception as error:  # one bad set must not lose the others
                 log(f"[{name}] FAILED: {error}")
                 continue
@@ -356,16 +370,22 @@ def main(argv: list[str] | None = None) -> int:
     build_parser.add_argument("--out", type=Path, default=Path("outputs"))
     build_parser.add_argument(
         "--draw-backend",
-        choices=["codex", "comfy"],
+        choices=list(BACKENDS),
         default=os.environ.get("CAG_DRAW_BACKEND", "codex"),
-        help="what draws the art: codex (ChatGPT sub) or comfy (Comfy Cloud workflow). "
-        "Default: $CAG_DRAW_BACKEND, else codex",
+        help="what draws the art: codex (ChatGPT sub), comfy (a ComfyUI workflow on Comfy "
+        "Cloud) or local (the same, on your own ComfyUI). Default: $CAG_DRAW_BACKEND, else codex",
     )
     build_parser.add_argument(
         "--comfy-workflow",
         type=Path,
         help="API-format ComfyUI workflow for --draw-backend comfy. "
         f"Default: $CAG_COMFY_WORKFLOW, else {comfy.DEFAULT_WORKFLOW}",
+    )
+    build_parser.add_argument(
+        "--comfy-pose-workflow",
+        type=Path,
+        help="API-format ComfyUI workflow that re-poses a traced set frame by frame. "
+        f"Default: $CAG_COMFY_POSE_WORKFLOW, else {comfy.POSE_WORKFLOW}",
     )
     build_parser.add_argument(
         "--frames-per-sheet",
@@ -440,6 +460,9 @@ def main(argv: list[str] | None = None) -> int:
         spec = load_spec(args.spec)
         log(f"[static] {spec.name}: approved {approve(args.work / spec.slug)}")
         return 0
+    if args.comfy_pose_workflow:
+        # Every set reads it through `comfy.pose_workflow_path`, as the env var does.
+        os.environ["CAG_COMFY_POSE_WORKFLOW"] = str(args.comfy_pose_workflow)
     build(
         args.spec,
         args.motion,
@@ -455,6 +478,17 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
+def text_model(work_dir: Path) -> BaseChatModel:
+    """Who writes a build's text: the agent session running it, unless told otherwise.
+
+    `CAG_TEXT_MODEL=codex` sends it to the codex CLI instead, as every build did
+    before; anything else is answered by the session (see `cag.chat_session`).
+    """
+    if os.environ.get("CAG_TEXT_MODEL") == "codex":
+        return ChatCodex()
+    return ChatSession(folder=work_dir / "text")
+
+
 def backend_state(backend: str, frames_per_sheet: int | None = None) -> dict:
     """How the graphs draw for this backend, where the backends differ.
 
@@ -463,12 +497,13 @@ def backend_state(backend: str, frames_per_sheet: int | None = None) -> dict:
     so a set is drawn whole (see `WHOLE_SET_SHEET`). Codex keeps both as they
     were measured. `frames_per_sheet`, when given, overrides either default.
     """
-    state = {} if backend == "codex" else {
+    state = {} if backend not in WORKFLOW_BACKENDS else {
         "detail_after_key": False,
         "frames_per_sheet": WHOLE_SET_SHEET,
         # A traced set is drawn a frame at a time by re-posing its reference; see
         # `pose_edit_frames`. Only a written set still goes on a frame sheet.
-        "pose_workflow": comfy.POSE_WORKFLOW,
+        "pose_workflow": comfy.pose_workflow_path(),
+        "snap_to_key": True,
     }
     if frames_per_sheet:
         state["frames_per_sheet"] = frames_per_sheet
@@ -479,21 +514,22 @@ def draw_with(backend: str, workflow: Path | None = None) -> Callable[..., Path]
     """The draw function a build hands its graphs, checked before anything is drawn.
 
     None means codex, and keeps each module on its own `draw` name — the seam the
-    tests replace. Comfy's workflow and key are checked here, once, so a missing
-    one stops the build by name instead of failing every set in turn.
+    tests replace. A workflow backend's workflows and key are checked here, once,
+    so a missing one stops the build by name instead of failing every set in turn.
     """
     if backend == "codex":
         return None
-    path = comfy.workflow_path(workflow)
+    local = backend == "local"
+    path = comfy.workflow_path(workflow, local=local)
     try:
         loaded = comfy.load_workflow(path)
-        comfy.load_workflow(comfy.POSE_WORKFLOW)
-        comfy.Client()
+        comfy.load_workflow(comfy.pose_workflow_path())
+        comfy.Client(local=local)
     except comfy.ComfyError as error:
-        raise SystemExit(f"[comfy] {error}") from None
-    log(f"[comfy] drawing with {path}, {comfy.reference_slots(loaded)} reference slots; "
-        f"traced sets frame by frame with {comfy.POSE_WORKFLOW}")
-    return partial(draw, backend="comfy", workflow=path)
+        raise SystemExit(f"[{backend}] {error}") from None
+    log(f"[{backend}] drawing with {path}, {comfy.reference_slots(loaded)} reference slots; "
+        f"traced sets frame by frame with {comfy.pose_workflow_path()}")
+    return partial(draw, backend=backend, workflow=path)
 
 
 if __name__ == "__main__":

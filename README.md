@@ -127,16 +127,16 @@ pingpong while the crooner's loops without either of them touching `sets.py`.
 
 ## Who draws
 
-Every render goes through one of two backends, picked per build:
+Every render goes through one backend, picked per build:
 
 ```bash
 uv run cag build specs/default/belter.json                        # codex, the default
 uv run cag build specs/default/belter.json --draw-backend comfy   # Comfy Cloud
+uv run cag build specs/default/belter.json --draw-backend local   # your own ComfyUI
 ```
 
-`CAG_DRAW_BACKEND=comfy` makes comfy the default. The text calls (the bible
-where a brief does not assemble its own, a written motion sheet, the motion
-director) stay on codex either way.
+`CAG_DRAW_BACKEND` sets the default. The rest of a build — briefs, prompts, the
+key art gate, the mask, assembly, and the text — is the same whichever draws.
 
 **codex** is an agent with an image tool: it is handed the prompt plus
 instructions to save the file and to redraw until the backdrop is magenta.
@@ -172,6 +172,44 @@ batched behind portrait key art.
 
 The magenta check still applies: a render with scenery behind the character is
 drawn again, the same as under codex.
+
+**local** runs the same kind of workflow on a ComfyUI server of your own, at
+`http://127.0.0.1:8188` unless `CAG_LOCAL_COMFY_URL` says otherwise. It needs no
+key and bills nothing, but it can only run nodes and models installed there, so
+no partner nodes: Nano Banana does not exist on a local server. Its default
+workflow is `comfy/qwen-image-2.1.json` (`--comfy-workflow` or
+`CAG_LOCAL_COMFY_WORKFLOW` names another). Qwen-Image-2.1's weights are under
+the Qwen Research License, research and evaluation only, so a package meant for
+anything else draws with an Apache-licensed workflow instead.
+
+A traced set under either workflow backend is drawn a frame at a time by
+`comfy/pose-edit.json` (`--comfy-pose-workflow` or `CAG_COMFY_POSE_WORKFLOW`):
+Qwen-Image-Edit-2511 at fp8 with the AnyPose LoRAs and the Lightning 4-step
+LoRA, which re-poses the set's reference into each traced photograph. Every file
+it loads runs on a 16 GB card, so Comfy Cloud and a local server draw the same
+dance. Each frame is then snapped back onto the reference's pixel grid and
+palette, with a black outline, on exact magenta (`cag.snap`): the workflow keeps
+the character, not the pixel art. The render as drawn is kept as `NN.raw.png`.
+
+## Who writes
+
+The text steps (the bible where a brief does not assemble its own, a written
+motion sheet, the motion director) are written by the AI session running the
+build, whichever agent that is. cag calls no model for them. A step with no
+reply writes its prompt to `work/<slug>/text/<key>.prompt.md` and the build
+stops there, the way it stops for key art approval:
+
+```
+[dance] waiting for text: answer work/belter/text/3f2a….prompt.md by writing the reply to work/belter/text/3f2a….md, then build again
+[sets] ko, sing, victory wait for dance
+```
+
+The session reads the request, writes the reply beside it, and builds again.
+`key` is a digest of the prompt, so a reply only answers the question it was
+written for. A set waiting for text stops the chain, because every later set
+starts from its last frame. A written set takes two rounds: its motion sheet,
+then its director. `CAG_TEXT_MODEL=codex` sends the text to the `codex` CLI
+instead.
 
 ## Every set needs a hand pass
 
@@ -230,10 +268,10 @@ the sheet and loses the edits**. Opened straight from disk instead of through
 
 ## Constraints this was built under
 
-- **No OpenAI API.** The model calls always go through the local `codex` CLI on
-  a ChatGPT subscription, and so does the image generation unless a build asks
-  for Comfy Cloud. `cag.chat_codex.ChatCodex` is a LangChain `BaseChatModel`
-  that shells out to `codex exec`.
+- **No OpenAI API.** Codex image generation goes through the local `codex` CLI
+  on a ChatGPT subscription, as does text under `CAG_TEXT_MODEL=codex`.
+  `cag.chat_codex.ChatCodex` is a LangChain `BaseChatModel` that shells out to
+  `codex exec`; `cag.chat_session.ChatSession` is the one the session answers.
 - **Vision is macOS only.** The cutout's fallback path is Apple's Vision
   framework (`VNGenerateForegroundInstanceMaskRequest`) through pyobjc. pyobjc
   installs only on macOS; elsewhere the chroma key does all the cutting, and a

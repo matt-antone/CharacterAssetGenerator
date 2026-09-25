@@ -226,7 +226,7 @@ def cloud(monkeypatch, tmp_path):
     real = comfy.Client
     monkeypatch.setattr(comfy, "POLL_SECONDS", 0)
     monkeypatch.setattr(
-        comfy, "Client", lambda: real(api_key="k", transport=httpx.MockTransport(fake))
+        comfy, "Client", lambda **kw: real(api_key="k", transport=httpx.MockTransport(fake), **kw)
     )
     workflow = tmp_path / "workflow.json"
     workflow.write_text(json.dumps(WORKFLOW))
@@ -297,3 +297,75 @@ def test_a_build_without_a_key_stops_before_drawing(monkeypatch, tmp_path):
     # The name Comfy's own samples use works too.
     monkeypatch.setenv("COMFY_API_KEY", "k")
     assert cli.draw_with("comfy", workflow) is not None
+
+
+class FakeLocal(FakeCloud):
+    """A ComfyUI server of your own: the same routes, and the image served directly."""
+
+    def __call__(self, request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/view":
+            self.requests.append(request)
+            return httpx.Response(200, content=self.image)
+        return super().__call__(request)
+
+
+@pytest.fixture
+def local(monkeypatch, tmp_path):
+    fake = FakeLocal()
+    real = comfy.Client
+    monkeypatch.setattr(comfy, "POLL_SECONDS", 0)
+    monkeypatch.setattr(
+        comfy, "Client", lambda **kw: real(transport=httpx.MockTransport(fake), **kw)
+    )
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text(json.dumps(WORKFLOW))
+    fake.workflow = workflow
+    return fake
+
+
+def test_draw_with_local_sends_no_key_to_your_own_server(local, tmp_path, monkeypatch):
+    monkeypatch.setenv("COMFY_CLOUD_API_KEY", "a-cloud-key-that-must-stay-home")
+    monkeypatch.delenv("CAG_LOCAL_COMFY_URL", raising=False)
+    out = draw("a singer", tmp_path / "art.png", backend="local", workflow=local.workflow)
+
+    with Image.open(out) as image:
+        assert image.size == (8, 8)
+    assert {r.url.host for r in local.requests} == {"127.0.0.1"}
+    assert all("x-api-key" not in r.headers for r in local.requests)
+    assert "extra_data" not in local.submitted[0]
+
+
+def test_a_local_error_says_it_was_local(tmp_path):
+    def refuse(request):
+        return httpx.Response(400, text="Cannot execute because node GeminiImage2Node does not exist.")
+
+    client = comfy.Client(local=True, transport=httpx.MockTransport(refuse))
+    with pytest.raises(comfy.ComfyError, match="local ComfyUI submit failed.*GeminiImage2Node"):
+        client.submit({"1": {"class_type": "GeminiImage2Node", "inputs": {}}})
+
+
+def test_a_local_build_needs_no_key_and_has_its_own_default_workflow(monkeypatch):
+    from cag import cli
+
+    monkeypatch.delenv("COMFY_CLOUD_API_KEY", raising=False)
+    monkeypatch.delenv("COMFY_API_KEY", raising=False)
+    monkeypatch.delenv("CAG_LOCAL_COMFY_WORKFLOW", raising=False)
+    assert cli.draw_with("local") is not None
+    # Nano Banana is a partner node: no local server can run the cloud default.
+    assert comfy.workflow_path(local=True) == comfy.LOCAL_WORKFLOW != comfy.DEFAULT_WORKFLOW
+    classes = {n["class_type"] for n in comfy.load_workflow(comfy.LOCAL_WORKFLOW).values()}
+    assert not any(c.startswith("Gemini") for c in classes)
+
+
+def test_every_backend_is_offered_and_none_goes_missing(capsys):
+    """The Comfy work once replaced a backend instead of adding beside it."""
+    import typing
+
+    from cag import cli
+    from cag.draw import BACKENDS, Backend
+
+    assert set(BACKENDS) == set(typing.get_args(Backend))
+    assert {"codex", "comfy", "local"} <= set(BACKENDS)
+    with pytest.raises(SystemExit):
+        cli.main(["build", "--help"])
+    assert "{" + ",".join(BACKENDS) + "}" in capsys.readouterr().out
