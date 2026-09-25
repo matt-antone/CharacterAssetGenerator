@@ -417,6 +417,18 @@ def home_x(poses: dict[int, dict[str, list[float]]]) -> float | None:
     return statistics.fmean(xs) if xs else None
 
 
+def contact_row(
+    pts: dict[str, list[float]], floor_y: float, body_h: float, height_inches: float, airborne: bool
+) -> int:
+    """The cell row a frame's feet land on: the contact row, or above it by as far
+    as an airborne frame's lowest sole is off the floor."""
+    if not airborne or not pts or not body_h:
+        return ANIM_CONTACT_ROW
+    px = anim_subject_height_px(height_inches) / body_h
+    lowest = max(pts[name][1] for name in SOLES if name in pts)
+    return ANIM_CONTACT_ROW - max(0, round((floor_y - lowest) * px))
+
+
 def placement(
     subject: Image.Image,
     pts: dict[str, list[float]],
@@ -438,10 +450,7 @@ def placement(
     if not pts or not body_h or home is None:
         return None, ANIM_CONTACT_ROW
     px = anim_subject_height_px(height_inches) / body_h
-    row = ANIM_CONTACT_ROW
-    if airborne:
-        lowest = max(pts[name][1] for name in SOLES if name in pts)
-        row -= max(0, round((floor_y - lowest) * px))
+    row = contact_row(pts, floor_y, body_h, height_inches, airborne)
 
     # The torso's rows in the drawing, read off the pose. The box runs crown to
     # lowest landmark: a generator draws feet, not the floor under a jump.
@@ -657,6 +666,78 @@ def slice_frame_sheet(sheet: Path | str, count: int, pad: int = 2 * BORDER_PIXEL
         cell.paste(figure, (pad, pad))
         cells.append(cell)
     return cells
+
+
+#: A frame whose figure is this far from the set's standing height, and that the
+#: tracer does not call airborne, is reported: the generator may have drawn it at
+#: another zoom. It is not rescaled on its own — see `canvas_to_cells`.
+ZOOM_OUTLIER = 0.10
+
+
+def canvas_to_cells(
+    sources: dict[int, Path],
+    dst_for: Callable[[int], Path],
+    poses: dict[int, dict[str, list[float]]],
+    floor_y: float,
+    body_h: float,
+    height_inches: float,
+    airborne: frozenset[int] = frozenset(),
+) -> tuple[dict[int, Path], list[int]]:
+    """Register renders that share one canvas with one transform for the whole set.
+
+    A pose workflow draws each frame as its own render, but every render is an
+    edit of the same reference at the same canvas size, so the generator has
+    already drawn them at one magnification and in one place. Registering each
+    frame on its own, as `set_to_cells` does with a group of one, measured a
+    scale off every frame's traced pose and put the torso where the trace said:
+    that trusted the render to have copied the performer's proportions, and when
+    it drew a straight leg for a bent one the frame was rescaled anyway. Belter's
+    club-01 dance came back from the generator within 1.1% of one height and the
+    registration spread it to 1.9%, a size pop the renders never had.
+
+    So one scale and one anchor serve every frame, and each frame keeps the size
+    and position the generator gave it relative to the others. The scale is the
+    median of what every frame's traced pose says, so no one frame's mismatch
+    moves it and the character stays at its height in inches: a figure's box
+    runs to the top of its hair, and scaling the box instead drew Belter 7%
+    short. A set with no landmarks takes its standing height the way
+    `set_to_cells` does. The anchor puts the set's median centre on the cell's
+    middle column. Only the feet are placed per frame: each lands on the
+    contact row, or is lifted off it when the tracer says the frame is airborne.
+
+    What it gives up: travel the trace has and the render does not. A generator
+    that draws every frame centred loses a dance's side-to-side sway, which the
+    torso placement used to put back in.
+
+    Returns the cells, and the frames `ZOOM_OUTLIER` calls into question.
+    """
+    subjects = {index: cutout(source) for index, source in sorted(sources.items())}
+    boxes = {index: subject_box(subject) for index, subject in subjects.items()}
+    heights = sorted(bottom - top for _, top, _, bottom in boxes.values())
+    # max() keeps the first of equal clusters, and heights are sorted, so a tie goes to the shorter
+    standing = statistics.median(
+        max(([x for x in heights if h <= x <= h * STANDING_SPREAD] for h in heights), key=len)
+    )
+    if body_h and all(poses.get(index) for index in subjects):
+        scale = statistics.median(
+            frame_scale(subject, poses[index], floor_y, body_h, height_inches)
+            for index, subject in subjects.items()
+        )
+    else:
+        scale = anim_subject_height_px(height_inches) / standing
+    anchor = (statistics.median((left + right) / 2 for left, _, right, _ in boxes.values()), CELL_WIDTH / 2)
+
+    cells, outliers = {}, []
+    for index, subject in subjects.items():
+        _, top, _, bottom = boxes[index]
+        if index not in airborne and abs((bottom - top) / standing - 1) > ZOOM_OUTLIER:
+            outliers.append(index)
+        row = contact_row(poses.get(index, {}), floor_y, body_h, height_inches, index in airborne)
+        dst = dst_for(index)
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        register(subject, scale, row, anchor).save(dst, format="PNG")
+        cells[index] = dst
+    return cells, outliers
 
 
 def set_to_cells(

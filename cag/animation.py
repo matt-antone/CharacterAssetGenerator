@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+import sys
 from functools import partial
 from pathlib import Path
 from typing import Callable, TypedDict
@@ -21,7 +22,14 @@ from langgraph.graph import END, START, StateGraph
 from .assemble import tile
 from .draw import DrawError, draw
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
-from .mask import MaskError, home_x, pose_to_cell, set_to_cells, slice_frame_sheet
+from .mask import (
+    MaskError,
+    canvas_to_cells,
+    home_x,
+    pose_to_cell,
+    set_to_cells,
+    slice_frame_sheet,
+)
 from .motion import Frame, MotionSheet
 from .prompts import (
     DIRECTOR_SYSTEM,
@@ -74,6 +82,9 @@ class AnimationState(TypedDict, total=False):
     #: Put each re-posed frame back on the reference's pixel grid and palette
     #: (see `cag.snap`): the pose workflow keeps the character, not the art.
     snap_to_key: bool
+    #: Every frame is its own render of the same reference on the same canvas,
+    #: so the set is registered with one transform; see `canvas_to_cells`.
+    shared_canvas: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
@@ -329,11 +340,13 @@ def pose_edit_frames(state: AnimationState, draw_fn: Callable[..., Path]) -> Ani
     between frames the way separate renders of a sheet did; and nothing shares
     a canvas, so no figure is shrunk to fit.
 
-    Each frame is registered at its own scale, read off its own traced pose.
-    The photographs share one camera, but the renders do not share a zoom:
-    Belter's `shuffle-01` dance came back between 1178 and 1430px tall for a
-    dancer whose height barely changes, and one scale across the set left that
-    1.22x spread in the cells.
+    The frames are registered together, with one transform for the set (see
+    `canvas_to_cells`): every render is an edit of the same reference on the
+    same canvas, so the generator's own sizes and positions are the ones to
+    keep. They were not always: Belter's `shuffle-01` dance once came back
+    between 1178 and 1430px tall, which is why frames were each rescaled off
+    their traced pose, and why a frame that far out is now reported by name
+    instead of being quietly rescaled.
 
     A frame on disk is kept, as `draw` keeps every render, so an interrupted set
     resumes where it stopped.
@@ -352,7 +365,11 @@ def pose_edit_frames(state: AnimationState, draw_fn: Callable[..., Path]) -> Ani
     stamp = motion_stamp(state)
     stamp.parent.mkdir(parents=True, exist_ok=True)
     stamp.write_text(motion_digest(motion) + "\n")
-    return {"sources": sources, "frame_sheets": [[index] for index in sorted(sources)]}
+    return {
+        "sources": sources,
+        "frame_sheets": [[index] for index in sorted(sources)],
+        "shared_canvas": True,
+    }
 
 
 def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
@@ -480,6 +497,24 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
     fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
     poses = {frame.index: frame.pts for frame in motion.frames}
     airborne = frozenset(frame.index for frame in motion.frames if frame.airborne)
+    if state.get("shared_canvas"):
+        cells, outliers = canvas_to_cells(
+            state["sources"],
+            partial(frame_path, state, "cells"),
+            poses,
+            motion.floor_y,
+            motion.body_h,
+            state["spec"].height_inches,
+            airborne,
+        )
+        if outliers:
+            print(
+                f"[{state['set_name']}] frames {outliers} are more than 10% off the set's "
+                "height: the generator may have drawn them at another zoom",
+                file=sys.stderr,
+                flush=True,
+            )
+        return {"cells": cells}
     if single_scale:
         return {
             "cells": set_to_cells(

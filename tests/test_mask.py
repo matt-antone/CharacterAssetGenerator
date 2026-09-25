@@ -463,3 +463,90 @@ def test_a_kicked_leg_does_not_shove_the_body_and_a_hop_leaves_the_floor(tmp_pat
     assert boxes[0][3] - 1 == ANIM_CONTACT_ROW
     lift = round((182 - 166) / 140 * anim_subject_height_px(69))
     assert boxes[0][3] - boxes[2][3] == pytest.approx(lift, abs=1)
+
+
+def _canvas_frames(tmp_path, monkeypatch, boxes, size=(300, 450)):
+    """One transparent render per box, on one shared canvas, cut out as drawn."""
+    from cag import mask
+
+    monkeypatch.setattr(mask, "cutout", lambda src: Image.open(src).convert("RGBA"))
+    sources = {}
+    for index, box in enumerate(boxes):
+        sources[index] = tmp_path / f"{index:02d}.png"
+        figure(size, box).save(sources[index])
+    return sources
+
+
+def _cell_box(path):
+    return subject_box(Image.open(path))
+
+
+def test_one_canvas_is_registered_with_one_scale_whatever_the_traced_poses_say(tmp_path, monkeypatch):
+    """Belter's dance came back within 1.1% of one height and per-frame
+    registration spread it to 1.9%: the renders already agree, so keep that."""
+    from cag.mask import canvas_to_cells
+
+    from cag.motion import load_motion
+
+    # The sample's traced poses each ask for a different scale, were they asked.
+    motion = load_motion("motions/sample/motion.json")
+    poses = {i: motion.frames[i].pts for i in range(3)}
+    sources = _canvas_frames(tmp_path, monkeypatch, [(100, 40, 160, 420)] * 3)
+    cells, outliers = canvas_to_cells(
+        sources, lambda i: tmp_path / "cells" / f"{i:02d}.png", poses,
+        motion.floor_y, motion.body_h, 67,
+    )
+    heights = {b[3] - b[1] for b in map(_cell_box, cells.values())}
+    assert len(heights) == 1, "one factor for every frame"
+    assert outliers == []
+
+
+def test_one_canvas_with_no_landmarks_scales_its_standing_height_to_the_character(tmp_path, monkeypatch):
+    from cag.mask import canvas_to_cells
+
+    sources = _canvas_frames(tmp_path, monkeypatch, [(100, 40, 160, 420)] * 3)
+    cells, _ = canvas_to_cells(sources, lambda i: tmp_path / "c" / f"{i:02d}.png", {}, 0.96, 0.8, 67)
+    heights = {b[3] - b[1] for b in map(_cell_box, cells.values())}
+    assert len(heights) == 1 and abs(heights.pop() - anim_subject_height_px(67)) <= 2
+
+
+def test_each_frame_keeps_where_the_generator_put_it_and_lands_its_feet(tmp_path, monkeypatch):
+    from cag.mask import canvas_to_cells
+
+    # The second render stands 30px further right; the third's feet sit 6px higher.
+    sources = _canvas_frames(
+        tmp_path, monkeypatch, [(100, 40, 160, 420), (130, 40, 190, 420), (100, 34, 160, 414)]
+    )
+    cells, _ = canvas_to_cells(sources, lambda i: tmp_path / "c" / f"{i:02d}.png", {}, 0.96, 0.8, 67)
+    boxes = [_cell_box(cells[i]) for i in range(3)]
+    scale = (boxes[0][3] - boxes[0][1]) / 380
+    assert abs((boxes[1][0] - boxes[0][0]) - 30 * scale) <= 1, "relative position survives"
+    assert boxes[2][0] == boxes[0][0], "no re-centring of a frame that did not move"
+    assert {b[3] for b in boxes} == {ANIM_CONTACT_ROW + 1}, "every frame's feet on the contact row"
+
+
+def test_a_frame_drawn_at_another_zoom_is_reported_not_rescaled(tmp_path, monkeypatch):
+    from cag.mask import canvas_to_cells
+
+    sources = _canvas_frames(
+        tmp_path, monkeypatch, [(100, 40, 160, 420)] * 4 + [(110, 120, 150, 420)]
+    )
+    cells, outliers = canvas_to_cells(
+        sources, lambda i: tmp_path / "c" / f"{i:02d}.png", {}, 0.96, 0.8, 67
+    )
+    assert outliers == [4]
+    short = _cell_box(cells[4])
+    tall = _cell_box(cells[0])
+    assert (short[3] - short[1]) < 0.85 * (tall[3] - tall[1]), "drawn small, kept small"
+
+
+def test_an_airborne_frame_is_lifted_off_the_contact_row(tmp_path, monkeypatch):
+    from cag.mask import canvas_to_cells
+
+    sources = _canvas_frames(tmp_path, monkeypatch, [(100, 40, 160, 420)] * 2)
+    soles = {name: [0.5, 0.86] for name in ("anL", "anR")}
+    cells, _ = canvas_to_cells(
+        sources, lambda i: tmp_path / "c" / f"{i:02d}.png", {1: soles}, 0.96, 0.8, 67,
+        airborne=frozenset({1}),
+    )
+    assert _cell_box(cells[1])[3] < _cell_box(cells[0])[3]
