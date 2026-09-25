@@ -344,10 +344,13 @@ CARRY_REFERENCE = (
 )
 
 #: Sheet-mode counterpart to `STANCE_REFERENCE`, said of every figure at once.
+#: It names the pose reference rather than the cue: a photographic sheet carries
+#: no cues, and pointing at one that is not there left the key art's wide stance
+#: as the only stance in the prompt.
 STANCE_SHEET_REFERENCE = (
     "The key art shows the character in one stance only; that stance is not locked. Stance and "
-    "foot spacing for each figure come from its own pose cue, not from the key art, even where "
-    "that means one figure stands narrower or wider than another or than the key art does."
+    "foot spacing for each figure come from its own pose reference, not from the key art, even "
+    "where that means one figure stands narrower or wider than another or than the key art does."
 )
 
 

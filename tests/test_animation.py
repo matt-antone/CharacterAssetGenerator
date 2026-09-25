@@ -437,7 +437,8 @@ def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_r
     an index-only cache kept every render drawn from the prose it replaced.
     """
     before = len(fake_frame_sheet_draw.calls)
-    swapped = load_motion(SAMPLE)
+    # The same photographs sheet_run drew from: they are part of what "same" means.
+    swapped = posed(load_motion(SAMPLE), tmp_path)
     moved = tuple(
         replace(frame, cue=f"{frame.cue} arms overhead") for frame in swapped.frames
     )
@@ -457,6 +458,24 @@ def test_a_different_motion_sheet_redraws_instead_of_reusing_the_old_art(sheet_r
 
     animation.frame_sheet({**state, "motion": replace(swapped, frames=moved)}, draw_fn=fake_frame_sheet_draw)
     assert len(fake_frame_sheet_draw.calls) > before, "a changed sheet must redraw"
+
+
+def test_new_pose_photos_with_the_same_cues_change_the_stamp(tmp_path):
+    """A bundle re-cut with new photographs keeps its cues, and on the photo
+    route the photographs are the whole pose reference. The stamp has to see
+    them, or the frames drawn from the old photographs are kept."""
+    import hashlib
+
+    motion = load_motion(SAMPLE)
+    before = animation.motion_digest(posed(motion, tmp_path / "old"))
+    recut = posed(motion, tmp_path / "new")
+    Image.new("RGB", (384, 512), (200, 10, 10)).save(recut.photos[0])
+    assert animation.motion_digest(recut) != before
+
+    # A set with no photographs keeps the stamp it was drawn under.
+    frames = "\n".join(f"{f.index}\t{f.role}\t{f.cue}\t{f.note}" for f in motion.frames)
+    unchanged = hashlib.sha256(f"{motion.view}\n{frames}".encode()).hexdigest()
+    assert animation.motion_digest(motion) == unchanged
 
 
 def test_the_pose_reference_is_described_as_a_photograph():

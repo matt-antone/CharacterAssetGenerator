@@ -24,6 +24,7 @@ from .assemble import (
 from .chat_codex import ChatCodex
 from .draw import draw
 from .edit import serve
+from .fidelity import report as fidelity_report
 from .motion import BUNDLE, MotionError, library, load_motion, read_bundle
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
@@ -372,7 +373,28 @@ def main(argv: list[str] | None = None) -> int:
     )
     edit_parser.add_argument("--port", type=int, default=8765)
 
+    fidelity_parser = sub.add_parser(
+        "fidelity", help="bone-angle error of a rendered set against its motion's photographs"
+    )
+    fidelity_parser.add_argument("spec", type=Path, help="path to a character brief")
+    fidelity_parser.add_argument("--set", dest="set_name", default="dance")
+    fidelity_parser.add_argument("--work", type=Path, default=Path("work"))
+    fidelity_parser.add_argument("--motion-root", type=Path, default=MOTION_ROOT)
+
     args = parser.parse_args(argv)
+    if args.command == "fidelity":
+        spec = load_spec(args.spec)
+        name = spec.motions.get(args.set_name)
+        if name is None:
+            log(f"{spec.name}'s {args.set_name} set names no motion; there is nothing to compare")
+            return 1
+        photos = library(args.motion_root)[name].photos
+        cells = [
+            args.work / spec.slug / "cells" / args.set_name / f"{index:02d}.png"
+            for index in range(len(photos))
+        ]
+        print(fidelity_report(cells, list(photos)))
+        return 0
     if args.command == "motions":
         sheets = library(args.motion_root)
         if not sheets:
