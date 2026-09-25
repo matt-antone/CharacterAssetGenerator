@@ -72,6 +72,35 @@ READY_STANCE = (
     "not give one, a relaxed stance with the arms readable and clear of the torso."
 )
 
+#: READY_STANCE only asks for readable arms when the brief gives no stance, so a
+#: brief that gives one lost the guarantee: Belter's "free hand compact and
+#: relaxed" came back on Qwen-Image-2.1 with that hand tucked behind her back.
+#: Every frame is drawn from the key art, and a hand it hides is one no frame
+#: has a reference for. Said on every key art, whatever the brief's stance.
+#: A rule alone lost two rolls in three to "compact": it is a concrete default
+#: position now, placed straight after the description, and a stance that does
+#: place the free hand (a hand on the hip, a raised fist) still wins.
+KEY_ARMS = (
+    "Both arms and both hands are in full view, with every finger of each hand visible. If the "
+    "stance below places the free hand, draw it there, in front of the body or out to the side. "
+    "Otherwise the free arm hangs straight down at the character's side, clear of the torso, the "
+    "open hand beside the thigh and below the hair. Never behind the back, in a pocket, or hidden "
+    "by hair, a sleeve or the other arm."
+)
+
+#: The key art is the identity every later render copies, so anything it drops
+#: is dropped for good. Two Qwen-Image-2.1 rolls of Belter both left out the
+#: crimson waist accent, drew her near-black boots mid-brown, and gave her the
+#: long upright fashion figure her brief avoids. The avoid list stays out of the
+#: prompt (see `assemble_bible`), so this says the right thing positively.
+KEY_COMPLETE = (
+    "This drawing is the reference every other render of the character is copied from. Every "
+    "garment, accessory and colour named in the description above appears in it, each where and "
+    "in the colour the description gives: none left out, merged into another piece, or drawn "
+    "lighter or darker than stated. The body's proportions follow the build and height described "
+    "above rather than a default fashion-illustration figure."
+)
+
 #: Stance for a projection view, whose whole job is being comparable to its
 #: siblings. Never for a set reference: the animation frames are drawn from
 #: that picture, and an even-weight arms-down base came back through every
@@ -230,9 +259,11 @@ def view_prompt(
         part for part in [
             f"Draw {spec.name}.",
             bible,
+            KEY_ARMS if view == KEY_VIEW and not pose else "",
             props,
             line,
             stance,
+            KEY_COMPLETE if view == KEY_VIEW else "",
             f"{STYLE} {STANDING}",
             BACKDROP,
             detail_clause(detail_level),
