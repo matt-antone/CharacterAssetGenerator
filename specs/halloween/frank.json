@@ -45,6 +45,9 @@
     "mic"
   ],
   "animations": {
+    "dance": {
+      "motion": "hiphop-03"
+    },
     "sing": {
       "intent": "Heartfelt ballad vocal loop: lift the flat-topped head slightly, press the free character-left hand to the chest, then settle back into his square ready stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [

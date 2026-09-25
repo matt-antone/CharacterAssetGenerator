@@ -70,6 +70,9 @@
     "arm"
   ],
   "animations": {
+    "dance": {
+      "motion": "twist-03"
+    },
     "sing": {
       "intent": "Open-air doo-wop loop: he holds nothing to his face and yells the part straight up into the room — tip the head back so the hat brim lifts clear, open the mouth wide off the long teeth for a sustained vowel with the belly pushing the note, raise the free character-left hand open beside the ear as though listening for the harmony above him, then settle back into his ready stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [

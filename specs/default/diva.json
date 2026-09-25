@@ -36,6 +36,9 @@
     "mic"
   ],
   "animations": {
+    "dance": {
+      "motion": "breakin-01"
+    },
     "sing": {
       "intent": "Restrained vocal loop: breathe through a subtle torso rise, move the free palm from sternum into one precise phrase gesture, then restore the statuesque stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [

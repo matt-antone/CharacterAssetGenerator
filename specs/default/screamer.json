@@ -35,6 +35,9 @@
     "mic"
   ],
   "animations": {
+    "dance": {
+      "motion": "shuffle-03"
+    },
     "sing": {
       "intent": "Loud vocal loop: lean back through the flexed knees, throw the free arm open, then recover into the heavy planted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [

@@ -37,6 +37,9 @@
     "a headset, stand, cable, handheld prop, cane or weapon"
   ],
   "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
     "sing": "Formal vocal loop without a microphone: expand the broad chest for a sustained note, unfold one large hand from the front for a controlled phrase, then refold both hands in the centered stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
     "flinch": "Brief room-sound reaction: the broad shoulders rise and the folded hands separate for a beat, then he restores the dignified centered posture. No opponent, strike, or contact.",
     "guard": "One-shot stage self-protection: turn the broad torso slightly, bring both large hands into a calm protective overlap, then hold a stable formal final stance. Not a combat action.",
