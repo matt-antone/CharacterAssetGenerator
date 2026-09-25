@@ -19,8 +19,14 @@ the operating manual for this pipeline, and it wins over anything here.
 ## Running a build
 
 ```bash
-uv run cag build specs/<set>/<slug>.json
+uv run cag build specs/<set>/<slug>.json --draw-backend <codex|comfy|local>
 ```
+
+**Never choose the draw backend yourself.** It must come from the task you were
+given, or from `CAG_DRAW_BACKEND`. If neither names one, do not build: stop and
+report that you need to be told which draw backend to use — `codex` (OpenAI),
+`comfy` (Comfy Cloud) or `local` (the user's own ComfyUI). `cag build` refuses
+to run without one anyway.
 
 `uv run cag build -h` lists the flags that exist; there is no `--jobs`.
 

@@ -59,8 +59,9 @@ Run every character that needs building at once, each as its own `uv run cag bui
 process. Do not queue them one at a time.
 
 ```bash
+BACKEND=comfy   # the one the user named; see "Ask which draw backend" below
 for spec in specs/default/*.json; do
-  uv run cag build "$spec" &
+  uv run cag build "$spec" --draw-backend "$BACKEND" &
 done
 ```
 
@@ -83,6 +84,15 @@ Nothing else — no projection views, no frames — is drawn until someone looks
 builds again. A key art that is wrong gets deleted instead, and the next build
 redraws it. Show the user the key art and wait for their answer; do not approve
 on their behalf.
+
+## Ask which draw backend, never pick one
+
+`cag build` has no default draw backend: it stops unless `--draw-backend` or
+`CAG_DRAW_BACKEND` names `codex` (OpenAI), `comfy` (Comfy Cloud) or `local` (the
+user's own ComfyUI). Each is a different model, a different bill and a different
+licence, so it is the user's call. If the user has not named one, ask before the
+first build, and use their answer for every build that follows. An agent that
+cannot ask stops and says it needs one. The user may call it the "processor".
 
 ## A build stops for text, and the session writes it
 
@@ -241,6 +251,7 @@ A new term is named here before it is used.
 | **key art** | the approved character reference render |
 | **bible** | the identity text quoted into every prompt |
 | **set** | one animation: dance, sing, flinch, guard, entrance, victory, ko |
+| **draw backend** | what draws a build's art: `codex`, `comfy` or `local` (`--draw-backend`). Never assumed. The user may say "processor" |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.

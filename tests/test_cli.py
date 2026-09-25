@@ -39,6 +39,7 @@ def built(tmp_path, monkeypatch):
     build_argv = [
             "build",
             "tests/fixtures/velvet-lou.json",
+            "--draw-backend", "codex",
             "--set", "dance",
             "--motion", SAMPLE,
             "--per-frame",
@@ -63,7 +64,8 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
     )
     with pytest.raises(SystemExit) as stop:
         cli.main(
-            ["build", "tests/fixtures/velvet-lou.json", "--work", str(tmp_path / "w"),
+            ["build", "tests/fixtures/velvet-lou.json", "--draw-backend", "codex",
+             "--work", str(tmp_path / "w"),
              "--out", str(tmp_path / "o")]
         )
     assert "source/key.png" in str(stop.value)
@@ -106,7 +108,8 @@ def test_static_only_build_skips_the_animation(tmp_path, monkeypatch):
         lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
     )
     monkeypatch.setattr(cli, "write_motion", lambda *a, **kw: pytest.fail("no sheet needed"))
-    argv = ["build", "tests/fixtures/no-animations.json", "--work", str(tmp_path / "w"),
+    argv = ["build", "tests/fixtures/no-animations.json", "--draw-backend", "codex",
+            "--work", str(tmp_path / "w"),
             "--out", str(tmp_path / "o")]
     with pytest.raises(SystemExit):  # the key art gate
         cli.main(argv)
@@ -255,3 +258,12 @@ def test_the_location_prompt_asks_for_an_empty_room_and_never_the_bible(built):
     assert "velvet jacket" not in prompt
     assert spec.location not in "".join(call["prompt"] for call in fake_draw.calls
                                         if "location" not in call["out"].name)
+
+
+def test_a_build_that_names_no_backend_stops_and_asks(tmp_path, monkeypatch):
+    """Each backend is a different model, bill and licence: none is assumed."""
+    monkeypatch.delenv("CAG_DRAW_BACKEND", raising=False)
+    with pytest.raises(SystemExit, match="no draw backend.*codex,comfy,local"):
+        cli.main(["build", "tests/fixtures/velvet-lou.json", "--work", str(tmp_path / "w"),
+                  "--out", str(tmp_path / "o")])
+    assert not (tmp_path / "w").exists(), "nothing is drawn before the backend is known"

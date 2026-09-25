@@ -371,9 +371,10 @@ def main(argv: list[str] | None = None) -> int:
     build_parser.add_argument(
         "--draw-backend",
         choices=list(BACKENDS),
-        default=os.environ.get("CAG_DRAW_BACKEND", "codex"),
+        default=os.environ.get("CAG_DRAW_BACKEND"),
         help="what draws the art: codex (ChatGPT sub), comfy (a ComfyUI workflow on Comfy "
-        "Cloud) or local (the same, on your own ComfyUI). Default: $CAG_DRAW_BACKEND, else codex",
+        "Cloud) or local (the same, on your own ComfyUI). Default: $CAG_DRAW_BACKEND. There "
+        "is no fallback: a build that names neither stops and asks",
     )
     build_parser.add_argument(
         "--comfy-workflow",
@@ -460,6 +461,14 @@ def main(argv: list[str] | None = None) -> int:
         spec = load_spec(args.spec)
         log(f"[static] {spec.name}: approved {approve(args.work / spec.slug)}")
         return 0
+    if not args.draw_backend:
+        # Each backend is a different model, bill and licence, so it is never
+        # assumed: an agent running the build asks the person which one.
+        raise SystemExit(
+            "[build] no draw backend: pass --draw-backend "
+            f"{{{','.join(BACKENDS)}}} or set CAG_DRAW_BACKEND. Which one draws is the "
+            "person's call; an agent asks rather than picks"
+        )
     if args.comfy_pose_workflow:
         # Every set reads it through `comfy.pose_workflow_path`, as the env var does.
         os.environ["CAG_COMFY_POSE_WORKFLOW"] = str(args.comfy_pose_workflow)

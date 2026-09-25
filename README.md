@@ -4,7 +4,7 @@ Turns a short character brief into game-ready sprite assets: a projection sheet
 of static views, and a masked animation set per animation the brief names.
 
 ```bash
-uv run cag build specs/default/belter.json
+uv run cag build specs/default/belter.json --draw-backend codex
 ```
 
 The first run stops after the key art and waits for a human. Look at
@@ -74,7 +74,7 @@ cp -R ../MotionArtist/work/shuffle motions/shuffle-1
 one file, overriding whatever the brief names:
 
 ```bash
-uv run cag build specs/default/crooner.json --set dance --motion ../MotionArtist/work/shuffle/motion.json
+uv run cag build specs/default/crooner.json --draw-backend codex --set dance --motion ../MotionArtist/work/shuffle/motion.json
 ```
 
 ## How it runs
@@ -130,12 +130,13 @@ pingpong while the crooner's loops without either of them touching `sets.py`.
 Every render goes through one backend, picked per build:
 
 ```bash
-uv run cag build specs/default/belter.json                        # codex, the default
+uv run cag build specs/default/belter.json --draw-backend codex   # OpenAI, via codex
 uv run cag build specs/default/belter.json --draw-backend comfy   # Comfy Cloud
 uv run cag build specs/default/belter.json --draw-backend local   # your own ComfyUI
 ```
 
-`CAG_DRAW_BACKEND` sets the default. The rest of a build — briefs, prompts, the
+There is no default: a build that names none, by flag or `CAG_DRAW_BACKEND`,
+stops before drawing anything. The rest of a build — briefs, prompts, the
 key art gate, the mask, assembly, and the text — is the same whichever draws.
 
 **codex** is an agent with an image tool: it is handed the prompt plus
