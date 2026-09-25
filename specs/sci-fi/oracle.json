@@ -1,0 +1,54 @@
+{
+  "id": "oracle",
+  "name": "Oracle",
+  "height": "6' 5\"",
+  "description": "An ageless cosmic seer of perfect calm who sings drifting ambient new-age as though reading the song off the stars.",
+  "build": "Very tall, slender and elongated, with a long neck, narrow sloping shoulders and long slow-moving arms; a tall column silhouette that widens only at the robe hem. Never muscular, broad or stooped.",
+  "face": "A smooth oval face with pale lavender skin, high cheekbones, a small straight nose, a calm closed-lip half-smile, and large almond eyes that are solid pale gold with no visible pupils. A small glowing white dot sits centred on the brow.",
+  "hair": "No hair: a smooth, bare, slightly elongated lavender crown.",
+  "outfit": "A long flowing floor-length robe of pale silver-white with wide belled sleeves that fall past the fingertips; the lining of the sleeves and the open front panels is deep indigo scattered with tiny white star points, visible whenever the robe moves. A high stand-up collar frames the neck. A narrow gold cord ties at the waist. The hem pools at the feet so only bare lavender toes show.",
+  "personality": "Serene, kind and unhurried; faintly amused by everything.",
+  "performance_style": "Upright and still: feet together under the pooled robe, shoulders level, both hands raised to chest height with palms turned slightly upward and fingers softly spread, eyes half-lidded.",
+  "location": "An observatory dome at night: a polished dark-violet floor of hexagonal tiles running to the bottom of the frame, a clean curved back wall of deep indigo panels, a huge round viewport in that wall showing a ringed planet and a spiral nebula, and a thin ring of soft lilac light around the floor's edge.",
+  "recognition_cues": [
+    "pale lavender skin and a bare elongated crown",
+    "solid pale-gold pupil-less almond eyes",
+    "a silver-white robe with a star-field indigo lining"
+  ],
+  "palette": [
+    "robe #E4E2EE / #A9A5BE / #FFFFFF",
+    "lining #23205A / #110F33 / #3F3A8C",
+    "stars #FFFFFF / #C9CCF0 / #FFFFFF",
+    "skin #C3B2DE / #8A76AE / #E3D8F4",
+    "eyes #E9CF7E / #B0943F / #FFF1C2",
+    "cord gold #C9A64A / #8A6E27 / #EFD58A"
+  ],
+  "avoid": [
+    "any hair, hood or headdress",
+    "human-coloured skin or grey alien skin",
+    "black pupils or glowing red eyes",
+    "a staff, orb, crystal ball or floating objects",
+    "a sinister, sly or menacing expression",
+    "a short robe, visible legs or shoes",
+    "high kicks or wide stances that split the robe",
+    "any franchise alien or mystic design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Slow ambient sway loop: from the upright opening stance, shift weight gently onto the character-left foot while both arms float outward and up so the wide sleeves open and show the star-field lining, rotate the torso a few degrees, then drift weight across to the character-right foot as the arms trace a slow circle down, and return to the exact opening stance with hands at chest height. Feet stay under the robe; no kicks, jumps or quick steps.",
+    "sing": {
+      "intent": "Ambient sustained-note loop: tilt the head slightly back and lift the free character-left hand slowly outward as a long note unfurls, the sleeve falling open to show the stars, then draw it back to chest height. The mouth must visibly open and change shape across the loop, from a soft round 'oo' to a wider open vowel, so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound reaction: the gold eyes widen, the head draws back an inch and the sleeves flutter as the hands lift, then she lets out a calm breath and resettles into her serene stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the free forearm so the wide sleeve drapes across the body like a curtain, then hold that calm, level stance. Not a combat pose.",
+    "entrance": "One-shot entrance: glide in with small unseen steps beneath the pooled robe, stop, let the sleeves settle, then raise both hands to chest height into her opening stance.",
+    "victory": "One-shot finish: spread both arms wide and high so the sleeves fall open to show the full star-field lining, tip the face upward with a serene smile, then bring the palms together at the chest and hold a tall still pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while her calm dims — the arms sink to hang at her sides with the sleeves covering the hands, the long neck bows so the head drops forward, and the gold eyes close. She holds a standing, visibly drained finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

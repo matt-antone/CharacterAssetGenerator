@@ -1,0 +1,58 @@
+{
+  "id": "keen",
+  "name": "Keen",
+  "height": "5' 7\"",
+  "description": "A banshee with the biggest voice and softest heart on the roster, who sings old Celtic laments at a volume that rattles the rafters and then worries she was too loud.",
+  "build": "Slender and willowy with long thin arms, long pale hands, a long neck and narrow shoulders, standing upright and level like the rest of the roster with weight even over both feet; never youthful-glamorous, never hunched.",
+  "face": "A long pale face with a faint silver-blue tinge, large silvery grey eyes rimmed in pink from crying, fine smile lines and crow's feet of a woman of about sixty, a long slim nose, soft thin brows raised in worry, and a wide expressive mouth that opens enormously when she sings.",
+  "hair": "A huge wild mane of long snow-white hair standing out around the head and falling past the waist in tangled windblown waves, with a few thin braids tied with faded green thread.",
+  "outfit": "A tattered ankle-length gown of layered dove-grey gauze with long trailing bell sleeves ragged at the ends, a high round neck, and a hem torn into soft jagged points brushing the floor; a woven moss-green shawl knotted across the shoulders, and a tarnished silver ring brooch at the knot. Bare pale feet.",
+  "personality": "Warm-hearted, emotional and mortified by her own volume.",
+  "performance_style": "Gathered and earnest: feet together under the gown, shoulders open, the free character-left hand held open at chest height with the palm up, eyes glistening, mane standing wild.",
+  "location": "A misty ruined chapel on a moor: a floor of cracked grey flagstones with moss in the joints running to the bottom of the frame, a clean back wall of rough grey stone with one tall empty arched window showing a mist-swirled night sky, a toppled stone bench and ivy at one side. Cool silver-blue moonlight and pale drifting mist at floor level.",
+  "recognition_cues": [
+    "a huge wild mane of snow-white hair",
+    "a tattered dove-grey gauze gown with ragged trailing sleeves",
+    "a moss-green shawl knotted at the shoulders",
+    "an enormous open mouth when singing"
+  ],
+  "palette": [
+    "gown #A8ACB4 / #6E727A / #D2D6DC",
+    "gown shade #858A94 / #52565E / #A8ACB4",
+    "shawl #5A7A4A / #334828 / #86A470",
+    "brooch #A8A8A0 / #6A6A62 / #D8D8D0",
+    "hair #F2F4F6 / #B8C0CA / #FFFFFF",
+    "skin #DCE0E4 / #A0A8B2 / #F2F4F6",
+    "eye silver #9AA8B8",
+    "eye rim #E2A0A8",
+    "mouth #5A3A44"
+  ],
+  "avoid": [
+    "a young, glamorous or sexy banshee, or a low-cut or clinging gown",
+    "a skull face, hollow black eyes, a screaming horror face or a menacing glare",
+    "translucent, glowing, floating or wispy spectral body",
+    "sound waves, shockwaves, shattered glass or visible scream effects",
+    "a comb, harp, candle or lantern in hand",
+    "blood, tears of blood or anything that reads as injury",
+    "tied-back, short or neat hair",
+    "high kicks, knee lifts or jumps",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Slow Celtic lament sway loop: from the gathered stance, turn gently a quarter toward character-right with the free arm sweeping out low so the ragged sleeve trails, sway back through centre, turn a quarter toward character-left with the hair swinging, and return to face front in the exact opening stance, feet staying close under the gown.",
+    "sing": {
+      "intent": "Piercing lament loop: draw a deep breath with the shoulders rising, then throw the head back on a huge keening note with the wild hair lifting and the free hand reaching up, then bring the hand to her heart and settle into her gathered stance. The mouth must visibly open very wide and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the shoulders jump, the silver eyes go wide and the free hand flies to her mouth as if she startled herself, the white hair bristling, then she lowers it with an apologetic smile and resettles into her gathered stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and draw the ragged bell sleeve up across the face with the free arm, silver eyes peeking over it, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: drift in with slow gliding steps under the gown with the mane streaming, stop, pull the green shawl snug with both hands, give a small shy nod, then settle into her gathered stance.",
+    "victory": "One-shot song-finish celebration: fling both arms wide and up with sleeves streaming and the mane flaring, face bright with happy tears, then hold a proud upright pose with both hands clasped over her heart.",
+    "ko": "Non-contact performance defeat: she stays on her feet while her voice fails her — the free hand goes to her throat, the shoulders fold in, the wild hair falls forward over the face and the ragged sleeves hang still. She holds a standing, visibly heartsore finish with weight even over both feet. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, fading away or going to the ground. Do not imply a hit, injury or opponent."
+  }
+}

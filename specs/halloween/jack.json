@@ -1,0 +1,60 @@
+{
+  "id": "jack",
+  "name": "Jack",
+  "height": "6' 3\"",
+  "description": "A lanky pumpkin-headed scarecrow who sings high lonesome bluegrass at the harvest moon, all gangly politeness and front-porch warmth.",
+  "build": "Tall, lanky and loose-jointed with a straw-stuffed body, thin arms and legs, big gloved hands and a slightly floppy way of standing, upright and level like the rest of the roster with weight even over both feet; never bulky or menacing.",
+  "face": "A round ribbed orange pumpkin for a head with a short curly green stem on top, two carved triangle eyes and a triangle nose lit warm yellow from inside, and a wide carved jagged grin that is his mouth: the carved opening visibly stretches wider, rounds into an O and narrows as he sings, glowing yellow inside.",
+  "hair": "Tufts of dry golden straw poking out under the hat brim at the sides and back of the pumpkin.",
+  "outfit": "A floppy wide-brimmed straw hat with a frayed edge and a faded red band; a faded blue-and-red plaid shirt with straw poking from the cuffs and collar; patched denim overalls with one strap unbuttoned and hanging, square patches of red gingham and brown corduroy on the knees and bib; worn brown work gloves; and scuffed brown lace-up work boots with straw sticking out of the tops.",
+  "personality": "Gentle, polite and a little shy until the fiddle kicks in.",
+  "performance_style": "Loose and folksy: feet apart with toes turned out, one knee slightly bent, the free character-left gloved hand hooked in the overall bib, pumpkin head tilted with a lit grin.",
+  "location": "A moonlit barn: a floor of wide weathered planks scattered with loose straw running to the bottom of the frame, a clean back wall of red barn boards with a big open hayloft door showing a huge orange harvest moon, stacked hay bales and a lantern hung on a nail at one side. Warm lantern-orange light and cool blue moonlight.",
+  "recognition_cues": [
+    "an orange carved pumpkin head with a glowing jagged grin",
+    "a floppy frayed straw hat",
+    "patched denim overalls with one strap hanging loose",
+    "straw poking from cuffs, collar and boots"
+  ],
+  "palette": [
+    "pumpkin #E07A1F / #9C4A0E / #F5A451",
+    "carve glow #FFD24A / #E09A1E / #FFF0A8",
+    "stem #4E6B2A / #2C3E16 / #7A9A4C",
+    "straw #D9B45A / #9C7C30 / #F0D68E",
+    "hat band #A63A2E / #62201A / #CC5F52",
+    "plaid blue #3E5E8C / #243858 / #6A8AB8",
+    "plaid red #B0463A / #6A2820 / #D6705E",
+    "denim #5A7AA6 / #34496A / #8AA6CA",
+    "patch gingham #C23A3A / #7A2020 / #E88080",
+    "patch corduroy #7A5230 / #45301A / #A87C54",
+    "gloves #8A6A48 / #52402A / #B89470",
+    "boots #5A3E28 / #2E2014 / #86644A"
+  ],
+  "avoid": [
+    "any existing pumpkin-king or scarecrow character's likeness",
+    "a snarling, fanged or menacing carved face",
+    "rot, mould, cracks or a smashed pumpkin",
+    "fire, flames, smoke or a burning head",
+    "a scythe, pitchfork, banjo, fiddle or lantern in hand",
+    "crows, stitched sack face or a burlap mask",
+    "a pole or post behind him",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Bluegrass buck-step loop: from the folksy stance, do a quick loose shuffle-tap with the character-right boot, then the character-left, knees flapping loosely like a scarecrow, the free hand slapping the thigh on the beat, one hop in place with the straw tufts bouncing, and land back in the exact opening stance.",
+    "sing": {
+      "intent": "High lonesome vocal loop: tip the pumpkin head up toward the moon on a long keening note with the free gloved hand lifting out to the side, then bring it back to the bib and settle into his folksy stance. The carved grin is his mouth and must visibly stretch open, round into an O and change shape across the loop, glowing inside, so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the loose limbs jerk, straw puffs out of the cuffs, the glow in the carved eyes flares and the hat hops up off the pumpkin, then it lands back and he resettles into his folksy stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and pull the floppy hat brim down over the carved eyes with the free gloved hand, elbow raised, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: amble in with long gangly loose-kneed steps, stop, tip the straw hat politely, set it back on the pumpkin, then settle into his folksy stance with a thumb hooked in the bib.",
+    "victory": "One-shot song-finish celebration: wave the straw hat high overhead with the free hand, give one loose hop, then set the hat back and hold a proud upright pose with the carved grin glowing bright.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the stuffing goes out of him — the arms hang limp, the shoulders sag, the pumpkin head lolls to one side, the carved glow dims low and the hat brim flops down over the eyes. He holds a standing, visibly wilted finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, collapsing or going to the ground. Do not imply a hit, injury or opponent."
+  }
+}

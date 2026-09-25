@@ -1,0 +1,57 @@
+{
+  "id": "rattles",
+  "name": "Rattles",
+  "height": "5' 11\"",
+  "description": "A cocksure skeleton rockabilly singer who has been dead for decades and still combs his hair between every song, though nobody can work out how the hair stays on.",
+  "build": "A lean full skeleton of clean ivory bone with a narrow ribcage, slim hips and long thin limb bones, standing upright and level like the rest of the roster with weight even over both feet; bones visible only at the skull, hands, neck, chest gap and ankles.",
+  "face": "A bare ivory skull with large round dark eye sockets holding two small warm white pinpoint glints, a small upside-down-heart nose hole, high cheekbones and a full set of neat square teeth on a hinged jaw that drops open when he sings, set in a permanent cocky grin.",
+  "hair": "A tall glossy jet-black pompadour quiff sitting on top of the bare skull, swept up and forward with one loose curl falling over the forehead, and short slick sides.",
+  "outfit": "A black leather motorcycle jacket with an asymmetric zip, wide lapels and the collar turned up, worn open over a plain white T-shirt, the collarbones and top ribs showing at its neckline; dark indigo jeans with wide turned-up cuffs showing bare ankle bones, and black leather engineer boots.",
+  "personality": "Cocky, charming and endlessly pleased with himself.",
+  "performance_style": "Loose and cocky: feet apart with one knee cocked in, hips shifted, the free character-left hand sliding back along the side of the quiff, skull tipped with a grin.",
+  "location": "A fifties roadhouse at midnight: a black-and-white checkerboard linoleum floor running to the bottom of the frame, a clean back wall of pale mint tile with a chrome trim stripe, a chrome jukebox glowing at one side with no readable labels, and a row of red vinyl diner stools. Warm neon red and cool mint light.",
+  "recognition_cues": [
+    "a bare ivory skull topped with a tall jet-black pompadour quiff",
+    "a black leather motorcycle jacket with the collar up",
+    "indigo jeans with wide turned-up cuffs over bare ankle bones"
+  ],
+  "palette": [
+    "bone #E8DFC8 / #A89E86 / #FAF5E8",
+    "socket dark #1E1B1C",
+    "eye glint #FFF6DA",
+    "quiff #141418 / #050507 / #3E4452",
+    "leather #1F1D20 / #0C0B0D / #4A474E",
+    "zip chrome #BFC5CC / #7A8088 / #F2F4F7",
+    "tee #F2F0EA / #BDB9AE / #FFFFFF",
+    "denim #283A64 / #16223E / #4A6194",
+    "cuff denim #6B82B0 / #3F5582 / #97ABD2",
+    "boots #1A1718 / #0A0909 / #403A3A"
+  ],
+  "avoid": [
+    "any real rock-and-roll star's likeness",
+    "flesh, skin, eyes, lips or ears on the skull",
+    "cracked, broken, bloody or grimy bones or anything that reads as injury",
+    "a guitar, comb, cigarette or bottle in hand",
+    "a quiff in any colour other than jet black, or a missing quiff",
+    "patches, studs, band names or writing on the jacket",
+    "a jacket zipped closed",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Rockabilly knee-shake loop: from the cocked stance, swivel both knees in and out twice on the beat with the heels planted and the hips rolling, snap the free fingers down at character-right, slide the free hand back along the quiff, swivel twice more, and settle back into the exact opening stance.",
+    "sing": {
+      "intent": "Rockabilly hiccup vocal loop: lean the skull back and jut the chin, then snap forward with a quick hiccupping shake of the head that bounces the quiff curl, free hand snapping on the beat, and return to his cocky stance. The hinged jaw must visibly drop open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the whole skeleton rattles in place, the jaw clacks open and the pinpoint glints shrink, the quiff wobbles, then he checks it with the free hand and resettles into his cocky stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the free bony hand flat over the quiff to protect it, leather collar up, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: stroll in with a loose swaggering walk, stop, tug the jacket lapels straight with both hands, slide the free hand back along the quiff, then drop into his cocky stance with a grin.",
+    "victory": "One-shot song-finish celebration: point the free finger straight up overhead, give one sharp knee swivel, then hold a proud upright pose smoothing the quiff with a wink of one pinpoint glint.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the swagger leaves him — the shoulders droop inside the jacket, the jaw hangs slack and the proud quiff flops down over the eye sockets. He holds a standing, visibly deflated finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, falling apart into a pile of bones or going to the ground. Do not imply a hit, injury or opponent."
+  }
+}

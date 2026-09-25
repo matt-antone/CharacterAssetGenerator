@@ -1,0 +1,49 @@
+{
+  "id": "nova",
+  "name": "Nova",
+  "height": "5' 7\"",
+  "description": "A mid-twenties street singer who owns every rain-slick corner of the lower city and sings drum-and-bass like the whole block is her crowd.",
+  "build": "Lean and wiry with long legs, narrow hips, strong shoulders and a restless coiled energy; athletic and quick, never glamour-curvy or bulky.",
+  "face": "Sharp angular cheekbones, a narrow straight nose, dark eyes with a flick of electric-magenta liner, dark lips, a small silver ring in the character-left eyebrow, and a sly lopsided smirk.",
+  "hair": "A jet-black undercut shaved on the character-right side, with a long straight electric-blue fringe swept over to the character-left and falling past the jaw.",
+  "outfit": "An asymmetric cropped black jacket with one long sleeve on the character-right arm and the character-left arm bare, a tall collar edged in glowing cyan piping, over a charcoal high-neck tank; slim dark-purple cargo trousers tucked into chunky black lace-up boots. Thin glowing cyan circuit-line tattoos run along the bare character-left arm and up the side of the neck.",
+  "personality": "Cool, sharp and quietly generous.",
+  "performance_style": "Weight on the back foot with the front knee bent, shoulders angled, the character-right hand holding the mic close to the mouth and the bare character-left arm with its glowing circuits flung down and out.",
+  "location": "A neon alley at night: wet dark asphalt with puddle reflections running to the bottom of the frame, a clean dark-brick back wall glowing with magenta and cyan wordless neon tubes in abstract shapes, steam rising from a grate at one side, and coloured light pooling on the ground.",
+  "recognition_cues": [
+    "glowing cyan circuit-line tattoos on the bare character-left arm and neck",
+    "an asymmetric one-sleeved black jacket with a cyan-piped collar",
+    "an electric-blue fringe over a shaved undercut"
+  ],
+  "palette": [
+    "jacket black #17161C / #09090C / #34323E",
+    "glow cyan #2EF2FF / #0E9AA8 / #C2FCFF",
+    "magenta #F0319B / #9A1560 / #FF86C6",
+    "purple #3E2A5C / #221633 / #654A8C",
+    "fringe blue #2F6BFF / #173C9E / #7FA3FF",
+    "skin #D1A283 / #8C664F / #EEC4A6",
+    "hair black #121216 / #060608 / #2E2E36"
+  ],
+  "avoid": [
+    "a gun, blade or cybernetic weapon arm",
+    "a trench coat or long duster",
+    "visible cleavage or a pin-up pose",
+    "readable neon words or signage",
+    "a symmetric jacket with two sleeves",
+    "any franchise cyberpunk character design",
+    "logos, text or real brands"
+  ],
+  "props": ["mic"],
+  "animations": {
+    "dance": "Drum-and-bass loop: fast light footwork — quick heel-toe steps shuffling character-left and back, the shoulders bouncing on the double-time beat, the bare glowing arm cutting a sharp arc across the body and back, then she lands in the exact opening stance.",
+    "sing": {
+      "intent": "Rapid-fire vocal loop: lean into the mic on a hard line with the glowing arm pumping down twice, then pull back upright into the stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": ["mic"]
+    },
+    "flinch": "Brief feedback-screech startle: the head snaps aside, the fringe swings and the glowing arm jerks up, then she shakes it off and resumes the stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn the jacketed shoulder forward and raise the sleeved forearm in front of the face, then hold a coiled upright finish. Not a fight pose.",
+    "entrance": "One-shot entrance: stroll in with loose swaggering steps, flick the blue fringe aside with the free hand, then drop into her back-weighted performance stance.",
+    "victory": "One-shot finish: thrust the glowing arm straight up with the fist closed and the circuits blazing brighter, then settle into a cool hip-cocked pose with a smirk.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out — the circuit tattoos dim, the shoulders slump and her head drops so the blue fringe hangs over the face. She holds a standing, visibly spent finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

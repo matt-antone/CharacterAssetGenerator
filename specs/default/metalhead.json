@@ -1,0 +1,51 @@
+{
+  "id": "metalhead",
+  "name": "Metalhead",
+  "height": "6' 4\"",
+  "description": "A heavy-metal vocalist in his forties who roars like a landslide on stage and apologises to the lighting crew for stepping on a cable; the roster's tallest, heaviest frame.",
+  "build": "Huge and barrel-chested, thick arms, a heavy belly and a wide stable stance; never lean, small or wiry.",
+  "face": "Broad and weathered, kind crinkled eyes, and a long full brown beard reaching mid-chest.",
+  "hair": "Very long straight brown hair with grey strands, falling loose past the shoulder blades, parted in the middle.",
+  "outfit": "A sleeveless faded mid-blue denim battle vest over a plain black t-shirt, the vest's front and back covered in plain blank patches in black, dark red and grey with stitched borders and no images or lettering. Black jeans, a plain black leather belt, and scuffed black lace-up boots. Studded black leather wristbands on both wrists. No headwear.",
+  "performance_style": "Very wide heavy stance, knees bent, torso leaning forward, the character-right hand holding the mic close to the beard, and the free hand clenched in a raised fist at shoulder height.",
+  "location": "A festival main stage at night: a black steel stage deck running to the bottom of the frame, a solid wall of black speaker cabinets with blank grilles filling the back, deep red floodlights washing up from the floor, and thin smoke drifting across.",
+  "recognition_cues": [
+    "a very long full brown beard to mid-chest",
+    "a faded denim battle vest covered in blank coloured patches",
+    "very long loose hair"
+  ],
+  "palette": [
+    "faded denim #5B7593 / #354659 / #88A0BA",
+    "dark #20232B / #101217 / #3A3E48",
+    "patch red #7C2320 / #4A1311 / #A94641",
+    "patch grey #6F747C / #34383E / #B5BAC0",
+    "skin #D7A585 / #9C6F53 / #EEC5A8",
+    "hair #5A3C26 / #331F12 / #8A6448"
+  ],
+  "avoid": [
+    "any text, logos, band names, skulls or images on the patches",
+    "a guitar or any instrument",
+    "corpse paint or face paint",
+    "a lean or wiry build",
+    "a menacing or cruel expression off-mic",
+    "spikes, horns or chains",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Headbang loop: from the wide stance he bends forward at the waist and whips the head down and up in time, the long hair swinging in big arcs, the free fist pumping on each downbeat, a heavy stomp of the character-left then character-right boot, then he straightens back into the opening stance.",
+    "sing": {
+      "intent": "Roaring metal vocal loop: lean hard over the mic with the brow knotted, bellow the phrase, then rock back upright with the fist raised. The mouth must visibly open very wide and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the big frame jumps a little and he blinks with gentle surprise, a hand half-raised in apology, then he resettles into the heavy stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn the broad shoulder forward and bring the thick forearm up across the chest, holding a solid planted final pose. Not a fight pose.",
+    "entrance": "One-shot entrance: lumber in with heavy steps, sweep the hair back with one hand, give a small shy nod, then plant into the canonical wide stance with the fist up.",
+    "victory": "One-shot finish: raise the free hand in the horns gesture high overhead and throw the head back with a huge roar, then hold it.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the fury leaves him — the fist opens and drops, the huge shoulders sag, and the head hangs so the hair and beard fall forward. He holds a standing, visibly spent finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

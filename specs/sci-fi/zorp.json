@@ -1,0 +1,47 @@
+{
+  "id": "zorp",
+  "name": "Zorp",
+  "height": "3' 6\"",
+  "description": "A tiny, round visitor from a very friendly planet who learned Earth music from bubblegum-pop radio and never looked back.",
+  "build": "Small and round: a big egg-shaped head nearly as wide as the plump pear-shaped body, short stubby arms with three rounded fingers, and short stubby legs on wide flat three-toed feet. Soft and bouncy; never lanky, skeletal or menacing.",
+  "face": "Three large glossy black eyes in a row with bright white highlights, the middle one slightly bigger, a small smooth snout-free face, and a wide happy mouth with no visible teeth.",
+  "hair": "None. Two thin springy antennae on top of the head, each ending in a round glowing pink bob.",
+  "outfit": "Smooth lime-green skin with a paler mint belly. A shiny silver one-piece romper with short puffed sleeves, a wide round collar and a single round pink button at the chest; bare green feet.",
+  "personality": "Sunny, curious and endlessly excited.",
+  "performance_style": "Feet planted wide apart and turned out, round body leaning slightly forward, the character-right hand holding the mic under the mouth and the free character-left hand waving up beside the head.",
+  "location": "A moon-base canteen: a floor of glossy white-and-pale-pink checker tiles running to the bottom of the frame, a clean mint-green curved back wall with a wide round window showing grey craters and a blue Earth, a chrome counter with a soft-serve machine at one side, and bright even pastel lighting.",
+  "recognition_cues": [
+    "three large glossy black eyes in a row",
+    "two springy antennae with glowing pink bobs",
+    "a round lime-green body in a silver romper"
+  ],
+  "palette": [
+    "skin lime #7BD34A / #4A8C27 / #AEF07F",
+    "belly mint #C8F0B0 / #8FBF74 / #EEFFE2",
+    "silver #C9CED6 / #858B94 / #F6F8FB",
+    "pink #FF6FB5 / #C23D7F / #FFB0D8",
+    "eye #111114"
+  ],
+  "avoid": [
+    "a grey alien with large almond eyes",
+    "two eyes or five eyes",
+    "tentacles, slime or claws",
+    "a ray gun or any weapon",
+    "a flying saucer",
+    "a scary or sinister expression",
+    "logos, text or real brands"
+  ],
+  "props": ["mic"],
+  "animations": {
+    "dance": "Bubblegum-pop bounce loop: hop in place twice on both feet, swing the round body character-left then character-right with the free arm waving overhead, let the antennae bobble with each hop, then land back in the wide opening stance.",
+    "sing": {
+      "intent": "Bright chorus loop: rise onto the toes and tilt the big head back on a high note with all three eyes squeezed happy, then drop back into the stance. The mouth must visibly open wide and change shape across the loop so Zorp unmistakably reads as singing.",
+      "props": ["mic"]
+    },
+    "flinch": "Brief startle: all three eyes pop wide, the antennae spring straight up and the round body jolts, then the antennae droop back and Zorp resumes the stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: tuck the head down and hold the free stubby arm up in front of the eyes, antennae flattened back, then hold a steady upright finish. Not a fight pose.",
+    "entrance": "One-shot entrance: waddle in on quick short steps, stop, give the antennae a wiggle and a little wave, then settle into the wide performance stance.",
+    "victory": "One-shot finish: a big two-footed jump with both stubby arms up and antennae flying, then land in a beaming pose with the free hand waving.",
+    "ko": "Non-contact performance defeat: Zorp stays on its feet while its cheer fades — the antennae wilt and flop over, the three eyes go droopy and the round body sags. It holds a standing, visibly glum finish. It remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

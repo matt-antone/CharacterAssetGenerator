@@ -1,0 +1,52 @@
+{
+  "id": "tonnage",
+  "name": "Tonnage",
+  "height": "7' 6\"",
+  "description": "A huge old mining robot, long retired from the asteroid belt, who sings deep slow Delta blues with the patience of a machine that has nowhere else to be.",
+  "build": "Enormous, boxy and bottom-heavy: a massive barrel chest, a small squat head sunk low between huge rounded shoulders, very long thick arms ending in big three-fingered hands that hang near the knees, and short thick piston legs on wide flat feet. A heavy gorilla-like block silhouette standing upright.",
+  "face": "A small square head with two round headlamp eyes glowing warm yellow under a riveted brow plate, and a wide hinged jaw-plate for a mouth: a separate lower plate that drops open on hinges at the sides, showing a dark cavity with a faint amber glow inside. No nose, no lips.",
+  "hair": "No hair: a riveted dome head with one short stubby antenna.",
+  "outfit": "No clothing: a rusty ochre-yellow painted steel body, heavily weathered with patches of orange rust and flaked paint showing grey metal beneath, faded diagonal black-and-yellow hazard stripes on each shoulder, exposed pistons and hoses at the elbows and knees, a big round vent grille on the chest, and dented steel plating.",
+  "personality": "Slow, gentle, melancholy and kind.",
+  "performance_style": "Heavy, rooted stance with the wide feet apart, the huge shoulders slightly forward, head tilted down, the free character-left hand hanging loose at knee height, the jaw-plate half open.",
+  "location": "An abandoned asteroid-mine loading dock: a floor of rust-streaked steel grating running to the bottom of the frame, a clean back wall of corrugated metal lit by a single dim caged work lamp, a tipped-over empty ore cart at one side, and dusty warm light with a violet starry sky through a gap at the top.",
+  "recognition_cues": [
+    "a hinged jaw-plate mouth that drops open",
+    "round yellow headlamp eyes in a small head sunk between huge shoulders",
+    "rusty ochre-yellow plating with faded hazard stripes"
+  ],
+  "palette": [
+    "paint ochre #C9962E / #7E5C16 / #E8BE62",
+    "rust #9A4A1E / #5A2A0E / #C8703C",
+    "steel #6E7278 / #3C3E42 / #9EA2A8",
+    "hazard black #232326 / #0E0E10 / #45454A",
+    "eyes #FFD65A / #C99A1A / #FFF3B8",
+    "mouth glow #FFA43A"
+  ],
+  "avoid": [
+    "a human face, lips or teeth",
+    "a drill, pickaxe, claw weapon or guitar",
+    "a sleek, shiny or new robot",
+    "red evil glowing eyes or menace",
+    "a skinny or humanoid-proportioned robot",
+    "any franchise robot design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Slow blues sway loop: from the rooted opening stance, rock the huge body slowly onto the character-left foot with the shoulders rolling and the long arms swinging loose, nod the head on the beat, shift heavily across to the character-right foot, then rock back to centre in the exact opening stance. Slow, heavy and grounded; feet barely leave the floor.",
+    "sing": {
+      "intent": "Deep Delta blues loop: tilt the small head back slowly and drop the hinged jaw-plate wide open on a long low note, the amber glow brightening inside, bring the free hand up to the chest vent, then close the jaw partway and lower the head. The jaw-plate mouth must visibly open and shut to different heights across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the headlamp eyes flicker, the huge shoulders jerk up with a clank and the jaw-plate snaps shut, then he slowly settles back into his rooted stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one massive shoulder forward and bring the free forearm up in front of the chest vent, head sunk low, then hold a heavy braced stance. Not a combat pose.",
+    "entrance": "One-shot entrance: lumber in with slow ground-shaking steps, stop, let out a puff of steam from the shoulder vents, and settle into his rooted stance with the jaw-plate half open.",
+    "victory": "One-shot finish: raise both huge arms slowly overhead with the headlamp eyes brightening and the jaw-plate open in a wide grin, then lower them and hold a proud, gentle stance.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the power runs down — the headlamp eyes dim, the jaw-plate hangs slack, the huge arms drop to hang limp and the head sags forward between the shoulders. He holds a standing, visibly powered-down finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

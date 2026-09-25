@@ -1,0 +1,48 @@
+{
+  "id": "wren",
+  "name": "Wren",
+  "height": "5' 5\"",
+  "description": "A sixty-something colony farmer who has coaxed crops out of red alien dirt for forty years and sings the old folk songs the first settlers brought.",
+  "build": "Wiry and weathered with ropey forearms, capable work-worn hands, a slight forward lean of long habit held upright, and sturdy legs; tough and spare, never frail, stooped or heavy.",
+  "face": "A long sun-lined face, deep crow's feet around twinkling hazel eyes, a sharp nose, freckles across the cheeks, weathered tanned skin, and a warm crinkly smile.",
+  "hair": "A long thick silver-white braid falling over the character-right shoulder, wisps escaping at the temples.",
+  "outfit": "A wide-brim soft sage-green canvas hat with a frayed band, faded mustard-yellow utility coveralls with the sleeves rolled to the elbow, mismatched patches in rust and teal stitched on the knees and one hip, a teal neckerchief knotted at the throat, a tool belt with plain pouches, and scuffed brown work boots.",
+  "personality": "Wry, patient and unshakeably kind.",
+  "performance_style": "Feet planted easy and a little apart, weight on one hip, the character-right hand holding the mic at chest height and the free character-left thumb hooked in the tool belt.",
+  "location": "A greenhouse dome on a frontier colony: packed rust-red earth with a straight plank walkway running to the bottom of the frame, a clean curved back wall of glass panels showing a pale-pink sky and two small moons, rows of leafy green crops in raised beds at one side, and soft warm afternoon light.",
+  "recognition_cues": [
+    "a wide-brim sage-green canvas hat",
+    "mustard coveralls with mismatched patches",
+    "a long silver-white braid over the character-right shoulder"
+  ],
+  "palette": [
+    "coveralls mustard #C99A38 / #85641E / #E8C06A",
+    "hat sage #8A9E6E / #56663F / #B4C69A",
+    "patch rust #A9502E / #642B17 / #D47A55",
+    "teal #2E8A86 / #185452 / #5CB8B2",
+    "boots #6B4A30 / #3B2818 / #946C4E",
+    "skin #B77C57 / #764C33 / #D9A07C",
+    "hair #E4E1DA / #A8A59E / #FFFFFF"
+  ],
+  "avoid": [
+    "a guitar, banjo, fiddle or harmonica",
+    "a pitchfork, rifle or any tool in hand",
+    "a cowboy hat or Stetson",
+    "a frail, bent or stooped old woman",
+    "short or loose hair",
+    "logos, text or real brands"
+  ],
+  "props": ["mic"],
+  "animations": {
+    "dance": "Folk barn-dance loop: a light heel-and-toe step with the character-left boot then the character-right, a small hop-turn to character-left and back, the braid swinging and the free thumb staying hooked in the belt, then settle back into the easy opening stance.",
+    "sing": {
+      "intent": "Folk-song loop: close the eyes and sway gently on a long held line with the free hand lifting palm-up, then lower it back to the belt. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": ["mic"]
+    },
+    "flinch": "Brief dust-storm-siren startle: she clamps the free hand on the hat brim and hunches the shoulders, then straightens with a wry look and resumes the stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and tip the hat brim down over the face with the free hand, then hold a steady upright finish. Not a fight pose.",
+    "entrance": "One-shot entrance: amble in with unhurried steps, push the hat brim up with the free hand, hook the thumb in the belt, then take the easy performance stance.",
+    "victory": "One-shot finish: sweep off the hat and wave it high with a crinkly grin, then set it back on and settle into a proud relaxed pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the weariness of forty harvests catches up — the shoulders round, the free hand drops from the belt and her head bows so the hat brim hides the face. She holds a standing, visibly tired finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

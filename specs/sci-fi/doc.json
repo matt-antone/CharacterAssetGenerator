@@ -1,0 +1,52 @@
+{
+  "id": "doc",
+  "name": "Doc",
+  "height": "5' 3\"",
+  "description": "The ship's chief medic in her seventies, who has seen everything twice and sings jazz standards dry and wry.",
+  "build": "Small, trim and upright with narrow shoulders and a straight back; a neat compact rectangle silhouette lengthened by the knee-length coat. Never stooped, frail or heavy.",
+  "face": "A lined, angular pale face with high cheekbones, sharp pale-blue eyes under one arched eyebrow, crow's-feet, thin lips in a wry sideways half-smile, and small round wire-rimmed spectacles perched low on the nose.",
+  "hair": "A sleek, blunt chin-length silver bob with a straight fringe.",
+  "outfit": "A crisp, bright white knee-length lab coat with a notched collar, worn open, with rolled cuffs and a single pen clipped to the breast pocket; underneath, a fitted plum jumpsuit with a mandarin collar and a thin silver zip; a slim silver stethoscope-like scanner hung around the neck; and flat plum ankle boots.",
+  "personality": "Dry, unflappable, sardonic and quietly kind.",
+  "performance_style": "Neat upright stance with the feet close, the weight on the character-right hip, the free character-left hand tucked in the lab-coat pocket, one eyebrow raised over the spectacles.",
+  "location": "A starship sickbay: a pale mint floor of seamless tiles running to the bottom of the frame, a clean white curved back wall with a softly glowing pale-green wall panel, a single medical bed with a white sheet at one side, and cool clinical light.",
+  "recognition_cues": [
+    "a blunt silver bob with a straight fringe",
+    "a crisp white knee-length lab coat over a plum jumpsuit",
+    "small round wire-rimmed spectacles low on the nose"
+  ],
+  "palette": [
+    "coat white #F2F2EE / #BFC0BA / #FFFFFF",
+    "jumpsuit plum #6A2E58 / #3C1832 / #955080",
+    "silver #C8CCD2 / #8A8E96 / #F2F4F8",
+    "skin #E3C0A6 / #A6826A / #F6DCC8",
+    "hair #D6D8DC / #9A9EA6 / #FFFFFF",
+    "eyes #7FA8C8"
+  ],
+  "avoid": [
+    "a syringe, scalpel, clipboard, tablet or medical tools in hand",
+    "red crosses, medical symbols or insignia",
+    "a stooped, frail or hunched posture",
+    "a bun, long hair or curls",
+    "blood or injury imagery",
+    "any franchise medical officer's uniform",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Cool-jazz finger-snap loop: from the neat opening stance, take the free hand out of the pocket and snap the fingers at hip height, do a small unhurried step-touch to character-left and back to character-right with the shoulders rolling and the lab coat swinging, one small hip sway, then tuck the hand back into the pocket in the exact opening stance. Understated and small; no kicks.",
+    "sing": {
+      "intent": "Wry jazz vocal loop: lean slightly in, lift the arched eyebrow on a knowing line and give a small shrug, then settle back. The mouth must visibly open and change shape across the loop, from a sly half-smile to rounded open vowels, so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound reaction: both eyebrows shoot up over the spectacles and the shoulders tighten for a beat, then she pushes the spectacles back up with one finger and resumes her unimpressed stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and draw the lab-coat front across her body with the free hand, then hold a composed upright stance. Not a fight pose.",
+    "entrance": "One-shot entrance: stride in briskly with short efficient steps, straighten the lab-coat collar, nudge the spectacles, and settle into her neat stance with the hand in the pocket.",
+    "victory": "One-shot finish: give a small dry bow of the head, then lower the spectacles with one finger for a knowing look over the rims and hold a satisfied smirk.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the dry composure gives out — the shoulders drop, the spectacles slip down the nose, the free hand hangs at her side and the head bows with a weary sigh. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

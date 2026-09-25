@@ -1,0 +1,52 @@
+{
+  "id": "luma",
+  "name": "Luma",
+  "height": "5' 5\"",
+  "description": "A gentle bioluminescent alien from a deep ocean world who sings dreamy synthwave like a slow tide.",
+  "build": "Slender and soft-edged with a gently rounded torso, sloping shoulders and long thin boneless-looking arms, standing upright on two slim legs with small rounded feet; a tall teardrop silhouette topped by a domed bell. Never tentacle-legged, floating or hovering.",
+  "face": "A soft, smooth face of translucent pale-aqua skin with faint glowing blue veins under the surface, two large round solid dark-blue eyes with a single white highlight, no nose, and a small soft mouth that glows faintly pink inside.",
+  "hair": "A translucent domed jellyfish bell in place of hair, glowing soft aqua with a pink frilled rim, from which dozens of long thin glowing tendrils trail down past the shoulders to the waist, fading from aqua to pink at the tips.",
+  "outfit": "No clothing: the translucent pale-aqua body carries a soft internal glow, with ruffled translucent frills at the wrists, the waist and the ankles that fade from aqua to pink, and faint pink luminous spots in rows down the arms.",
+  "personality": "Dreamy, shy and sweet.",
+  "performance_style": "Soft upright stance with the feet close together, the weight on the character-left foot, the free character-right hand floating at shoulder height with the fingers trailing, the head tilted with the tendrils swaying.",
+  "location": "A neon retro-future lounge: a glossy black floor with a glowing magenta grid running to the bottom of the frame, a clean deep-purple back wall with a huge striped orange-to-pink setting sun disc, and teal and pink neon light.",
+  "recognition_cues": [
+    "a glowing translucent jellyfish bell on the head",
+    "long glowing aqua-to-pink trailing tendrils to the waist",
+    "translucent pale-aqua skin with a soft inner glow"
+  ],
+  "palette": [
+    "body aqua #9DE8E4 / #4FA6A6 / #DDFFFB",
+    "glow aqua #4FF0E6 / #1AA8A2 / #C8FFFB",
+    "frill pink #F07ACB / #A63C84 / #FFC2EA",
+    "vein blue #3D8BE6",
+    "eyes #0F2A5A / #06142E / #2E58A0"
+  ],
+  "avoid": [
+    "floating, hovering or drifting off the floor",
+    "tentacles in place of legs",
+    "a human hairstyle or human skin tone",
+    "stinging, slime, goo or horror imagery",
+    "clothing, a swimsuit or a dress",
+    "a synthesizer, keytar or instrument",
+    "any franchise alien design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Dreamy synthwave drift loop: from the soft opening stance, sway slowly to character-left with both arms rippling outward like water and the tendrils swinging after them, do a slow half-turn in place on both feet, ripple the arms back across to character-right, then return to the exact opening stance. Both feet stay on the floor throughout; no jumps or kicks.",
+    "sing": {
+      "intent": "Dreamy synthwave vocal loop: close the eyes, tilt the head back so the tendrils fall behind, let the free character-right hand drift up in a slow wave and the body glow brighten on the long note, then open the eyes and settle. The mouth must visibly open and change shape across the loop, glowing pink inside, so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the whole body glow flickers bright, the bell contracts slightly and the tendrils flare outward, then everything dims back and she resettles into her soft stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward, draw the tendrils around the body with the free arm like a veil and dim the glow, then hold a small upright stance. Not a combat pose.",
+    "entrance": "One-shot entrance: walk in with slow soft steps, the tendrils trailing behind, pause, let the glow brighten, and settle into her soft stance with the hand floating up.",
+    "victory": "One-shot finish: spread both arms wide and glow brightest, the tendrils fanning out like a halo, then bring the hands together at the chest and hold a shy happy stance.",
+    "ko": "Non-contact performance defeat: she stays on her feet while her light fades — the glow dims to a faint flicker, the tendrils hang straight and limp, the arms droop at her sides and the head bows. She holds a standing, visibly dimmed finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

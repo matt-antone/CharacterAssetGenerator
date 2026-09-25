@@ -1,0 +1,47 @@
+{
+  "id": "astro",
+  "name": "Astro",
+  "height": "5' 11\"",
+  "description": "A clean-cut pulp-magazine astronaut in his thirties, the hero of every rocket serial, who croons doo-wop to the stars.",
+  "build": "Trim and athletic with an upright heroic posture, squared shoulders and a narrow waist; fit and wholesome, never bulky or slouching.",
+  "face": "A clean-shaven oval face with a dimpled chin, bright blue eyes, a straight nose, dark arched brows, and a wide friendly toothy smile; clearly visible through the helmet glass.",
+  "hair": "A glossy dark-brown pompadour with a neat quiff, fully visible inside the helmet.",
+  "outfit": "A clear round fishbowl helmet sealed to a chunky red ring collar, showing the whole head inside. A padded silver quilted flight suit with red ribbed cuffs, a red chest panel with three round dials, a wide red belt, silver gauntlet gloves with red flared cuffs, and red rounded moon boots.",
+  "personality": "Earnest, gallant and a little corny.",
+  "performance_style": "Feet together with the character-left knee popped forward, chest proud, the character-right glove holding the mic in front of the helmet glass and the free character-left hand palm-out at shoulder height.",
+  "location": "A rocket launch gantry at night: a riveted grey steel deck running to the bottom of the frame, a clean deep-blue back wall of sky with a few stars and a crescent moon, the finned red-and-silver tail of a rocket at one side, and bright white floodlights.",
+  "recognition_cues": [
+    "a clear round fishbowl helmet with the smiling face and pompadour visible inside",
+    "a silver quilted suit with a red ring collar",
+    "a red chest panel with three round dials"
+  ],
+  "palette": [
+    "suit silver #C8CDD4 / #818891 / #F4F6F9",
+    "red #D0302C / #861A17 / #F2635E",
+    "glass #CFEAF5 / #8DB6C6 / #FFFFFF",
+    "dial cream #EFE6CC",
+    "skin #E0AE8C / #A0735A / #F6CFB2",
+    "hair #3C2618 / #1E120A / #6A4630"
+  ],
+  "avoid": [
+    "an opaque, mirrored or tinted helmet visor",
+    "a modern white NASA-style spacesuit",
+    "a ray gun, holster or jetpack",
+    "a flag, mission patch or insignia",
+    "fogged or reflective glass hiding the face",
+    "logos, text or real brands"
+  ],
+  "props": ["mic"],
+  "animations": {
+    "dance": "Doo-wop loop: a smooth side-step character-left and back with a knee pop on each beat, shoulders rocking, the free hand snapping out palm-open and back, then close to the opening knee-popped stance.",
+    "sing": {
+      "intent": "Doo-wop crooning loop: tilt the helmeted head to one side on a sweet held note with the free hand drifting over the heart, then return to the stance. The mouth, visible through the glass, must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": ["mic"]
+    },
+    "flinch": "Brief meteor-alarm startle: the eyes widen inside the helmet and the shoulders jerk up to the collar ring, then he gives a sheepish grin and resumes the stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the free gauntlet in front of the helmet glass, then hold a steady heroic finish. Not a fight pose.",
+    "entrance": "One-shot entrance: bound in with springy low-gravity steps, land lightly, give the helmet a tap with the free glove, then pop into the performance stance.",
+    "victory": "One-shot finish: fling the free arm up pointing to the stars with a huge grin, then settle into a fists-on-hips heroic pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the gallantry leaks away — the shoulders slump, the free arm hangs and his face inside the helmet droops with the pompadour tipping forward. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "sheets",
+  "name": "Sheets",
+  "height": "4' 2\"",
+  "description": "A small, painfully shy bedsheet ghost who whispers indie lullabies into the mic and is always slightly astonished anyone is listening.",
+  "build": "Small and soft, a single rounded dome-headed shape under the sheet with narrow sloping shoulders and two small arm shapes lifting the cloth from inside, standing upright and level like the rest of the roster; the hem rests on the floor all round, never hovering, with no feet or legs visible.",
+  "face": "Two plain oval eyeholes cut in the sheet near the top of the dome, showing soft dark shadow with two tiny pale glints for eyes, and a small soft oval mouth-hole below them that is his mouth: it opens wider, rounds and narrows as he sings, dark inside.",
+  "hair": "None; the dome of the sheet is smooth.",
+  "outfit": "One plain off-white cotton bedsheet draped over the whole body, soft and slightly rumpled, with a faint pale-blue pinstripe, gentle folds falling to a wavy hem that pools a little on the floor, and one small faded blue star-shaped patch sewn near the lower character-right side.",
+  "personality": "Shy, gentle and sincere; blushes through the cloth.",
+  "performance_style": "Small and hushed: the dome tipped slightly down, the free character-left arm shape lifted to hold the sheet edge up near the mouth-hole, the hem settled on the floor.",
+  "location": "A child's attic bedroom at night: a floor of pale painted floorboards with a round braided rug running to the bottom of the frame, a clean back wall of sloping plaster with faded star wallpaper, a small iron bed with a rumpled quilt and a stack of old books at one side, and a round window showing a small crescent moon. Soft blue night-light glow and a warm lamp pool.",
+  "recognition_cues": [
+    "a small off-white bedsheet ghost with two oval eyeholes",
+    "a small round mouth-hole below the eyeholes",
+    "a faint pale-blue pinstripe and one faded blue star patch",
+    "a wavy hem resting on the floor"
+  ],
+  "palette": [
+    "sheet #EDEBE4 / #B7B3A8 / #FFFFFF",
+    "pinstripe #A9C0D8 / #7890AA / #CCDCEC",
+    "star patch #6A8CBC / #405E88 / #94B0D8",
+    "hole dark #25242C",
+    "eye glint #E8F2FF",
+    "blush #F2B8C0"
+  ],
+  "avoid": [
+    "floating, hovering, a tail or a hem lifted off the floor",
+    "visible feet, legs, shoes, hands or a person under the sheet",
+    "a translucent, glowing or wispy spectral ghost",
+    "a hooded robe, chains, a scream mask or a menacing face",
+    "a teddy bear, candle or blanket in hand",
+    "high kicks, knee lifts or jumps",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Shy indie sway loop: from the hushed stance, rock the whole sheeted body gently to character-right with the dome tilting and the folds swinging, pause, rock to character-left, give a tiny bashful shoulder shrug under the cloth, and settle back into the exact opening stance with the hem resting on the floor throughout.",
+    "sing": {
+      "intent": "Whispered lullaby loop: lean the dome in close to the mic with the eyeholes softly narrowing, sway a little as the free arm shape lifts gently out to the side, then draw back into his hushed stance. The small mouth-hole in the sheet is his mouth and must visibly open, round and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the whole sheet puffs up and ripples, the eyeholes go round and the free arm shape pulls the cloth up over the mouth-hole, then it settles and he resettles into his hushed stance, hem on the floor. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and lift the free arm shape so a fold of the sheet covers the eyeholes, peeking over its edge, then hold a steady upright finish with the hem on the floor. Not a combat action.",
+    "entrance": "One-shot entrance: shuffle in with small gliding steps under the hem, stop, peek out at the crowd, give a tiny wave with the free arm shape, then settle into his hushed stance.",
+    "victory": "One-shot song-finish celebration: lift both arm shapes up in a small happy stretch so the sheet rises into a tall point at the dome, sway once with a pink blush showing through the cloth, then hold a proud upright pose with the hem on the floor.",
+    "ko": "Non-contact performance defeat: he stays upright while his nerve goes — the dome droops forward, both arm shapes drop so the sheet hangs limp and straight, and the eyeholes sag into sad downturned ovals. He holds a standing, visibly crestfallen finish with the hem resting on the floor. He remains upright in every frame — no kneeling, crouching, sitting, sinking, deflating into a flat pile of cloth or going to the ground. Do not imply a hit, injury or opponent."
+  }
+}

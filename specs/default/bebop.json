@@ -1,0 +1,51 @@
+{
+  "id": "bebop",
+  "name": "Bebop",
+  "height": "5' 3\"",
+  "description": "A jazz scat singer in his seventies, small and spry, whose eyes twinkle every time he finds a note nobody expected; the roster's shortest figure.",
+  "build": "Small, slight and a little stooped, thin limbs, light on his feet; never tall, broad or heavy.",
+  "face": "Lined and cheerful, a neat short white moustache, bright twinkling eyes behind round gold-wire spectacles, a sly grin.",
+  "hair": "Short white hair showing only at the sides and back below the cap.",
+  "outfit": "A mustard-yellow shawl-collar cardigan, buttoned, over a pale blue button-down shirt with a small burgundy polka-dot bow tie, charcoal pleated trousers with a sharp crease, and brown two-tone wingtip shoes. A charcoal tweed flat cap worn slightly tilted. Round gold-wire spectacles.",
+  "performance_style": "Light narrow stance with the weight on the character-left foot, knees loose, slightly stooped, head cocked, the character-right hand holding the mic low at chin height, and the free hand snapping fingers by the hip.",
+  "location": "A cramped jazz club stage: a dark stained wooden floor running to the bottom of the frame, an exposed red-brick back wall, an upright bass leaning on its side in a corner, a small drum kit partly in shadow, and a single blue-tinted spotlight.",
+  "recognition_cues": [
+    "a tilted charcoal flat cap over short white hair",
+    "round gold-wire spectacles",
+    "a mustard shawl-collar cardigan with a polka-dot bow tie"
+  ],
+  "palette": [
+    "mustard #C49A2C / #7D6118 / #E6C05A",
+    "burgundy #6E1E2E / #41101A / #9B3D50",
+    "pale blue #AFC4D8 / #7890A6 / #D5E3F0",
+    "charcoal #3E4046 / #202226 / #666971",
+    "skin #8A5A40 / #573725 / #B07A5C",
+    "hair #E7E4DC / #B4B0A6 / #FFFFFF"
+  ],
+  "avoid": [
+    "a fedora, trilby or beret",
+    "sunglasses or square glasses",
+    "a cane, horn or any instrument",
+    "a tall, upright or athletic build",
+    "a suit jacket or tuxedo",
+    "a solemn or tired expression",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Nimble swing loop: light quick-step shuffle toward character-left, heel-toe tap, then shuffle toward character-right with a finger snap on each beat, a little shoulder bounce and a tip of the cap brim, then return to the opening stance. Feet stay close to the floor.",
+    "sing": {
+      "intent": "Scat vocal loop: bob the head with the rhythm, eyebrows jumping over the spectacles, the free hand fluttering fingers as if playing the notes in the air, then back to the snap. The mouth must visibly open and change shape rapidly across the loop so he unmistakably reads as scat singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: he pops up on his toes with eyebrows high and the spectacles slipping, pushes them back up with one finger, and chuckles back into his stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: tuck the free arm across the cardigan and turn one shoulder forward with a wry look, holding it. Not a fight pose.",
+    "entrance": "One-shot entrance: shuffle in with quick light steps, snapping his fingers, tip the cap to the room, then settle into the canonical loose stance.",
+    "victory": "One-shot finish: a small spry spin on the spot, land with the cap doffed and held out to the crowd, and hold the twinkling grin.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the spark leaves him — the stoop deepens, the free hand drops, the spectacles slide down his nose, and his head hangs low. He holds a standing, visibly tired finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}
