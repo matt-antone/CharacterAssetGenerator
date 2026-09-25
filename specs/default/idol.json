@@ -34,6 +34,9 @@
     "closed prop-holding fist"
   ],
   "animations": {
+    "dance": {
+      "motion": "nicki-minaj-01"
+    },
     "sing": "Headset vocal loop: keep both hands visibly open, use small asymmetric pop choreography around a held note, breathe through the shoulders, then recover to the light grounded stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
     "flinch": "Brief room-sound surprise: the ponytails and open hands react upward, the body recoils slightly, then she resets into a bright composed dance-ready pose. No opponent or contact.",
     "guard": "One-shot stage self-protection: draw both open empty hands into a compact protective shape, keep the headset unobstructed, then hold a balanced grounded final stance. Not combat.",

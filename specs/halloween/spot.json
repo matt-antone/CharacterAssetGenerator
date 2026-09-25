@@ -47,6 +47,9 @@
     "mic"
   ],
   "animations": {
+    "dance": {
+      "motion": "twist-01"
+    },
     "sing": {
       "intent": "Howling rock vocal loop: tip the long muzzle up toward the ceiling, throw back the head for a long joyful howl with the free fist pumping once, then settle back into his upright eager stance. The jaws must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [

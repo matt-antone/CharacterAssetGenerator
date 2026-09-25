@@ -72,6 +72,9 @@
     "pigeon"
   ],
   "animations": {
+    "dance": {
+      "motion": "club-04"
+    },
     "sing": {
       "intent": "Big chorus loop: she holds nothing to her face and belts straight into the open air — plant both boots, tip the head back and hold a sustained line at full volume with the grey lips drawn wide off the teeth, throw the free character-right arm out wide, then settle back into her squared stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [

@@ -3,10 +3,10 @@
   "name": "Belter",
   "height": "5' 7\"",
   "description": "A power-ballad singer in her forties with commanding performance energy.",
-  "build": "A trim, athletic, braced arcade build. Lean and fit rather than heavy: a firm torso, trim hips and thighs, a defined waist, a low centre of gravity and planted weight, carrying about twenty pounds less than a thickset build — strong, not bulky. Never narrow, dainty or elongated, and never heavy, wide-hipped or thick-thighed.",
+  "build": "A trim, athletic, braced build. Lean and fit rather than heavy: a firm torso, trim hips and thighs, a defined waist.",
   "hair": "A large shoulder-clearing mass of thick wavy auburn hair with a high crown and wide side volume, worn completely loose and down: the mass is visibly wider than her shoulders. Every strand falls free from the scalp, with nothing gathered, tied, clipped, twisted or swept back at the crown, temples or nape.",
   "outfit": "A structured crimson performance jacket with angular lapels over a dark fitted top, high-waisted blue mom jeans, a crimson waist accent, and chunky ankle boots in near-black dark brown leather with visible laces: warm mid-brown cross-laced cords over a dark tongue, at least three readable rungs per boot, tied off at the top. The laces are brown, but a distinctly lighter, warmer, more saturated brown than the boot leather — they must read as their own material at a glance, with at least three tone steps between lace and boot. No hat or headwear.",
-  "performance_style": "Flexed knees, torso braced over a low centre, feet planted, and the free hand compact and relaxed.",
+  "performance_style": "free hand compact and relaxed.",
   "location": "A mid-size rock club, seen from the front of a low black stage: a scuffed matte-black deck running to the bottom of the frame, a bare red-brick back wall with a half-furled black drape at one side, a stack of road cases and a silent cabinet amp pushed against it, and a truss of warm PAR cans overhead throwing crossed pools of red and amber onto the brick.",
   "recognition_cues": [
     "a wavy auburn hair mass visibly wider than her shoulders"
@@ -39,8 +39,11 @@
     "mic"
   ],
   "animations": {
+    "dance": {
+      "motion": "club-01"
+    },
     "sing": {
-      "intent": "Planted power-ballad vocal loop: brace through the legs, use one compact free-hand emphasis, then settle back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "intent": "power-ballad vocal loop: use one compact free-hand emphasis, then settle back into her ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [
         "mic"
       ]
