@@ -1,0 +1,53 @@
+{
+  "id": "glitch",
+  "name": "Glitch",
+  "height": "5' 7\"",
+  "description": "An eighteen-year-old hacker prodigy who sings bleepy chiptune and can't keep still.",
+  "build": "Wiry and skinny with narrow shoulders, long thin limbs and knobbly wrists lost in oversized clothes; a small head on a baggy boxy torso over skinny legs. Never muscular or curvy.",
+  "face": "A young narrow face with light olive skin, a light dusting of freckles across the nose, big bright dark-brown eyes, a pointed chin, and a lopsided cocky grin showing a small gap between the front teeth.",
+  "hair": "Messy short black hair with a bright magenta streak in the fringe, sticking up around the visor.",
+  "outfit": "A chunky wraparound visor with a single mirrored cyan lens pushed up on top of the head like goggles; a huge oversized charcoal pullover hoodie falling to mid-thigh with sleeves bunched over the hands, a thin glowing cyan LED strip running along the hood edge, the cuffs and the front pouch; slim black cargo joggers; and chunky white high-top sneakers with cyan soles.",
+  "personality": "Hyper, sarcastic, secretly sweet.",
+  "performance_style": "Loose bouncy stance with knees soft and weight on the character-right foot, shoulders hunched, the free character-left hand held up at chest height with sleeve-covered fingers wiggling as if typing in the air, cocky grin.",
+  "location": "A hacker den aboard a space station: a floor of dark rubber grid tiles running to the bottom of the frame, a clean back wall of matte black panels lined with glowing cyan and magenta circuit traces, a low bank of blinking server racks at one side, and cool screen-glow light.",
+  "recognition_cues": [
+    "a cyan-lens visor pushed up on the head",
+    "an oversized charcoal hoodie with glowing cyan LED trim",
+    "a magenta streak in messy black hair"
+  ],
+  "palette": [
+    "hoodie #34363D / #1B1C20 / #555964",
+    "led cyan #29E6F0 / #129AA2 / #B8FBFF",
+    "magenta #E0348C / #901C58 / #FF7BBE",
+    "joggers #1C1D22 / #0C0C0F / #373943",
+    "sneakers #EFEFEF / #B4B6BC / #FFFFFF",
+    "skin #C69A74 / #85603F / #E6BE98",
+    "hair #16161A / #070709 / #3A3A44"
+  ],
+  "avoid": [
+    "the visor worn down over the eyes",
+    "a laptop, keyboard, tablet, phone or cables in hand",
+    "a fitted or cropped hoodie",
+    "a muscular or adult build",
+    "readable code, text, glyphs or logos on screens or clothing",
+    "any franchise hacker design",
+    "real brands or sneaker logos"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Chiptune bit-crush loop: from the bouncy opening stance, do quick robotic twitch moves in time — pop the character-left shoulder, snap the head to character-right, stutter-step the feet side to side in small jerky increments with arms locked at sharp angles like pixel sprites, do a short sideways shuffle and back, then land exactly in the opening stance with the hand up and fingers wiggling. No kicks, no floorwork.",
+    "sing": {
+      "intent": "Chiptune vocal loop: bob the head rapidly, bounce on the knees, and jab the free character-left sleeve up on each accent, then return to the bouncy stance. The mouth must visibly open and change shape across the loop, quick clipped vowels with the gap-toothed grin, so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: jolt stiff like a frozen frame, eyes wide and shoulders up to the ears, hood LEDs flickering, then shake it off and slump back into the bouncy stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and yank the hood partly up with the free hand, hunching behind the sleeve, then hold a tense crouch-free upright stance. Not a combat pose.",
+    "entrance": "One-shot entrance: skid in on the sneakers with a quick sideways slide, flick the visor up onto the head with one finger, then drop into his bouncy stance with the grin.",
+    "victory": "One-shot finish: jump with both sleeve-covered fists pumping overhead, land, then snap into a smug pose pointing both index fingers forward with the grin, and hold.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the energy crashes — the arms drop limp inside the long sleeves, the hood LEDs dim out, the shoulders sag and the head flops forward so the visor slips down crooked. He holds a standing, visibly crashed finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

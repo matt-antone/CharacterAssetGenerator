@@ -1,0 +1,51 @@
+{
+  "id": "folkie",
+  "name": "Folkie",
+  "height": "5' 6\"",
+  "description": "An earnest acoustic singer-songwriter in her late twenties who sings every verse as if confiding it to one person in the front row.",
+  "build": "Slight and soft-shouldered, with a long vertical line that widens gently into a bell at the hem; never athletic, broad or pin-up exaggerated.",
+  "face": "Open and warm: freckles across the nose and cheeks, soft brows lifted in sincerity, an easy closed-lip smile at rest.",
+  "hair": "Long straight honey-auburn hair worn loose past the shoulder blades, parted in the middle, with one thin braid falling from the character-left temple.",
+  "outfit": "A chunky oatmeal cable-knit cardigan, oversized and hanging open to mid-thigh, over a plain cream high-neck blouse, and a long layered rust prairie skirt in three soft tiers falling to the ankle. Brown lace-up ankle boots show only at the toes. No hat or headwear, no jewellery beyond one thin brass ring.",
+  "performance_style": "Feet together and planted beneath the skirt, knees soft, head tilted slightly toward the character-left shoulder, the character-right hand holding the mic low at chin height and the free hand resting open over her heart.",
+  "location": "A small coffeehouse stage in the afternoon: a low worn pine-plank platform running to the bottom of the frame, a whitewashed brick back wall, a braided rag rug beneath the singer's spot, a wooden stool set to one side, and a string of plain warm bulbs sagging across the upper wall.",
+  "recognition_cues": [
+    "a long layered rust prairie skirt in three tiers",
+    "an oversized oatmeal cable-knit cardigan hanging open",
+    "long middle-parted honey-auburn hair with one thin braid"
+  ],
+  "palette": [
+    "oatmeal #CDBB9A / #9C8A6A / #EADBBE",
+    "cream #E6D9BC / #B9A98B / #FFF4D9",
+    "rust #A2482A / #6A2B17 / #CD6D48",
+    "boot brown #6B4428 / #3F2614 / #936240",
+    "skin #E3B596 / #B07F63 / #F6D2B8",
+    "hair #A8672F / #6B3D18 / #D39456"
+  ],
+  "avoid": [
+    "a guitar, banjo or any instrument",
+    "a flower crown, headband or hat",
+    "a short or fitted skirt",
+    "a sleek fitted cardigan",
+    "a smoky or seductive expression",
+    "high kicks, knee lifts or visible legs",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Gentle folk sway loop: from her planted stance she rocks her weight to character-left and back to character-right on the beat, the tiered skirt swinging a half-beat behind her, the free hand patting time softly against her thigh, one easy half-turn of the shoulders, then she settles back into the opening stance. Feet stay on the floor throughout; no kicks or knee lifts.",
+    "sing": {
+      "intent": "Confiding folk vocal loop: close her eyes on the first phrase, lean slightly toward the mic, open them warmly on the next, the free hand lifting from her heart and returning. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: her shoulders draw up inside the cardigan and she blinks wide, the braid swinging, then she softens back into her warm stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: wrap the cardigan closed across her chest with the free arm and turn one shoulder forward, then hold a small, quiet protected stance. Not a fight pose.",
+    "entrance": "One-shot entrance: walk in with small unhurried steps, tuck a strand of hair behind her ear, give a shy little wave, then settle into the canonical planted stance.",
+    "victory": "One-shot song finish: a small grateful bow with the free hand at her heart, then rise into a bright, open smile and hold it.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the warmth drains out — the cardigan slides off one shoulder, her shoulders round and her head hangs with the chin to her chest, the hair falling forward over her face. She holds a standing, visibly crestfallen finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "gospel",
+  "name": "Gospel",
+  "height": "5' 5\"",
+  "description": "A choir director in her fifties whose joy fills the room before she sings a note and floods it after; the roster's broadest, most grounded silhouette.",
+  "build": "Broad, sturdy and full-figured, wide shoulders and a solid trapezoid of robe down to the floor; never slender, frail or small.",
+  "face": "Round and radiant, full cheeks, eyes creased from smiling, a wide open-hearted grin at rest.",
+  "hair": "Short natural grey-and-black hair shaped into a neat rounded crop close to the head.",
+  "outfit": "A full-length deep royal-purple choir robe with wide bell sleeves and a pleated yoke, falling to the floor and hiding the feet, a white round collar at the neck, and a long gold satin stole draped around the neck and hanging straight down the front to the knees. Small gold stud earrings. No headwear.",
+  "performance_style": "Feet set wide and firmly planted under the robe, knees soft, chest lifted, the character-right hand holding the mic at the chin, and the free arm raised high with the palm open to the ceiling.",
+  "location": "A church sanctuary platform: a warm honey-oak floor running to the bottom of the frame, a clean cream plaster back wall, three tiers of empty choir risers in dark wood behind, and tall plain arched windows spilling soft golden light.",
+  "recognition_cues": [
+    "a full-length royal-purple choir robe with wide bell sleeves",
+    "a long gold stole hanging straight down the front",
+    "one arm raised high with the palm open"
+  ],
+  "palette": [
+    "royal purple #5A2A86 / #34164F / #8752B8",
+    "gold #D2A437 / #8A6A1C / #F2CD68",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "skin #6E4230 / #43271B / #99634A",
+    "hair #5E5B58 / #2E2C2A / #A09C97"
+  ],
+  "avoid": [
+    "a slender or slight build",
+    "a hymnal, cross, or any held object other than the mic",
+    "visible feet or legs",
+    "long or straightened hair",
+    "a solemn or stern expression",
+    "the stole worn crossed or tied",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Joyful choir-step loop: from her planted stance she steps to character-left and brings the other foot in, steps to character-right and brings it in, clapping on each beat with the mic hand kept near the chest, the bell sleeves and stole swinging, then returns to the opening stance with the free arm rising again. Feet stay on the floor; no kicks or knee lifts.",
+    "sing": {
+      "intent": "Soaring gospel vocal loop: rock back as the big note builds, raise the free palm higher, eyes closing in joy, then come forward and bring the hand down to the heart. The mouth must visibly open wide and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: she draws her chin back with wide eyes and a hand to the collar, then laughs it off and settles back into her planted stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: bring the free arm across the chest, the wide sleeve covering it, and turn one shoulder forward, holding a steady grounded final pose. Not a fight pose.",
+    "entrance": "One-shot entrance: stride in with a rolling unhurried walk, the robe swaying, smooth the stole flat with one hand, then plant into the canonical stance and lift the free arm.",
+    "victory": "One-shot finish: throw both arms up with palms open and head tipped back in delight, then hold the jubilant pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the joy drains away — the free arm drops, the wide shoulders slump, and her head hangs with the chin to her chest, the stole swinging still. She holds a standing, visibly weary finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground, and no legs shown. Do not imply a hit or opponent."
+  }
+}

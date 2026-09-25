@@ -1,0 +1,50 @@
+{
+  "id": "moody",
+  "name": "Moody",
+  "height": "5' 8\"",
+  "description": "A nineteen-year-old emo singer who insists none of this is fun and is visibly having the time of their life.",
+  "build": "Gangly and narrow, thin arms and long thin legs, slightly hunched shoulders; never muscular, broad or stocky.",
+  "face": "Pale and narrow, smudged black eyeliner, a downturned sulky mouth that keeps betraying a small hidden smile.",
+  "hair": "Dyed jet-black hair with a long side-swept fringe that covers the character-left eye completely, choppy short layers at the back.",
+  "outfit": "An oversized plain black pullover hoodie with the hood down and sleeves pulled over the knuckles, a black-and-white horizontally striped long-sleeve shirt showing at the hem and cuffs, black skinny jeans, and scuffed black-and-white canvas high-top sneakers. A single black studded wristband. No headwear.",
+  "performance_style": "Pigeon-toed feet, knees slightly bent inward, shoulders hunched, head tipped down, the character-right hand gripping the mic with both elbows tucked in, and the free hand shoved in the hoodie pocket.",
+  "location": "A cramped all-ages club stage: a scuffed black-painted plywood floor running to the bottom of the frame, a bare cinderblock back wall painted matte dark grey, a single cold purple-blue wash light, and a low stack of amp cabinets with blank grilles at one side.",
+  "recognition_cues": [
+    "a long black side-swept fringe covering one eye",
+    "an oversized black hoodie with striped cuffs and hem showing",
+    "black skinny jeans on a gangly frame"
+  ],
+  "palette": [
+    "dark #20232B / #101217 / #3A3E48",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "denim black #2A2C33 / #15161A / #474A54",
+    "skin #EBCFC0 / #BC9D8E / #FAE6DA",
+    "hair #141418 / #070709 / #3C3C44"
+  ],
+  "avoid": [
+    "a guitar or any instrument",
+    "a cheerful open grin",
+    "both eyes visible",
+    "coloured hair streaks",
+    "a hood worn up",
+    "chains, spikes or a mohawk (that is the punk, not this character)",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Pop-punk bounce loop: small springy bounces on the balls of the feet, then a fast bounce shifting weight character-left and character-right, the head bobbing so the fringe flops, one reluctant fist-pump with the free hand, then back to the hunched pigeon-toed opening stance.",
+    "sing": {
+      "intent": "Angsty vocal loop: hunch over the mic with the eyes squeezed shut, then throw the head back so the fringe swings, then hunch again. The mouth must visibly open and change shape across the loop so they unmistakably read as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: they jolt and pull the hoodie sleeves further over the hands, peek from behind the fringe, then slouch back into the stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn away, hunch the shoulders and pull the free forearm across the face with the sleeve over the hand, holding it. Not a fight pose.",
+    "entrance": "One-shot entrance: shuffle in with hands in the hoodie pocket, flick the fringe with a head toss, then drop into the canonical hunched stance.",
+    "victory": "One-shot finish: a small shrug as if unimpressed, then the smile breaks through and they throw one fist up, holding it with a grin half-hidden by the fringe.",
+    "ko": "Non-contact performance defeat: they stay on their feet while it all becomes too much — the shoulders cave in, the arms hang, and the head drops so the fringe covers the whole face. They hold a standing, visibly defeated finish. They remain standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

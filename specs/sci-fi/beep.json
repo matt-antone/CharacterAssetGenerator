@@ -1,0 +1,47 @@
+{
+  "id": "beep",
+  "name": "Beep",
+  "height": "4' 8\"",
+  "description": "A cheerful service robot who was built to serve drinks and instead discovered vocoder synth-pop.",
+  "build": "Boxy and top-heavy: a large rounded-cube head on a short neck joint, a squarish barrel torso, thin jointed tube arms ending in three-fingered clamp hands, and two short sturdy piston legs on flat oval feet. Rigid, mechanical and level; never humanoid-muscled, never slim or android-sleek.",
+  "face": "A dark glass visor band across the head with two round glowing cyan eye-lights, and below it a rectangular speaker-grille mouth of horizontal slats that lights cyan from behind; the lit area opens, narrows and changes shape like a mouth when it speaks or sings.",
+  "hair": "None. A single short stub antenna with a small red bulb on top of the head.",
+  "outfit": "Cream enamel body panels with rounded corners over chrome joints, a tangerine-orange enamel chest plate with three round push-buttons, chrome ribbed neck, elbow and knee joints, and chrome flat feet. Visible panel seams and rivets.",
+  "personality": "Eager, polite and easily delighted.",
+  "performance_style": "Feet together and level, body upright and stiff, the character-right clamp holding the mic below the grille mouth and the free character-left arm bent up at a crisp right angle.",
+  "location": "A starship cargo bay: a steel diamond-plate floor with yellow-and-black hazard striping running to the bottom of the frame, a clean pale-grey back wall of large riveted panels with a closed round-cornered hatch, a few stacked crates at one side, and cool white overhead strip lights.",
+  "recognition_cues": [
+    "a rounded-cube cream head with a dark visor band and two round cyan eye-lights",
+    "a slatted speaker-grille mouth glowing cyan",
+    "a tangerine chest plate with three round buttons"
+  ],
+  "palette": [
+    "enamel cream #EDE3CC / #B8AC92 / #FFF8E8",
+    "tangerine #E8742A / #9E4815 / #FFA064",
+    "chrome #B9C0C8 / #6E757D / #F2F5F8",
+    "visor #1A2330 / #0B1016 / #33445A",
+    "glow cyan #3FE0F0 / #1A95A3 / #B8F8FF",
+    "bulb red #D8333A"
+  ],
+  "avoid": [
+    "a humanoid android face, skin or lips",
+    "a sleek or menacing combat robot",
+    "wheels or treads instead of legs",
+    "a tray, blaster, weapon or tool arm",
+    "any franchise droid design",
+    "logos, text or real brands"
+  ],
+  "props": ["mic"],
+  "animations": {
+    "dance": "Robotic synth-pop loop: stiff mechanical popping in sharp stops — the head ticks character-left then character-right, the free arm snaps from a right angle up to straight and back, the torso twists a quarter turn and back on the flat feet, then everything locks back into the opening stance.",
+    "sing": {
+      "intent": "Vocoder vocal loop: the head tilts up on a held note while the free arm slowly rises, then lowers back into the stance. The speaker-grille mouth visibly lights brighter and its glowing area opens tall, narrows and changes shape across the loop so Beep unmistakably reads as singing.",
+      "props": ["mic"]
+    },
+    "flinch": "Brief glitch startle: the eye-lights flicker to small dots, the antenna bulb blinks and the whole body judders once, then the eyes reset round and Beep resumes the stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: pull both clamp arms up in front of the visor and turn the chest plate slightly away, then hold a locked upright finish. Not a fight pose.",
+    "entrance": "One-shot entrance: stomp in on short stiff steps, stop with a little bounce, rotate the head to face forward, then lock into the performance stance.",
+    "victory": "One-shot finish: the eye-lights turn into upward arcs, both arms shoot straight up with clamps open and the antenna bulb glows, then Beep settles into a proud upright pose.",
+    "ko": "Non-contact performance defeat: Beep powers down on its feet — the eye-lights dim to faint dots, the grille mouth goes dark, the head droops forward on its neck joint and both arms hang limp. It holds a standing, switched-off finish. It remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit, sparks, smoke or opponent."
+  }
+}

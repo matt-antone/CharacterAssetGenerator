@@ -1,0 +1,51 @@
+{
+  "id": "rudeboy",
+  "name": "Rudeboy",
+  "height": "5' 10\"",
+  "description": "A ska and rocksteady singer in his mid thirties, cool as a cut-throat razor until the offbeat hits and his knees start pumping.",
+  "build": "Trim and compact, square shoulders, narrow straight lines everywhere; never bulky, loose or slouched.",
+  "face": "Lean with a pencil-thin moustache, a sharp jaw, and a cool half-lidded look with one eyebrow raised.",
+  "hair": "Close-cropped black hair, a short even fade, mostly hidden under the hat.",
+  "outfit": "A slim two-tone tonic suit in iridescent green-to-plum shot fabric: a short three-button jacket with narrow lapels, and narrow cropped trousers ending above the ankle to show white socks. A crisp white shirt with a skinny black tie, a small black pork-pie hat with a short upturned brim, and black-and-white brogues.",
+  "performance_style": "Upright and sharp, feet shoulder-width, knees ready, the character-right hand holding the mic close at the chin, and the free hand pointing a finger down at the floor on the offbeat.",
+  "location": "A small basement dancehall: a black-and-white checkerboard floor running to the bottom of the frame, a plain matte-black back wall, a stack of speaker cabinets in dark wood at one side, and a single strip of warm red light along the top of the wall.",
+  "recognition_cues": [
+    "a small black pork-pie hat",
+    "a two-tone shot-fabric tonic suit with cropped trousers and white socks",
+    "a skinny black tie on a white shirt"
+  ],
+  "palette": [
+    "tonic green #3F6B55 / #22402F / #6E9E84",
+    "tonic plum #5E3A5A / #372135 / #8A5E86",
+    "dark #20232B / #101217 / #3A3E48",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "skin #7A4A34 / #4B2B1E / #A36A4F",
+    "hair #171719 / #080809 / #424248"
+  ],
+  "avoid": [
+    "a trilby, fedora or wide-brimmed hat",
+    "baggy or full-length trousers",
+    "dreadlocks or long hair",
+    "a loose, unbuttoned or slouchy look",
+    "a horn or any instrument",
+    "flags, badges or checkerboard patterns on the clothing",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Skanking loop: pump the knees alternately on the offbeat, the elbows bent and fists running forward and back like a sprinter in place, the free-hand fist pumping low, lean slightly to character-left then character-right, feet paddling close to the floor, then return to the opening sharp stance.",
+    "sing": {
+      "intent": "Cool rocksteady vocal loop: dip one shoulder with the rhythm, tilt the hat brim with the free hand, then straighten back. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: he snaps his head back and slaps a hand to the hat to keep it on, then tugs the jacket straight and resumes his cool stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn side-on, raise the free forearm across the chest, and hold a sharp, composed final pose. Not a fight pose.",
+    "entrance": "One-shot entrance: bop in with quick springy steps, tip the pork-pie hat, tug the jacket cuffs, then snap into the canonical stance.",
+    "victory": "One-shot finish: a quick spin on the spot, land with a finger-point at the crowd and the hat tipped low, and hold it.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the sharpness goes out of him — the hat tips down over his eyes, the tie hangs crooked, the shoulders drop and his head hangs low. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "rocker",
+  "name": "Rocker",
+  "height": "6' 0\"",
+  "description": "A glam-rock frontman in his early thirties who treats every stage as a runway built for him alone.",
+  "build": "Long-limbed and whip-thin, narrow hips, a wide V of flared legs at the floor; never muscular, stocky or broad-chested.",
+  "face": "Angular with high cheekbones, a knowing sideways smirk, and a bold silver lightning streak painted diagonally across the character-left eye.",
+  "hair": "Huge teased platinum-blond hair, a wide shaggy mane layered and backcombed into a round cloud well past the shoulders.",
+  "outfit": "A one-piece silver sequined jumpsuit with a deep V neck to the sternum, wide pointed collar, long sleeves, a narrow waist and dramatic bell-bottom flares covering the feet down to the tips of tall magenta platform boots. A thin magenta sash tied at the waist. No hat or headwear.",
+  "performance_style": "Wide cocky stance with the character-left leg forward and hip cocked to character-right, chin lifted, the character-right hand holding the mic near his mouth with the elbow flared high, and the free arm flung out to the side with fingers splayed.",
+  "location": "An arena rock stage: a glossy black riser floor running to the bottom of the frame, a back wall of tall black truss hung with rows of white and magenta lamps, a pair of low monitor wedges at the front edge, and a thin haze catching the beams.",
+  "recognition_cues": [
+    "huge teased platinum-blond hair in a round cloud",
+    "a silver sequined jumpsuit with wide bell-bottom flares",
+    "a silver lightning streak painted across one eye"
+  ],
+  "palette": [
+    "silver sequin #B9BDC6 / #6F737C / #F2F4F8",
+    "magenta #C21E7A / #7A0F4B / #EE5AA8",
+    "dark #20232B / #101217 / #3A3E48",
+    "skin #E1B49A / #A97A61 / #F5D2BD",
+    "hair #E8DDB0 / #B0A477 / #FFF8DC"
+  ],
+  "avoid": [
+    "a guitar or any instrument",
+    "a leather jacket or denim",
+    "flat sleek or short hair",
+    "a bulky muscular build",
+    "a full-face makeup mask or face paint beyond the one eye streak",
+    "a cape or feathers",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Glam strut loop: from the cocky stance he swaggers two slow steps toward character-right on the platforms, swings the hips on each step, snaps back with a sharp shoulder shimmy that sets the flares swinging, whips the hair with one head toss, then struts back and lands in the opening stance.",
+    "sing": {
+      "intent": "Showman rock vocal loop: throw the head back on the long note, then lean forward over the mic with the free arm pointing out at the crowd, and return. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief feedback-squeal reaction: he recoils with a theatrical wince, the hair cloud bouncing, then smooths it with the free hand and resumes the swagger. No contact or opponent.",
+    "guard": "One-shot stage self-protection: swing the free forearm up in front of the face in a dramatic pose, one flared leg turned in, and hold it like a photo call. Not a fight pose.",
+    "entrance": "One-shot entrance: strut in on long platform steps with the hips swinging, stop, flick the hair back, and snap into the canonical cocky stance.",
+    "victory": "One-shot finish: fling both arms wide, drop the head back with a triumphant grin, then hold a star-shaped final pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the swagger collapses — the hips straighten, the shoulders sag, the free arm dangles, and the head hangs low with the teased hair drooping over his face. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

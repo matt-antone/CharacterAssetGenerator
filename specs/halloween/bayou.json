@@ -1,0 +1,59 @@
+{
+  "id": "bayou",
+  "name": "Bayou",
+  "height": "6' 0\"",
+  "description": "A cheerful swamp creature who crawled out of the lagoon for the surf rock and never went back, forever dripping and forever stoked.",
+  "build": "Athletic and rangy with a broad scaly chest, long arms, big webbed hands and long webbed feet, a slight pot belly, standing upright and level like the rest of the roster with weight even over both feet; never hunched or lurching.",
+  "face": "A broad fish-like face with a wide flat lipless mouth that opens very wide, a small flat nose with two slit nostrils, big round glossy yellow eyes set to the sides with heavy scaly brow ridges, three frilled gill slits on each side of the neck, and a big goofy grin showing small rounded teeth.",
+  "hair": "None; a tall ribbed fin crest runs from the brow over the top of the head and down the back of the neck, with two smaller fan fins at the sides of the head where ears would be.",
+  "outfit": "Green scaly skin all over with a pale yellow-green belly; knee-length board shorts in turquoise and orange hibiscus print with a drawstring; a string of little white shells around the neck; bare webbed feet. Small drips of swamp water run from the fin crest and elbows.",
+  "personality": "Sunny, laid-back and delighted by everything.",
+  "performance_style": "Loose surfer stance: feet wide and turned out, knees soft, weight rolling easy, the free character-left webbed hand throwing a relaxed open wave, fin crest up and a wide grin.",
+  "location": "A moonlit swamp dock: a floor of mossy wet boardwalk planks running to the bottom of the frame, a clean back wall of dark cypress trunks hung with Spanish moss over still black water, a surfboard of plain turquoise leaning against a post at one side, and paper lanterns strung overhead. Warm lantern-orange light and green swamp glow.",
+  "recognition_cues": [
+    "a tall ribbed fin crest from brow to neck",
+    "green scaly skin with frilled gill slits on the neck",
+    "big round glossy yellow eyes",
+    "turquoise-and-orange hibiscus board shorts"
+  ],
+  "palette": [
+    "scales #3E8A4C / #20502A / #6CB878",
+    "belly #BFD48A / #86A052 / #DEEBB4",
+    "fin crest #2E6E62 / #164038 / #5AA090",
+    "fin membrane #8FC9A8 / #5A9678 / #BEE6CE",
+    "gills #C66A6A / #7E3A3A / #E8989A",
+    "eye yellow #F2D23A",
+    "pupil #141414",
+    "shorts turquoise #1FA7B8 / #11687A / #5ED0DC",
+    "hibiscus orange #F07A2E / #A44A14 / #FFA868",
+    "shells #F4EFE2 / #BDB4A0 / #FFFFFF",
+    "drips #9FE0D4"
+  ],
+  "avoid": [
+    "any lagoon-creature film's likeness or design",
+    "slime so heavy it hides the shape, sludge, mud or grime",
+    "claws, fangs, a snarl or a menacing posture",
+    "a surfboard, spear, trident or guitar in hand",
+    "a hunched, crouching or lurching posture",
+    "a tail",
+    "shoes or sandals",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Surf-rock stomp loop: from the surfer stance, do the pony with light bouncing steps, character-right foot then character-left, shoulders rolling and the free webbed hand paddling the air, lean into a little surf wobble with the arms out for balance, drips flicking off, and settle back into the exact opening stance.",
+    "sing": {
+      "intent": "Reverb-drenched vocal loop: lean back into a big open-throated note with the fin crest flaring and the gills fanning out, the free webbed hand rolling like a wave, then return to his surfer stance. The wide mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the fin crest snaps flat, the gills flutter shut and a splash of drips flies off, then the crest springs back up and he resettles into his surfer stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the free webbed hand spread wide in front of the face with the fin crest flattened, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: pad in with slapping wet webbed footsteps, stop, give a full-body shake that sprays drips off the fin crest, throw a two-finger shaka wave, then drop into his surfer stance.",
+    "victory": "One-shot song-finish celebration: throw both arms up in a wide stoked V with the fin crest and gill frills fanned full, then hold a proud upright pose with a shaka and the goofiest grin.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the stoke drains out — the fin crest wilts flat down the back of the head, the gills droop, the big eyes go heavy-lidded and the arms dangle. He holds a standing, visibly bummed finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, melting into a puddle or going to the ground. Do not imply a hit, injury or opponent."
+  }
+}

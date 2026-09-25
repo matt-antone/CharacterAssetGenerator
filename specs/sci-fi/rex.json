@@ -1,0 +1,55 @@
+{
+  "id": "rex",
+  "name": "Rex",
+  "height": "6' 0\"",
+  "description": "A swaggering space pirate in his forties who sings rowdy sea shanties like every gig is a shore leave.",
+  "build": "Broad-chested and barrel-bellied with thick forearms and sturdy legs; a solid top-heavy wedge silhouette made wider by the long coat. Never lean, lanky or boyish.",
+  "face": "A weathered tan face with a big grin, a broken nose, a heavy brow, and a thick red-brown beard braided into two short plaits tied with brass rings. The character-left eye is natural dark brown; the character-right eye is a round brass cybernetic lens with a glowing amber iris, set in a riveted brass plate that covers the eye socket and part of the cheekbone.",
+  "hair": "Shaggy shoulder-length red-brown hair with grey streaks at the temples, pushed back.",
+  "outfit": "A long teal frock coat to mid-calf with wide turned-back cuffs, big brass buttons and flared skirts, worn open over a loose cream shirt with a laced neck; a wide dark-red sash around the belly, a thick brown belt with a plain round brass buckle, dark grey trousers tucked into tall scuffed brown boots with folded-over tops. No hat.",
+  "personality": "Loud, generous and mock-menacing; more ham than villain.",
+  "performance_style": "Wide planted stance with the character-left foot forward, chest out, the free character-left fist on the hip pushing the coat back, head cocked with a big grin.",
+  "location": "The deck of a pirate starship: a floor of worn riveted steel deck plates running to the bottom of the frame, a clean back wall of teal-painted bulkhead with brass portholes showing starfield, coils of heavy rope and a barrel lashed at one side, and a warm amber lantern glow from above.",
+  "recognition_cues": [
+    "a brass cybernetic eye with a glowing amber iris over the character-right eye",
+    "a red-brown beard in two brass-ringed braids",
+    "a long open teal frock coat with brass buttons"
+  ],
+  "palette": [
+    "coat teal #1F6E6E / #0F3F40 / #3A9C9A",
+    "brass #C49A3C / #7C5E1E / #EACB7A",
+    "sash red #8E2A25 / #551613 / #C0493F",
+    "shirt cream #E3D6B8 / #B1A385 / #FAF1DC",
+    "boots #6A4428 / #3C2615 / #9A6A44",
+    "skin #B77E56 / #774A2E / #D9A07A",
+    "hair #7E3B20 / #4A200F / #AC5D38",
+    "eye amber #FFB23A"
+  ],
+  "avoid": [
+    "an eyepatch instead of the cybernetic eye",
+    "a tricorn hat, bandana or skull-and-crossbones",
+    "a cutlass, sword, blaster, pistol, hook hand or parrot",
+    "a peg leg",
+    "a thin or young build",
+    "a real snarl or genuine menace",
+    "any film pirate's likeness or costume",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Hornpipe-style shanty stomp loop: from the planted opening stance, fold the arms high across the chest, hop onto the character-right foot and tap the character-left heel forward twice, stomp, then switch and tap the character-right heel twice, with the coat skirts swinging; unfold the arms and land back in the exact opening stance, fist on hip. Low heel taps and stomps only, no high kicks.",
+    "sing": {
+      "intent": "Rowdy shanty chorus loop: throw the head back on the big line with the braided beard jutting up, swing the free character-left fist up in a toast, then bring it back to the hip and lean in. The mouth must visibly open wide and change shape across the loop, beard moving with the jaw, so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the shoulders jolt, the natural eye squeezes while the cyber-eye iris flares brighter, then he barks a laugh and resettles into his planted stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and sweep the coat's front skirt across his body with the free arm like a cape, then hold a wide planted stance. Not a fight pose.",
+    "entrance": "One-shot entrance: swagger in with rolling heavy steps, flick the coat tails back with both hands, and plant into his wide stance with the fist to the hip and a grin.",
+    "victory": "One-shot finish: thrust the free fist high overhead, rock back on his heels with a roaring laugh so the braids swing, then settle into a proud chest-out pose with both fists on hips.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the swagger leaks out — the big chest caves, the shoulders roll forward, the coat hangs limp, the cyber-eye dims to a dull amber and the head hangs low with the beard on his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

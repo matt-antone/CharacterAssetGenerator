@@ -1,0 +1,47 @@
+{
+  "id": "captain",
+  "name": "Captain",
+  "height": "6' 1\"",
+  "description": "A square-jawed starship captain in his fifties who has talked his crew through every asteroid field and now swings big-band standards like he is still giving orders from the bridge.",
+  "build": "Broad-chested and upright with a straight military back, square shoulders, a slight settled middle and solid legs; commanding and sturdy, never bulky, hunched or athletic-lean.",
+  "face": "A square cleft jaw, a strong straight nose, deep smile lines and crow's feet, heavy dark brows going grey at the ends, steady blue-grey eyes, and a confident closed-lip half smile.",
+  "hair": "Short wavy steel-grey hair swept back from a slightly receding hairline, with silver temples.",
+  "outfit": "A fitted royal-blue command tunic with a high mandarin collar, a diagonal gold-piped front closure running from the character-left shoulder to the character-right hip, square gold-fringed epaulettes on both shoulders, three plain gold bands on each cuff, a wide black belt with a plain round gold buckle, straight black trousers, and polished black ankle boots. No hat or headwear.",
+  "personality": "Warm, decisive and a little theatrical.",
+  "performance_style": "Feet planted shoulder-width, chest out, chin level, the character-right hand holding the mic at chest height and the free character-left hand extended palm-down as though steadying the room.",
+  "location": "A retro starship observation lounge: a polished charcoal deck with a brass inlaid stripe running to the bottom of the frame, a clean curved back wall of cream enamel panels with rounded porthole windows showing a ringed planet and stars, a low chrome bar with round stools at one side, and warm amber ceiling lights.",
+  "recognition_cues": [
+    "square gold-fringed epaulettes on a royal-blue tunic",
+    "a diagonal gold-piped closure across the chest",
+    "a square cleft jaw under swept-back steel-grey hair"
+  ],
+  "palette": [
+    "tunic blue #1F4FA8 / #122F66 / #4B7AD1",
+    "gold #D4A937 / #8A6A1C / #F2D57A",
+    "black #1C1D22 / #0C0C0F / #3A3C44",
+    "skin #C98B6A / #875640 / #E6AE8E",
+    "hair #9A9DA3 / #5E6167 / #CDD0D5"
+  ],
+  "avoid": [
+    "a gold chest insignia, badge or delta emblem",
+    "a skinny or young build",
+    "a peaked cap or any headwear",
+    "a sidearm, blaster or holster",
+    "a cape or long coat",
+    "any franchise uniform design or colour-coded division shirt",
+    "logos, text or real brands"
+  ],
+  "props": ["mic"],
+  "animations": {
+    "dance": "Big-band swing loop: from his planted stance, step the character-left foot out and back on the beat, swing the shoulders and free arm in a relaxed side-to-side sway, snap the fingers of the free hand twice at shoulder height, then return exactly to the planted opening stance.",
+    "sing": {
+      "intent": "Brassy swing vocal loop: lean the chest into a big held note with the free character-left hand sweeping out wide, then draw it back and settle into the planted stance. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing.",
+      "props": ["mic"]
+    },
+    "flinch": "Brief alarm-klaxon startle: the eyebrows shoot up and the shoulders square sharply, then he tugs the tunic hem straight and resumes command posture. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn the character-left shoulder forward and raise the free forearm across the chest, then hold a firm upright finish. Not a fight pose.",
+    "entrance": "One-shot entrance: stride in with long confident steps, stop, tug the tunic hem straight with the free hand, then take his planted stance with a small nod.",
+    "victory": "One-shot finish: throw a crisp two-finger salute from the brow, then plant the fist of the free hand on the hip in a broad proud pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the command drains out of him — the square shoulders sag, the epaulettes droop forward, and his head bows with the chin toward the collar. He holds a standing, visibly weary finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

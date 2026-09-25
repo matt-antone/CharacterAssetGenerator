@@ -1,0 +1,50 @@
+{
+  "id": "salsera",
+  "name": "Salsera",
+  "height": "5' 4\"",
+  "description": "A salsa singer in her mid thirties, all fire in the voice and all precision in the feet, who never misses the clave.",
+  "build": "Petite and compact through the torso, strong shoulders, a small waist flaring into a wide tiered skirt; never tall, lanky or heavy.",
+  "face": "Heart-shaped with strong dark brows, bold red lips, and a fierce confident smile.",
+  "hair": "Glossy black hair pulled into a tight high bun, with a single large red flower pinned at the character-left side of the bun.",
+  "outfit": "A scarlet off-the-shoulder dress with a deep double ruffle around the neckline and short ruffled cap sleeves, fitted through the bodice, then a knee-to-calf skirt of four stacked ruffled tiers that flares wide when she turns, each tier edged in a thin white trim. Scarlet strapped dance heels. Large gold hoop earrings.",
+  "performance_style": "Weight on the character-right foot, the character-left toe pointed out in front, hips angled, shoulders squared, the character-right hand holding the mic at the chin and the free hand on the hip.",
+  "location": "A Latin dance club stage: a polished dark-red lacquered floor running to the bottom of the frame, a deep teal back wall with a clean band of warm amber uplight along its base, a pair of conga drums standing at one side, and a small bandstand of empty chairs pushed well back.",
+  "recognition_cues": [
+    "a scarlet ruffled off-shoulder dress with four stacked flaring tiers",
+    "a tight high bun with one large red flower",
+    "large gold hoop earrings"
+  ],
+  "palette": [
+    "scarlet #C11E2A / #7A1018 / #EA5059",
+    "white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "gold #D2A437 / #8A6A1C / #F2CD68",
+    "skin #B7805E / #7A5139 / #D6A07D",
+    "hair #141418 / #070709 / #3C3C44"
+  ],
+  "avoid": [
+    "a fan, maracas or any held object other than the mic",
+    "loose or flowing hair",
+    "a floor-length gown or train",
+    "a sombrero or any hat",
+    "polka dots or flamenco-style long sleeves",
+    "a demure or shy expression",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Salsa basic loop: from her stance she steps forward with the character-left foot, rocks back, closes; steps back with the character-right, rocks forward, closes, the hips swinging on each step, then a single quick spin on the spot that flares the tiered skirt wide, and she lands back in the opening stance. Feet stay close to the floor; no kicks.",
+    "sing": {
+      "intent": "Fiery salsa vocal loop: sharp shoulder shimmy on the phrase, free hand snapping up from the hip to punctuate, then back to the hip. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: she snaps her head toward the sound with a hard stare, the earrings swinging, then flicks her chin and returns to her stance. No contact or opponent.",
+    "guard": "One-shot stage self-protection: turn a shoulder forward and sweep the free arm up across the body, holding a crisp defiant pose. Not a fight pose.",
+    "entrance": "One-shot entrance: dance in with quick precise steps on the beat, a half-turn that swirls the skirt, then plant into the canonical stance with the hand on the hip.",
+    "victory": "One-shot finish: a fast double spin that sends the tiers flying, stop dead with the free arm flung high, and hold it.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the fire goes out — the hand slides off the hip, the shoulders drop, the skirt hangs still, and her head hangs with the chin down. She holds a standing, visibly defeated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

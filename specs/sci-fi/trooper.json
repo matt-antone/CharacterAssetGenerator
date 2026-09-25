@@ -1,0 +1,51 @@
+{
+  "id": "trooper",
+  "name": "Trooper",
+  "height": "5' 10\"",
+  "description": "A battle-hardened space marine in her thirties who sings soaring power metal and treats every chorus as a rally cry.",
+  "build": "Strong and athletic under armour, made massive by it: huge rounded shoulder plates, a thick chest plate and heavy greaves give a blocky, top-heavy, wide silhouette with a small head. Never slim-waisted, pin-up or exposed.",
+  "face": "A square-jawed determined face with warm brown skin, a small white scar through the character-left eyebrow, strong dark brows, steady hazel eyes and a wide confident mouth.",
+  "hair": "A short dark-brown undercut, shaved at the sides, with the top swept back and slightly flattened as if just out of a helmet.",
+  "outfit": "Chunky rounded plated armour in bright orange with off-white panels: oversized dome shoulder pauldrons, a thick segmented chest plate, a wide armoured belt, heavy thigh plates, big boxy knee guards, armoured forearm gauntlets and large chunky boots. A dark grey padded bodysuit shows at the neck, elbows and joints. A few scuffs and chipped paint on the plates. No helmet anywhere.",
+  "personality": "Loud, loyal and fearless; a big-hearted squad leader.",
+  "performance_style": "Wide heroic power stance with the feet planted apart, chest out, the free character-left gauntleted fist raised to shoulder height, chin up with a fierce grin.",
+  "location": "A starship hangar bay: a floor of yellow-and-grey hazard-striped steel deck plating running to the bottom of the frame, a clean back wall of tall grey blast doors with orange warning lights along the top, and cold white overhead floodlight.",
+  "recognition_cues": [
+    "oversized orange dome shoulder pauldrons",
+    "a bare head with a short dark undercut",
+    "chunky orange-and-white plated armour"
+  ],
+  "palette": [
+    "armour orange #E0701E / #92430C / #F9A35C",
+    "armour white #E6E2D8 / #A9A498 / #FFFFFF",
+    "bodysuit #3A3D44 / #1C1E22 / #5A5E68",
+    "skin #8A5A3A / #53341F / #B07C58",
+    "hair #3A2618 / #1A100A / #5E4230"
+  ],
+  "avoid": [
+    "a helmet worn, carried, held or at her feet",
+    "a rifle, blaster, knife, sword or any weapon",
+    "exposed midriff, cleavage or skin-tight armour",
+    "sleek slim armour",
+    "insignia, rank badges, skulls, eagles or unit markings",
+    "any franchise space-marine armour design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Power-metal headbang loop: from the planted opening stance, pump the free fist up and down in time, headbang with the undercut flopping, step the character-left foot forward into a lunging rock stance, windmill the free arm once, then step back and return to the exact opening stance with the fist at shoulder height. Low stomps only, no kicks.",
+    "sing": {
+      "intent": "Power-metal anthem loop: lean back, throw the chin up on a soaring high note and punch the free gauntlet skyward, then pull it back to shoulder height. The mouth must visibly open wide and change shape across the loop, from a shout to a held open vowel, so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the big pauldrons hitch up, the eyes snap sideways alert, then she rolls her neck and resettles into her power stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward so the dome pauldron leads and raise the free forearm gauntlet in front of the face, then hold a braced planted stance. Not a combat attack.",
+    "entrance": "One-shot entrance: march in with heavy clanking strides, stop with a stomp, roll the armoured shoulders, and plant into her wide power stance.",
+    "victory": "One-shot finish: raise the free fist high overhead with a triumphant roar, then bring it down to thump the chest plate and hold a proud chest-out stance.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the fight drains out — the heavy pauldrons sag, the arms hang loose, and her head drops forward with the eyes shut. She holds a standing, visibly spent finish, braced upright by the heavy armour. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

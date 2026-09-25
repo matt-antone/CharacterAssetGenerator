@@ -1,0 +1,54 @@
+{
+  "id": "xyla",
+  "name": "Xyla",
+  "height": "6' 3\"",
+  "description": "A regal insectoid alien queen who sings grand opera with total imperial conviction.",
+  "build": "Tall and statuesque with a narrow wasp waist, a long neck, broad squared shoulders capped by carapace pauldrons and two long slender arms; an hourglass-to-bell silhouette with the gown flaring wide at the floor. Two arms only. Never hunched, bug-crawling or six-limbed.",
+  "face": "A smooth emerald-green chitin face with a narrow tapering chin, a small lipless mouth with dark violet edges that opens clearly, no nose, and two large faceted compound eyes, deep gold with a honeycomb sheen, wrapping around the sides of the head. Two long thin antennae sweep up and back from the brow and curl at the tips.",
+  "hair": "No hair: a smooth emerald chitin crown rising into a tall pointed crest behind the antennae.",
+  "outfit": "A floor-length iridescent carapace gown made of overlapping shell plates that shift from emerald to violet to gold, fitted tight through the wasp waist and flaring into a wide stiff bell skirt; a high fan-shaped collar of translucent amber wing membrane rising behind the head; ridged shell pauldrons at the shoulders; long fitted sleeves ending in slim three-fingered dark-green hands. The skirt hides the feet.",
+  "personality": "Imperious, dramatic and secretly delighted by applause.",
+  "performance_style": "Tall and imperious: feet together under the bell skirt, chin lifted, the free character-left arm extended out and slightly raised with the three fingers spread, the wing collar framing the head.",
+  "location": "A hive throne hall: a floor of polished amber hexagonal tiles running to the bottom of the frame, a clean curved back wall of honeycomb-textured resin glowing warm gold from behind, and two tall ribbed resin pillars at the sides.",
+  "recognition_cues": [
+    "large faceted gold compound eyes and curling antennae",
+    "an iridescent emerald-violet carapace bell gown",
+    "a fan-shaped amber wing-membrane collar"
+  ],
+  "palette": [
+    "carapace emerald #1E8A5A / #0D4F31 / #4FC58C",
+    "iridescent violet #6B3FA0 / #3A2060 / #A07AD6",
+    "sheen gold #D9AE3C / #8E6E1C / #F5D987",
+    "wing amber #E8A94A / #A06A1F / #FFD99A",
+    "eyes #C4912A / #6E4E10 / #F4CE6A",
+    "mouth violet #3A1C44"
+  ],
+  "avoid": [
+    "more than two arms or visible insect legs",
+    "a human face, human skin or human eyes",
+    "mandibles, fangs, drool or anything horror",
+    "wings used to fly or hover",
+    "a sceptre, crown object or throne in hand",
+    "a short or split gown, visible legs",
+    "high kicks",
+    "any franchise alien queen design",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Stately court-dance loop: from the imperious opening stance, glide a small step to character-left and turn the torso with the free arm sweeping in a high slow arc, dip in a shallow regal curtsey, rise and glide back to character-right with the arm sweeping the other way, antennae swaying, then return to the exact opening stance. Feet stay under the skirt; no kicks or jumps.",
+    "sing": {
+      "intent": "Grand opera aria loop: swell the chest, lift the chin high and spread the free character-left arm wide on a soaring sustained note, antennae quivering, then draw the hand back to the chest. The small mouth must visibly open wide and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the antennae snap back flat, the wing collar flares wider and the free hand flies to the chest, then she recomposes with a haughty tilt of the head. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward so the carapace pauldron leads and raise the free forearm across the body, antennae lowered, then hold a tall defiant stance. Not a combat pose.",
+    "entrance": "One-shot entrance: sweep in with a slow gliding walk, the bell skirt swaying, stop, fan the wing collar open, and extend the free arm into her imperious stance.",
+    "victory": "One-shot finish: throw the free arm and head back in a grand diva flourish with antennae high and wing collar fully spread, then descend into a deep regal bow and rise to a tall proud hold.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the majesty drains away — the wing collar folds down, the antennae droop, the shoulders fall and the head bows with the arms hanging at her sides. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+  }
+}

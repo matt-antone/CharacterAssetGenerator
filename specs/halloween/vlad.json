@@ -1,0 +1,60 @@
+{
+  "id": "vlad",
+  "name": "Vlad",
+  "height": "6' 5\"",
+  "description": "A centuries-old vampire count who sings melodramatic cabaret chanson as if every verse were his last farewell, then bows to the applause like it is the first he has heard in four hundred years.",
+  "build": "Very tall, gaunt and narrow with long thin limbs, a long neck, sloping narrow shoulders and long elegant bony fingers, standing upright and level like the rest of the roster with weight even over both feet; never muscular, stocky or hunched.",
+  "face": "A long narrow face with pale lilac-grey skin, sharp high cheekbones and hollow cheeks, a long straight thin nose, heavy arched black brows, deep-set sorrowful red eyes with dark lavender shadows beneath, and a thin-lipped mouth showing two small neat white fangs only when it opens.",
+  "hair": "Glossy black hair slicked straight back from a sharp widow's peak, with two silver streaks at the temples, ending neatly at the nape.",
+  "outfit": "A long black cape lined in deep wine-red satin, with a tall stiff pointed collar standing up behind the head to crown height and the hem sweeping just above the floor; a black tailcoat over a wine-red brocade waistcoat, a white wing-collar shirt with a floppy black silk bow at the throat, slim black trousers, and pointed black patent shoes.",
+  "personality": "Tragic, theatrical and secretly very sweet; weeps at his own ballads.",
+  "performance_style": "Tall and still: heels together, chin lifted, the free character-left hand pressed flat over the heart with the long fingers spread, and a look of exquisite sorrow.",
+  "location": "A candlelit cabaret salon in a crumbling castle: a floor of worn black-and-white marble tiles running to the bottom of the frame, a clean back wall of faded wine-red damask hung with two tall iron candelabra, a small round café table with an empty wine glass pushed to one side, and a heavy red velvet curtain gathered at the edge. Warm low candlelight, cool grey shadow above.",
+  "recognition_cues": [
+    "a tall stiff pointed cape collar standing up behind the head",
+    "a black cape with a wine-red satin lining",
+    "slicked-back black hair with a sharp widow's peak and silver temple streaks",
+    "very tall gaunt silhouette with pale lilac-grey skin"
+  ],
+  "palette": [
+    "cape and coat #1C1A22 / #0C0B10 / #3A3644",
+    "wine lining #7A1E34 / #45101D / #A8394F",
+    "brocade waistcoat #6B1A2C / #3B0E18 / #94334A",
+    "shirt #E8E4EA / #B2ACB6 / #FFFFFF",
+    "skin #C9C0CE / #8C8294 / #E6E0EA",
+    "hair #16151B / #08080B / #34323E",
+    "silver streak #B8B8C4 / #7C7C88 / #E0E0EA",
+    "eye red #B8232E",
+    "under-eye #8E7A9C",
+    "fangs #F4F2EC",
+    "shoes #141318 / #060608 / #4A4856"
+  ],
+  "avoid": [
+    "any classic vampire film actor's likeness or any film's costume design",
+    "blood, bite marks, drips of red or anything that reads as injury",
+    "long bared fangs, a hiss, a snarl or a menacing glare",
+    "bat wings, bats, turning into mist or any transformation",
+    "a medallion, sash of office or military decorations",
+    "a coffin, goblet, candelabrum or cane in hand",
+    "a short, stocky, muscular or hunched body",
+    "a cape without its tall pointed collar",
+    "logos, text or real brands"
+  ],
+  "props": [
+    "mic"
+  ],
+  "animations": {
+    "dance": "Slow cabaret sway loop: from the heels-together stance, step the character-right foot a little to the side and lean the long body over it while the free hand sweeps outward in a wide mournful arc and the cape swings, pause, then draw back through centre, lean the other way with the hand returning to the heart, and close the heels together again in the exact opening stance.",
+    "sing": {
+      "intent": "Melodramatic chanson loop: tip the head back with eyes half-closed on a long aching note, let the free character-left hand rise from the heart and reach out to an invisible lost love, then bring it back to the chest and return to his still stance. The mouth must visibly open and change shape across the loop, the two small fangs just glinting, so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the long body jolts upright, the red eyes go wide and the free hand snaps the cape edge up to the chin like a scandalised aunt, then he lowers it with dignity and resettles into his still stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and sweep the free arm up so the cape drapes across the lower face with only the sorrowful eyes and widow's peak showing above it, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: glide in with slow long strides and the cape trailing, stop, sweep the cape back off one shoulder with a flourish, give a small deep courtly bow of the head, then rise into his tall still stance with the hand over the heart.",
+    "victory": "One-shot song-finish celebration: fling the free arm wide so the cape opens like a curtain showing the wine-red lining, tip the head back in tragic triumph, then settle into a deep satisfied bow of the head and hold a proud upright pose with the hand on the heart.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the drama collapses inward — the free hand goes limp to the brow in a swoon, the long body sags at the shoulders and the head droops to one side, the cape hanging straight. He holds a standing, theatrically heartbroken finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, fainting or going to the ground. Do not imply a hit, injury or opponent."
+  }
+}
