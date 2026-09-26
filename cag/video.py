@@ -34,7 +34,6 @@ from . import comfy, drive
 from .animation import AnimationState, claim_frames, frame_path, motion_digest, motion_stamp
 from .draw import DrawError
 from .prompts import MASK_PASS_PROMPT, RESTYLE, scail_prompt
-from .snap import snap_file
 
 #: Bumped whenever the way a restyle is asked for changes outside the graph and
 #: the prompt, so every set drawn the old way is superseded at once.
@@ -198,8 +197,8 @@ def video_frames(
             failed.append(frame.index)
             _log(state, f"restyle {frame.index:02d} failed: {error}")
             continue
-        if state.get("snap_to_key"):
-            snap_file(sources[frame.index], reference)
+        # Kept as drawn: snapping to the key art's grid (`cag.snap`) made the
+        # faces blocky and the set was judged better without it (2026-09-26).
 
     stamp = motion_stamp(state)
     stamp.write_text(motion_digest(motion) + "\n")

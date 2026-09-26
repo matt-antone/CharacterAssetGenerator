@@ -82,7 +82,9 @@ the hardware and the bill.
 - **Qwen-Image-2.1 is licensed for research only.** Nothing the video path draws
   ships until that is cleared.
 
-Trial renders on a branch are scratch, as below. What `cag build` itself has
+Trial renders on a branch are scratch, as below. The video path keeps each restyle as drawn; nothing is snapped to the key art's
+grid (`cag.snap` still serves the pose-edit path), because snapping made the faces
+blocky. What `cag build` itself has
 drawn on this path, all Belter on the `cloud` profile, 2026-09-25, scratch:
 
 1. **`club-01`, two rolls** (seed 1234, then `CAG_VIDEO_SEED=7`). The trace
@@ -94,7 +96,8 @@ drawn on this path, all Belter on the `cloud` profile, 2026-09-25, scratch:
    reference the first roll's raw frames read 0.77-0.92 detail and 0.7-5.3
    colour delta. The second roll's backdrop drifted violet (red 177-211 rather
    than about 235), which the research `measure.py` threshold reads as figure,
-   so its raw-frame numbers are not comparable; snapping restores pure magenta.
+   so its raw-frame numbers are not comparable; the cut-out measures each
+   frame's own backdrop, so the cells are unaffected.
 2. **`country-01`, one roll,** through the mask pass: 14 frames, the foot work
    (kicks, crossed steps) carried, identity held.
 3. **Cost:** about 118 credits a `club-01` set, and a rebuild of a finished set

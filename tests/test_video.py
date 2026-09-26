@@ -97,8 +97,6 @@ def world(tmp_path, monkeypatch):
     monkeypatch.setattr(drive, "decode", footage())
     scail = Scail()
     monkeypatch.setattr(comfy, "render_frames", scail)
-    snapped = []
-    monkeypatch.setattr(video, "snap_file", lambda path, key: snapped.append(Path(path).name))
     machine = replace(load_machine("cloud"), name="tiny", width=64, height=96)
     graphs = {stage: materialise(machine, stage, tmp_path / "comfy") for stage in ("video", "restyle", "mask")}
     key_art = tmp_path / "dance-key-front.png"
@@ -125,7 +123,7 @@ def world(tmp_path, monkeypatch):
         )
         return graph.invoke({**state, **changes}), restyle
 
-    return {"build": build, "scail": scail, "snapped": snapped, "state": state, "tmp": tmp_path}
+    return {"build": build, "scail": scail, "state": state, "tmp": tmp_path}
 
 
 def test_a_traced_set_with_a_machine_is_drawn_from_its_clip(world):
@@ -161,7 +159,7 @@ def test_a_traced_set_with_a_machine_is_drawn_from_its_clip(world):
         assert picked.getpixel((50, 75)) == frame.resize((100, 150)).getpixel((50, 75))
     assert json.loads((job["out"] / "trace-index.json").read_text()) == INDEX
 
-    assert world["snapped"] == [f"{n:02d}.png" for n in range(16)], "snapped once each"
+    assert not list((state["work_dir"] / "source" / "dance").glob("*.raw.png")), "kept as drawn, never snapped"
     assert result["frame_sheets"] == [[n] for n in range(16)]
     assert result["shared_canvas"] and sorted(result["cells"]) == list(range(16))
     assert (state["work_dir"] / "source" / "dance" / "drawn.sha").read_text().startswith("video\t")
