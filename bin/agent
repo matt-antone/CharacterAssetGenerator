@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Start one of the project's agents as its own Claude Code session, titled
+# "<Name> — <Role> · <subject>" so several instances of a role stay distinct.
+#
+#   agent character-builder heavyweight
+#   agent motion-capturer club-01 "trace https://youtu.be/..."
+#
+# The names live here and in AGENTS.md ("The team"); keep the two in step.
+set -euo pipefail
+
+usage() {
+  echo "usage: agent <creative-director|character-creator|character-builder|prop-creator|motion-capturer> <subject> [prompt...]" >&2
+  exit 2
+}
+[ $# -ge 2 ] || usage
+role=$1; subject=$2; shift 2
+
+case $role in
+  creative-director) title="Dana — Creative Director" ;;
+  character-creator) title="Iris — Character Designer" ;;
+  character-builder) title="Otto — Render Lead" ;;
+  prop-creator)      title="Pim — Prop Maker" ;;
+  motion-capturer)   title="Mo — Motion Capture" ;;
+  *) echo "agent: no agent called '$role'" >&2; usage ;;
+esac
+
+cd "$(dirname "$0")/.."
+exec claude --agent "$role" --name "$title · $subject" "$@"

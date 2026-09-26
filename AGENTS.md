@@ -175,6 +175,31 @@ on both dances. There is still no pose-fidelity floor for this path, and one
 character is not a cast: the bulky trooper, over the 8.1 colour bar in 6 of 15
 frames in the scratch-script run, has not been drawn through `cag build`.
 
+## The team
+
+The five project agents (`.claude/agents/`) each have a name and a role, and every
+running instance is titled `<Name> — <Role> · <subject>`: the name says which
+role, the subject — the one character, prop, bundle or cast that instance owns —
+tells parallel instances apart, and is what `SendMessage` addresses them by.
+
+| agent | name — role | subject |
+| --- | --- | --- |
+| creative-director | Dana — Creative Director | the cast or character, e.g. `default cast` |
+| character-creator | Iris — Character Designer | the brief's slug |
+| character-builder | Otto — Render Lead | the character's slug |
+| prop-creator | Pim — Prop Maker | the prop's name |
+| motion-capturer | Mo — Motion Capture | the bundle or move |
+
+No agent can title itself: Claude Code has no frontmatter field for a session
+title, so whoever starts it names it.
+
+- **As its own session:** `bin/agent <agent> <subject> [prompt]` (on PATH as
+  `agent`) runs `claude --agent <agent> --name "<Name> — <Role> · <subject>"`.
+- **Dispatched by another agent:** pass the Agent tool's `description` as the
+  title, e.g. `Otto — Render Lead · heavyweight`, never a bare task summary.
+
+Keep the names in `bin/agent` and this table in step.
+
 ## Real renders happen on main
 
 A render that counts is drawn on `main`, from the committed code, into the
