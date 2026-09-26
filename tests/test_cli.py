@@ -527,7 +527,7 @@ def test_clips_missing_is_every_declared_clip_not_on_disk(tmp_path, monkeypatch,
     from cag import clips
 
     block = {"file": "clip.mp4", "start": 0.0, "fps": 24, "frame_count": 10, "size": [64, 48],
-             "sha256": "ab" * 32}
+             "sha256": "ab" * 32, "backfilled_by": "cag"}
     for name, clip in (("fresh", None), ("stale", b"another cut"), ("never", None)):
         shutil.copytree("motions/sample", tmp_path / name)
         manifest = json.loads((tmp_path / name / "manifest.json").read_text())
@@ -618,3 +618,37 @@ def test_a_build_publishes_its_finished_package_even_with_a_failed_set(
     assert "[dance] FAILED" in err
     assert ("network is unreachable" in err) == bool(returncode)
 
+
+
+def test_clips_only_verifies_a_clip_the_tracer_shipped(tmp_path, monkeypatch, capsys):
+    """MotionArtist cut it from the file it traced; cag never cuts it again."""
+    from cag import clips
+    from test_pull import tracer_bundle
+
+    root = tracer_bundle(tmp_path, name="shuffle-3")
+    monkeypatch.setattr(clips, "backfill", lambda *a, **kw: pytest.fail("a tracer's clip is never re-cut"))
+    args = ["--motion-root", str(tmp_path)]
+    assert cli.main(["clips", "shuffle-3", "--check", *args]) == 0
+    assert capsys.readouterr().out.strip() == "shuffle-3 clip=ok mask=ok heads=ok from=tracer"
+    assert cli.main(["clips", "shuffle-3", *args]) == 0
+    assert "shuffle-3 clip=ok from=tracer: shipped with the bundle, nothing to cut" in capsys.readouterr().out
+
+    (root / "mask.mp4").write_bytes(b"another mask")
+    assert cli.main(["clips", "shuffle-3", "--check", *args]) == 1
+    assert capsys.readouterr().out.strip() == "shuffle-3 clip=ok mask=stale heads=ok from=tracer"
+
+    (root / "clip.mp4").unlink()
+    assert cli.main(["clips", "--missing", *args]) == 1
+    out = capsys.readouterr().out
+    assert "shuffle-3 REFUSED: clip=missing" in out
+    assert "cag motions pull shuffle/shuffle-3" in out
+
+
+def test_backfill_itself_refuses_a_tracers_clip(tmp_path):
+    from cag import clips
+    from test_pull import tracer_bundle
+
+    root = tracer_bundle(tmp_path, name="shuffle-3")
+    (root / "clip.mp4").write_bytes(b"not the tracer's")
+    with pytest.raises(clips.ClipError, match="never cuts again; pull the bundle again: cag motions pull shuffle/shuffle-3"):
+        clips.backfill(root, tmp_path / "cache")

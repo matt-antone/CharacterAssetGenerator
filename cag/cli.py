@@ -14,7 +14,7 @@ from typing import Callable
 
 from langchain_core.language_models.chat_models import BaseChatModel
 
-from . import clips, comfy
+from . import clips, comfy, pull
 from .animation import WHOLE_SET_SHEET, build_animation_graph
 from .assemble import (
     MANIFEST,
@@ -32,7 +32,17 @@ from .draw import BACKENDS, WORKFLOW_BACKENDS, draw
 from .edit import serve
 from .fidelity import report as fidelity_report
 from .machines import STAGES, Machine, MachineError, load_machine, machine_names, materialise
-from .motion import BUNDLE, MotionError, clip_status, library, load_motion, read_bundle
+from .motion import (
+    BUNDLE,
+    PARTS,
+    MotionError,
+    clip_status,
+    library,
+    load_motion,
+    part_status,
+    read_bundle,
+    summary,
+)
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
 from .publish import REMOTE_ENV, packages, publish
@@ -471,6 +481,30 @@ def main(argv: list[str] | None = None) -> int:
         "motions", help="list the traced sheets a brief can name"
     )
     motions_parser.add_argument("--motion-root", type=Path, default=MOTION_ROOT)
+    motions_sub = motions_parser.add_subparsers(dest="motions_command")
+    pull_parser = motions_sub.add_parser(
+        "pull",
+        help="copy a bundle MotionArtist synced to Drive into motions/<set>/<set>-<index>/, "
+        "checked, replacing any copy already installed",
+    )
+    pull_parser.add_argument(
+        "bundle", nargs="?", help="<set>/<set>-<index>, e.g. shuffle/shuffle-3"
+    )
+    pull_parser.add_argument(
+        "--list",
+        dest="list_set",
+        nargs="?",
+        const="",
+        default=None,
+        metavar="SET",
+        help="list the bundles on the remote, or in one set of it, and which are installed",
+    )
+    pull_parser.add_argument(
+        "--remote",
+        default=os.environ.get(pull.REMOTE_ENV) or None,
+        help=f"MotionArtist's rclone remote. Default: ${pull.REMOTE_ENV}",
+    )
+    pull_parser.add_argument("--motion-root", type=Path, default=argparse.SUPPRESS)
 
     machines_parser = sub.add_parser(
         "machines", help="list the machine profiles the video path can draw on"
@@ -546,6 +580,8 @@ def main(argv: list[str] | None = None) -> int:
         ]
         print(fidelity_report(cells, list(photos)))
         return 0
+    if args.command == "motions" and args.motions_command == "pull":
+        return pull_bundle(args)
     if args.command == "motions":
         sheets = library(args.motion_root)
         if not sheets:
@@ -852,13 +888,41 @@ def clip_bundles(args: argparse.Namespace) -> int:
             failed += 1
             continue
         # One bundle's fault is that bundle's line, never the end of the batch.
+        try:
+            bundle = read_bundle(roots[name] / BUNDLE)
+        except BUNDLE_FAULTS as error:
+            bundle, fault = None, error
         if args.check:
-            try:
-                status = clip_status(read_bundle(roots[name] / BUNDLE))
-            except BUNDLE_FAULTS as error:
-                status = f"bad ({error})"
-            print(f"{name} clip={status}")
-            failed += status != "ok"
+            if bundle is None:
+                print(f"{name} clip=bad ({fault})")
+                failed += 1
+                continue
+            status = clip_status(bundle)
+            parts = {
+                kind: part_status(bundle, kind)
+                for kind in PARTS
+                if getattr(bundle.declared_clip, kind, None)
+            }
+            shipped = " from=tracer" if bundle.declared_clip and bundle.declared_clip.from_tracer else ""
+            print(
+                f"{name} clip={status}"
+                + "".join(f" {kind}={said}" for kind, said in parts.items())
+                + shipped
+            )
+            failed += status != "ok" or any(said != "ok" for said in parts.values())
+            continue
+        if bundle is not None and bundle.declared_clip and bundle.declared_clip.from_tracer:
+            # The tracer cut this clip from the file it traced; a re-cut here
+            # would be another clip under the tracer's hash. Verify only.
+            status = clip_status(bundle)
+            if status == "ok":
+                print(f"{name} clip=ok from=tracer: shipped with the bundle, nothing to cut")
+                continue
+            print(
+                f"{name} REFUSED: clip={status}, and the tracer shipped it, so cag never cuts "
+                f"it again; pull it: cag motions pull {roots[name].parent.name}/{name}"
+            )
+            failed += 1
             continue
         try:
             print(clips.backfill(roots[name], args.cache, dry_run=args.dry_run))
@@ -869,6 +933,44 @@ def clip_bundles(args: argparse.Namespace) -> int:
             print(f"{name} REFUSED: {said}")
             failed += 1
     return 1 if failed else 0
+
+
+def pull_bundle(args: argparse.Namespace) -> int:
+    """`cag motions pull`: fetch one bundle from MotionArtist's remote, or list them."""
+    try:
+        if args.list_set is not None:
+            installed = set(clips.bundle_roots(args.motion_root)) if args.motion_root.exists() else set()
+            found = pull.list_remote(args.remote, args.list_set)
+            for entry in found:
+                name = entry.split("/", 1)[1]
+                print(f"{entry:32s} {'installed' if name in installed else '-'}")
+            if not found:
+                log(f"[pull] no bundles under {pull.remote_path(args.remote, args.list_set)}")
+            return 0
+        if not args.bundle:
+            log("[pull] name a bundle as <set>/<set>-<index>, or pass --list")
+            return 1
+        done = pull.pull(
+            args.bundle,
+            args.motion_root,
+            args.remote,
+            probe=clips.probe if shutil.which("ffprobe") else None,
+        )
+    except pull.PullError as error:
+        log(f"[pull] REFUSED: {error}")
+        return 1
+    home = done.bundle.root
+    log(
+        f"[pull] {done.source} -> {home}"
+        + (
+            "; it replaced the copy already installed there, as the tracer re-syncs a "
+            "bundle in place"
+            if done.replaced
+            else ""
+        )
+    )
+    print(summary(done.bundle.name, done.bundle))
+    return 0
 
 
 def _needs_cut(root: Path) -> bool:

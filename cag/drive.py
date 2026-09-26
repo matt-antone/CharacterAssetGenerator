@@ -17,6 +17,12 @@ threshold mask (`LIGHT`) good enough, the drive rate is 16, and the SCAIL frame
 for traced frame i is `round((t_i - t_0) * rate)`. Footage without a light
 backdrop needs the mask pass, which no render has exercised yet.
 
+A bundle whose tracer shipped a bundle mask (`mask.mp4`) has its drive mask cut
+from that, the same frames through the same box as the drive video, and checked
+the same way; one that fails the checks falls back to the threshold or the mask
+pass, and `drive.json` says why. Head boxes the tracer shipped (`heads.json`)
+place the face blur; a frame it has no box for is found from the drive mask.
+
 Every drive has the performer's face blurred (`blur_faces`): SCAIL-2 copies
 the face it is shown, and a drive with the face blurred gets the set
 reference's face instead, pose kept (one scratch roll, 2026-09-26).
@@ -38,6 +44,7 @@ import numpy
 from PIL import Image, ImageDraw, ImageFilter, ImageSequence
 
 from .mask import BORDER_PIXELS
+from .motion import MotionError, read_heads
 
 if TYPE_CHECKING:
     from .machines import Machine
@@ -58,7 +65,9 @@ SCAIL_MAX_LENGTH = 81
 #: drive/4: the head is found in the figure opened past its limbs, so hands over
 #: the crown or a leaning head no longer misplace the blur, and a lying figure
 #: is left unblurred and named.
-DRIVE_VERSION = "drive/4"
+#: drive/5: a bundle mask and head boxes shipped with the clip are used, and
+#: their hashes are part of the digest.
+DRIVE_VERSION = "drive/5"
 
 #: The record a finished drive leaves; written last, so its presence means done.
 DRIVE_RECORD = "drive.json"
@@ -503,22 +512,30 @@ def head_box(mask: numpy.ndarray) -> tuple[int, int, int, int] | None:
 
 
 def blur_faces(
-    frames: Sequence[Image.Image | numpy.ndarray], masks: Sequence[numpy.ndarray]
+    frames: Sequence[Image.Image | numpy.ndarray],
+    masks: Sequence[numpy.ndarray],
+    heads: Sequence[tuple[int, int, int, int] | None] | None = None,
 ) -> tuple[list[Image.Image], dict[str, Any]]:
     """Every drive frame with the performer's face blurred, and a record of where.
 
     SCAIL-2 draws the face it sees in the drive over the set reference's; with
-    the face blurred it draws the reference's. An oval over `head_box`,
+    the face blurred it draws the reference's. An oval over the head box,
     feathered, takes a Gaussian blur; nothing else in the frame changes. The
     radii are measured at 576 wide and scaled to the frame's width.
 
-    A frame with no head to find (see `head_box`) is left as it is and named in
-    the record's `skipped`. `boxes` holds each frame's head box, or None.
+    The head box is `heads[k]`, the tracer's own box in drive pixels, where
+    there is one; otherwise `head_box` finds it in the drive mask. A frame with
+    no head either way is left as it is and named in the record's `skipped`.
+    `boxes` holds each frame's head box, or None, and `sources` where it came
+    from: `"bundle"`, `"heuristic"`, or None.
     """
     if len(frames) != len(masks):
         raise DriveError(f"{len(frames)} drive frames but {len(masks)} drive mask frames")
+    if heads is not None and len(heads) != len(frames):
+        raise DriveError(f"{len(frames)} drive frames but {len(heads)} head boxes")
     out: list[Image.Image] = []
     boxes: list[list[int] | None] = []
+    sources: list[str | None] = []
     skipped: list[int] = []
     for k, (frame, mask) in enumerate(zip(frames, masks)):
         image = frame if isinstance(frame, Image.Image) else Image.fromarray(numpy.asarray(frame))
@@ -529,8 +546,10 @@ def blur_faces(
                 f"drive frame {k:02d} is {image.width}x{image.height}, its mask "
                 f"{mask.shape[1]}x{mask.shape[0]}"
             )
-        box = head_box(mask)
+        given = heads[k] if heads is not None else None
+        box = given if given is not None else head_box(mask)
         boxes.append(list(box) if box else None)
+        sources.append(None if box is None else "bundle" if given is not None else "heuristic")
         if box is None:
             skipped.append(k)
             out.append(image)
@@ -541,7 +560,12 @@ def blur_faces(
         oval = oval.filter(ImageFilter.GaussianBlur(FACE_FEATHER * scale))
         blurred = image.filter(ImageFilter.GaussianBlur(FACE_BLUR * scale))
         out.append(Image.composite(blurred, image, oval))
-    return out, {"blurred": len(out) - len(skipped), "skipped": skipped, "boxes": boxes}
+    return out, {
+        "blurred": len(out) - len(skipped),
+        "skipped": skipped,
+        "boxes": boxes,
+        "sources": sources,
+    }
 
 
 def mask_stats(masks: Sequence[numpy.ndarray]) -> list[dict[str, float | None]]:
@@ -699,10 +723,14 @@ def drive_digest(
 ) -> str:
     """Everything a drive is a function of. Change any of it and the drive is redrawn.
 
+    That includes the bundle mask and the head boxes the clip carries, when it
+    carries them.
+
     Only the first traced time: the drive runs from it at the rate for the
     length, whatever the traced frames between. The trace index does depend on
     them, so it is never cached with the drive; see `Drive.read`.
     """
+    mask, heads = getattr(clip, "mask", None), getattr(clip, "heads", None)
     parts = (
         clip.sha256 or _sha(clip.path),
         f"{clip.start:.6f}",
@@ -714,6 +742,8 @@ def drive_digest(
         length,
         width,
         height,
+        (mask.sha256 or _sha(mask.path)) if mask else None,
+        (heads.sha256 or _sha(heads.path)) if heads else None,
         DRIVE_VERSION,
     )
     return hashlib.sha256("\t".join(map(str, parts)).encode()).hexdigest()
@@ -730,7 +760,7 @@ class Drive:
     size: tuple[int, int]
     #: The 2:3 box the drive was cut from, as (x, y, w, h) in source-clip pixels.
     box: tuple[int, int, int, int]
-    #: "light-backdrop" or "mask-pass": how the drive mask was made.
+    #: "bundle-mask", "light-backdrop" or "mask-pass": how the drive mask was made.
     method: str
     #: The SCAIL frame for each traced frame; see `trace_index`. Worked out
     #: afresh from the motion every time, never read back from the record: a
@@ -761,6 +791,83 @@ class Drive:
             index=tuple(index),
             mask_key=data.get("mask_key", ""),
         )
+
+
+def bundle_masks(
+    clip: Clip,
+    decode: Callable[[Path], numpy.ndarray],
+    picks: Sequence[int],
+    box: tuple[int, int, int, int],
+    size: tuple[int, int],
+    pad: numpy.ndarray,
+    shape: tuple[int, int, int],
+) -> list[numpy.ndarray]:
+    """The drive mask cut from the bundle mask: the same clip frames through the same box.
+
+    `shape` is the clip's decoded (frames, height, width): the bundle mask must
+    match it frame for frame and pixel for pixel, or it is refused. Any channel
+    over half is the performer; padding never is.
+    """
+    frames = decode(clip.mask.path)
+    if tuple(frames.shape[:3]) != tuple(shape):
+        raise DriveError(
+            f"{clip.mask.path.name} decodes to {frames.shape[0]} frames at "
+            f"{frames.shape[2]}x{frames.shape[1]}, the clip to {shape[0]} at {shape[2]}x{shape[1]}"
+        )
+    masks = []
+    for pick in picks:
+        piece, _ = cut(frames[pick], box, (0, 0, 0))
+        grey = Image.fromarray(piece.max(axis=2)).resize(size, Image.BILINEAR)
+        masks.append((numpy.asarray(grey) > 127) & ~pad)
+    return masks
+
+
+def map_head(
+    head: Sequence[float], box: tuple[int, int, int, int], size: tuple[int, int]
+) -> tuple[int, int, int, int] | None:
+    """One head box `[x0, y0, x1, y1]` in clip pixels, in drive pixels instead.
+
+    Through the drive box, then scaled to the drive's size, and clamped to the
+    frame. None when none of it is inside the drive box.
+    """
+    left, top, box_w, box_h = box
+    width, height = size
+    sx, sy = width / box_w, height / box_h
+    x0, y0, x1, y1 = (float(n) for n in head)
+    x0, x1 = sorted(((x0 - left) * sx, (x1 - left) * sx))
+    y0, y1 = sorted(((y0 - top) * sy, (y1 - top) * sy))
+    if x1 < 0 or y1 < 0 or x0 > width - 1 or y0 > height - 1:
+        return None
+    return (
+        min(max(round(x0), 0), width - 1),
+        min(max(round(y0), 0), height - 1),
+        min(max(round(x1), 0), width - 1),
+        min(max(round(y1), 0), height - 1),
+    )
+
+
+def bundle_heads(
+    clip: Clip,
+    picks: Sequence[int],
+    box: tuple[int, int, int, int],
+    size: tuple[int, int],
+    count: int,
+) -> tuple[list[tuple[int, int, int, int] | None] | None, str]:
+    """The tracer's head box under each drive frame, in drive pixels, and why not.
+
+    None, with the reason, when the clip carries no head boxes or they do not
+    read: one entry per clip frame (`count` of them), each `[x0, y0, x1, y1]`
+    or null. A null entry, or a box wholly outside the drive box, is None in
+    the list, and `blur_faces` finds that frame's head from the drive mask.
+    """
+    part = getattr(clip, "heads", None)
+    if part is None:
+        return None, ""
+    try:
+        boxes = read_heads(part.path, count)
+    except MotionError as error:
+        return None, str(error)
+    return [None if boxes[j] is None else map_head(boxes[j], box, size) for j in picks], ""
 
 
 #: `(drive video, into, length) -> images`: runs the mask pass on the drive video
@@ -866,6 +973,8 @@ def build_drive(
             f"{motion.name} carries no source clip with traced frame times; "
             f"run `cag clips {motion.name}`"
         )
+    if getattr(clip, "problem", ""):
+        raise DriveError(clip.problem)
     rate, length = plan(times, m, motion.name)
     index = trace_index(times, rate, length, capped=rate < m.rate)
     size = (int(m.width), int(m.height))
@@ -924,8 +1033,25 @@ def _cut_drive(
     write_apng(video, here / DRIVE_VIDEO, ms)
 
     arrays = [numpy.asarray(frame) for frame in video]
-    method, masks, stats = "mask-pass", None, None
-    if light_backdrop(arrays):
+    method, masks, stats, mask_fallback = "", None, None, ""
+    if getattr(clip, "mask", None):
+        try:
+            masks = bundle_masks(clip, decode, picks, box, size, pad, native.shape[:3])
+            stats = mask_stats(masks)
+            problems = check_masks(masks, stats)
+            if problems:
+                mask_fallback = (
+                    f"the bundle mask fails in {len(problems)} places, first {problems[0]}"
+                )
+            else:
+                method = "bundle-mask"
+        except DriveError as error:
+            mask_fallback = f"the bundle mask cannot be used: {error}"
+        if mask_fallback:
+            _log(f"{motion.name}: {mask_fallback}; making the drive mask as if it had none")
+    if not method:
+        method = "mask-pass"
+    if method == "mask-pass" and light_backdrop(arrays):
         masks = [figure_mask(frame, pad) for frame in arrays]
         stats = mask_stats(masks)
         problems = check_masks(masks, stats)
@@ -948,9 +1074,12 @@ def _cut_drive(
                 + f"; its frames are kept in {kept}, and the next build runs it again"
             )
     write_apng([paint(mask) for mask in masks], here / DRIVE_MASK, ms)
+    heads, heads_fallback = bundle_heads(clip, picks, box, size, len(native))
+    if heads_fallback:
+        _log(f"{motion.name}: {heads_fallback}; finding every head from the drive mask")
     # Only now, with the drive mask to find the head by: the mask pass above
     # read the drive as cut, face and all.
-    video, faces = blur_faces(video, masks)
+    video, faces = blur_faces(video, masks, heads)
     if faces["skipped"]:
         _log(
             f"{motion.name}: no upright head found in drive frames "
@@ -971,7 +1100,10 @@ def _cut_drive(
         "box": list(box),
         "source_frames": picks,
         "method": method,
+        "mask_fallback": mask_fallback,
         "mask_key": mask_key if method == "mask-pass" else "",
+        "heads_source": "bundle" if heads is not None else "heuristic",
+        "heads_fallback": heads_fallback,
         "masks": stats,
         "face_blur": faces,
     }

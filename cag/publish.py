@@ -123,6 +123,14 @@ def diagnose(stderr: str, remote: str) -> str:
     return lines[-1] if lines else "rclone gave no reason"
 
 
+def call(
+    run: Callable[..., subprocess.CompletedProcess], argv: list[str], timeout: float
+) -> subprocess.CompletedProcess:
+    """Run one rclone command the only way cag runs rclone: no stdin to prompt on,
+    output captured, bounded by `timeout`. Raises TimeoutExpired and OSError."""
+    return run(argv, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=timeout)
+
+
 def take_turn(lock, wait: float | None = None) -> bool:
     """Take the publish lock, trying until `wait` seconds pass. True once held."""
     deadline = time.monotonic() + (LOCK_WAIT if wait is None else wait)
@@ -175,8 +183,7 @@ def publish(
                     f"{LOCK_WAIT}s, so {out_dir} was not published; "
                     "uv run cag publish on this brief once it is done")
                 return False
-            done = run(argv, stdin=subprocess.DEVNULL, capture_output=True, text=True,
-                       timeout=TIMEOUT)
+            done = call(run, argv, TIMEOUT)
     except subprocess.TimeoutExpired:
         log(f"[publish] WARNING: `{command}` gave no answer in {TIMEOUT}s; "
             "check the network, then uv run cag publish on this brief")

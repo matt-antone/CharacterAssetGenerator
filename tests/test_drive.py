@@ -684,7 +684,9 @@ def test_blur_faces_blurs_the_head_and_nothing_else(size):
     cx, cy = (x0 + x1) // 2, (y0 + y1) // 2
     face = slice(cy - 3, cy + 3), slice(cx - 3, cx + 3)
     assert after[face].std() < before[face].std() / 3, "the face is blurred"
-    assert report == {"blurred": 1, "skipped": [], "boxes": [[x0, y0, x1, y1]]}
+    assert report == {
+        "blurred": 1, "skipped": [], "boxes": [[x0, y0, x1, y1]], "sources": ["heuristic"]
+    }
 
 
 def test_blur_faces_leaves_a_frame_with_no_figure_alone_and_says_so():
@@ -701,8 +703,8 @@ def test_blur_faces_leaves_a_frame_with_no_figure_alone_and_says_so():
 def test_the_drive_version_is_part_of_the_digest(monkeypatch):
     clip = Clip(Path("clip.mp4"), start=10.0, fps=24, frame_count=48, size=(96, 64), box=None, sha256="ab" * 32)
     now = drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48)
-    assert drive.DRIVE_VERSION == "drive/4", "the face blur's head search: every drive before it is stale"
-    monkeypatch.setattr(drive, "DRIVE_VERSION", "drive/3")
+    assert drive.DRIVE_VERSION == "drive/5", "the bundle mask and head boxes: every drive before is stale"
+    monkeypatch.setattr(drive, "DRIVE_VERSION", "drive/4")
     assert drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48) != now
 
 
@@ -745,3 +747,136 @@ def test_the_mask_pass_reads_the_drive_before_its_face_is_blurred(tmp_path):
     head = (slice(y0, y1 + 1), slice(x0, x1 + 1))
     assert not numpy.array_equal(as_cut[head], blurred[head]), "the drive SCAIL gets is blurred"
     assert numpy.array_equal(as_cut[40:], blurred[40:]), "below the head nothing changes"
+
+
+# The tracer's bundle mask and head boxes, shipped beside the clip.
+
+
+def silhouette(count=48, figure=True):
+    """The bundle mask of `native()`'s performer: white on black, frame for frame."""
+    frames = numpy.zeros((count, 64, 96, 3), numpy.uint8)
+    if figure:
+        for j in range(count):
+            x = 40 + j % 4
+            frames[j, 12:52, x : x + 16] = 255
+    return frames
+
+
+def shipped(tmp_path, mask=True, heads=None):
+    """`bundle()`, its clip carrying a bundle mask and, when given, head boxes."""
+    from cag.motion import ClipPart
+
+    motion = bundle(tmp_path)
+    parts = {}
+    if mask:
+        (tmp_path / "mask.mp4").write_bytes(b"mask")
+        parts["mask"] = ClipPart(tmp_path / "mask.mp4", "cd" * 32)
+    if heads is not None:
+        (tmp_path / "heads.json").write_text(json.dumps(heads))
+        parts["heads"] = ClipPart(tmp_path / "heads.json", drive._sha(tmp_path / "heads.json"))
+    return SimpleNamespace(**{**vars(motion), "clip": replace(motion.clip, **parts)})
+
+
+def footage(clip, mask):
+    """A decode that hands back `clip` for clip.mp4 and `mask` for mask.mp4."""
+    return lambda path: mask() if Path(path).name == "mask.mp4" else clip()
+
+
+def test_a_bundle_mask_makes_the_drive_mask_without_the_mask_pass(tmp_path):
+    calls = []
+    dark = lambda: native(backdrop=(40, 30, 30), figure=(250, 250, 250))  # noqa: E731
+    built = build_drive(
+        shipped(tmp_path), SMALL, tmp_path / "drive", mask_pass_writing(calls), footage(dark, silhouette)
+    )
+    assert calls == [] and built.method == "bundle-mask"
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    assert record["method"] == "bundle-mask" and record["mask_fallback"] == ""
+    # The same clip frames through the same box as the drive video, in blue on black.
+    masks = read_apng(built.mask)
+    colours = {tuple(c) for c in masks[0].reshape(-1, 3)}
+    assert colours <= {(0, 0, 0), (0, 0, 1), MASK_FIGURE}
+    x = 40 + record["source_frames"][0] % 4
+    left = round((x - 26) * 32 / 43)
+    figure = numpy.nonzero(masks[0][..., 2] > 128)[1]
+    assert abs(int(figure.min()) - left) <= 1, "cut through the drive box, then scaled"
+
+
+def test_a_bundle_mask_that_fails_its_checks_falls_back_and_says_why(tmp_path, capsys):
+    empty = lambda: silhouette(figure=False)  # noqa: E731
+    built = build_drive(shipped(tmp_path), SMALL, tmp_path / "drive", None, footage(native, empty))
+    assert built.method == "light-backdrop"
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    assert "the bundle mask fails" in record["mask_fallback"] and "outside 3%-60%" in record["mask_fallback"]
+    assert "the bundle mask fails" in capsys.readouterr().err
+
+    calls = []
+    dark = lambda: native(backdrop=(40, 30, 30), figure=(250, 250, 250))  # noqa: E731
+    built = build_drive(
+        shipped(tmp_path), SMALL, tmp_path / "dark", mask_pass_writing(calls), footage(dark, empty)
+    )
+    assert built.method == "mask-pass" and len(calls) == 1
+
+
+def test_a_bundle_mask_that_is_not_frame_for_frame_with_the_clip_falls_back(tmp_path):
+    short = lambda: silhouette(count=40)  # noqa: E731
+    built = build_drive(shipped(tmp_path), SMALL, tmp_path / "drive", None, footage(native, short))
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    assert built.method == "light-backdrop"
+    assert "decodes to 40 frames at 96x64, the clip to 48" in record["mask_fallback"]
+
+
+def test_a_head_box_maps_through_the_drive_box_and_its_scale():
+    box, size = (26, 0, 43, 64), (32, 48)
+    assert drive.map_head([40, 12, 56, 20], box, size) == (10, 9, 22, 15)
+    assert drive.map_head([60, -8, 80, 6], box, size) == (25, 0, 31, 4), "clamped to the frame"
+    assert drive.map_head([0, 10, 20, 30], box, size) is None, "wholly outside the drive box"
+
+
+def test_the_tracers_head_boxes_place_the_blur_and_a_null_falls_back(tmp_path):
+    heads = [None if j % 2 else [40 + j % 4, 12, 56 + j % 4, 20] for j in range(48)]
+    built = build_drive(
+        shipped(tmp_path, heads=heads), SMALL, tmp_path / "drive", None, footage(tall_native, silhouette)
+    )
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    faces = record["face_blur"]
+    assert record["heads_source"] == "bundle" and record["heads_fallback"] == ""
+    for k, pick in enumerate(record["source_frames"]):
+        if heads[pick] is None:
+            assert faces["sources"][k] != "bundle"
+        else:
+            assert faces["sources"][k] == "bundle"
+            mapped = drive.map_head(heads[pick], tuple(record["box"]), (32, 48))
+            assert faces["boxes"][k] == list(mapped)
+    assert "heuristic" in faces["sources"], "the null frames were found from the drive mask"
+
+
+def test_head_boxes_that_do_not_cover_the_clip_are_not_used(tmp_path, capsys):
+    built = build_drive(
+        shipped(tmp_path, heads=[[40, 12, 56, 20]] * 47), SMALL, tmp_path / "drive", None,
+        footage(tall_native, silhouette),
+    )
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    assert record["heads_source"] == "heuristic"
+    assert "heads.json holds 47 entries for 48 clip frames" in record["heads_fallback"]
+    assert set(record["face_blur"]["sources"]) <= {"heuristic", None}
+    assert "finding every head from the drive mask" in capsys.readouterr().err
+
+
+def test_the_bundle_mask_and_head_boxes_are_part_of_the_digest(tmp_path):
+    from cag.motion import ClipPart
+
+    clip = bundle(tmp_path).clip
+    plain = drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48)
+    masked = replace(clip, mask=ClipPart(tmp_path / "mask.mp4", "cd" * 32))
+    assert drive.drive_digest(masked, 10.5, 16.0, 17, 32, 48) != plain
+    remasked = replace(clip, mask=ClipPart(tmp_path / "mask.mp4", "ef" * 32))
+    assert drive.drive_digest(remasked, 10.5, 16.0, 17, 32, 48) != drive.drive_digest(masked, 10.5, 16.0, 17, 32, 48)
+    headed = replace(clip, heads=ClipPart(tmp_path / "heads.json", "01" * 32))
+    assert drive.drive_digest(headed, 10.5, 16.0, 17, 32, 48) not in (plain, drive.drive_digest(masked, 10.5, 16.0, 17, 32, 48))
+
+
+def test_a_stale_bundle_mask_fails_the_video_path_by_name(tmp_path):
+    motion = bundle(tmp_path)
+    stale = SimpleNamespace(**{**vars(motion), "clip": replace(motion.clip, problem="declares mask mask.mp4 ... pull it again")})
+    with pytest.raises(DriveError, match="declares mask mask.mp4"):
+        build_drive(stale, SMALL, tmp_path / "drive", None, lambda p: native())

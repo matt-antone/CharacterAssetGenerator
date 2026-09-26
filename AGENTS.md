@@ -51,7 +51,7 @@ pose-edit path as before, and `--no-machine` takes it for one build whatever
 the hardware and the bill.
 
 - **A traced set with no source clip fails,** and says to run
-  `uv run cag clips <bundle>`. It never falls back to the pose-edit path, because
+  `uv run cag clips <bundle>` (a bundle pulled from the tracer: pull it again). It never falls back to the pose-edit path, because
   a set drawn the other way would pass for this one's output. `cag motions`
   shows each bundle's clip as `ok`, `missing`, `stale` or `none`. A `stale` clip
   (a file on disk that is not the one declared) fails only the video path's
@@ -79,6 +79,15 @@ the hardware and the bill.
   `source/<set>/superseded/` and keeps the SCAIL video, and a changed set
   reference draws a new SCAIL video. A failed restyle fails the set by frame
   number, and a rebuild draws only those.
+- **A bundle that ships a bundle mask** has its drive mask cut from it: the
+  same clip frames through the same drive box, blue on black, checked like any
+  other drive mask (`method: "bundle-mask"` in `drive.json`). One that fails the
+  checks, or is not frame for frame with the clip, falls back to the threshold
+  or the mask pass below, and `drive.json`'s `mask_fallback` says why. Head
+  boxes the bundle ships place the face blur instead of the head search; a
+  frame whose entry is null, or outside the drive box, has its head found from
+  the drive mask as below (`heads_source`, `face_blur.sources`). `drive/5`
+  made every earlier drive stale.
 - **Only footage on a light backdrop** gets a threshold drive mask. Anything
   else runs the mask pass (SAM3). One render has exercised it, on Comfy Cloud:
   `country-01`, portrait footage in a cluttered shop, gave one clean silhouette
@@ -395,49 +404,83 @@ them download the whole package folder and open `index.html` from there.
 
 ## Installing a motion bundle
 
-Bundles arrive as zips. `library()` finds every `manifest.json` under `motions/`,
-at any depth — the layout is `motions/<genre>/<genre>-NN/` — so a zip in
-`motions/` is inert: nothing reads it and nothing warns you.
+MotionArtist syncs every bundle it exports to Drive as a plain directory,
+`$MOTION_ARTIST_REMOTE/<set>/<set>-<index>/` (`kadrive:MotionArtist`, exported
+in `~/.bashrc`). There are no zips. Install one with
 
-Installing one is a single action with four parts. Doing three of them leaves
-the library lying:
+```bash
+uv run cag motions pull shuffle/shuffle-3
+uv run cag motions pull --list [<set>]   # what is on the remote, and what is installed
+```
 
-1. Extract into `motions/<genre>/`, keeping the bundle's own directory name exactly.
-   **Never rename on the way in.** A bundle carries its name in three places —
-   the directory, the manifest's `name`, and the `name` inside `motion.json` —
-   and renaming one desyncs it from the other two. `library()` keys on the
-   manifest; the build log prints the motion sheet's copy.
-2. Delete the zip.
-3. Delete the bundle it supersedes. A re-cut that arrives under a new name
+It lands at `motions/<set>/<set>-<index>/`, **unrenamed**: the directory, the
+manifest's `name` and `motion.json`'s `name` are one name, `<set>-<index>` with
+the index not zero-padded, and a pull whose names disagree is refused. The
+bundle carries its source clip (`clip.mp4`, cut by the tracer from the very
+file it traced), and may carry a bundle mask (`mask.mp4`) and head boxes
+(`heads.json`) beside it; their hashes are in the manifest's `clip` block.
+
+The pull copies into a staging directory beside `motions/` and checks it there:
+the names, every file the manifest lists and its hash, the clip, bundle mask
+and head boxes against the hashes the `clip` block declares, the head boxes
+one per clip frame, the clip and mask decoding at the declared frame count and
+size (when `ffprobe` is installed), one traced frame per frame, and the motion
+sheet loading against its manifest. Only then does it move the bundle into
+place and check that `library()` loads it. Anything refused, failed or
+interrupted leaves nothing half-installed, and a bundle installed before stays
+as it was. rclone runs as `cag publish` runs it: no stdin,
+`--ask-password=false`, bounded retries and timeout.
+
+**A re-pull replaces the bundle in place,** and says so: the tracer re-syncs a
+bundle in place when it re-exports it. Drives are keyed on the clip, mask and
+head-box hashes, so a re-pulled bundle's drive is cut again on its own.
+
+Two parts of installing are still yours, because a pull cannot know them:
+
+1. **Delete the bundle it supersedes.** A re-cut that arrives under a new name
    lands *beside* the old one rather than over it, so nothing breaks and a
    brief still naming the old one silently renders the old motion. Silence is
    the failure mode here.
-4. Repoint every brief that named the old bundle. A brief naming a bundle that
-   is gone fails loudly and by name; a brief naming a stale one does not fail.
+2. **Repoint every brief that named the old bundle.** A brief naming a bundle
+   that is gone fails loudly and by name; a brief naming a stale one does not
+   fail.
 
-Then check it before trusting it:
+The pull prints the install check's line for the bundle it installed. To check
+the whole library:
 
 ```bash
 .venv/bin/python -c "
-from cag.motion import clip_status, library
+from cag.motion import library, summary
 for n, b in sorted(library('motions').items()):
-    m = b.load()
-    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {m.playback} seam={b.seam!r} '
-          f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
-          f'travel={m.travel:.3f} clip={clip_status(b)}')"
+    print(summary(n, b))"
 ```
 
-One pass catches everything that matters. A manifest that disagrees with its
-motion sheet raises, and so does a source clip that does not span the traced
-frames. A short thumb set shows as `photos=0`, which means that set renders with
-no pose reference at all. `clip=none` means the video path cannot draw the
-bundle until `uv run cag clips <name>` backfills it; `clip=missing` is every
-backfilled bundle on a fresh clone, `clip=stale` is a file on disk that is not
-the declared one, and `uv run cag clips --missing` cuts both kinds again.
-`--cast` covers only the bundles a brief names. `playback` must suit the set: a `loop`
-trace seams back to frame 0, a `pingpong` turns around on its ends and plays
-back down the frames it just played, a `one-shot` does neither, and driving a
-looping set from a one-shot cut gives a dance that plays once.
+which prints, per bundle, `<name>: <N>f @ <fps>fps <view> <playback>
+seam=<...> photos=<N> airborne=[...] travel=<...> clip=<...>`, plus `mask=` and
+`heads=` for a bundle that declares them. One pass catches everything that
+matters. A manifest that disagrees with its motion sheet raises, and so does a
+source clip that does not span the traced frames. A short thumb set shows as
+`photos=0`, which means that set renders with no pose reference at all.
+
+`clip=`, `mask=` and `heads=` read `ok`, `missing` (declared, not on disk),
+`stale` (on disk, not the declared file) or `none` (never declared). `clip.mp4`
+and `mask.mp4` are git-ignored, so a pulled bundle on a fresh clone reads
+`clip=missing`: pull it again. A stale mask or head boxes fails only the video
+path's sets of that bundle, by name.
+
+**`cag clips` only backfills old bundles** — those traced before the tracer
+shipped its clip, whose `clip` block, if any, says `"backfilled_by": "cag"`.
+A bundle whose clip came from the tracer (no `backfilled_by`) is only ever
+verified: `cag clips <name> --check` reports `clip=`, `mask=` and `heads=` with
+`from=tracer`, and `cag clips <name>` or `--missing` never re-cuts it; a
+missing or stale one is refused with the pull command that fetches it. For
+old bundles, `uv run cag clips --missing` cuts every missing or stale clip
+again, and `--cast` covers only the bundles a brief names.
+
+`playback` must suit the set: a `loop` trace seams back to frame 0, a
+`pingpong` turns around on its ends and plays back down the frames it just
+played, a `one-shot` does neither, and driving a looping set from a one-shot
+cut gives a dance that plays once.
 
 Read `playback` before you read `seam`. A `seam` verdict of `needs blend` or
 `stalls` is a statement about a cut from the last frame back to the first, and a
@@ -458,8 +501,8 @@ holds a set's last frame is the set plan's call, not the trace's. A set is drive
 prompt or the other: its motion spec, or the brief that writes it a sheet. The
 set plan in `cag/sets.py` is only the default for a brief that says nothing.
 
-The source clip is the one edit cag makes to an installed bundle. `cag clips`
-fetches the source video into `work/sources/`, cuts the traced window at native
+For a bundle traced before the tracer shipped its clip, the source clip is the
+one edit cag makes to an installed bundle. `cag clips` fetches the source video into `work/sources/`, cuts the traced window at native
 rate and size, finds the clip box by matching the bundle's own traced frames
 against it, and refuses below a 0.90 match. It writes `clip.mp4`, which is
 git-ignored, and a `clip` block in the manifest marked
@@ -467,11 +510,12 @@ git-ignored, and a `clip` block in the manifest marked
 every file, so another machine's cut of the same frames has another hash: that
 hash goes in `clip.sha256` beside the clip, also ignored, and the committed
 block is left as it is. Only a cut of different frames rewrites the block. It never touches `motion.json` or
-the manifest's `files`. A MotionArtist re-export replaces the block; run
-`cag clips` on the new bundle if it arrives without one.
+the manifest's `files`. A bundle pulled from the tracer never needs it.
 
-A bundle is named `<genre>-NN` — `club-01` — and what it traced, the video id
-and start second, is in its `source` block. Two cuts of one video are two
+A bundle is named `<set>-<index>` — `shuffle-3` from the tracer's Drive, and
+`club-01`, zero-padded, for the bundles installed before it synced there — and
+what it traced, the video id and start second, is in its `source` block.
+`shuffle-03` and `shuffle-3` are two names, and so two bundles. Two cuts of one video are two
 names: `club-01` and `club-04` are both from `P4QeqpsY8v8`. Names used to be
 the trace itself (`shuffle-1-b0ARQ5kM85Y-13.6s`), after two different dances
 collided on the bare label `shuffle` and the baselines measured against one
@@ -491,13 +535,17 @@ A new term is named here before it is used.
 
 | term | what it is |
 | --- | --- |
-| **motion bundle** | `motions/<genre>/<name>/`, identified by its manifest (`Bundle`) |
+| **motion bundle** | `motions/<set>/<name>/`, identified by its manifest (`Bundle`) |
 | **manifest** | the bundle's `manifest.json` (`read_bundle`) |
 | **motion sheet** | the contents of `motion.json` (`MotionSheet`, `load_motion`). The one place "sheet" may appear, always qualified |
 | **traced sheet** / **written sheet** | a motion sheet from a bundle, versus one `cag/motion_writer.py` generated from the brief's prose. A written sheet has no traced frames and therefore no pose reference at all |
 | **traced frame** | one photograph of the performer, `thumbs/fNN.jpg` in a bundle |
-| **source clip** | the footage a bundle was traced from, `motions/<genre>/<name>/clip.mp4`: native rate and size, uncropped, the traced window ±0.5 s. Described by the manifest's `clip` block (`Clip`, `Bundle.clip`), the one manifest edit cag makes (`"backfilled_by": "cag"`), written by `cag clips <name>`. The block is committed and the `.mp4` is git-ignored and absent from `files`, so a fresh clone loads with `clip=None` until `cag clips` runs. A file on disk whose sha256 is neither the block's nor this machine's own cut (`clip.sha256`) is `stale`, and the video path raises it |
-| **clip box** | the 3:4 box, in source-clip pixels, that the traced frames were cut from (`Clip.box`). Always inside the frame |
+| **source clip** | the footage a bundle was traced from, `motions/<set>/<name>/clip.mp4`: native rate and size, uncropped. Described by the manifest's `clip` block (`Clip`, `Bundle.clip`). Shipped by the tracer, cut from the file it traced (no `backfilled_by`), or for an older bundle backfilled by `cag clips <name>` (`"backfilled_by": "cag"`, the traced window ±0.5 s — the one manifest edit cag makes). The `.mp4` is git-ignored and absent from `files`, so a fresh clone loads with `clip=None` until it is pulled or cut again. A file on disk whose sha256 is neither the block's nor this machine's own cut (`clip.sha256`) is `stale`, and the video path raises it |
+| **clip frame** | the frame of `clip.mp4`, counted from 0, a traced frame was taken from: `clip_frame` in `motion.json` (`Frame.clip_frame`). When every frame has one, the video path times each traced frame as `start + t_offset + clip_frame / fps` of the clip, exactly, rather than by its `t` |
+| **bundle mask** | the performer's silhouette the tracer ships beside the clip, `mask.mp4`: white on black, frame for frame and pixel for pixel with `clip.mp4`. Declared under the `clip` block's `mask` (`Clip.mask`). The drive mask is cut from it when it passes the drive mask checks. Not the drive mask, which is always cag's |
+| **head boxes** | the performer's head per clip frame, as the tracer found it, `heads.json`: `[x0, y0, x1, y1]` in clip pixels, or null. Declared under the `clip` block's `heads` (`Clip.heads`). Places the face blur; a null falls back to the head search |
+| **pull** | `cag motions pull <set>/<name>`: copy a bundle from `MOTION_ARTIST_REMOTE` into `motions/<set>/<name>/`, checked, replacing any copy already installed (`cag/pull.py`). The only way a bundle is installed |
+| **clip box** | the box, in source-clip pixels, that the traced frames were cut from (`Clip.box`): 3:4 for a backfilled clip, the whole frame for one the tracer shipped. Always inside the frame. The drive box is centred on it |
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
 | **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |
 | **pose reference** | the umbrella concept. Today always pose cards and pose grids made from traced frames; nothing else qualifies |
@@ -514,7 +562,7 @@ A new term is named here before it is used.
 | **drive video** | the source clip resampled to the drive rate, cut to a 2:3 box, sized to the machine profile, as one animated PNG: `work/drive/<bundle>-<digest12>/drive.png`. Shared across characters |
 | **drive rate** | frames per second of the drive video. 16 unless the profile's length cap lowers it |
 | **drive mask** | the drive video's silhouette per frame, #0000FF on black: `drive-mask.png` beside `drive.png` |
-| **face blur** | the oval of Gaussian blur over the performer's head in every drive video frame (`blur_faces`, `cag/drive.py`), placed from the drive mask. Per-frame head boxes are recorded in `drive.json` under `face_blur` |
+| **face blur** | the oval of Gaussian blur over the performer's head in every drive video frame (`blur_faces`, `cag/drive.py`), placed from the bundle's head boxes where it ships them, else from the drive mask. Per-frame head boxes and where each came from are recorded in `drive.json` under `face_blur` |
 | **mask pass** | the SAM3 Comfy job that makes a drive mask when the footage has no light backdrop to threshold |
 | **reference mask** | the set reference's silhouette, blue on black |
 | **SCAIL video** | every image one SCAIL-2 job returns: `work/<char>/video/<set>/<digest12>/NNN.png` |

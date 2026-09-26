@@ -1,7 +1,10 @@
 """Give a traced bundle its source clip, rebuilt from the video it was traced off.
 
-A stopgap until MotionArtist writes `clip.mp4` itself. Every installed bundle
-records its video's URL, the traced window and the source second of each traced
+A backfill for bundles traced before MotionArtist shipped `clip.mp4` itself. A
+bundle pulled from the tracer (`cag motions pull`) carries its own clip, with no
+`backfilled_by` in its block; this only ever checks that one, and never cuts it.
+
+Every bundle traced before then records its video's URL, the traced window and the source second of each traced
 frame, but none carries the video, and the 3:4 box its traced frames were cut
 through is written down nowhere. So the whole video is fetched once into
 `work/sources/`, the traced window is cut out of it at native rate and size with
@@ -370,6 +373,14 @@ def backfill(
     held = data.get("clip")
     if held and (root / CLIP).exists() and sha256_of(root / CLIP) in _accepted(root, held):
         return _result(name, held, written=False)
+    if held and not held.get("backfilled_by"):
+        # MotionArtist cut this clip from the very file it traced, and may
+        # have shipped a bundle mask and head boxes frame for frame with it.
+        # A cut from a fresh download would be other frames under its hash.
+        raise ClipError(
+            f"{manifest} carries the clip the tracer shipped, which cag never cuts again; "
+            f"pull the bundle again: cag motions pull {root.parent.name}/{name}"
+        )
 
     source = data.get("source") or {}
     missing = [key for key in ("url", "duration") if not source.get(key)]

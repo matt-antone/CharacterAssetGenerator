@@ -352,3 +352,129 @@ def test_a_clip_does_not_change_the_motion_digest(tmp_path):
     clipped = read_bundle(timed_bundle(tmp_path / "b", clip={})).load()
     assert clipped.clip is not None
     assert motion_digest(clipped) == motion_digest(plain)
+
+
+# What the tracer ships beside its clip: a clip frame per traced frame, the
+# bundle mask and the head boxes.
+
+
+def with_clip_frames(root, picks):
+    spec = json.loads((root / "motion.json").read_text())
+    for frame, pick in zip(spec["frames"], picks):
+        if pick is None:
+            frame.pop("clip_frame", None)
+        else:
+            frame["clip_frame"] = pick
+    (root / "motion.json").write_text(json.dumps(spec))
+    return root
+
+
+def test_clip_frames_give_each_traced_frame_its_exact_second(tmp_path):
+    """`t` is a rounded second; the clip frame is the frame itself."""
+    picks = [12 + 6 * i + (i % 3 == 1) for i in range(16)]
+    # Each `t` is a hair off the frame's own second, the way a seek by millisecond is.
+    times = [15.5 + pick / 24 + 0.013 for pick in picks]
+    root = with_clip_frames(timed_bundle(tmp_path, clip={"t_offset": 0.004}, times=times), picks)
+    motion = read_bundle(root).load()
+    assert [f.clip_frame for f in motion.frames] == picks
+    assert motion.clip_frames == tuple(picks)
+    assert motion.frame_times == pytest.approx([15.5 + 0.004 + pick / 24 for pick in picks])
+    assert [motion.clip.frame_at(t) for t in motion.frame_times] == picks
+
+
+def test_frame_times_fall_back_to_t_without_every_clip_frame_or_a_clip(tmp_path):
+    root = with_clip_frames(timed_bundle(tmp_path, clip={}), [12 + 6 * i for i in range(15)] + [None])
+    motion = read_bundle(root).load()
+    assert motion.clip_frames == () and motion.frame_times[0] == 16.0
+    unclipped = with_clip_frames(timed_bundle(tmp_path / "b"), [12 + 6 * i for i in range(16)])
+    motion = read_bundle(unclipped).load()
+    assert motion.clip is None and motion.frame_times[0] == 16.0, "no clip to count frames in"
+
+
+def test_clip_frames_outside_the_clip_or_out_of_order_are_refused(tmp_path):
+    picks = [12 + 6 * i for i in range(16)]
+    root = with_clip_frames(timed_bundle(tmp_path, clip={}), [*picks[:-1], 109])
+    with pytest.raises(MotionError, match=r"does not cover the clip frames of traced frames \[15\]"):
+        read_bundle(root).load()
+    root = with_clip_frames(timed_bundle(tmp_path / "b", clip={}), [picks[1], picks[0], *picks[2:]])
+    with pytest.raises(MotionError, match="clip frames are not strictly increasing"):
+        read_bundle(root).load()
+
+
+@pytest.mark.parametrize("pick", [-1, 2.5, True, "x"])
+def test_a_clip_frame_that_is_not_a_frame_number_is_refused(tmp_path, pick):
+    root = timed_bundle(tmp_path)
+    spec = json.loads((root / "motion.json").read_text())
+    spec["frames"][2]["clip_frame"] = pick
+    (root / "motion.json").write_text(json.dumps(spec))
+    with pytest.raises(MotionError, match="a whole number from 0"):
+        load_motion(root / "motion.json")
+
+
+def test_clip_frames_do_not_change_the_motion_digest(tmp_path):
+    from cag.animation import motion_digest
+
+    plain = read_bundle(timed_bundle(tmp_path / "a", clip={})).load()
+    picked = read_bundle(
+        with_clip_frames(timed_bundle(tmp_path / "b", clip={}), [12 + 6 * i for i in range(16)])
+    ).load()
+    assert motion_digest(picked) == motion_digest(plain)
+
+
+def shipped_bundle(tmp_path, mask=b"white on black", heads=b"[null]", **block):
+    """A tracer's bundle: its clip block declares a bundle mask and head boxes."""
+    root = timed_bundle(tmp_path, clip={"backfilled_by": None, "box": [0, 0, 1280, 720], **block})
+    manifest = json.loads((root / "manifest.json").read_text())
+    del manifest["clip"]["backfilled_by"]
+    for kind, name, data in (("mask", "mask.mp4", mask), ("heads", "heads.json", heads)):
+        manifest["clip"][kind] = {"file": name, "sha256": hashlib.sha256(data or b"").hexdigest()}
+        if data is not None:
+            (root / name).write_bytes(data)
+    (root / "manifest.json").write_text(json.dumps(manifest))
+    return root
+
+
+def test_a_tracers_mask_and_head_boxes_load_onto_the_clip(tmp_path):
+    from cag.motion import part_status
+
+    bundle = read_bundle(shipped_bundle(tmp_path))
+    clip = bundle.load().clip
+    assert clip.from_tracer and not bundle.declared_clip.backfilled_by
+    assert clip.mask.path == tmp_path / "shuffle" / "mask.mp4"
+    assert clip.heads.sha256 == hashlib.sha256(b"[null]").hexdigest()
+    assert clip.problem == ""
+    assert (part_status(bundle, "mask"), part_status(bundle, "heads")) == ("ok", "ok")
+    assert not read_bundle(timed_bundle(tmp_path / "cag", clip={})).clip.from_tracer
+
+
+def test_a_missing_mask_is_absent_not_an_error(tmp_path):
+    from cag.motion import part_status
+
+    bundle = read_bundle(shipped_bundle(tmp_path, mask=None))
+    assert bundle.clip.mask is None and bundle.clip.heads is not None
+    assert bundle.clip.problem == "" and clip_status(bundle) == "ok"
+    assert part_status(bundle, "mask") == "missing"
+    assert bundle.declared_clip.mask.path.name == "mask.mp4"
+
+
+def test_a_stale_mask_is_dropped_and_only_the_video_path_hears_of_it(tmp_path):
+    from cag.motion import part_status
+
+    root = shipped_bundle(tmp_path)
+    (root / "heads.json").write_text("[[1, 2, 3, 4]]")
+    bundle = read_bundle(root)
+    assert clip_status(bundle) == "ok", "the clip itself is fine"
+    assert bundle.clip.heads is None and bundle.clip.mask is not None
+    assert "declares heads heads.json" in bundle.clip.problem
+    assert "cag motions pull" in bundle.clip.problem
+    assert part_status(bundle, "heads") == "stale"
+    assert bundle.load().clip.problem == bundle.clip.problem
+
+
+def test_a_mask_block_with_no_file_is_refused(tmp_path):
+    root = shipped_bundle(tmp_path)
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["clip"]["mask"] = {"sha256": "ab"}
+    (root / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(MotionError, match="mask names no file"):
+        read_bundle(root)

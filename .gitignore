@@ -23,3 +23,9 @@ motions/*.zip
 motions/**/clip.mp4
 # The clip's hash as this machine cut it; see `CLIP_SHA` in cag/motion.py.
 motions/**/clip.sha256
+
+# A motion bundle being pulled, staged beside motions/ until it is checked.
+.cag-pull-*/
+# The bundle mask MotionArtist ships beside clip.mp4: fetched again by
+# `cag motions pull`, like the clip it matches frame for frame.
+motions/**/mask.mp4

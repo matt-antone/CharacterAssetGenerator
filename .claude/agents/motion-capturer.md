@@ -16,8 +16,8 @@ let the character build happen elsewhere.
 
 **Invoke the `motion-artist` skill first, every time, and follow it.** It is the
 manual for extract → author arc → render → pose-grid → export. Nothing below
-overrides it; the rest of this file is what happens on the cag side after
-`export` prints a zip.
+overrides it; the rest of this file is what happens on the cag side once the
+export has synced the bundle to Drive.
 
 The skill's repo is `/home/antone/Work/MotionArtist`. Captures
 land in its `work/<name>/`, bundles in its `exports/`. cag's own repo is
@@ -42,42 +42,47 @@ land in its `work/<name>/`, bundles in its `exports/`. cag's own repo is
 
 ## Installing into cag
 
-Four parts, one action. Doing three leaves the library lying:
+MotionArtist syncs each exported bundle to Drive as a plain directory,
+`$MOTION_ARTIST_REMOTE/<set>/<set>-<index>/` (`kadrive:MotionArtist`). There
+is no zip. From cag's repo:
 
-1. Extract the zip into `motions/`, **keeping the bundle's own directory name
-   exactly**. Never rename — the name lives in the directory, the manifest and
-   `motion.json`, and renaming one desyncs the other two.
-2. Delete the zip. `library()` globs `motions/*/manifest.json`, so a zip sitting
-   there is inert and nothing warns.
-3. Delete the bundle this one supersedes. A re-cut arrives under its own trace
-   name and lands *beside* the old one, so a brief naming the old one silently
+1. `uv run cag motions pull --list <set>` to see what the tracer has synced,
+   then `uv run cag motions pull <set>/<set>-<index>` (e.g.
+   `shuffle/shuffle-3`). It copies the bundle into
+   `motions/<set>/<set>-<index>/` **unrenamed** and checks it before it
+   installs it: the directory, the manifest's `name` and `motion.json`'s `name`
+   must be one name (index not zero-padded), every listed file and the clip,
+   bundle mask and head boxes must match their hashes, and the motion sheet
+   must load. A `[pull] REFUSED:` line is a blocker, and nothing was
+   installed. A re-pull of a bundle already there replaces it in place and
+   says so; that is how a re-export arrives.
+2. Delete the bundle this one supersedes. A re-cut that arrives under a new
+   name lands *beside* the old one, so a brief naming the old one silently
    renders last week's motion. Silence is the failure mode.
-4. Repoint every brief in `specs/` that named the old bundle. A brief naming a
+3. Repoint every brief in `specs/` that named the old bundle. A brief naming a
    missing bundle fails loudly; one naming a stale bundle does not fail at all.
 
-5. Give it a source clip: `uv run cag clips <bundle>` downloads the video once,
-   cuts the traced window (±0.5 s) into `clip.mp4` (git-ignored) and writes the
-   `clip` block into the manifest (committed). Without one the video path
-   refuses the bundle. Report the `box=` and `match=` it prints; a `REFUSED`
-   line is a blocker. Footage on a dark or busy backdrop also needs the SAM3
-   mask pass at build time.
+The bundle carries its own source clip (`clip.mp4`), and may carry a bundle
+mask (`mask.mp4`) and head boxes (`heads.json`); nothing more is cut on the
+cag side. `uv run cag clips` is only for bundles traced before the tracer
+shipped a clip; on a pulled bundle `cag clips <name> --check` only verifies
+(`clip=ok mask=ok heads=ok from=tracer`) and never re-cuts.
 
-Then verify before trusting it:
+The pull prints the install check's line. Check it, and the rest of the
+library, before trusting it:
 
 ```bash
 .venv/bin/python -c "
-from cag.motion import library
+from cag.motion import library, summary
 for n, b in sorted(library('motions').items()):
-    m = b.load()
-    print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {m.playback} seam={b.seam!r} '
-          f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
-          f'travel={m.travel:.3f}')"
+    print(summary(n, b))"
 ```
 
 `photos=0` means that set renders with no pose reference — treat it as a failed
-install. A manifest disagreeing with its motion sheet raises. `playback` must
-suit the set: a `one-shot` cut driving a looping set gives a dance that plays
-once.
+install (the pull refuses one). A manifest disagreeing with its motion sheet
+raises. `clip=`, `mask=` and `heads=` must read `ok` for a pulled bundle.
+`playback` must suit the set: a `one-shot` cut driving a looping set gives a
+dance that plays once.
 
 cag reads playback off `motion.json`, never off the manifest, and reads it as
 one word: `--pingpong` (which ships as `"playback": "loop"` plus
@@ -92,21 +97,24 @@ Leave it installed.
 
 ## Naming
 
-A bundle's name is its trace — label, video id, start second — because a label
-alone is a genre. Two dances once collided on `shuffle` and every baseline
-measured against one came to mean the other.
+A bundle is named `<set>-<index>`, the index not zero-padded (`shuffle-3`), in
+three places that must agree: the directory, the manifest's `name` and
+`motion.json`'s `name`. What it traced — the video id and start second — is in
+its `source` block. Older bundles are zero-padded (`club-01`); `shuffle-03` and
+`shuffle-3` are two different bundles.
 
 ## Vocabulary
 
 Never write "sheet", "grid", "sprite sheet" or "spritesheet" unqualified, in
 code, comments, filenames or conversation. Both repos' `AGENTS.md` carry the
 agreed table: motion bundle, manifest, motion sheet, traced frame, pose card,
-pose grid, pose reference, frame sheet, key art, bible, set. "skeleton" is
+pose grid, pose reference, frame sheet, key art, bible, set, and on cag's side
+source clip, clip frame, bundle mask and head boxes. "skeleton" is
 retired — neither repo draws one.
 
 ## Reporting back
 
 Give the bundle name, frame count, fps, playback, seam verdict, thumb count vs
-frame count, the verification line's output, which bundle you deleted, and which
-briefs you repointed. Send the motion sheet HTML or the pose grid with
+frame count, the pull's install line, which bundle you deleted, and which briefs
+you repointed. Send the motion sheet HTML or the pose grid with
 SendUserFile if the user should look at it — the HTML is self-contained.

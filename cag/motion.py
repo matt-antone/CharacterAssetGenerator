@@ -56,6 +56,22 @@ def playback_of(declared: str) -> str:
 
 
 @dataclass(frozen=True)
+class ClipPart:
+    """A file the tracer ships beside its source clip, frame for frame with it.
+
+    The bundle mask (`mask.mp4`: the performer white on black, one frame per
+    clip frame) and the head boxes (`heads.json`: one `[x0, y0, x1, y1]` in clip
+    pixels per clip frame, or null). Declared in the manifest's `clip` block as
+    `{"file": ..., "sha256": ...}` under `mask` and `heads`. Like `clip.mp4`, a
+    part whose file is not there is absent, not an error, and one whose file is
+    not the one declared is stale.
+    """
+
+    path: Path
+    sha256: str = ""
+
+
+@dataclass(frozen=True)
 class Clip:
     """A bundle's source clip: the footage the traced frames were taken from.
 
@@ -81,6 +97,22 @@ class Clip:
     #: boundary; the backfill measures the difference rather than assume none.
     t_offset: float = 0.0
     sha256: str = ""
+    #: The bundle mask and the head boxes, when the tracer shipped them. On a
+    #: clip read off disk, each is there only when its file is and matches its
+    #: hash; on a declared clip, whenever the block names it.
+    mask: ClipPart | None = None
+    heads: ClipPart | None = None
+    #: Why a declared mask or head boxes on disk were not taken: their file is
+    #: not the one declared. Only the video path reads it, and fails with it.
+    problem: str = ""
+    #: Who cut the clip when cag did (`"cag"`, from `cag clips`); empty for a
+    #: clip the tracer shipped, which cag never cuts again.
+    backfilled_by: str = ""
+
+    @property
+    def from_tracer(self) -> bool:
+        """Shipped with the bundle by MotionArtist, rather than backfilled here."""
+        return not self.backfilled_by
 
     @property
     def end(self) -> float:
@@ -111,6 +143,10 @@ class Frame:
     #: The source second this frame was traced at. None for a motion sheet that does
     #: not say, which is every written sheet.
     t: float | None = None
+    #: The frame of the bundle's `clip.mp4` this frame was traced from, counted
+    #: from 0. Exact where `t` is a rounded second; None when the tracer does
+    #: not say, which is every bundle cut before MotionArtist shipped its clip.
+    clip_frame: int | None = None
 
     @property
     def is_locked(self) -> bool:
@@ -158,12 +194,25 @@ class MotionSheet:
     clip_problem: str = ""
 
     @property
+    def clip_frames(self) -> tuple[int, ...]:
+        """Every frame's clip frame, in order; empty unless every frame has one."""
+        picks = tuple(frame.clip_frame for frame in self.frames)
+        return () if None in picks else picks
+
+    @property
     def frame_times(self) -> tuple[float, ...]:
         """Every frame's traced second, in order; empty unless every frame has one.
 
-        A partial set would pair a frame with the wrong moment of the clip, so
-        it is dropped entirely, the way a partial set of photographs is.
+        With a clip and a clip frame on every frame, the second is the clip
+        frame's own, `start + t_offset + clip_frame / fps`, which `Clip.frame_at`
+        takes back to that exact frame. Otherwise it is each frame's `t`. A
+        partial set of either would pair a frame with the wrong moment of the
+        clip, so it is dropped entirely, the way a partial set of photographs is.
         """
+        picks = self.clip_frames
+        if self.clip is not None and picks:
+            clip = self.clip
+            return tuple(clip.start + clip.t_offset + pick / clip.fps for pick in picks)
         times = tuple(frame.t for frame in self.frames)
         return () if None in times else times
 
@@ -230,6 +279,18 @@ def load_motion(path: Path | str) -> MotionSheet:
     if data.get("missing_frames"):
         raise MotionError(f"{path} has gaps at frames {data['missing_frames']}")
 
+    for raw in data["frames"]:
+        pick = raw.get("clip_frame")
+        if pick is not None and (
+            isinstance(pick, bool)
+            or not isinstance(pick, (int, float))
+            or not float(pick).is_integer()
+            or pick < 0
+        ):
+            raise MotionError(
+                f"{path} frame {raw.get('i')} has clip_frame {pick!r}; it is a frame "
+                "number of clip.mp4, a whole number from 0"
+            )
     frames = tuple(
         Frame(
             index=int(raw["i"]),
@@ -240,6 +301,7 @@ def load_motion(path: Path | str) -> MotionSheet:
             pts=raw.get("pts", {}),
             airborne=bool(raw.get("features", {}).get("airborne", False)),
             t=None if raw.get("t") is None else float(raw["t"]),
+            clip_frame=None if raw.get("clip_frame") is None else int(raw["clip_frame"]),
         )
         for raw in data["frames"]
     )
@@ -329,7 +391,19 @@ class Bundle:
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
                 f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
             )
-        if self.clip and motion.frame_times:
+        picks = motion.clip_frames
+        if self.clip and picks:
+            if any(b <= a for a, b in zip(picks, picks[1:])):
+                raise MotionError(f"{self.sheet} clip frames are not strictly increasing")
+            outside = [
+                f.index for f in motion.frames if not 0 <= f.clip_frame < self.clip.frame_count
+            ]
+            if outside:
+                raise MotionError(
+                    f"{self.root / BUNDLE} clip holds frames 0-{self.clip.frame_count - 1}, "
+                    f"which does not cover the clip frames of traced frames {outside}"
+                )
+        elif self.clip and motion.frame_times:
             times = motion.frame_times
             if any(b <= a for a, b in zip(times, times[1:])):
                 raise MotionError(f"{self.sheet} traced times are not strictly increasing")
@@ -393,7 +467,11 @@ def read_bundle(path: Path | str) -> Bundle:
         local = declared.path.with_name(CLIP_SHA)
         cut_here = local.read_text().strip() if local.exists() else ""
         if not declared.sha256 or actual in (declared.sha256, cut_here):
-            clip = replace(declared, sha256=actual)
+            parts, problems = {}, []
+            for kind in PARTS:
+                parts[kind], said = _adopt(manifest, getattr(declared, kind), kind, name)
+                problems += [said] if said else []
+            clip = replace(declared, sha256=actual, problem="; ".join(problems), **parts)
         else:
             problem = (
                 f"{manifest} declares clip {declared.path.name} with sha256 "
@@ -416,15 +494,42 @@ def read_bundle(path: Path | str) -> Bundle:
     )
 
 
+#: The files a `clip` block may declare beside the clip, by the key they sit under.
+PARTS = ("mask", "heads")
+
+
+def _adopt(
+    manifest: Path, part: ClipPart | None, kind: str, name: str
+) -> tuple[ClipPart | None, str]:
+    """A declared mask or head boxes as found on disk, and why it was not taken.
+
+    Not there is absent and says nothing. There but not the declared file is
+    absent too, with the reason, which only the video path raises.
+    """
+    if part is None or not part.path.exists():
+        return None, ""
+    actual = sha256_of(part.path)
+    if not part.sha256 or actual == part.sha256:
+        return replace(part, sha256=actual), ""
+    return None, (
+        f"{manifest} declares {kind} {part.path.name} with sha256 {part.sha256[:12]}, "
+        f"but the file on disk is not it; pull {name} again with "
+        f"`cag motions pull {manifest.parent.parent.name}/{name}`"
+    )
+
+
 def read_clip(manifest: Path, block: dict) -> Clip:
     """A manifest's `clip` block, checked for sense but not for the file.
 
     The block records the source clip: `file` beside the manifest, `start` (the
     source second of its first frame), `fps`, `frame_count`, `size` as [w, h],
-    and optionally `box` as [x, y, w, h], `t_offset` and `sha256`. Anything
-    else in it (`match`, `backfilled_by`) is a note for people and is not read.
-    A missing file is not an error: the footage is untracked and fetched again
-    by `cag clips`, so the manifest outlives it.
+    and optionally `box` as [x, y, w, h], `t_offset`, `sha256`, and the `mask`
+    and `heads` the tracer ships beside it, each `{"file": ..., "sha256": ...}`.
+    `backfilled_by` says cag cut the clip rather than the tracer. Anything else
+    in it (`match`) is a note for people and is not read. A missing file is not
+    an error: the footage is untracked and fetched again (`cag clips` for a
+    backfilled clip, `cag motions pull` for a shipped one), so the manifest
+    outlives it.
     """
     missing = {"file", "start", "fps", "frame_count", "size"} - set(block)
     if missing:
@@ -441,6 +546,14 @@ def read_clip(manifest: Path, block: dict) -> Clip:
                 f"{manifest} clip box {[x, y, bw, bh]} does not lie inside the {w}x{h} frame"
             )
         box = (x, y, bw, bh)
+    parts = {}
+    for kind in PARTS:
+        part = block.get(kind)
+        if part is None:
+            continue
+        if not isinstance(part, dict) or not part.get("file"):
+            raise MotionError(f"{manifest} clip block's {kind} names no file")
+        parts[kind] = ClipPart(manifest.parent / part["file"], str(part.get("sha256", "")))
     return Clip(
         path=manifest.parent / block["file"],
         start=float(block["start"]),
@@ -450,7 +563,33 @@ def read_clip(manifest: Path, block: dict) -> Clip:
         box=box,
         t_offset=float(block.get("t_offset", 0.0)),
         sha256=str(block.get("sha256", "")),
+        backfilled_by=str(block.get("backfilled_by", "") or ""),
+        **parts,
     )
+
+
+def read_heads(path: Path, count: int) -> list[list[float] | None]:
+    """A bundle's head boxes: one `[x0, y0, x1, y1]` in clip pixels, or null, per clip frame.
+
+    Raises MotionError when the file does not read, or does not hold exactly
+    `count` entries of that shape.
+    """
+    path = Path(path)
+    try:
+        boxes = json.loads(path.read_text())
+    except (OSError, ValueError) as error:
+        raise MotionError(f"{path.name} does not read ({error})") from None
+    if not isinstance(boxes, list) or len(boxes) != count:
+        held = len(boxes) if isinstance(boxes, list) else type(boxes).__name__
+        raise MotionError(f"{path.name} holds {held} entries for {count} clip frames")
+    for j, head in enumerate(boxes):
+        if head is not None and not (
+            isinstance(head, list)
+            and len(head) == 4
+            and all(isinstance(n, (int, float)) and not isinstance(n, bool) for n in head)
+        ):
+            raise MotionError(f"{path.name} entry {j} is {head!r}, not [x0, y0, x1, y1] or null")
+    return boxes
 
 
 def sha256_of(path: Path) -> str:
@@ -472,6 +611,38 @@ def clip_status(bundle: Bundle) -> str:
     if bundle.clip_problem:
         return "stale"
     return "missing" if bundle.declared_clip else "none"
+
+
+def part_status(bundle: Bundle, kind: str) -> str:
+    """`clip_status` for the bundle mask (`"mask"`) or the head boxes (`"heads"`).
+
+    Read off the file and the declared hash alone, so it answers whether or
+    not the clip itself is on disk.
+    """
+    declared = getattr(bundle.declared_clip, kind, None) if bundle.declared_clip else None
+    if declared is None:
+        return "none"
+    if not declared.path.exists():
+        return "missing"
+    if declared.sha256 and sha256_of(declared.path) != declared.sha256:
+        return "stale"
+    return "ok"
+
+
+def summary(name: str, bundle: Bundle) -> str:
+    """The one-line install check AGENTS.md prints for each bundle."""
+    motion = bundle.load()
+    return (
+        f"{name}: {bundle.frame_count}f @ {bundle.fps}fps {bundle.view} {motion.playback} "
+        f"seam={bundle.seam!r} photos={len(motion.photos)} "
+        f"airborne={[f.index for f in motion.frames if f.airborne]} "
+        f"travel={motion.travel:.3f} clip={clip_status(bundle)}"
+        + "".join(
+            f" {kind}={part_status(bundle, kind)}"
+            for kind in PARTS
+            if getattr(bundle.declared_clip, kind, None)
+        )
+    )
 
 
 def library(root: Path | str) -> dict[str, Bundle]:
