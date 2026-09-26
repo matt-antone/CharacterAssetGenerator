@@ -243,6 +243,8 @@ A new term is named here before it is used.
 | **motion sheet** | the contents of `motion.json` (`MotionSheet`, `load_motion`). The one place "sheet" may appear, always qualified |
 | **traced sheet** / **written sheet** | a motion sheet from a bundle, versus one `cag/motion_writer.py` generated from the brief's prose. A written sheet has no traced frames and therefore no pose reference at all |
 | **traced frame** | one photograph of the performer, `thumbs/fNN.jpg` in a bundle |
+| **source clip** | the footage a bundle was traced from, `motions/<genre>/<name>/clip.mp4`: native rate and size, uncropped, the traced window ±0.5 s. Described by the manifest's `clip` block (`Clip`, `Bundle.clip`), the one manifest edit cag makes (`"backfilled_by": "cag"`), written by `cag clips <name>`. The block is committed and the `.mp4` is git-ignored and absent from `files`, so a fresh clone loads with `clip=None` until `cag clips` runs. A file on disk whose sha256 disagrees with the block raises |
+| **clip box** | the 3:4 box, in source-clip pixels, that the traced frames were cut from (`Clip.box`). Always inside the frame |
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
 | **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |
 | **pose reference** | the umbrella concept. Today always pose cards and pose grids made from traced frames; nothing else qualifies |
@@ -253,6 +255,18 @@ A new term is named here before it is used.
 | **bible** | the identity text quoted into every prompt |
 | **set** | one animation: dance, sing, flinch, guard, entrance, victory, ko |
 | **draw backend** | what draws a build's art: `codex`, `comfy` or `local` (`--draw-backend`). Never assumed. The user may say "processor" |
+| **set reference** | the identity image a set is drawn against, what `set_key_art` returns: `key.png`, or `source/<set>-key-<view>.png` |
+| **machine profile** | `comfy/machines/<name>.json`: the model files, sizes, steps, rate, length cap and timeouts for one machine (`Machine`, `--machine`) |
+| **video path** / **pose-edit path** | the two ways a traced set is drawn under a workflow backend: from its source clip through SCAIL-2 (`video_frames`), or one pose card at a time through Qwen-Image-2.1 (`pose_edit_frames`) |
+| **drive video** | the source clip resampled to the drive rate, cut to a 2:3 box, sized to the machine profile, as one animated PNG: `work/drive/<bundle>-<digest12>/drive.png`. Shared across characters |
+| **drive rate** | frames per second of the drive video. 16 unless the profile's length cap lowers it |
+| **drive mask** | the drive video's silhouette per frame, #0000FF on black: `drive-mask.png` beside `drive.png` |
+| **mask pass** | the SAM3 Comfy job that makes a drive mask when the footage has no light backdrop to threshold |
+| **reference mask** | the set reference's silhouette, blue on black |
+| **SCAIL video** | every image one SCAIL-2 job returns: `work/<char>/video/<set>/<digest12>/NNN.png` |
+| **SCAIL frame** | one image of a SCAIL video |
+| **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
+| **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png` |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.
