@@ -1,0 +1,231 @@
+{
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "wan2.1_14B_SCAIL_2_fp8_scaled.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "2": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "1",
+    0
+   ],
+   "lora_name": "wan2.1_SCAIL_2_DPO_lora_bf16.safetensors",
+   "strength_model": 1.0
+  }
+ },
+ "3": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "2",
+    0
+   ],
+   "lora_name": "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors",
+   "strength_model": 0.8
+  }
+ },
+ "4": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "shift": 5.0
+  }
+ },
+ "5": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+   "type": "wan",
+   "device": "default"
+  }
+ },
+ "6": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "5",
+    0
+   ],
+   "text": "$prompt"
+  }
+ },
+ "7": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "clip": [
+    "5",
+    0
+   ],
+   "text": ""
+  }
+ },
+ "8": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "Wan2_1_VAE_bf16.safetensors"
+  }
+ },
+ "9": {
+  "class_type": "CLIPVisionLoader",
+  "inputs": {
+   "clip_name": "clip_vision_h.safetensors"
+  }
+ },
+ "11": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "$image1"
+  },
+  "_meta": {
+   "title": "the approved front reference"
+  }
+ },
+ "12": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "$image2"
+  },
+  "_meta": {
+   "title": "its silhouette, blue #0000FF on black"
+  }
+ },
+ "10": {
+  "class_type": "CLIPVisionEncode",
+  "inputs": {
+   "clip_vision": [
+    "9",
+    0
+   ],
+   "image": [
+    "11",
+    0
+   ],
+   "crop": "none"
+  }
+ },
+ "D": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "$image3"
+  },
+  "_meta": {
+   "title": "driving video: the traced clip, as frames"
+  }
+ },
+ "M": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "$image4"
+  },
+  "_meta": {
+   "title": "its silhouette video, blue on black"
+  }
+ },
+ "S": {
+  "class_type": "WanSCAILToVideo",
+  "inputs": {
+   "positive": [
+    "6",
+    0
+   ],
+   "negative": [
+    "7",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ],
+   "width": 576,
+   "height": 864,
+   "length": 41,
+   "batch_size": 1,
+   "pose_video": [
+    "D",
+    0
+   ],
+   "pose_video_mask": [
+    "M",
+    0
+   ],
+   "replacement_mode": false,
+   "pose_strength": 1.0,
+   "pose_start": 0.0,
+   "pose_end": 1.0,
+   "reference_image": [
+    "11",
+    0
+   ],
+   "reference_image_mask": [
+    "12",
+    0
+   ],
+   "clip_vision_output": [
+    "10",
+    0
+   ],
+   "video_frame_offset": 0,
+   "previous_frame_count": 5
+  },
+  "_meta": {
+   "title": "animation mode: replacement_mode false, masks on black"
+  }
+ },
+ "K": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "positive": [
+    "S",
+    0
+   ],
+   "negative": [
+    "S",
+    1
+   ],
+   "latent_image": [
+    "S",
+    2
+   ],
+   "seed": 1234,
+   "steps": 6,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "denoise": 1.0
+  }
+ },
+ "V": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "K",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  }
+ },
+ "O": {
+  "class_type": "SaveImage",
+  "inputs": {
+   "images": [
+    "V",
+    0
+   ],
+   "filename_prefix": "cag-scail"
+  }
+ }
+}
