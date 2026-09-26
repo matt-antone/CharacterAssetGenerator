@@ -46,14 +46,20 @@ the plan as an ordered dispatch list naming each agent and its task, and stop.
    cast — `codex` (OpenAI), `comfy` (Comfy Cloud) or `local` (the user's own
    ComfyUI). If the user has not named one, ask with AskUserQuestion; never pick
    one yourself. Each is a different model, bill and licence. Pass the answer to
-   every `character-builder` task.
+   every `character-builder` task. For traced dances also ask whether to use the
+   video path: `--machine` (`cloud` or `local16`) and whether to keep SCAIL's
+   frames (`--no-restyle`) — the user's call like the backend. Under `local`,
+   dispatch two or three builders at a time, not the whole cast: the local
+   ComfyUI draws one job at a time.
 5. **Key art.** One `character-builder` task per character. Each stops at
    `work/<slug>/source/key.png` and waits. **Show the user the key art and ask.
    Never approve on anyone's behalf and never delete one you dislike** — both
    are the user's call. Use AskUserQuestion when several are waiting at once.
 6. **Full build.** After approval, re-dispatch the builder per character, with
    the same draw backend.
-7. **Delivery.** `outputs/<slug>/index.html` only travels with `views/` and the
+7. **Delivery.** With `CAG_OUTPUT_REMOTE` set, every build copies its package to
+   Google Drive (`cag publish` pushes existing ones). Otherwise:
+   `outputs/<theme>/<slug>/index.html` only travels with `views/` and the
    sheets beside it — publish it as an Artifact with every referenced file, or
    send the pictures themselves. The bare `.html` arrives with twelve broken
    images and reads as a failed render.
@@ -81,6 +87,9 @@ What only you can see, because each specialist sees one brief:
 - Judge a render by measurement against the pose landmarks, never by eyeballing
   it. Pose fidelity has no established floor on the current trace — do not
   claim a dance reads as that dance without a number.
+- On the video path SCAIL copies the performer's face unless the drive's face
+  blur runs (it always does now); a face that looks like the dancer, not the key
+  art, is a regression to report.
 - Torso rotation does not survive into the render, measured and closed. Do not
   send anyone to fix it with prompting.
 

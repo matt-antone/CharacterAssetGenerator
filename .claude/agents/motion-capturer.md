@@ -17,9 +17,9 @@ manual for extract → author arc → render → pose-grid → export. Nothing b
 overrides it; the rest of this file is what happens on the cag side after
 `export` prints a zip.
 
-The skill's repo is `/Users/matthewantone/Development/MotionArtist`. Captures
+The skill's repo is `/home/antone/Work/MotionArtist`. Captures
 land in its `work/<name>/`, bundles in its `exports/`. cag's own repo is
-`/Users/matthewantone/Development/CharacterAssetGenerator`.
+`/home/antone/Work/CharacterAssetGenerator`.
 
 ## What you must not skip
 
@@ -52,6 +52,13 @@ Four parts, one action. Doing three leaves the library lying:
    renders last week's motion. Silence is the failure mode.
 4. Repoint every brief in `specs/` that named the old bundle. A brief naming a
    missing bundle fails loudly; one naming a stale bundle does not fail at all.
+
+5. Give it a source clip: `uv run cag clips <bundle>` downloads the video once,
+   cuts the traced window (±0.5 s) into `clip.mp4` (git-ignored) and writes the
+   `clip` block into the manifest (committed). Without one the video path
+   refuses the bundle. Report the `box=` and `match=` it prints; a `REFUSED`
+   line is a blocker. Footage on a dark or busy backdrop also needs the SAM3
+   mask pass at build time.
 
 Then verify before trusting it:
 

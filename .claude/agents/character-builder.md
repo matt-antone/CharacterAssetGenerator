@@ -34,8 +34,35 @@ to run without one anyway.
   harness background task with `run_in_background`, never a detached `nohup ... &`
   and never a batched loop over specs — the user has to be able to see and stop
   each build.
-- Several characters build at once, each its own task.
+- Several characters build at once, each its own task — **except under
+  `--draw-backend local`**: the local ComfyUI runs one job at a time, so run two
+  or three characters at once, not the whole cast (AGENTS.md, "Build characters
+  in parallel").
 - `uv run cag motions` lists the bundles a brief may name.
+
+## Machines and the video path
+
+A traced set can be drawn from its bundle's source clip instead (AGENTS.md,
+"The video path"). Like the backend, the machine is the user's call — never pick
+one. The task names it, or `CAG_MACHINE` does:
+
+```bash
+uv run cag build specs/<set>/<slug>.json --draw-backend local --machine local16 --no-restyle
+```
+
+- `--machine cloud|local16|smoke4` turns the video path on; `--no-machine` turns
+  it off for one build. `smoke4` is wiring only — never judge its art.
+- `--no-restyle` keeps SCAIL-2's frames and skips the Qwen restyle (the house
+  look on the RX 9070, 2026-09-26). Only with `--machine`.
+- The cell finish (defringe, one palette per set, 1-pixel inner outline) runs by
+  default on the video path; `--no-finish` skips it.
+- `--motion` takes a bundle **path**, e.g. `--motion motions/club/club-01`.
+- A traced set whose bundle has no source clip fails and says so: run
+  `uv run cag clips <bundle>` (it downloads the video once), then build again.
+- Local builds: ComfyUI must already be running with the flags in
+  `comfy/machines/local16.json`'s `about`, and key art locally needs
+  `CAG_LOCAL_COMFY_WORKFLOW=comfy/qwen-image-2.1-fp8.json`. Check a machine with
+  `uv run cag machines --check local16` before a long build.
 
 ## The key art gate
 
@@ -68,17 +95,22 @@ logged `FAILED` and the run continues. That is a coin flip, not a broken set:
 re-run the same `uv run cag build`. Completed frames are cached and skipped, so
 repeated passes converge on a full package.
 
-`--set <name>` re-renders one set but rewrites `outputs/<slug>/index.html` to
+`--set <name>` re-renders one set but rewrites `outputs/<theme>/<slug>/index.html` to
 list only that set. Always finish with a full `uv run cag build <spec>`, which
 is nearly free and puts every set back on the page.
 
 ## Delivering
 
-`outputs/<slug>/index.html` points at `views/key.png` and the sheets with
+`outputs/<theme>/<slug>/index.html` points at `views/key.png` and the sheets with
 relative paths. Sending the bare `.html` breaks every image. Either publish it
 as an Artifact with every referenced file passed through `files`, or send the
 pictures themselves — key art, a frame sheet, a proof GIF — and leave the
 gallery on disk.
+
+When `CAG_OUTPUT_REMOTE` is set (e.g. `gdrive:CharacterAssetGenerator/outputs`),
+each build copies its finished folder to that Google Drive path with rclone,
+keeping `index.html` beside its pictures; `uv run cag publish <spec>` pushes one
+already built. A publish failure only warns — report it, don't retry blindly.
 
 ## Vocabulary
 

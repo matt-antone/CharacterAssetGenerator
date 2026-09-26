@@ -47,6 +47,11 @@ drift, and removing that drift is the point of the schema.
 - `avoid` is a list of concrete wrong readings, not vague warnings. Name the
   right thing positively in the field and the wrong thing here — negation alone
   is weak with a generator.
+- Name garments by their exact cut, not a family word. "A steel evening coat
+  with short coat tails" drew Heavyweight a knee-length overcoat under
+  Qwen-Image-2.1 (2026-09-26); "a white-tie tailcoat, cut away at the waist,
+  tails to the backs of the knees" drew the tailcoat. Put the misreading in
+  `avoid` too ("an overcoat, frock coat or topcoat").
 
 ## Animation intents
 
