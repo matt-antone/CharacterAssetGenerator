@@ -205,6 +205,16 @@ Characters are the unit of parallelism. Within one character the sets are drawn
 in order, each continuing from the last frame of the set before it, so there is
 nothing to parallelise there.
 
+**Under `--draw-backend local`, run two or three at a time, not the whole cast.**
+A local ComfyUI has one queue and one GPU: it runs one job at a time, so ten
+builds launched together draw nothing faster — their jobs take turns, and every
+character finishes near the end instead of one by one. Two or three keep the GPU
+busy while another build does its CPU work (cutting the drive, masking, the cell
+finish). More than that only fills system RAM: with `--disable-smart-memory`
+every model a queued job needs sits in RAM between jobs (about 45 GB for key art
+and SCAIL together on the RX 9070's 62 GB machine), and past that ComfyUI reloads
+from disk. The rule above stands for `comfy`: Comfy Cloud runs jobs side by side.
+
 ## Launch builds as tracked background tasks
 
 Start each `uv run cag build` as a harness background task, not a detached `nohup ... &`
