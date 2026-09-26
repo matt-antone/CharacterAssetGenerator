@@ -20,7 +20,7 @@ case $role in
   character-creator) title="Iris — Character Designer" ;;
   character-builder) title="Otto — Render Lead" ;;
   prop-creator)      title="Pim — Prop Maker" ;;
-  motion-capturer)   title="Mo — Motion Capture" ;;
+  motion-capturer)   title="Mo — Motion Capture Artist" ;;
   *) echo "agent: no agent called '$role'" >&2; usage ;;
 esac
 

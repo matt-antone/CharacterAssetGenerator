@@ -188,7 +188,7 @@ tells parallel instances apart, and is what `SendMessage` addresses them by.
 | character-creator | Iris — Character Designer | the brief's slug |
 | character-builder | Otto — Render Lead | the character's slug |
 | prop-creator | Pim — Prop Maker | the prop's name |
-| motion-capturer | Mo — Motion Capture | the bundle or move |
+| motion-capturer | Mo — Motion Capture Artist | the bundle or move |
 
 No agent can title itself: Claude Code has no frontmatter field for a session
 title, so whoever starts it names it.
