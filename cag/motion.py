@@ -192,6 +192,9 @@ class MotionSheet:
     #: Why a bundle that declares a clip has none to give: the file on disk is
     #: not the one it declares. Only the video path reads it, and fails with it.
     clip_problem: str = ""
+    #: The command that puts the clip back when it is missing or stale; see
+    #: `clip_remedy`. Empty on a sheet read straight off disk.
+    clip_remedy: str = ""
 
     @property
     def clip_frames(self) -> tuple[int, ...]:
@@ -380,8 +383,13 @@ class Bundle:
     clip_problem: str = ""
     #: The clip the manifest declares, whether or not its file is there.
     #: `clip.mp4` is not tracked, so on a fresh clone every bundle has this and
-    #: no `clip` until `cag clips` fetches the footage again.
+    #: no `clip` until it is pulled or cut again; see `clip_remedy`.
     declared_clip: Clip | None = None
+
+    @property
+    def clip_remedy(self) -> str:
+        """The command that puts this bundle's clip back; see `clip_remedy`."""
+        return clip_remedy(self.root, self.name, self.declared_clip)
 
     def load(self) -> MotionSheet:
         """The sheet itself, checked against the header that advertised it."""
@@ -413,7 +421,13 @@ class Bundle:
                     f"{self.root / BUNDLE} clip spans {self.clip.start:.3f}-{self.clip.end:.3f}s, "
                     f"which does not cover traced frames {outside}"
                 )
-        return replace(motion, photos=self.photos, clip=self.clip, clip_problem=self.clip_problem)
+        return replace(
+            motion,
+            photos=self.photos,
+            clip=self.clip,
+            clip_problem=self.clip_problem,
+            clip_remedy=self.clip_remedy,
+        )
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -476,7 +490,8 @@ def read_bundle(path: Path | str) -> Bundle:
             problem = (
                 f"{manifest} declares clip {declared.path.name} with sha256 "
                 f"{declared.sha256[:12]}, but the file on disk is not it; "
-                f"run `cag clips {name}` to cut it again"
+                f"run `{clip_remedy(manifest.parent, name, declared)}` to "
+                + ("pull it again" if declared.from_tracer else "cut it again")
             )
     return Bundle(
         name=name,
@@ -597,14 +612,27 @@ def sha256_of(path: Path) -> str:
         return hashlib.file_digest(f, "sha256").hexdigest()
 
 
+def clip_remedy(root: Path, name: str, declared: Clip | None) -> str:
+    """The command that puts back the clip of the bundle `name` at `root`.
+
+    A clip the tracer shipped is pulled again, `cag motions pull <set>/<name>`,
+    and never cut here: `cag clips` refuses it. A clip cag backfilled, or a
+    bundle that has never had one, is cut by `cag clips <name>`.
+    """
+    if declared is not None and declared.from_tracer:
+        return f"cag motions pull {Path(root).parent.name}/{name}"
+    return f"cag clips {name}"
+
+
 def clip_status(bundle: Bundle) -> str:
     """One word for what a bundle holds of its source clip, as `cag motions` shows it.
 
     `ok` is a clip on disk that matches its hash. `missing` is a manifest that
     declares one whose file is not there, which is every clip on a fresh clone
-    until `cag clips <name>` cuts it again. `stale` is a file there that is not
-    the one declared, which `cag clips <name>` also cuts again. `none` is a
-    bundle that has never had one, which only `cag clips` can backfill.
+    until it is put back. `stale` is a file there that is not the one declared.
+    Either is put back by `Bundle.clip_remedy`: a pull for a clip the tracer
+    shipped, `cag clips <name>` for one cag backfilled. `none` is a bundle that
+    has never had one, which only `cag clips` can backfill.
     """
     if bundle.clip:
         return "ok"

@@ -445,6 +445,14 @@ def test_a_motion_with_no_clip_names_the_backfill(tmp_path):
         build_drive(motion, SMALL, tmp_path / "drive")
 
 
+def test_a_tracer_bundle_with_no_clip_names_the_pull(tmp_path):
+    motion = SimpleNamespace(
+        name="club-99", clip=None, frame_times=tuple(TIMES), clip_remedy="cag motions pull club/club-99"
+    )
+    with pytest.raises(DriveError, match="run `cag motions pull club/club-99`"):
+        build_drive(motion, SMALL, tmp_path / "drive")
+
+
 def test_a_clip_that_decodes_at_another_size_is_refused(tmp_path):
     with pytest.raises(DriveError, match="decodes at 64x96"):
         build_drive(

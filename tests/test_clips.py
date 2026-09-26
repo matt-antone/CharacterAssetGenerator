@@ -1,4 +1,6 @@
 import json
+import shutil
+import subprocess
 from fractions import Fraction
 from pathlib import Path
 
@@ -6,7 +8,7 @@ import numpy as np
 import pytest
 from PIL import Image, ImageFilter
 
-from cag import clips
+from cag import clips, drive
 from cag.clips import ClipError, Probe, backfill, cut, fetch, recover_box, video_id
 from cag.motion import clip_status, read_bundle, sha256_of
 
@@ -158,6 +160,41 @@ def ffprobe_json(duration, rate="24/1", average="24/1", frames=None, size=(1280,
     if frames is not None:
         stream["nb_frames"] = str(frames)
     return json.dumps({"streams": [stream], "format": {"duration": str(duration)}})
+
+
+@pytest.mark.parametrize(
+    "turned, shown",
+    [
+        ({"side_data_list": [{"rotation": -90}]}, (1080, 1920)),
+        ({"tags": {"rotate": "270"}}, (1080, 1920)),
+        ({"side_data_list": [{"rotation": 180}]}, (1920, 1080)),
+        ({}, (1920, 1080)),
+    ],
+)
+def test_probe_reports_the_size_a_rotated_stream_displays_at(monkeypatch, turned, shown):
+    out = json.loads(ffprobe_json(5.0, frames=120, size=(1920, 1080)))
+    out["streams"][0].update(turned)
+    fake_tools(monkeypatch, {"ffprobe": lambda cmd: json.dumps(out)})
+    assert clips.probe(Path("clip.mp4")).size == shown
+
+
+@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="needs ffmpeg")
+def test_probe_and_decode_agree_on_a_clip_stored_on_its_side(tmp_path):
+    """A pull checks a clip's size with probe; a drive build decodes it. A clip
+    carrying a rotation matrix must pass both at the one size its manifest says."""
+    plain, turned = tmp_path / "plain.mp4", tmp_path / "turned.mp4"
+    subprocess.run(
+        ["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc=size=192x108:rate=24",
+         "-frames:v", "10", "-pix_fmt", "yuv420p", str(plain)],
+        check=True,
+    )
+    subprocess.run(
+        ["ffmpeg", "-v", "error", "-y", "-display_rotation", "90", "-i", str(plain), "-c", "copy", str(turned)],
+        check=True,
+    )
+    frames = drive.decode(turned)
+    assert clips.probe(turned).size == (frames.shape[2], frames.shape[1]) == (108, 192)
+    assert clips.decode(turned).shape == frames.shape
 
 
 def fake_tools(monkeypatch, answers):

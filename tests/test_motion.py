@@ -287,6 +287,27 @@ def test_a_clip_that_is_not_the_one_declared_is_stale_and_only_the_video_path_re
     assert motion.clip is None and motion.clip_problem == bundle.clip_problem
 
 
+def test_a_tracer_clip_that_is_missing_or_stale_names_the_pull_not_cag_clips(tmp_path):
+    """`cag clips` refuses a clip the tracer shipped, so no message may send a builder there."""
+    root = timed_bundle(tmp_path / "shuffle", clip={"backfilled_by": ""}, footage=None)
+    bundle = read_bundle(root)
+    assert clip_status(bundle) == "missing" and bundle.declared_clip.from_tracer
+    assert bundle.clip_remedy == "cag motions pull shuffle/shuffle"
+    assert bundle.load().clip_remedy == "cag motions pull shuffle/shuffle"
+    (root / "clip.mp4").write_bytes(b"a different cut")
+    stale = read_bundle(root)
+    assert clip_status(stale) == "stale"
+    assert "run `cag motions pull shuffle/shuffle` to pull it again" in stale.clip_problem
+    assert "cag clips" not in stale.clip_problem
+
+
+def test_a_backfilled_clip_still_names_cag_clips(tmp_path):
+    root = timed_bundle(tmp_path, clip={}, footage=None)
+    assert read_bundle(root).clip_remedy == "cag clips shuffle"
+    (root / "clip.mp4").write_bytes(b"a different cut")
+    assert "run `cag clips shuffle` to cut it again" in read_bundle(root).clip_problem
+
+
 def test_one_stale_clip_does_not_stop_the_rest_of_the_library(tmp_path):
     root = timed_bundle(tmp_path, clip={})
     (root / "clip.mp4").write_bytes(b"a different cut")

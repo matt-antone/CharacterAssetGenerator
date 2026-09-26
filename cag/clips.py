@@ -111,13 +111,19 @@ class Probe:
 
 
 def probe(path: Path) -> Probe:
-    """Duration, rate, size and frame count of `path`, and whether its rate varies."""
+    """Duration, rate, size and frame count of `path`, and whether its rate varies.
+
+    The size is the display size: a stream stored on its side with a rotation
+    matrix (phone footage, often) comes back turned, because ffmpeg decodes it
+    turned, and every decoder here takes its frame size from this.
+    """
     out = json.loads(
         _run(
             [
                 "ffprobe", "-v", "error", "-select_streams", "v:0",
                 "-show_entries",
-                "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+                "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames"
+                ":stream_side_data=rotation:stream_tags=rotate:format=duration",
                 "-of", "json", str(path),
             ]
         )
@@ -131,7 +137,19 @@ def probe(path: Path) -> Probe:
     fps = nominal or average
     frames = int(stream.get("nb_frames") or 0) or round(duration * fps)
     variable = not nominal or not average or abs(nominal / average - 1) > RATE_SLACK
-    return Probe(duration, fps, (int(stream["width"]), int(stream["height"])), frames, variable)
+    size = (int(stream["width"]), int(stream["height"]))
+    if _rotation(stream) % 180 == 90:
+        size = size[::-1]
+    return Probe(duration, fps, size, frames, variable)
+
+
+def _rotation(stream: dict) -> int:
+    """The stream's display rotation in whole degrees, from its display matrix
+    or, in older files, its `rotate` tag; 0 when it carries neither."""
+    for side in stream.get("side_data_list") or ():
+        if "rotation" in side:
+            return round(float(side["rotation"]))
+    return round(float((stream.get("tags") or {}).get("rotate") or 0))
 
 
 def fetch(url: str, duration: float, cache: Path = SOURCES) -> Path:

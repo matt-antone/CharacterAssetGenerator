@@ -470,7 +470,8 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
             raise MotionError(
                 motion.clip_problem
                 or f"{motion.name} carries no source clip; --machine draws traced sets from "
-                f"video. Run `cag clips {motion.name}`, or build without --machine"
+                f"video. Run `{getattr(motion, 'clip_remedy', '') or f'cag clips {motion.name}'}`, "
+                "or build without --machine"
             )
         # Imported here: the video path builds on this module's paths and stamps.
         from .video import video_frames

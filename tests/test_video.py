@@ -222,6 +222,13 @@ def test_a_traced_set_without_a_clip_says_how_to_get_one(world):
     assert world["scail"].calls == []
 
 
+def test_a_traced_set_whose_tracer_clip_is_missing_names_the_pull(world):
+    motion = replace(world["state"]["motion"], clip=None, clip_remedy="cag motions pull shuffle/shuffle-3")
+    with pytest.raises(MotionError, match=r"Run `cag motions pull shuffle/shuffle-3`, or build without"):
+        world["build"](motion=motion)
+    assert world["scail"].calls == []
+
+
 def test_a_stale_clip_fails_the_set_saying_so(world):
     problem = "motions/x/manifest.json declares clip clip.mp4 with sha256 abc, but the file on disk is not it"
     motion = replace(world["state"]["motion"], clip=None, clip_problem=problem)

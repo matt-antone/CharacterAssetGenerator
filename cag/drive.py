@@ -971,7 +971,7 @@ def build_drive(
     if clip is None or not times:
         raise DriveError(
             f"{motion.name} carries no source clip with traced frame times; "
-            f"run `cag clips {motion.name}`"
+            f"run `{getattr(motion, 'clip_remedy', '') or f'cag clips {motion.name}'}`"
         )
     if getattr(clip, "problem", ""):
         raise DriveError(clip.problem)

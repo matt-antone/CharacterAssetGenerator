@@ -206,6 +206,67 @@ def test_a_listed_file_that_did_not_arrive_is_refused(tmp_path):
         pulling(tmp_path)
 
 
+def rehash(root: Path, listed: str) -> None:
+    """Re-sign one listed file in the manifest after a test has broken it."""
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["files"][listed] = sha(root / listed)
+    (root / "manifest.json").write_text(json.dumps(manifest))
+
+
+def break_role(root: Path) -> None:
+    motion_sheet = json.loads((root / "motion.json").read_text())
+    del motion_sheet["frames"][0]["role"]
+    (root / "motion.json").write_text(json.dumps(motion_sheet))
+    rehash(root, "motion.json")
+
+
+def break_start(root: Path) -> None:
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["clip"]["start"] = "abc"
+    (root / "manifest.json").write_text(json.dumps(manifest))
+
+
+def list_manifest(root: Path) -> None:
+    (root / "manifest.json").write_text(json.dumps(["shuffle-3"]))
+
+
+def list_motion_sheet(root: Path) -> None:
+    (root / "motion.json").write_text(json.dumps(["shuffle-3"]))
+    rehash(root, "motion.json")
+
+
+@pytest.mark.parametrize(
+    "breaks, said",
+    [
+        (break_role, "KeyError: 'role'"),
+        (break_start, "ValueError"),
+        (list_manifest, "holds a JSON list, not an object"),
+        (list_motion_sheet, "AttributeError"),
+    ],
+)
+def test_a_malformed_bundle_is_refused_not_a_traceback(tmp_path, monkeypatch, capsys, breaks, said):
+    breaks(tracer_bundle(tmp_path / "remote"))
+    with pytest.raises(PullError, match=said):
+        pulling(tmp_path)
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["motions", "remote"]
+    assert not (tmp_path / "motions" / "shuffle").exists(), "nothing is installed"
+    monkeypatch.setattr(pull.subprocess, "run", fake_rclone(tmp_path / "remote", []))
+    monkeypatch.setattr(pull.shutil, "which", which)
+    args = ["motions", "pull", "shuffle/shuffle-3", "--motion-root", str(tmp_path / "m"), "--remote", REMOTE]
+    assert cli.main(args) == 1
+    assert "[pull] REFUSED: " in capsys.readouterr().err
+
+
+def test_a_list_manifest_elsewhere_in_the_library_is_a_refusal_not_a_traceback(tmp_path):
+    tracer_bundle(tmp_path / "remote")
+    other = tmp_path / "motions" / "club" / "club-1"
+    other.mkdir(parents=True)
+    (other / "manifest.json").write_text("[1, 2, 3]")
+    with pytest.raises(PullError, match="library\\(\\) does not load .*nothing was installed"):
+        pulling(tmp_path)
+    assert not (tmp_path / "motions" / "shuffle" / "shuffle-3").exists()
+
+
 def test_head_boxes_that_do_not_cover_the_clip_are_refused(tmp_path):
     tracer_bundle(tmp_path / "remote", heads=[None] * 119)
     with pytest.raises(PullError, match="holds 119 entries for 120 clip frames"):

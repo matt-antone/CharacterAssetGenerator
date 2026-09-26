@@ -160,6 +160,12 @@ def list_remote(
     return sorted(found)
 
 
+#: What a malformed manifest or motion sheet raises on its way through
+#: `read_bundle` and `load_motion`: a missing key, a field that is not a number,
+#: a JSON list where an object belongs. Each is one refused pull, never a traceback.
+MALFORMED = (MotionError, KeyError, IndexError, ValueError, TypeError, AttributeError)
+
+
 def check(
     root: Path,
     name: str,
@@ -168,8 +174,20 @@ def check(
     """The bundle at `root`, once it has passed every check a pull makes; else PullError.
 
     `probe` is `cag.clips.probe`, to check the clip and bundle mask decode at
-    the frame count and size the manifest declares; None skips that.
+    the frame count and size the manifest declares; None skips that. Sizes are
+    display sizes, the way a drive build decodes the clip, so a clip stored on
+    its side with a rotation matrix is checked upright.
     """
+    try:
+        return _check(root, name, probe)
+    except PullError:
+        raise
+    except MALFORMED as error:
+        said = error if isinstance(error, MotionError) else f"{type(error).__name__}: {error}"
+        raise PullError(f"{name} does not read as a bundle: {said}") from None
+
+
+def _check(root: Path, name: str, probe: Callable[[Path], object] | None) -> Bundle:
     manifest = root / BUNDLE
     if not manifest.exists():
         raise PullError(f"{name} holds no {BUNDLE}: nothing is there, or it is not a bundle")
@@ -177,6 +195,8 @@ def check(
         data = json.loads(manifest.read_text())
     except json.JSONDecodeError as error:
         raise PullError(f"{name}'s {BUNDLE} is not valid JSON: {error}") from None
+    if not isinstance(data, dict):
+        raise PullError(f"{name}'s {BUNDLE} holds a JSON {type(data).__name__}, not an object")
     if data.get("name") != name:
         raise PullError(
             f"{name}'s manifest calls it {data.get('name')!r}: the directory, the manifest's "
@@ -201,11 +221,8 @@ def check(
                 f"{name}'s motion.json calls it {said!r}: the directory, the manifest's name "
                 "and motion.json's name must be one name"
             )
-    try:
-        bundle = read_bundle(root)
-        motion = bundle.load()
-    except MotionError as error:
-        raise PullError(str(error)) from None
+    bundle = read_bundle(root)
+    motion = bundle.load()
     if not bundle.photos:
         raise PullError(
             f"{name} ships {len([f for f in files if Path(f).parent.name == 'thumbs'])} traced "
@@ -259,9 +276,11 @@ def _elsewhere(motion_root: Path, name: str, home: Path) -> Path | None:
         if manifest.parent.resolve() == home.resolve():
             continue
         try:
-            called = json.loads(manifest.read_text()).get("name", manifest.parent.name)
+            data = json.loads(manifest.read_text())
         except (OSError, ValueError):
             continue
+        # Someone else's broken manifest is not this pull's to refuse.
+        called = data.get("name", manifest.parent.name) if isinstance(data, dict) else None
         if called == name:
             return manifest.parent
     return None
@@ -311,7 +330,7 @@ def pull(
         try:
             bundle = library(motion_root)[name]
             bundle.load()
-        except (MotionError, KeyError, OSError, ValueError) as error:
+        except (*MALFORMED, OSError) as error:
             shutil.rmtree(home, ignore_errors=True)
             if replaced:
                 previous.rename(home)

@@ -59,8 +59,11 @@ uv run cag build specs/<set>/<slug>.json --draw-backend local --machine local16 
 - The cell finish (defringe, one palette per set, 1-pixel inner outline) runs by
   default on the video path; `--no-finish` skips it.
 - `--motion` takes a bundle **path**, e.g. `--motion motions/club/club-01`.
-- A traced set whose bundle has no source clip fails and says so: run
-  `uv run cag clips <bundle>` (it downloads the video once), then build again.
+- A traced set whose bundle has no source clip fails and names the command
+  that puts it back; run that, then build again. A bundle the tracer shipped is
+  pulled again with `uv run cag motions pull <set>/<bundle>` (`cag clips`
+  refuses it); an older bundle is cut with `uv run cag clips <bundle>` (it
+  downloads the video once).
 - Local builds: ComfyUI must already be running with the flags in
   `comfy/machines/local16.json`'s `about`, and key art locally needs
   `CAG_LOCAL_COMFY_WORKFLOW=comfy/qwen-image-2.1-fp8.json`. Check a machine with
