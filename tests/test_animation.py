@@ -709,6 +709,9 @@ def test_a_traced_set_under_a_pose_workflow_is_drawn_frame_by_frame(tmp_path, mo
         assert call["out"] == tmp_path / "lou" / "source" / "dance" / f"{index:02d}.png"
     assert result["frame_sheets"] == [[n] for n in range(16)], "each frame at its own scale"
     assert sorted(result["cells"]) == list(range(16))
+    assert result["cells"][0] == tmp_path / "lou" / "cells" / "dance" / "00.png"
+    assert not (tmp_path / "lou" / "cells-cut").exists(), "the cell finish is the video path's alone"
+    assert not (tmp_path / "lou" / "cells" / "dance" / "finish.sha").exists()
 
 
 def test_a_written_set_under_a_pose_workflow_still_goes_on_a_frame_sheet(tmp_path, monkeypatch):

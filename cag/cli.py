@@ -175,6 +175,7 @@ def render_set(
     machine: Machine | None = None,
     graphs: dict[str, Path] | None = None,
     scail_only: bool = False,
+    finish: bool = True,
 ) -> dict:
     """Draw and mask one animation set, continuing from the set drawn before it.
 
@@ -209,7 +210,7 @@ def render_set(
             "motion": motion,
             "set_name": set_name,
             "work_dir": work_dir,
-            **backend_state(backend, frames_per_sheet, machine, graphs, scail_only),
+            **backend_state(backend, frames_per_sheet, machine, graphs, scail_only, finish),
             **({"carry": carry} if carry else {}),
         }
     )
@@ -237,6 +238,7 @@ def build(
     machine: Machine | None = None,
     graphs: dict[str, Path] | None = None,
     scail_only: bool = False,
+    finish: bool = True,
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -297,6 +299,7 @@ def build(
                     machine,
                     graphs,
                     scail_only,
+                    finish,
                 )
             except TextPending as pending:
                 # Not a failure: the session's AI answers it and the build goes on.
@@ -420,6 +423,13 @@ def main(argv: list[str] | None = None) -> int:
         help="with --machine: keep each traced frame's SCAIL frame as drawn and skip the "
         "Qwen-Image-2.1 restyle (minutes a frame on a local GPU). The key art and set "
         "reference SCAIL animates are still drawn by the draw backend's own workflow",
+    )
+    build_parser.add_argument(
+        "--no-finish",
+        dest="finish",
+        action="store_false",
+        help="with --machine: leave the video path's cells as cut out, without the cell "
+        "finish (defringe, one palette per set, a 1px inner outline)",
     )
     for stage, flag in (("video", "scail"), ("restyle", "restyle"), ("mask", "mask")):
         variable, default = STAGES[stage]
@@ -554,6 +564,10 @@ def main(argv: list[str] | None = None) -> int:
         # Every set reads it through `comfy.pose_workflow_path`, as the env var does.
         os.environ["CAG_COMFY_POSE_WORKFLOW"] = str(args.comfy_pose_workflow)
     machine, graphs = None, None
+    if not args.finish and not args.machine:
+        # Only the video path's cells are finished; as with --no-restyle, a flag
+        # that would be ignored stops the build instead.
+        raise SystemExit("[build] --no-finish turns off the video path's cell finish; it needs --machine")
     if args.scail_only and not args.machine:
         # Only the video path restyles; without a machine it would be ignored
         # silently, and a build that looks SCAIL-only would be drawn otherwise.
@@ -588,6 +602,7 @@ def main(argv: list[str] | None = None) -> int:
         machine=machine,
         graphs=graphs,
         scail_only=args.scail_only,
+        finish=args.finish,
     )
     return 0
 
@@ -609,6 +624,7 @@ def backend_state(
     machine: Machine | None = None,
     graphs: dict[str, Path] | None = None,
     scail_only: bool = False,
+    finish: bool = True,
 ) -> dict:
     """How the graphs draw for this backend, where the backends differ.
 
@@ -619,7 +635,8 @@ def backend_state(
 
     A `machine`, with the `graphs` `machine_with` wrote for it, sends every
     traced set down the video path instead of the pose-edit path, and
-    `scail_only` stops that path at the SCAIL video, restyling nothing.
+    `scail_only` stops that path at the SCAIL video, restyling nothing. Without
+    `finish` that path's cells are left as cut out (`cag.finish`).
     """
     state = {} if backend not in WORKFLOW_BACKENDS else {
         "detail_after_key": False,
@@ -635,6 +652,8 @@ def backend_state(
         state.update(machine=machine, machine_graphs=dict(graphs or {}), local=backend == "local")
         if scail_only:
             state["scail_only"] = True
+        if not finish:
+            state["finish"] = False
     return state
 
 

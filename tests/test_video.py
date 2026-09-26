@@ -356,3 +356,43 @@ def test_switching_modes_supersedes_the_frames_and_keeps_the_scail_video(world, 
     assert len(restyle.calls) == 16, "back to restyles: every frame drawn again"
     assert sorted(p.name.split("-")[0] for p in (source / "superseded").iterdir()) == ["scail", "video"]
     assert len(world["scail"].calls) == 1, "one SCAIL video served all three builds"
+
+
+# The cell finish: the video path's cells, and only its.
+
+
+def test_the_video_path_finishes_its_cells_from_cut_outs_kept_beside_them(world, capsys):
+    result, _ = world["build"]()
+    work = world["state"]["work_dir"]
+    for index in range(16):
+        cut, finished = work / "cells-cut" / "dance" / f"{index:02d}.png", work / "cells" / "dance" / f"{index:02d}.png"
+        assert result["cells"][index] == finished, "everything downstream reads the finished cell"
+        with Image.open(cut) as a, Image.open(finished) as b:
+            assert a.size == b.size
+            alpha = numpy.asarray(b)[..., 3]
+            assert set(numpy.unique(alpha)) <= {0, 255}
+            assert ((alpha > 0) == (numpy.asarray(a)[..., 3] > 128)).all(), "same silhouette as the cut-out"
+    assert (work / "cells" / "dance" / "finish.sha").exists()
+    assert "cell finish: 16 cells" in capsys.readouterr().err
+
+    world["build"]()
+    assert "cell finish cached" in capsys.readouterr().err, "a rebuild re-cuts the same cut-outs"
+
+
+def test_scail_only_is_finished_too(world):
+    world["build"](scail_only=True)
+    assert (world["state"]["work_dir"] / "cells" / "dance" / "finish.sha").exists()
+
+
+def test_no_finish_leaves_the_cells_as_cut_out_and_forgets_the_finish(world, capsys):
+    world["build"]()
+    work = world["state"]["work_dir"]
+    capsys.readouterr()
+    result, _ = world["build"](finish=False)
+    assert not (work / "cells" / "dance" / "finish.sha").exists()
+    for index in range(16):
+        with Image.open(result["cells"][index]) as a, Image.open(work / "cells-cut" / "dance" / f"{index:02d}.png") as b:
+            assert a.tobytes() == b.tobytes(), "the cell is the cut-out"
+    assert "cell finish" not in capsys.readouterr().err
+    world["build"]()
+    assert "cell finish: 16 cells" in capsys.readouterr().err, "turned back on, it finishes again"

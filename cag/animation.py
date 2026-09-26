@@ -21,6 +21,8 @@ from langgraph.graph import END, START, StateGraph
 
 from .assemble import tile
 from .draw import DrawError, draw
+from .finish import STAMP as FINISH_STAMP
+from .finish import finish_set
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
 from .mask import (
     MaskError,
@@ -98,6 +100,9 @@ class AnimationState(TypedDict, total=False):
     #: Whether the video path stops at the SCAIL video: each traced frame's
     #: SCAIL frame is the set's frame, and nothing is restyled (`--no-restyle`).
     scail_only: bool
+    #: Whether a video path set's cells get the cell finish (`cag.finish`).
+    #: Missing means true; `--no-finish` turns it off.
+    finish: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
@@ -583,10 +588,16 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
     fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
     poses = {frame.index: frame.pts for frame in motion.frames}
     airborne = frozenset(frame.index for frame in motion.frames if frame.airborne)
+    # A set the cell finish will run on is cut out beside its cells, so the
+    # finish always starts from the cut-outs; anything else is cut out straight
+    # into its cells, which are then no longer the finished ones.
+    into = "cells-cut" if finishes(state) else "cells"
+    if into == "cells":
+        (state["work_dir"] / "cells" / state["set_name"] / FINISH_STAMP).unlink(missing_ok=True)
     if state.get("shared_canvas"):
         cells, outliers = canvas_to_cells(
             state["sources"],
-            partial(frame_path, state, "cells"),
+            partial(frame_path, state, into),
             poses,
             motion.floor_y,
             motion.body_h,
@@ -605,7 +616,7 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
         return {
             "cells": set_to_cells(
                 state["sources"],
-                partial(frame_path, state, "cells"),
+                partial(frame_path, state, into),
                 poses,
                 motion.floor_y,
                 motion.body_h,
@@ -619,7 +630,7 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
         "cells": {
             index: pose_to_cell(
                 source,
-                frame_path(state, "cells", index),
+                frame_path(state, into, index),
                 poses.get(index, {}),
                 motion.floor_y,
                 motion.body_h,
@@ -630,6 +641,31 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
             )
             for index, source in sorted(state["sources"].items())
         }
+    }
+
+
+def finishes(state: AnimationState) -> bool:
+    """Whether this set's cells get the cell finish: the video path's, unless turned off."""
+    return draws_by_video(state) and bool(state.get("finish", True))
+
+
+def finish_frames(state: AnimationState) -> AnimationState:
+    """The cell finish (`cag.finish`), on the video path only.
+
+    `mask_frames` has cut the set out under `cells-cut/<set>/`; this writes the
+    finished cells under `cells/<set>/`, where every later step reads them. The
+    pose-edit path is snapped to the key art instead (`cag.snap`), and a frame
+    sheet is left as drawn.
+    """
+    if not finishes(state):
+        return {}
+    return {
+        "cells": finish_set(
+            state["cells"],
+            partial(frame_path, state, "cells"),
+            state["key_art"],
+            state["set_name"],
+        )
     }
 
 
@@ -655,5 +691,7 @@ def build_animation_graph(
         graph.add_edge("direct", "keyframe")
         graph.add_edge("keyframe", "tween")
         graph.add_edge("tween", "mask")
-    graph.add_edge("mask", END)
+    graph.add_node("finish", finish_frames)
+    graph.add_edge("mask", "finish")
+    graph.add_edge("finish", END)
     return graph.compile()

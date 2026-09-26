@@ -117,6 +117,37 @@ the hardware and the bill.
   switching moves the other mode's frames into `source/<set>/superseded/`, and
   both reuse the one SCAIL video. A local `--no-restyle` build starts with the
   restyle graph's models missing, and says which.
+- **Every set's cells get the cell finish** (`cag/finish.py`), restyled or
+  `--no-restyle`, unless the build says `--no-finish` (with `--machine` only;
+  without it the build refuses). It runs on the cells, after the shrink: the
+  render is drawn about 3.6x the cell's size, so pixels snapped there are
+  averaged away by the time anyone sees them. Each rule is there for something
+  seen on Belter's `club-01` dance on `local16`, `--no-restyle`, 2026-09-26:
+  1. **Defringe.** A pixel whose red and blue both clear its green
+     (`min(r,b) − g > 22` and `b − g > 35`) is the backdrop bleeding in. Within
+     two pixels of the transparency it leaves the figure; deeper in, it takes
+     the average colour of its untinted neighbours. The cut-out left a magenta
+     fringe in the hair and along the silhouette.
+  2. **One 64-colour palette per set,** median cut over the set reference's
+     figure and every defringed cell of the set. A 48-colour palette from the
+     key art alone had nothing near the denim and put grey patches on the thigh.
+  3. **Quantize with no dither, and keep the cut-out's silhouette exactly.** A
+     majority filter over the silhouette refilled the tip of the gap between
+     the legs and painted it the palette's colour nearest the magenta, a pale
+     pixel at the crotch.
+  4. **A 1 px black outline inside the silhouette,** never outside it, so a
+     finished figure is no bigger than its cut-out and stays the size of the
+     pose-edit path's cells.
+
+  The cut-outs are kept under `cells-cut/<set>/` and the finish writes
+  `cells/<set>/`, which is what the frame sheet, the proof GIF, `cag fidelity`
+  and the gallery read, so the finish never runs on its own output.
+  `cells/<set>/finish.sha` is a digest of the cut-outs, the set reference and
+  `FINISH_VERSION`: a rebuild re-cuts the same cut-outs and finishes nothing,
+  and a changed one redoes the set. A `--no-finish` build cuts straight into
+  `cells/<set>/` and deletes the stamp. The pose-edit path, a frame sheet and
+  `cag.snap` are untouched. One set, one roll, judged by eye: it is approved
+  as the look, not measured as a floor.
 
 Trial renders on a branch are scratch, as below. The video path keeps each restyle as drawn; nothing is snapped to the key art's
 grid (`cag.snap` still serves the pose-edit path), because snapping made the faces
@@ -395,6 +426,7 @@ A new term is named here before it is used.
 | **SCAIL frame** | one image of a SCAIL video |
 | **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
 | **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
+| **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one 64-colour palette per set, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.

@@ -397,6 +397,33 @@ def test_no_restyle_reaches_the_build_and_the_machine_check(tmp_path, monkeypatc
     assert seen["scail_only"] is False and checked["restyle"] is True
 
 
+def test_no_finish_needs_a_machine(tmp_path, monkeypatch):
+    monkeypatch.delenv("CAG_MACHINE", raising=False)
+    with pytest.raises(SystemExit, match="--no-finish turns off the video path's cell finish; it needs --machine"):
+        cli.main([*BUILD, "--draw-backend", "comfy", "--no-finish",
+                  "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")])
+    assert not (tmp_path / "w").exists()
+
+
+def test_no_finish_reaches_the_build(tmp_path, monkeypatch):
+    seen = {}
+    monkeypatch.setattr(cli, "machine_with", lambda *a, **kw: (object(), {}))
+    monkeypatch.setattr(cli, "build", lambda *a, **kw: seen.update(kw))
+    args = [*BUILD, "--draw-backend", "comfy", "--machine", "cloud",
+            "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")]
+    assert cli.main([*args, "--no-finish"]) == 0 and seen["finish"] is False
+    assert cli.main(args) == 0 and seen["finish"] is True
+
+
+def test_backend_state_carries_no_finish_only_with_a_machine():
+    from cag.machines import load_machine
+
+    machine = load_machine("smoke4")
+    assert cli.backend_state("local", None, machine, {}, finish=False)["finish"] is False
+    assert "finish" not in cli.backend_state("local", None, machine, {}), "on unless turned off"
+    assert "finish" not in cli.backend_state("local", finish=False)
+
+
 def test_backend_state_carries_scail_only_only_with_a_machine(tmp_path):
     from cag.machines import load_machine
 
