@@ -57,7 +57,9 @@ the hardware and the bill.
   (a file on disk that is not the one declared) fails only the video path's
   sets of that bundle; every other build reads the library as usual.
 - **Profiles** live in `comfy/machines/`. `cloud` is the only verified one — the
-  research run's settings. `local16` (RX 9070) has drawn nothing yet. `smoke4`
+  research run's settings. `local16` (RX 9070 over Thunderbolt) has drawn key art, at fp8 through
+  `comfy/qwen-image-2.1-fp8.json` (`CAG_LOCAL_COMFY_WORKFLOW`), but no SCAIL video
+  yet; its `about` holds the ComfyUI flags and the driver setting it needs. `smoke4`
   (GTX 1050 Ti: 256x384, 9 frames, 2 steps) is wiring only, never art: nothing
   drawn on it is judged. `uv run cag machines --check <name>` lists every node
   and model file that machine's ComfyUI lacks, and a `local` build will not
