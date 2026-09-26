@@ -249,7 +249,9 @@ writes back there. A sheet that isn't under the folder won't save.
 4. **Save sheet** overwrites the sheet in place and rebuilds `<set>-proof.gif`
    beside it at the fps in the box, then closes the sheet and shows the result
    on the stage. If the save fails, the sheet stays open with your edits. Frames
-   you moved carry a dot in the filmstrip.
+   you moved carry a dot in the filmstrip. With `CAG_OUTPUT_REMOTE` set (or
+   `--output-remote`), Save then publishes that character's package, so the
+   shared copy gets the edit too; `--no-publish` turns that off.
 
 | Key | Does |
 | --- | --- |

@@ -1,3 +1,4 @@
+import fcntl
 import subprocess
 from pathlib import Path
 
@@ -78,6 +79,51 @@ def test_a_publish_copies_the_whole_folder(tmp_path):
     assert kwargs["capture_output"] and kwargs["timeout"]
 
 
+def test_rclone_never_reads_the_builds_terminal(tmp_path):
+    """An encrypted config would prompt for its password on a captured stderr and
+    wait on the terminal's stdin until the timeout; with no stdin it fails at once."""
+    run = Rclone()
+    publish.publish(package(tmp_path, "belter"), tmp_path, REMOTE, run, installed)
+    [(argv, kwargs)] = run.calls
+    assert kwargs["stdin"] is subprocess.DEVNULL
+    assert "--ask-password=false" in argv
+
+
+def test_rclones_own_retries_are_bounded_inside_the_timeout():
+    argv = rclone_argv(Path("outputs/belter"), f"{REMOTE}/belter")
+    flag = lambda name: argv[argv.index(name) + 1]
+    assert flag("--retries") == "1" and flag("--low-level-retries") == "3"
+    assert flag("--contimeout") == "15s" and flag("--timeout") == "60s"
+
+
+def test_a_publish_waits_for_its_turn_only_so_long(tmp_path, capsys, monkeypatch):
+    monkeypatch.setattr(publish, "LOCK_WAIT", 0.2)
+    monkeypatch.setattr(publish, "LOCK_POLL", 0.02)
+    folder = package(tmp_path, "belter")
+    run = Rclone()
+    with open(tmp_path / publish.LOCK, "w") as held:
+        fcntl.flock(held, fcntl.LOCK_EX)  # another build's copy, hung
+        assert publish.publish(folder, tmp_path, REMOTE, run, installed) is False
+    err = capsys.readouterr().err
+    assert run.calls == [] and "WARNING" in err and publish.LOCK in err
+    assert publish.publish(folder, tmp_path, REMOTE, run, installed) is True  # its turn, once free
+
+
+@pytest.mark.parametrize("remote", ["gdrive", "outputs/shared"])
+def test_a_remote_without_a_colon_is_refused_not_copied_into_a_local_folder(tmp_path, capsys, remote):
+    run = Rclone()
+    assert publish.publish(package(tmp_path, "belter"), tmp_path, remote, run, installed) is False
+    err = capsys.readouterr().err
+    assert run.calls == [] and "names no rclone remote" in err and "gdrive:" in err
+
+
+def test_an_absolute_local_path_is_still_a_destination(tmp_path):
+    run = Rclone()
+    share = str(tmp_path / "share")
+    assert publish.publish(package(tmp_path, "out", "belter"), tmp_path / "out", share, run, installed)
+    assert run.calls[0][0][3] == f"{share}/belter"
+
+
 def test_a_folder_that_is_not_there_publishes_nothing(tmp_path, capsys):
     run = Rclone()
     assert publish.publish(tmp_path / "belter", tmp_path, REMOTE, run, installed) is False
@@ -98,6 +144,8 @@ def test_no_rclone_is_a_warning_with_the_install_command(tmp_path, capsys):
          "rclone config create gdrive drive scope=drive.file"),
         ("oauth2: cannot fetch token: 400 Bad Request invalid_grant", "rclone config reconnect gdrive:"),
         ("googleapi: Error 403: insufficientFilePermissions", "scope drive.file"),
+        ("Failed to load config file: unable to decrypt configuration and not allowed to ask "
+         "for password - set RCLONE_CONFIG_PASS to your configuration password", "export RCLONE_CONFIG_PASS"),
         ("ERROR : some other trouble\n", "some other trouble"),
     ],
 )
@@ -149,6 +197,19 @@ def test_publish_command_copies_named_briefs_and_says_which_were_never_built(tmp
     assert "build it first" in capsys.readouterr().err
 
 
+def test_publish_command_goes_on_past_a_brief_it_cannot_read(tmp_path, rclone, capsys):
+    out = tmp_path / "out"
+    package(out, "velvet-lou")
+    broken = tmp_path / "broken.json"
+    broken.write_text("{}")
+    code = cli.main(["publish", "tests/fixtures/velvet-lou.json", "tests/fixtures/typo.jsn",
+                     str(broken), "--out", str(out), "--output-remote", REMOTE])
+    assert code == 1
+    assert [argv[3] for argv, _ in rclone.calls] == [f"{REMOTE}/velvet-lou"]
+    err = capsys.readouterr().err
+    assert "typo.jsn" in err and "broken.json" in err
+
+
 def test_publish_all_copies_every_package_and_reads_the_env(tmp_path, rclone, monkeypatch):
     out = tmp_path / "out"
     package(out, "default", "belter")
@@ -185,3 +246,27 @@ def test_the_build_flag_overrides_the_env_and_no_publish_turns_it_off(tmp_path, 
     assert cli.main([*args, "--no-publish"]) == 0 and seen["remote"] is None
     monkeypatch.delenv(publish.REMOTE_ENV)
     assert cli.main(args) == 0 and seen["remote"] is None
+
+
+def test_an_edit_save_publishes_the_package_it_rewrote(tmp_path, rclone):
+    from cag.assemble import tile
+    from cag.edit import save
+    from tests.test_assemble import cells
+
+    out = tmp_path / "outputs"
+    folder = package(out, "default", "belter")
+    tile(cells(tmp_path, count=2), folder / "hop-sheet.png")
+    png = (folder / "hop-sheet.png").read_bytes()
+
+    assert save(out, "default/belter", "hop-sheet.png", png, 4) == "saved, hop-proof.gif rebuilt"
+    assert rclone.calls == []  # no remote, nothing published
+    assert save(out, "default/belter", "hop-sheet.png", png, 4, REMOTE).endswith("published")
+    assert [argv[3] for argv, _ in rclone.calls] == [f"{REMOTE}/default/belter"]
+
+
+def test_edit_takes_the_remote_flags(tmp_path, monkeypatch):
+    seen = {}
+    monkeypatch.setattr(cli, "serve", lambda out, port, remote=None: seen.update(remote=remote))
+    monkeypatch.setenv(publish.REMOTE_ENV, REMOTE)
+    assert cli.main(["edit", str(tmp_path)]) == 0 and seen["remote"] == REMOTE
+    assert cli.main(["edit", str(tmp_path), "--no-publish"]) == 0 and seen["remote"] is None

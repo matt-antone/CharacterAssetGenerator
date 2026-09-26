@@ -21,6 +21,7 @@ import fcntl
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Callable
 
@@ -29,12 +30,33 @@ REMOTE_ENV = "CAG_OUTPUT_REMOTE"
 
 #: How long one package's copy may take. A package is about 4 MB; this is the
 #: bound on a hung connection, not an expected duration.
-TIMEOUT = 900
+TIMEOUT = 300
+
+#: rclone's own retries, bounded. Its defaults (3 passes, 10 low-level retries,
+#: a 5-minute idle timeout) can outlast `TIMEOUT` on a stalled link, and every
+#: parallel build queued on the lock waits behind that. `--ask-password=false`
+#: makes an encrypted config without RCLONE_CONFIG_PASS fail at once instead of
+#: prompting on a terminal whose output is captured and never shown.
+RCLONE_FLAGS = (
+    "--retries", "1",
+    "--low-level-retries", "3",
+    "--contimeout", "15s",
+    "--timeout", "60s",
+    "--ask-password=false",
+)
 
 #: Beside the packages in the output root: parallel builds take turns publishing,
 #: because two rclone processes creating the same Drive folder at once can each
 #: create one, and Drive allows two folders of one name side by side.
 LOCK = ".publish.lock"
+
+#: How long a publish waits for another build's turn to end before giving up
+#: with a warning. Bounded, so builds queued behind a hung copy do not each add
+#: its whole timeout to the next one's wait.
+LOCK_WAIT = TIMEOUT
+
+#: How often a waiting publish tries the lock again.
+LOCK_POLL = 0.5
 
 INSTALL = "sudo pacman -S rclone (or see https://rclone.org/install/)"
 
@@ -61,7 +83,7 @@ def destination(remote: str, out_dir: Path, out_root: Path) -> str:
 
 def rclone_argv(out_dir: Path, target: str, rclone: str = "rclone") -> list[str]:
     """The one command a publish runs. `copy`, never `sync`: nothing is deleted."""
-    return [rclone, "copy", str(out_dir), target, "--checksum", "--stats=0"]
+    return [rclone, "copy", str(out_dir), target, "--checksum", "--stats=0", *RCLONE_FLAGS]
 
 
 def remote_name(remote: str) -> str | None:
@@ -73,10 +95,22 @@ def remote_name(remote: str) -> str | None:
     return head
 
 
+def names_a_destination(remote: str) -> bool:
+    """Whether rclone reads `remote` as somewhere to publish: a configured remote
+    (`gdrive:...`) or an absolute local path. A bare word such as `gdrive` is
+    neither: rclone would copy into a folder of that name under the working
+    directory and report success."""
+    return remote_name(remote) is not None or Path(remote).is_absolute()
+
+
 def diagnose(stderr: str, remote: str) -> str:
     """The fix for a failed copy, read off rclone's own complaint."""
     name = remote_name(remote)
     said = stderr.lower()
+    if any(words in said for words in
+           ("rclone_config_pass", "configuration password", "failed to read password")):
+        return ("the rclone config is encrypted: export RCLONE_CONFIG_PASS "
+                "(or set RCLONE_PASSWORD_COMMAND) where the build runs")
     if name and ("didn't find section in config file" in said or "not found in config" in said):
         return (f"remote {name!r} is not configured: "
                 f"rclone config create {name} drive scope=drive.file")
@@ -87,6 +121,19 @@ def diagnose(stderr: str, remote: str) -> str:
                 "let it create the destination folder rather than making it in Drive by hand")
     lines = [line for line in stderr.strip().splitlines() if line.strip()]
     return lines[-1] if lines else "rclone gave no reason"
+
+
+def take_turn(lock, wait: float | None = None) -> bool:
+    """Take the publish lock, trying until `wait` seconds pass. True once held."""
+    deadline = time.monotonic() + (LOCK_WAIT if wait is None else wait)
+    while True:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return True
+        except BlockingIOError:
+            if time.monotonic() >= deadline:
+                return False
+            time.sleep(LOCK_POLL)
 
 
 def publish(
@@ -103,6 +150,11 @@ def publish(
     """
     if not remote:
         return False
+    if not names_a_destination(remote):
+        log(f"[publish] WARNING: {remote!r} names no rclone remote, so {out_dir} was not "
+            "published; rclone would have copied it into a local folder of that name. "
+            "Put a colon after the remote's name, e.g. gdrive:CharacterAssetGenerator/outputs")
+        return False
     if not out_dir.is_dir():
         log(f"[publish] nothing at {out_dir} to publish")
         return False
@@ -118,8 +170,13 @@ def publish(
     try:
         out_root.mkdir(parents=True, exist_ok=True)
         with open(out_root / LOCK, "w") as lock:
-            fcntl.flock(lock, fcntl.LOCK_EX)
-            done = run(argv, capture_output=True, text=True, timeout=TIMEOUT)
+            if not take_turn(lock):
+                log(f"[publish] WARNING: another publish held {out_root / LOCK} for "
+                    f"{LOCK_WAIT}s, so {out_dir} was not published; "
+                    "uv run cag publish on this brief once it is done")
+                return False
+            done = run(argv, stdin=subprocess.DEVNULL, capture_output=True, text=True,
+                       timeout=TIMEOUT)
     except subprocess.TimeoutExpired:
         log(f"[publish] WARNING: `{command}` gave no answer in {TIMEOUT}s; "
             "check the network, then uv run cag publish on this brief")

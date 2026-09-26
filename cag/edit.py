@@ -1,7 +1,9 @@
 """`cag edit` — serve the frame nudger over one output folder, so Save lands there.
 
 The editor moves pixels; this side only writes the sheet back over itself and
-rebuilds the proof beside it, the same way `build` made it.
+rebuilds the proof beside it, the same way `build` made it. With an output
+remote, each Save then publishes the package it rewrote, so the shared copy never
+keeps the frame the edit replaced.
 """
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ from PIL import Image
 
 from .assemble import MANIFEST, gif_proof, split_frame_sheet
 from .geometry import ANIM_CONTACT_ROW, CELL_HEIGHT, CELL_WIDTH, anim_subject_height_px
+from .publish import publish
 from .spec import load_spec
 
 EDITOR = Path(__file__).with_name("editor.html")
@@ -162,7 +165,24 @@ def locate(root: Path, name: str, png: bytes) -> dict | None:
     return None
 
 
-def serve(out_dir: Path, port: int) -> None:
+def save(root: Path, folder: str, name: str, png: bytes, fps: int, remote: str | None = None) -> str:
+    """Save one edited frame sheet into `root/folder`, then publish that package.
+
+    Returns what the editor shows. A failed publish is the usual warning in the
+    terminal; the save itself still stands.
+    """
+    if folder not in {f.relative_to(root).as_posix() for f in folders(root)}:
+        raise ValueError(f"no folder {folder!r} under {root}")
+    proof = save_frame_sheet(root / folder, name, png, fps)
+    said = f"saved, {proof.name} rebuilt"
+    if not remote:
+        return said
+    if publish(root / folder, root, remote):
+        return f"{said}, published"
+    return f"{said}; not published, see the terminal"
+
+
+def serve(out_dir: Path, port: int, remote: str | None = None) -> None:
     # Any page the user visits can POST to localhost, and a rebound DNS name can
     # reach it too. Only our own origin, addressed by a local name, gets in.
     hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
@@ -189,13 +209,11 @@ def serve(out_dir: Path, port: int) -> None:
                         raise ValueError(f"{Path(name).name} is not a sheet under {out_dir}")
                     return self.reply(200, json.dumps(found).encode(), "application/json")
                 folder = query.get("folder", ["."])[0]
-                if folder not in {f.relative_to(out_dir).as_posix() for f in folders(out_dir)}:
-                    raise ValueError(f"no folder {folder!r} under {out_dir}")
-                proof = save_frame_sheet(out_dir / folder, name, body, int(query["fps"][0]))
+                said = save(out_dir, folder, name, body, int(query["fps"][0]), remote)
             except (KeyError, ValueError, OSError) as error:
                 self.reply(400, str(error).encode(), "text/plain")
             else:
-                self.reply(200, f"saved, {proof.name} rebuilt".encode(), "text/plain")
+                self.reply(200, said.encode(), "text/plain")
 
         def reply(self, status, body, kind):
             self.send_response(status)

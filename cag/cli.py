@@ -37,7 +37,7 @@ from .motion_writer import write_motion
 from .prompts import KEY_VIEW
 from .publish import REMOTE_ENV, packages, publish
 from .sets import plan_for, wanted
-from .spec import CharacterSpec, load_spec
+from .spec import CharacterSpec, SpecError, load_spec
 from .static_sheet import (
     ApprovalRequired,
     approve,
@@ -520,6 +520,7 @@ def main(argv: list[str] | None = None) -> int:
         "out", type=Path, nargs="?", default=Path("outputs"), help="default: outputs/, every character"
     )
     edit_parser.add_argument("--port", type=int, default=8765)
+    add_remote_flags(edit_parser, "publish a package each time Save rewrites it")
 
     fidelity_parser = sub.add_parser(
         "fidelity", help="bone-angle error of a rendered set against its motion's photographs"
@@ -569,7 +570,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "clips":
         return clip_bundles(args)
     if args.command == "edit":
-        serve(args.out, args.port)
+        serve(args.out, args.port, args.output_remote)
         return 0
     if args.command == "approve":
         spec = load_spec(args.spec)
@@ -653,7 +654,8 @@ def add_remote_flags(parser: argparse.ArgumentParser, what: str, skip: bool = Tr
 def publish_packages(spec_paths: list[Path], every: bool, out_root: Path, remote: str | None) -> int:
     """`cag publish`: copy packages already on disk to the output remote.
 
-    A brief whose package was never built is its own line, and the rest go on.
+    A brief that cannot be read, or whose package was never built, is its own
+    line, and the rest go on.
     """
     if not remote:
         log(f"[publish] no remote: set {REMOTE_ENV} or pass --output-remote")
@@ -661,7 +663,12 @@ def publish_packages(spec_paths: list[Path], every: bool, out_root: Path, remote
     folders = packages(out_root, MANIFEST) if every else []
     missing = 0
     for spec_path in spec_paths:
-        folder = out_for(out_root, spec_path, load_spec(spec_path).slug)
+        try:
+            folder = out_for(out_root, spec_path, load_spec(spec_path).slug)
+        except (OSError, SpecError) as error:
+            log(f"[publish] {spec_path}: not a brief this can read ({error})")
+            missing += 1
+            continue
         if (folder / MANIFEST).is_file():
             folders.append(folder)
         else:

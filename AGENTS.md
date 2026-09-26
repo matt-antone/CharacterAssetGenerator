@@ -317,7 +317,9 @@ publishing its package: `rclone copy outputs/<theme>/<slug>
 local layout, so `index.html` arrives with `views/` and its frame sheets beside
 it. `--output-remote REMOTE` overrides the variable for one build, and
 `--no-publish` skips it. Unset, nothing is published and rclone is never looked
-for.
+for. The value must name the remote with its colon: a bare `gdrive` is refused
+with a warning, because rclone would copy into a local `./gdrive/` folder and
+report success.
 
 - **copy, never sync.** Nothing on the remote is deleted. A `--set` build
   publishes a gallery that lists one set; the other sets' files stay on the
@@ -332,11 +334,21 @@ for.
 - **`uv run cag publish <spec>...`** copies packages already on disk without
   building; `--all` copies every package under `--out` (each folder holding a
   `manifest.json`). Use it after fixing the remote, or to push packages built
-  before it existed.
+  before it existed. A brief it cannot read is one line; the others still go.
+- **`cag edit` publishes on Save.** It takes the same `--output-remote` and
+  `--no-publish` flags and reads `CAG_OUTPUT_REMOTE`; each Save rewrites a
+  frame sheet, its proof GIF and `manifest.json`, then copies that package. An
+  edit made with publishing off leaves the Drive copy on the old frames until
+  `uv run cag publish <spec>` runs.
 - **Parallel builds each copy their own folder,** and take turns
   (`outputs/.publish.lock`): two rclone processes creating one Drive folder at
   once can create two of the same name. If that ever happens,
-  `rclone dedupe --dedupe-mode merge <remote>` folds them together.
+  `rclone dedupe --dedupe-mode merge <remote>` folds them together. A build
+  waits at most 300s for its turn, and a copy runs at most 300s with rclone's
+  retries bounded, so a stalled network costs each build a warning, not a queue.
+- **An encrypted rclone config needs `RCLONE_CONFIG_PASS`** in the build's
+  environment. rclone runs with no stdin and `--ask-password=false`, so it
+  fails at once and the warning says so instead of waiting on a hidden prompt.
 - **The remote uses `scope=drive.file`:** rclone sees only what it created.
   Let it create the destination folder; one made by hand in Drive is invisible
   to it, and it makes a second of the same name beside it. Set it up once with
@@ -478,7 +490,7 @@ A new term is named here before it is used.
 | **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
 | **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one 64-colour palette per set, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
 | **output remote** | the rclone destination packages are published to: `CAG_OUTPUT_REMOTE` or `--output-remote`, e.g. `gdrive:CharacterAssetGenerator/outputs`. A package lands at its path under `outputs/` |
-| **publish** | `rclone copy` of one package folder to the output remote (`cag/publish.py`): at the end of every build, or by `cag publish`. Never sync, never deletes, never fails a build. Not the same act as publishing an Artifact |
+| **publish** | `rclone copy` of one package folder to the output remote (`cag/publish.py`): at the end of every build, on each `cag edit` Save, or by `cag publish`. Never sync, never deletes, never fails a build. Not the same act as publishing an Artifact |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.
