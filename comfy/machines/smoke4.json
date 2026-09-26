@@ -1,0 +1,18 @@
+{
+  "about": "GTX 1050 Ti Max-Q, 4 GB: wiring only, never art. The smallest SCAIL-2 GGUF streams from RAM, both text encoders run on the CPU, and every size and step count is cut to the least that exercises the path. Launch ComfyUI with: python main.py --reserve-vram 0.4 (fall back to --disable-dynamic-vram --novram --cpu-vae).",
+  "backend": "local",
+  "verified": false,
+  "seed": 1234,
+  "video": {
+    "width": 256, "height": 384, "rate": 16, "max_length": 9, "steps": 2, "timeout": 7200,
+    "patch": {
+      "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "SCAIL-2-Q2_K.gguf"}},
+      "5": {"inputs": {"device": "cpu"}}
+    }
+  },
+  "restyle": {
+    "resolution": 512, "steps": 2, "timeout": 3600,
+    "patch": {"clip": {"inputs": {"device": "cpu"}}}
+  },
+  "mask": {"timeout": 3600, "patch": {}}
+}

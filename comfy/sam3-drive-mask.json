@@ -1,0 +1,39 @@
+{
+  "sam3": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "sam3.1_multiplex_fp16.safetensors"},
+    "_meta": {"title": "SAM3.1, the file Comfy's own SCAIL-2 and SAM3 blueprints load (Comfy-Org/sam3.1, models/checkpoints)"}
+  },
+  "txt": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"clip": ["sam3", 1], "text": "$prompt"},
+    "_meta": {"title": "what to track; cag asks for a human"}
+  },
+  "drv": {
+    "class_type": "LoadImage",
+    "inputs": {"image": "$image1"},
+    "_meta": {"title": "the drive video, as one animated PNG"}
+  },
+  "trk": {
+    "class_type": "SAM3_VideoTrack",
+    "inputs": {
+      "images": ["drv", 0],
+      "model": ["sam3", 0],
+      "conditioning": ["txt", 0],
+      "detection_threshold": 0.5,
+      "max_objects": 4,
+      "detect_interval": 1
+    }
+  },
+  "col": {
+    "class_type": "SCAIL2ColoredMask",
+    "inputs": {
+      "driving_track_data": ["trk", 0],
+      "object_indices": "0",
+      "sort_by": "area",
+      "replacement_mode": false
+    },
+    "_meta": {"title": "one identity, blue on black. area sorts by (first frame seen, -area): object 0 is the largest of those present earliest, not the largest overall"}
+  },
+  "O": {"class_type": "SaveImage", "inputs": {"images": ["col", 0], "filename_prefix": "cag-mask"}}
+}

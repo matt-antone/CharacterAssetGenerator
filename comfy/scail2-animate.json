@@ -4,6 +4,9 @@
   "inputs": {
    "unet_name": "wan2.1_14B_SCAIL_2_fp8_scaled.safetensors",
    "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "SCAIL-2 at fp8, Comfy Cloud's file; a machine profile swaps this loader for a GGUF one"
   }
  },
  "2": {
@@ -44,6 +47,9 @@
    "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
    "type": "wan",
    "device": "default"
+  },
+  "_meta": {
+   "title": "umt5; a machine profile may move it to the CPU"
   }
  },
  "6": {
@@ -143,9 +149,9 @@
     "8",
     0
    ],
-   "width": 576,
-   "height": 864,
-   "length": 41,
+   "width": "$width",
+   "height": "$height",
+   "length": "$length",
    "batch_size": 1,
    "pose_video": [
     "D",
@@ -175,7 +181,7 @@
    "previous_frame_count": 5
   },
   "_meta": {
-   "title": "animation mode: replacement_mode false, masks on black"
+   "title": "animation mode: replacement_mode false, masks on black. Size and length come from the machine profile and the drive video"
   }
  },
  "K": {
@@ -197,8 +203,8 @@
     "S",
     2
    ],
-   "seed": 1234,
-   "steps": 6,
+   "seed": "$seed",
+   "steps": "$steps",
    "cfg": 1.0,
    "sampler_name": "euler",
    "scheduler": "simple",

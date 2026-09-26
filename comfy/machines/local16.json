@@ -1,0 +1,18 @@
+{
+  "about": "RX 9070, 16 GB, on a ROCm torch. SCAIL-2 at fp8 does not fit beside everything else, so it loads as a Q5_K_M GGUF, and both text encoders run on the CPU. Launch ComfyUI with: python main.py --reserve-vram 1 --use-pytorch-cross-attention (add --disable-dynamic-vram if the GGUF loader misbehaves). Nothing has been drawn on it yet.",
+  "backend": "local",
+  "verified": false,
+  "seed": 1234,
+  "video": {
+    "width": 576, "height": 864, "rate": 16, "max_length": 81, "steps": 6, "timeout": 5400,
+    "patch": {
+      "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "SCAIL-2-Q5_K_M.gguf"}},
+      "5": {"inputs": {"device": "cpu"}}
+    }
+  },
+  "restyle": {
+    "resolution": 1248, "steps": 40, "timeout": 1800,
+    "patch": {"clip": {"inputs": {"device": "cpu"}}}
+  },
+  "mask": {"timeout": 1800, "patch": {}}
+}

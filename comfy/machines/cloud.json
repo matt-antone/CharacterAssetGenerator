@@ -1,0 +1,9 @@
+{
+  "about": "Comfy Cloud. The graphs name its model files outright, so nothing is patched. The research run drew SCAIL-2 and the restyle here at these settings (2026-09-25).",
+  "backend": "comfy",
+  "verified": true,
+  "seed": 1234,
+  "video": {"width": 576, "height": 864, "rate": 16, "max_length": 81, "steps": 6, "timeout": 1800, "patch": {}},
+  "restyle": {"resolution": 1248, "steps": 40, "timeout": 900, "patch": {}},
+  "mask": {"timeout": 900, "patch": {}}
+}
