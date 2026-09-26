@@ -10,6 +10,11 @@ there is averaged away — in four steps, each for something measured on Belter'
 1. **Defringe.** Pixels tinted toward the backdrop (`tinted`) within two pixels
    of the transparency leave the figure; those deeper in take the average of
    their untinted neighbours. The fringe sat in the hair and on the silhouette.
+   "Tinted" is a hue test, and a purple, magenta or pink costume passes it as
+   readily as bleed does, so a colour the set reference's own figure wears in
+   bulk (`costume`) is figure, not bleed, and is left alone. Belter's reference
+   holds no such colour — its few tinted pixels are scattered, four at most to a
+   bin — so its cells are finished exactly as before this rule.
 2. **One palette per set,** 64 colours by median cut over the set reference's
    figure and every defringed cell of the set. From the key art alone (48
    colours) the denim had no near colour and came out as grey patches on the
@@ -32,6 +37,7 @@ that re-cuts the same cut-outs finishes nothing.
 from __future__ import annotations
 
 import hashlib
+import itertools
 import sys
 from pathlib import Path
 from typing import Callable, Sequence
@@ -42,7 +48,7 @@ from PIL import Image, ImageFilter
 from .snap import backdrop
 
 #: Bumped whenever the finish changes, so every finished set is redone.
-FINISH_VERSION = "finish/1"
+FINISH_VERSION = "finish/2"
 #: Colours in a set's palette.
 PALETTE_COLOURS = 64
 #: Beside the finished cells: the digest they were finished under.
@@ -52,16 +58,55 @@ STAMP = "finish.sha"
 FRINGE_WINDOW = 5
 #: The window an inner pocket takes its colour from (`BoxBlur` radius).
 FILL_RADIUS = 3
+#: Width of a colour bin, per channel, when reading the reference's tinted colours.
+COSTUME_BIN = 16
+#: A bin is a costume colour once it holds this share of the reference's figure
+#: pixels, away from its edge. Bleed inside a figure is a scatter; a garment is not.
+COSTUME_SHARE = 0.0005
+#: And a costume colour reaches this many bins either way on every channel, for
+#: the render shading a garment lighter or darker than the key art does.
+COSTUME_REACH = 2
 
 
-def tinted(rgb: np.ndarray) -> np.ndarray:
+def tinted(rgb: np.ndarray, worn: np.ndarray | None = None) -> np.ndarray:
     """Pixels leaning toward the magenta backdrop: red and blue both clear of green.
 
     Looser than `cag.snap.backdrop`, which finds the backdrop itself: this finds
-    figure pixels the backdrop has bled into.
+    figure pixels the backdrop has bled into. `worn` (from `costume`) names the
+    colours the character wears that lean the same way; those are not tinted.
     """
     r, g, b = (rgb[..., i].astype(int) for i in range(3))
-    return (np.minimum(r, b) - g > 22) & (b - g > 35)
+    hue = (np.minimum(r, b) - g > 22) & (b - g > 35)
+    if worn is None:
+        return hue
+    bins = rgb[..., :3].astype(int) // COSTUME_BIN
+    return hue & ~worn[bins[..., 0], bins[..., 1], bins[..., 2]]
+
+
+def costume(reference: np.ndarray) -> np.ndarray | None:
+    """The tinted colours the character wears, from the set reference on its backdrop.
+
+    A lookup over colour bins (`COSTUME_BIN` wide): true where the reference's
+    figure, away from its edge, holds `COSTUME_SHARE` of its pixels in a tinted
+    colour, grown `COSTUME_REACH` bins either way. None when it wears none, and
+    `tinted` is then the plain hue test.
+    """
+    rgb = reference[..., :3]
+    fig = ~backdrop(rgb)
+    inside = fig & ~dilate(~fig, FRINGE_WINDOW)
+    worn = rgb[inside & tinted(rgb)].astype(int) // COSTUME_BIN
+    side = 256 // COSTUME_BIN
+    counts = np.zeros((side,) * 3, int)
+    np.add.at(counts, (worn[:, 0], worn[:, 1], worn[:, 2]), 1)
+    table = counts >= max(1, COSTUME_SHARE * fig.sum())
+    if not table.any():
+        return None
+    reach = COSTUME_REACH
+    padded = np.pad(table, reach)
+    grown = np.zeros_like(table)
+    for dr, dg, db in itertools.product(range(2 * reach + 1), repeat=3):
+        grown |= padded[dr : dr + side, dg : dg + side, db : db + side]
+    return grown
 
 
 def _mask_filter(mask: np.ndarray, image_filter: ImageFilter.Filter) -> np.ndarray:
@@ -76,15 +121,16 @@ def dilate(mask: np.ndarray, size: int = 3) -> np.ndarray:
     return _mask_filter(mask, ImageFilter.MaxFilter(size))
 
 
-def defringe(cell: np.ndarray) -> np.ndarray:
+def defringe(cell: np.ndarray, worn: np.ndarray | None = None) -> np.ndarray:
     """An RGBA cell with the backdrop's tint taken out, and alpha made 0 or 255.
 
     Tinted pixels by the transparency leave the figure; tinted pixels inside it
-    take the colour of their untinted neighbours.
+    take the colour of their untinted neighbours, and keep their own where they
+    have none — a fill from nothing is black. `worn` is passed to `tinted`.
     """
     a = cell.copy()
     fig = a[..., 3] > 128
-    t = tinted(a[..., :3]) & fig
+    t = tinted(a[..., :3], worn) & fig
     fig &= ~(t & dilate(~fig, FRINGE_WINDOW))
     inner = t & fig
     if inner.any():
@@ -98,18 +144,23 @@ def defringe(cell: np.ndarray) -> np.ndarray:
             -1,
         )
         den = np.asarray(Image.fromarray((ok * 255).astype(np.uint8)).filter(blur)).astype(float)[..., None] / 255
+        inner &= den[..., 0] > 0
         a[inner, :3] = (num / np.maximum(den, 1e-3)).clip(0, 255).astype(np.uint8)[inner]
     a[..., 3] = fig * 255
     return a
 
 
-def set_palette(reference: Path, cells: Sequence[np.ndarray]) -> Image.Image | None:
+def read_reference(reference: Path) -> np.ndarray:
+    with Image.open(reference) as image:
+        return np.asarray(image.convert("RGB"))
+
+
+def set_palette(reference: Path | np.ndarray, cells: Sequence[np.ndarray]) -> Image.Image | None:
     """The set's palette: the set reference's figure and every defringed cell's opaque pixels.
 
     None when there is not one figure pixel to build it from.
     """
-    with Image.open(reference) as image:
-        rgb = np.asarray(image.convert("RGB"))
+    rgb = reference if isinstance(reference, np.ndarray) else read_reference(reference)
     pool = np.concatenate([rgb[~backdrop(rgb)]] + [cell[..., :3][cell[..., 3] > 0] for cell in cells])
     if not len(pool):
         return None
@@ -166,11 +217,13 @@ def finish_set(
         print(f"[{label}] cell finish cached", file=sys.stderr, flush=True)
         return cells
     stamp.unlink(missing_ok=True)
+    rgb = read_reference(reference)
+    worn = costume(rgb)
     defringed = {}
     for index, path in sorted(cuts.items()):
         with Image.open(path) as image:
-            defringed[index] = defringe(np.asarray(image.convert("RGBA")))
-    palette = set_palette(reference, list(defringed.values()))
+            defringed[index] = defringe(np.asarray(image.convert("RGBA")), worn)
+    palette = set_palette(rgb, list(defringed.values()))
     for index, cell in defringed.items():
         cells[index].parent.mkdir(parents=True, exist_ok=True)
         Image.fromarray(finish_cell(cell, palette)).save(cells[index], format="PNG")

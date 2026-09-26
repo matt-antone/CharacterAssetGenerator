@@ -201,3 +201,82 @@ def test_a_new_finish_version_redoes_every_set(tmp_path, monkeypatch, capsys):
     finish_set(cuts, dst, ref, "dance")
     assert "cell finish cached" not in capsys.readouterr().err
     assert Path(tmp_path / "cells" / "dance" / STAMP).read_text().strip() == finish.finish_key(cuts, ref)
+
+
+# A purple garment is a hue the tint test also flags. gospel's robe, from its brief.
+ROBE = (0x5A, 0x2A, 0x86)
+ROBE_LIT = (0x87, 0x52, 0xB8)
+SKIN = (200, 150, 120)
+BLEED = (230, 40, 230)
+
+
+def robed(a, left, top, fringe=True):
+    """A skin head over a two-tone purple robe, optionally ringed with backdrop bleed."""
+    if fringe:
+        paint(a, (left - 1, top - 1, left + 25, top + 61), BLEED)
+    paint(a, (left + 6, top, left + 18, top + 10), SKIN)
+    paint(a, (left, top + 10, left + 24, top + 60), ROBE)
+    paint(a, (left + 14, top + 10, left + 24, top + 60), ROBE_LIT)
+    return a
+
+
+def robed_reference(path):
+    """gospel's set reference: the robed figure on magenta, with nothing bled into it."""
+    image = np.zeros((80, 60, 3), np.uint8)
+    image[...] = (255, 0, 255)
+    rgba = robed(np.zeros((80, 60, 4), np.uint8), 18, 10, fringe=False)
+    fig = rgba[..., 3] > 0
+    image[fig] = rgba[fig, :3]
+    Image.fromarray(image).save(path)
+    return path
+
+
+def test_a_purple_costume_the_reference_wears_is_not_defringed(tmp_path):
+    ref = robed_reference(tmp_path / "ref.png")
+    worn = finish.costume(finish.read_reference(ref))
+    assert worn is not None
+    a = robed(cell((60, 80)), 18, 10)
+    out = defringe(a, worn)
+    robe = np.zeros(a.shape[:2], bool)
+    robe[20:70, 18:42] = True
+    assert (out[robe, 3] == 255).all(), "no robe pixel leaves the figure, edge or not"
+    assert (out[robe, :3] == a[robe, :3]).all(), "and none is refilled, least of all with black"
+    assert (out[9, 17:43, 3] == 0).all() and (out[9:71, 17, 3] == 0).all(), "the bleed ring still goes"
+
+
+def test_a_purple_set_finishes_to_a_robe_not_a_silhouette(tmp_path):
+    ref = robed_reference(tmp_path / "ref.png")
+    folder = tmp_path / "cells-cut" / "dance"
+    folder.mkdir(parents=True)
+    Image.fromarray(robed(cell((60, 80)), 18, 10)).save(folder / "00.png")
+    dst = lambda index: tmp_path / "cells" / "dance" / f"{index:02d}.png"  # noqa: E731
+    finish_set({0: folder / "00.png"}, dst, ref, "dance")
+    with Image.open(dst(0)) as image:
+        out = np.asarray(image.convert("RGBA"))
+    inside = np.zeros(out.shape[:2], bool)
+    inside[21:69, 19:41] = True
+    assert (out[inside, 3] == 255).all()
+    rgb = out[inside, :3].astype(int)
+    assert (rgb.sum(-1) > 0).all(), "not one pixel inside the robe is black"
+    assert (np.abs(rgb - ROBE).sum(-1) < 30).sum() > 300 and (np.abs(rgb - ROBE_LIT).sum(-1) < 30).sum() > 300
+
+
+def test_a_scatter_of_tinted_pixels_in_the_reference_is_not_a_costume(tmp_path):
+    """Belter's reference: crimson shading a few pixels of which lean tinted, never many to a colour."""
+    image = np.zeros((200, 200, 3), np.uint8)
+    image[...] = (255, 0, 255)
+    image[20:180, 20:180] = (0xC0, 0x17, 0x23)
+    for k, colour in enumerate([(176, 0, 48), (176, 0, 64), (192, 0, 48), (80, 32, 80)]):
+        image[60 + 10 * k, 60 : 60 + 4] = colour
+    assert finish.costume(image) is None
+
+
+def test_a_pocket_with_no_untinted_neighbour_keeps_its_colour_not_black():
+    a = cell()
+    paint(a, (5, 5, 35, 35), DENIM)
+    paint(a, (12, 12, 28, 28), POCKET)
+    out = defringe(a)
+    assert (out[12:28, 12:28, 3] == 255).all()
+    assert (out[12:28, 12:28, :3].astype(int).sum(-1) > 0).all(), "a fill from nothing is not black"
+    assert (out[20, 20, :3] == POCKET).all(), "its heart keeps its own colour"
+    assert np.abs(out[12, 12, :3].astype(int) - DENIM).max() <= 1, "its rim still takes the denim"
