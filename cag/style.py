@@ -144,6 +144,13 @@ DEFAULT_DETAIL_LEVEL = 10
 #: at level 10 on the description alone, came back at the same rendering density
 #: as his old level-4 renders. Level 10 is the house default, so it gets the
 #: picture: Belter's approved key art, the render the look was signed off on.
+#:
+#: Being a picture of a character is also its hazard. Nano Banana (the Comfy
+#: backend) copies the person out of it despite the prompt saying take nothing
+#: else: a Belter sing sheet drawn with it attached came back as this sample's
+#: Belter, darker skin and hair and the mic in the other hand, beside rows of
+#: the approved one. So under Comfy only the key art gets it — the one render a
+#: human signs off — and everything after takes its detail from that key art.
 DETAIL_FRAMES = {
     4: Path(__file__).parent / "references" / "detail-level-04.png",
     10: Path(__file__).parent / "references" / "detail-level-10.png",

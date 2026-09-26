@@ -1,0 +1,37 @@
+{
+  "about": "RX 9070, 16 GB, ROCm 7.2 torch in ~/ComfyUI/.venv-rocm, over Thunderbolt 3 (needs amdgpu pcie_gen_cap=0x0007001F, or the card is held to PCIe Gen 1). SCAIL-2 loads as a Q5_K_M GGUF; umt5 runs on the CPU. Launch ComfyUI with: python main.py --reserve-vram 1 --use-pytorch-cross-attention --disable-smart-memory. Without --disable-smart-memory ComfyUI keeps ~12 GB of models on the card and the VAE decode runs out of memory; PYTORCH_HIP_ALLOC_CONF=expandable_segments crashes the GPU. Key art locally: CAG_LOCAL_COMFY_WORKFLOW=comfy/qwen-image-2.1-fp8.json (134 s warm, 2.9 s/step). No SCAIL video drawn on it yet.",
+  "backend": "local",
+  "verified": false,
+  "seed": 1234,
+  "video": {
+    "width": 576,
+    "height": 864,
+    "rate": 16,
+    "max_length": 81,
+    "steps": 6,
+    "timeout": 5400,
+    "patch": {
+      "1": {
+        "class_type": "UnetLoaderGGUF",
+        "inputs": {
+          "unet_name": "SCAIL-2-Q5_K_M.gguf"
+        }
+      },
+      "5": {
+        "inputs": {
+          "device": "cpu"
+        }
+      }
+    }
+  },
+  "restyle": {
+    "resolution": 1248,
+    "steps": 40,
+    "timeout": 1800,
+    "patch": {}
+  },
+  "mask": {
+    "timeout": 1800,
+    "patch": {}
+  }
+}

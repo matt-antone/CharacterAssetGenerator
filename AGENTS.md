@@ -39,6 +39,111 @@ prompting. A frame traced at 28 degrees of body yaw comes back square-on in
 every condition tried — 1, 4, 8 and 12 figures per render, photographs or
 skeletons, and three separate rewordings.
 
+## The video path
+
+`--machine <profile>` (or `CAG_MACHINE`), under `--draw-backend comfy` or
+`local`, draws every traced set from its bundle's source clip instead of its
+pose cards: a drive video cut from the clip, one SCAIL-2 job that animates the
+set reference along it, then one Qwen-Image-2.1 restyle per traced frame, of the
+SCAIL frame at the trace index. Without `--machine` a traced set takes the
+pose-edit path as before, and `--no-machine` takes it for one build whatever
+`CAG_MACHINE` says. Like the backend, the profile is the user's call: it names
+the hardware and the bill.
+
+- **A traced set with no source clip fails,** and says to run
+  `uv run cag clips <bundle>`. It never falls back to the pose-edit path, because
+  a set drawn the other way would pass for this one's output. `cag motions`
+  shows each bundle's clip as `ok`, `missing`, `stale` or `none`. A `stale` clip
+  (a file on disk that is not the one declared) fails only the video path's
+  sets of that bundle; every other build reads the library as usual.
+- **Profiles** live in `comfy/machines/`. `cloud` is the only verified one — the
+  research run's settings. `local16` (RX 9070 over Thunderbolt) has drawn key art, at fp8 through
+  `comfy/qwen-image-2.1-fp8.json` (`CAG_LOCAL_COMFY_WORKFLOW`), but no SCAIL video
+  yet; its `about` holds the ComfyUI flags and the driver setting it needs. `smoke4`
+  (GTX 1050 Ti: 256x384, 9 frames, 2 steps) is wiring only, never art: nothing
+  drawn on it is judged. `uv run cag machines --check <name>` lists every node
+  and model file that machine's ComfyUI lacks, and a `local` build will not
+  start while anything the video graph loads is missing, nor, unless it is a
+  `--no-restyle` build, anything the restyle graph loads. The mask pass's SAM3
+  checkpoint only warns: most footage never runs it.
+- **Three caches, each keyed on what it is made from.** The drive under
+  `work/drive/` is shared by every character dancing that bundle, and locked
+  while it is cut, so parallel builds cut it once; a mask pass is keyed on its
+  graph and prompt, and one whose drive mask fails is moved aside to
+  `rejected-mask-pass-N/` and run again next build. The SCAIL
+  video under `work/<slug>/video/<set>/` records its job id in `pending.json`
+  the moment it is submitted, so a stopped build resumes the job rather than
+  paying for another. The set's frames are `source/<set>/NN.png` — restyles,
+  or under `--no-restyle` the SCAIL frames cut back to size — stamped in
+  `drawn.sha` (`video` or `scail`): a changed restyle graph or prompt moves them into
+  `source/<set>/superseded/` and keeps the SCAIL video, and a changed set
+  reference draws a new SCAIL video. A failed restyle fails the set by frame
+  number, and a rebuild draws only those.
+- **Only footage on a light backdrop** gets a threshold drive mask. Anything
+  else runs the mask pass (SAM3). One render has exercised it, on Comfy Cloud:
+  `country-01`, portrait footage in a cluttered shop, gave one clean silhouette
+  per frame (figure 10% of the frame, overlap 0.82-0.95 frame to frame).
+- **Qwen-Image-2.1 is licensed for research only.** Nothing the video path draws
+  ships until that is cleared.
+- **The performer's face is blurred in every drive video** (the face blur,
+  always on). SCAIL-2 copies the face it is shown in the drive onto the
+  character; with the face blurred it draws the set reference's face and keeps
+  the pose (one scratch roll on `local16`, 2026-09-26). The trade-off: the
+  character's expression now comes from the key art, not the performer, so a
+  set does not mouth or grimace along with the footage. The head is found from
+  the drive mask: the figure's largest region is opened (eroded, then dilated)
+  by an octagon 7% of its height across, which drops the arms and hands and
+  keeps the head and torso; the head's top is the opened figure's highest
+  pixel, and its width the part of the top 13% nearest that pixel. So hands
+  raised over the crown, clasped there or off to one side, and a head leaning
+  off the torso, all still find the head. The blur's sizes, measured at
+  576x864, scale to the drive's own. A frame with no figure to find a head in,
+  or whose opened figure is wider than it is tall (lying down), is left
+  unblurred and named in `drive.json` and the build log. What still fools it: a
+  figure bent over so its back is higher than its head, or upside down. The
+  mask pass reads the drive before it is blurred. `drive/4` made every earlier
+  drive, and so every earlier SCAIL video, stale.
+- **`--no-restyle` stops at the SCAIL video** (with `--machine` only; without
+  it the build refuses). Each traced frame's SCAIL frame, cut back to the set
+  reference's size, is written as `source/<set>/NN.png` and nothing is
+  restyled. Why: a restyle takes about 7.5 minutes a frame on the RX 9070,
+  no prompt wording moved the face it draws, and SCAIL frames alone read as a
+  smooth illustration. It does **not** clear the Qwen-Image-2.1 licence above:
+  a `local` build draws the key art and every set reference with
+  Qwen-Image-2.1 (`comfy/qwen-image-2.1.json`, or the fp8 copy on `local16`),
+  and SCAIL-2 animates that set reference, so every frame is still derived
+  from a research-licensed render.
+  The two modes are stamped apart in `drawn.sha` (`scail` and `video`), so
+  switching moves the other mode's frames into `source/<set>/superseded/`, and
+  both reuse the one SCAIL video. A local `--no-restyle` build starts with the
+  restyle graph's models missing, and says which.
+
+Trial renders on a branch are scratch, as below. The video path keeps each restyle as drawn; nothing is snapped to the key art's
+grid (`cag.snap` still serves the pose-edit path), because snapping made the faces
+blocky. What `cag build` itself has
+drawn on this path, all Belter on the `cloud` profile, 2026-09-25, scratch:
+
+1. **`club-01`, two rolls** (seed 1234, then `CAG_VIDEO_SEED=7`). The trace
+   index came out `[0,3,6,8,…,36,39]`, 41 SCAIL frames at 16 fps, exactly the
+   research run's. All 15 restyles passed first time. On the masked cells the
+   two rolls agree: figure height within 4-5% across a set, the same foot row
+   in every frame, no frame more than 2.6 off its set's mean colour, and the
+   two sets' mean colours within about 3 of each other. Against the set
+   reference the first roll's raw frames read 0.77-0.92 detail and 0.7-5.3
+   colour delta. The second roll's backdrop drifted violet (red 177-211 rather
+   than about 235), which the research `measure.py` threshold reads as figure,
+   so its raw-frame numbers are not comparable; the cut-out measures each
+   frame's own backdrop, so the cells are unaffected.
+2. **`country-01`, one roll,** through the mask pass: 14 frames, the foot work
+   (kicks, crossed steps) carried, identity held.
+3. **Cost:** about 118 credits a `club-01` set, and a rebuild of a finished set
+   spends none (the SCAIL video and every restyle are cached).
+
+The SCAIL prompt quoting the bible, untested before these runs, held identity
+on both dances. There is still no pose-fidelity floor for this path, and one
+character is not a cast: the bulky trooper, over the 8.1 colour bar in 6 of 15
+frames in the scratch-script run, has not been drawn through `cag build`.
+
 ## Real renders happen on main
 
 A render that counts is drawn on `main`, from the committed code, into the
@@ -59,8 +164,9 @@ Run every character that needs building at once, each as its own `uv run cag bui
 process. Do not queue them one at a time.
 
 ```bash
+BACKEND=comfy   # the one the user named; see "Ask which draw backend" below
 for spec in specs/default/*.json; do
-  uv run cag build "$spec" &
+  uv run cag build "$spec" --draw-backend "$BACKEND" &
 done
 ```
 
@@ -83,6 +189,26 @@ Nothing else — no projection views, no frames — is drawn until someone looks
 builds again. A key art that is wrong gets deleted instead, and the next build
 redraws it. Show the user the key art and wait for their answer; do not approve
 on their behalf.
+
+## Ask which draw backend, never pick one
+
+`cag build` has no default draw backend: it stops unless `--draw-backend` or
+`CAG_DRAW_BACKEND` names `codex` (OpenAI), `comfy` (Comfy Cloud) or `local` (the
+user's own ComfyUI). Each is a different model, a different bill and a different
+licence, so it is the user's call. If the user has not named one, ask before the
+first build, and use their answer for every build that follows. An agent that
+cannot ask stops and says it needs one. The user may call it the "processor".
+
+## A build stops for text, and the session writes it
+
+cag calls no model for its text steps — the motion director, a written motion
+sheet, a bible a brief did not assemble. The AI running the session writes them.
+A step with no reply writes its prompt to `work/<slug>/text/<key>.prompt.md`,
+logs `waiting for text`, and stops that set and every set after it, since each
+starts from the last frame of the one before. Read the request, write the reply
+to `work/<slug>/text/<key>.md` beside it, and build again. `<key>` is a digest of
+the prompt, so a changed brief asks afresh. `CAG_TEXT_MODEL=codex` sends the text
+to the codex CLI instead.
 
 ## A failed set is normal, retry it
 
@@ -143,20 +269,21 @@ skipped, so it costs almost nothing and puts every set back on the page.
 
 ## Installing a motion bundle
 
-Bundles arrive as zips. `library()` globs `motions/*/manifest.json`, so a zip in
-`motions/` is inert — nothing reads it and nothing warns you.
+Bundles arrive as zips. `library()` finds every `manifest.json` under `motions/`,
+at any depth — the layout is `motions/<genre>/<genre>-NN/` — so a zip in
+`motions/` is inert: nothing reads it and nothing warns you.
 
 Installing one is a single action with four parts. Doing three of them leaves
 the library lying:
 
-1. Extract into `motions/`, keeping the bundle's own directory name exactly.
+1. Extract into `motions/<genre>/`, keeping the bundle's own directory name exactly.
    **Never rename on the way in.** A bundle carries its name in three places —
    the directory, the manifest's `name`, and the `name` inside `motion.json` —
    and renaming one desyncs it from the other two. `library()` keys on the
    manifest; the build log prints the motion sheet's copy.
 2. Delete the zip.
-3. Delete the bundle it supersedes. A re-cut arrives under its own trace name
-   and lands *beside* the old one rather than over it, so nothing breaks and a
+3. Delete the bundle it supersedes. A re-cut that arrives under a new name
+   lands *beside* the old one rather than over it, so nothing breaks and a
    brief still naming the old one silently renders the old motion. Silence is
    the failure mode here.
 4. Repoint every brief that named the old bundle. A brief naming a bundle that
@@ -166,17 +293,22 @@ Then check it before trusting it:
 
 ```bash
 .venv/bin/python -c "
-from cag.motion import library
+from cag.motion import clip_status, library
 for n, b in sorted(library('motions').items()):
     m = b.load()
     print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {m.playback} seam={b.seam!r} '
           f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
-          f'travel={m.travel:.3f}')"
+          f'travel={m.travel:.3f} clip={clip_status(b)}')"
 ```
 
 One pass catches everything that matters. A manifest that disagrees with its
-motion sheet raises. A short thumb set shows as `photos=0`, which means that set
-renders with no pose reference at all. `playback` must suit the set: a `loop`
+motion sheet raises, and so does a source clip that does not span the traced
+frames. A short thumb set shows as `photos=0`, which means that set renders with
+no pose reference at all. `clip=none` means the video path cannot draw the
+bundle until `uv run cag clips <name>` backfills it; `clip=missing` is every
+backfilled bundle on a fresh clone, `clip=stale` is a file on disk that is not
+the declared one, and `uv run cag clips --missing` cuts both kinds again.
+`--cast` covers only the bundles a brief names. `playback` must suit the set: a `loop`
 trace seams back to frame 0, a `pingpong` turns around on its ends and plays
 back down the frames it just played, a `one-shot` does neither, and driving a
 looping set from a one-shot cut gives a dance that plays once.
@@ -200,9 +332,25 @@ holds a set's last frame is the set plan's call, not the trace's. A set is drive
 prompt or the other: its motion spec, or the brief that writes it a sheet. The
 set plan in `cag/sets.py` is only the default for a brief that says nothing.
 
-A bundle's name is its trace — label, video id and start second — because a
-label alone is a genre. Two different dances once collided on `shuffle`, and the
-baselines measured against one silently came to refer to the other.
+The source clip is the one edit cag makes to an installed bundle. `cag clips`
+fetches the source video into `work/sources/`, cuts the traced window at native
+rate and size, finds the clip box by matching the bundle's own traced frames
+against it, and refuses below a 0.90 match. It writes `clip.mp4`, which is
+git-ignored, and a `clip` block in the manifest marked
+`"backfilled_by": "cag"`, which is committed. x264 writes its own build into
+every file, so another machine's cut of the same frames has another hash: that
+hash goes in `clip.sha256` beside the clip, also ignored, and the committed
+block is left as it is. Only a cut of different frames rewrites the block. It never touches `motion.json` or
+the manifest's `files`. A MotionArtist re-export replaces the block; run
+`cag clips` on the new bundle if it arrives without one.
+
+A bundle is named `<genre>-NN` — `club-01` — and what it traced, the video id
+and start second, is in its `source` block. Two cuts of one video are two
+names: `club-01` and `club-04` are both from `P4QeqpsY8v8`. Names used to be
+the trace itself (`shuffle-1-b0ARQ5kM85Y-13.6s`), after two different dances
+collided on the bare label `shuffle` and the baselines measured against one
+silently came to refer to the other. A baseline names the bundle it was
+measured on.
 
 `motions/sample` is the worked example of the format and the only motion fixture
 the tests use. It is not a trace; leave it installed.
@@ -217,19 +365,36 @@ A new term is named here before it is used.
 
 | term | what it is |
 | --- | --- |
-| **motion bundle** | `motions/<name>/`, identified by its manifest (`Bundle`) |
+| **motion bundle** | `motions/<genre>/<name>/`, identified by its manifest (`Bundle`) |
 | **manifest** | the bundle's `manifest.json` (`read_bundle`) |
 | **motion sheet** | the contents of `motion.json` (`MotionSheet`, `load_motion`). The one place "sheet" may appear, always qualified |
 | **traced sheet** / **written sheet** | a motion sheet from a bundle, versus one `cag/motion_writer.py` generated from the brief's prose. A written sheet has no traced frames and therefore no pose reference at all |
 | **traced frame** | one photograph of the performer, `thumbs/fNN.jpg` in a bundle |
+| **source clip** | the footage a bundle was traced from, `motions/<genre>/<name>/clip.mp4`: native rate and size, uncropped, the traced window ±0.5 s. Described by the manifest's `clip` block (`Clip`, `Bundle.clip`), the one manifest edit cag makes (`"backfilled_by": "cag"`), written by `cag clips <name>`. The block is committed and the `.mp4` is git-ignored and absent from `files`, so a fresh clone loads with `clip=None` until `cag clips` runs. A file on disk whose sha256 is neither the block's nor this machine's own cut (`clip.sha256`) is `stale`, and the video path raises it |
+| **clip box** | the 3:4 box, in source-clip pixels, that the traced frames were cut from (`Clip.box`). Always inside the frame |
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
 | **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |
 | **pose reference** | the umbrella concept. Today always pose cards and pose grids made from traced frames; nothing else qualifies |
+| **mannequin** | one traced frame's landmarks drawn as a flat figure in the character's own colours, on magenta (`cag/mannequin.py`). The starting latent of a Qwen-Image-2.1 frame, never a reference image: the pose comes from it, identity from the key art |
 | **location** | the character's background: one 2048x1152 plate drawn from the brief's `location` prose, with no character in it. Shown cropped to the central 12:7, so the far left and right edges are croppable and carry nothing load-bearing. The only render that is not on magenta and never goes through the mask — the character cell is composited over it |
 | **frame sheet** | many frames of one character drawn in one render. The chunk renders under `work/<char>/source/<set>/`, and the deliverable at `outputs/<theme>/<char>/<set>-sheet.png` |
 | **key art** | the approved character reference render |
 | **bible** | the identity text quoted into every prompt |
 | **set** | one animation: dance, sing, flinch, guard, entrance, victory, ko |
+| **draw backend** | what draws a build's art: `codex`, `comfy` or `local` (`--draw-backend`). Never assumed. The user may say "processor" |
+| **set reference** | the identity image a set is drawn against, what `set_key_art` returns: `key.png`, or `source/<set>-key-<view>.png` |
+| **machine profile** | `comfy/machines/<name>.json`: the model files, sizes, steps, rate, length cap and timeouts for one machine (`Machine`, `--machine`) |
+| **video path** / **pose-edit path** | the two ways a traced set is drawn under a workflow backend: from its source clip through SCAIL-2 (`video_frames`), or one pose card at a time through Qwen-Image-2.1 (`pose_edit_frames`) |
+| **drive video** | the source clip resampled to the drive rate, cut to a 2:3 box, sized to the machine profile, as one animated PNG: `work/drive/<bundle>-<digest12>/drive.png`. Shared across characters |
+| **drive rate** | frames per second of the drive video. 16 unless the profile's length cap lowers it |
+| **drive mask** | the drive video's silhouette per frame, #0000FF on black: `drive-mask.png` beside `drive.png` |
+| **face blur** | the oval of Gaussian blur over the performer's head in every drive video frame (`blur_faces`, `cag/drive.py`), placed from the drive mask. Per-frame head boxes are recorded in `drive.json` under `face_blur` |
+| **mask pass** | the SAM3 Comfy job that makes a drive mask when the footage has no light backdrop to threshold |
+| **reference mask** | the set reference's silhouette, blue on black |
+| **SCAIL video** | every image one SCAIL-2 job returns: `work/<char>/video/<set>/<digest12>/NNN.png` |
+| **SCAIL frame** | one image of a SCAIL video |
+| **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
+| **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.

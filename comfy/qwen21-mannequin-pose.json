@@ -1,0 +1,12 @@
+{
+  "1": {"class_type": "UNETLoader", "inputs": {"unet_name": "qwen_image_2.1_bf16.safetensors", "weight_dtype": "default"}, "_meta": {"title": "Qwen-Image-2.1"}},
+  "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen3vl_8b_bf16.safetensors", "type": "qwen_image", "device": "default"}},
+  "3": {"class_type": "VAELoader", "inputs": {"vae_name": "qwen_image_2.1_vae_bf16.safetensors"}},
+  "4": {"class_type": "LoadImage", "inputs": {"image": "$image1"}, "_meta": {"title": "image 1: the approved reference, identity and style"}},
+  "5": {"class_type": "LoadImage", "inputs": {"image": "$image2"}, "_meta": {"title": "image 2: the colour-blocked mannequin in the traced pose, same canvas as image 1"}},
+  "6": {"class_type": "TextEncodeQwenImage21", "inputs": {"clip": ["2", 0], "vae": ["3", 0], "prompt": "$prompt", "negative_prompt": "", "resolution": 1248, "images.image_1": ["4", 0]}, "_meta": {"title": "the reference is the only image the model sees"}},
+  "7": {"class_type": "VAEEncode", "inputs": {"pixels": ["5", 0], "vae": ["3", 0]}, "_meta": {"title": "the mannequin is the starting latent, never a reference"}},
+  "8": {"class_type": "KSampler", "inputs": {"model": ["1", 0], "positive": ["6", 0], "negative": ["6", 1], "latent_image": ["7", 0], "seed": 1234, "steps": 40, "cfg": 1.0, "sampler_name": "euler", "scheduler": "simple", "denoise": 0.9}, "_meta": {"title": "0.9: 0.85 stays a flat cartoon, 0.95 drifts back to the reference's stance"}},
+  "9": {"class_type": "VAEDecode", "inputs": {"samples": ["8", 0], "vae": ["3", 0]}},
+  "10": {"class_type": "SaveImage", "inputs": {"images": ["9", 0], "filename_prefix": "cag-mannequin"}}
+}

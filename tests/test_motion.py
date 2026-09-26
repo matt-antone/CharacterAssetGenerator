@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -6,7 +7,7 @@ from dataclasses import replace
 
 import pytest
 
-from cag.motion import Frame, library, read_bundle, MotionError, load_motion
+from cag.motion import Frame, clip_status, library, read_bundle, MotionError, load_motion
 
 SAMPLE = "motions/sample/motion.json"
 
@@ -205,3 +206,149 @@ def test_a_v2_bundle_loads_and_keeps_its_depth(tmp_path):
     (root / "motion.json").write_text(json.dumps(sheet))
     motion = read_bundle(root).load()
     assert all(len(point) == 3 for point in motion.frames[0].pts.values())
+
+
+def timed_bundle(tmp_path, clip=None, times=None, footage=b"not really an mp4"):
+    """A bundle whose frames carry traced seconds, with a clip block when given one.
+
+    The sample's frames sit at 16.00-19.75 s, a quarter second apart.
+    """
+    root = bundle_at(tmp_path)
+    spec = json.loads((root / "motion.json").read_text())
+    for frame, t in zip(spec["frames"], times or [16.0 + 0.25 * i for i in range(16)]):
+        frame["t"] = t
+    (root / "motion.json").write_text(json.dumps(spec))
+    if clip is not None:
+        if footage is not None:
+            (root / "clip.mp4").write_bytes(footage)
+        block = {
+            "file": "clip.mp4", "start": 15.5, "fps": 24.0, "frame_count": 109,
+            "size": [1280, 720], "box": [400, 40, 480, 640], "t_offset": 0.0,
+            "sha256": hashlib.sha256(footage or b"").hexdigest(),
+            "backfilled_by": "cag", **clip,
+        }
+        manifest = json.loads((root / "manifest.json").read_text())
+        manifest["clip"] = block
+        (root / "manifest.json").write_text(json.dumps(manifest))
+    return root
+
+
+def test_a_frames_traced_second_is_read(tmp_path):
+    motion = load_motion(timed_bundle(tmp_path) / "motion.json")
+    assert motion.frames[1].t == 16.25
+    assert motion.frame_times[0] == 16.0 and len(motion.frame_times) == 16
+
+
+def test_frame_times_are_all_or_nothing(tmp_path):
+    """A partial set would pair a frame with the wrong moment of the clip."""
+    root = timed_bundle(tmp_path)
+    spec = json.loads((root / "motion.json").read_text())
+    del spec["frames"][5]["t"]
+    (root / "motion.json").write_text(json.dumps(spec))
+    motion = load_motion(root / "motion.json")
+    assert motion.frames[4].t == 17.0
+    assert motion.frame_times == ()
+
+
+def test_the_sample_carries_no_clip():
+    bundle = read_bundle("motions/sample")
+    assert bundle.clip is None and bundle.declared_clip is None
+    assert bundle.load().clip is None
+    assert clip_status(bundle) == "none"
+
+
+def test_a_clip_block_loads_onto_the_motion(tmp_path):
+    bundle = read_bundle(timed_bundle(tmp_path, clip={}))
+    assert clip_status(bundle) == "ok"
+    clip = bundle.load().clip
+    assert clip == bundle.clip
+    assert clip.path == tmp_path / "shuffle" / "clip.mp4"
+    assert (clip.size, clip.box) == ((1280, 720), (400, 40, 480, 640))
+    assert clip.end == pytest.approx(15.5 + 108 / 24)
+    assert clip.frame_at(16.0) == 12 and clip.frame_at(19.75) == 102
+
+
+def test_a_declared_clip_that_is_not_on_disk_is_missing_not_an_error(tmp_path):
+    """clip.mp4 is untracked: a fresh clone has the block and not the file."""
+    bundle = read_bundle(timed_bundle(tmp_path, clip={}, footage=None))
+    assert bundle.clip is None
+    assert bundle.declared_clip.path.name == "clip.mp4"
+    assert clip_status(bundle) == "missing"
+    assert bundle.load().clip is None
+
+
+def test_a_clip_that_is_not_the_one_declared_is_stale_and_only_the_video_path_refuses_it(tmp_path):
+    root = timed_bundle(tmp_path, clip={})
+    (root / "clip.mp4").write_bytes(b"a different cut")
+    bundle = read_bundle(root)
+    assert bundle.clip is None and clip_status(bundle) == "stale"
+    assert "cag clips shuffle" in bundle.clip_problem
+    motion = bundle.load()
+    assert motion.clip is None and motion.clip_problem == bundle.clip_problem
+
+
+def test_one_stale_clip_does_not_stop_the_rest_of_the_library(tmp_path):
+    root = timed_bundle(tmp_path, clip={})
+    (root / "clip.mp4").write_bytes(b"a different cut")
+    shutil.copytree("motions/sample", tmp_path / "sample")
+    found = library(tmp_path)
+    assert sorted(found) == ["sample", "shuffle"]
+    assert clip_status(found["shuffle"]) == "stale" and found["sample"].load()
+
+
+def test_a_clip_this_machine_cut_is_its_own_even_when_the_block_is_anothers(tmp_path):
+    """x264 writes its build into every file: the same footage cut elsewhere is other bytes."""
+    root = timed_bundle(tmp_path, clip={})
+    (root / "clip.mp4").write_bytes(b"the same frames, another x264")
+    (root / "clip.sha256").write_text(hashlib.sha256(b"the same frames, another x264").hexdigest() + "\n")
+    bundle = read_bundle(root)
+    assert clip_status(bundle) == "ok"
+    assert bundle.clip.sha256 == hashlib.sha256(b"the same frames, another x264").hexdigest(), (
+        "a drive is keyed on the bytes on disk"
+    )
+
+
+@pytest.mark.parametrize(
+    "block, message",
+    [
+        ({"box": [900, 40, 480, 640]}, "does not lie inside"),
+        ({"fps": 0}, "at 0.0 fps"),
+    ],
+)
+def test_a_clip_block_that_makes_no_sense_is_refused(tmp_path, block, message):
+    with pytest.raises(MotionError, match=message):
+        read_bundle(timed_bundle(tmp_path, clip=block))
+
+
+def test_a_clip_block_missing_a_field_is_refused(tmp_path):
+    root = timed_bundle(tmp_path, clip={})
+    manifest = json.loads((root / "manifest.json").read_text())
+    del manifest["clip"]["start"]
+    (root / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(MotionError, match="clip block is missing start"):
+        read_bundle(root)
+
+
+def test_a_clip_that_does_not_span_the_trace_is_refused(tmp_path):
+    """Frame 15 is at 19.75 s; a clip ending at 19.0 s never shows it."""
+    bundle = read_bundle(timed_bundle(tmp_path, clip={"frame_count": 85}))
+    with pytest.raises(MotionError, match=r"does not cover traced frames \[13, 14, 15\]"):
+        bundle.load()
+
+
+def test_traced_times_that_go_backwards_are_refused(tmp_path):
+    times = [16.0 + 0.25 * i for i in range(16)]
+    times[3], times[4] = times[4], times[3]
+    bundle = read_bundle(timed_bundle(tmp_path, clip={}, times=times))
+    with pytest.raises(MotionError, match="not strictly increasing"):
+        bundle.load()
+
+
+def test_a_clip_does_not_change_the_motion_digest(tmp_path):
+    """The stamp every drawn set carries; a clip arriving must not stale them all."""
+    from cag.animation import motion_digest
+
+    plain = read_bundle(timed_bundle(tmp_path / "a")).load()
+    clipped = read_bundle(timed_bundle(tmp_path / "b", clip={})).load()
+    assert clipped.clip is not None
+    assert motion_digest(clipped) == motion_digest(plain)

@@ -72,6 +72,35 @@ READY_STANCE = (
     "not give one, a relaxed stance with the arms readable and clear of the torso."
 )
 
+#: READY_STANCE only asks for readable arms when the brief gives no stance, so a
+#: brief that gives one lost the guarantee: Belter's "free hand compact and
+#: relaxed" came back on Qwen-Image-2.1 with that hand tucked behind her back.
+#: Every frame is drawn from the key art, and a hand it hides is one no frame
+#: has a reference for. Said on every key art, whatever the brief's stance.
+#: A rule alone lost two rolls in three to "compact": it is a concrete default
+#: position now, placed straight after the description, and a stance that does
+#: place the free hand (a hand on the hip, a raised fist) still wins.
+KEY_ARMS = (
+    "Both arms and both hands are in full view, with every finger of each hand visible. If the "
+    "stance below places the free hand, draw it there, in front of the body or out to the side. "
+    "Otherwise the free arm hangs straight down at the character's side, clear of the torso, the "
+    "open hand beside the thigh and below the hair. Never behind the back, in a pocket, or hidden "
+    "by hair, a sleeve or the other arm."
+)
+
+#: The key art is the identity every later render copies, so anything it drops
+#: is dropped for good. Two Qwen-Image-2.1 rolls of Belter both left out the
+#: crimson waist accent, drew her near-black boots mid-brown, and gave her the
+#: long upright fashion figure her brief avoids. The avoid list stays out of the
+#: prompt (see `assemble_bible`), so this says the right thing positively.
+KEY_COMPLETE = (
+    "This drawing is the reference every other render of the character is copied from. Every "
+    "garment, accessory and colour named in the description above appears in it, each where and "
+    "in the colour the description gives: none left out, merged into another piece, or drawn "
+    "lighter or darker than stated. The body's proportions follow the build and height described "
+    "above rather than a default fashion-illustration figure."
+)
+
 #: Stance for a projection view, whose whole job is being comparable to its
 #: siblings. Never for a set reference: the animation frames are drawn from
 #: that picture, and an even-weight arms-down base came back through every
@@ -230,9 +259,11 @@ def view_prompt(
         part for part in [
             f"Draw {spec.name}.",
             bible,
+            KEY_ARMS if view == KEY_VIEW and not pose else "",
             props,
             line,
             stance,
+            KEY_COMPLETE if view == KEY_VIEW else "",
             f"{STYLE} {STANDING}",
             BACKDROP,
             detail_clause(detail_level),
@@ -467,7 +498,12 @@ def frame_sheet_prompt(
             props,
             standing,
             view_clause,
-            f"Draw this on a landscape canvas. {layout} No numbers, labels, frame lines or grid "
+            # More than four across is a set drawn whole (Comfy only), and eight
+            # figures across a plain landscape canvas left each one a slot too
+            # narrow for Belter's hair and mic arm: they ran together and would
+            # not slice. "Wide" is 21:9 there; see `cag.comfy.CANVASES`.
+            f"Draw this on a {'wide ' if columns > 4 else ''}landscape canvas. {layout} "
+            "No numbers, labels, frame lines or grid "
             "lines: only the figures on the backdrop.",
             figures,
             STYLE,
@@ -486,3 +522,70 @@ def frame_sheet_prompt(
             + (" and do not move the prop to the other hand." if props else "."),
         ] if part
     )
+
+
+#: The prompt for re-posing a set's approved reference into one traced frame's
+#: pose (`cag.comfy.POSE_WORKFLOW`). The first half is AnyPose's own wording, the
+#: phrasing its LoRAs were trained against. The rest is what a photograph of a
+#: real performer carries that must not come across: her clothes, her shoes, the
+#: street she danced in. It names no character, because the reference image
+#: already is one, and words only compete with it.
+POSE_EDIT = (
+    "Make the person in image 1 do the exact same pose of the person in image 2. Changing the "
+    "style and background of the image of the person in image 1 is undesirable, so don't do it. "
+    "The new pose should be pixel accurate to the pose we are trying to copy. The position of the "
+    "arms and head and legs should be the same as the pose we are trying to copy. "
+    "Keep everything else from image 1 exactly: its pixel-art style and black outline, the "
+    "character's face, hair, body, clothing and footwear, anything held in the hands, and the "
+    "flat pure magenta background. Take nothing from image 2 except the pose: not the performer's "
+    "clothes, hair, face or shoes, not the scenery, not the camera angle. Draw the whole figure, "
+    "head to feet, with nothing cropped."
+)
+
+
+# The video path's prompts (see `cag.video`). Each is the string a measured
+# render sent, give or take the bible standing in for a hand-written costume
+# sentence. One roll per character is all that is behind them, so a change is
+# rolled twice before it is kept.
+
+#: The SCAIL-2 job's prompt: one video of the set reference following the drive
+#: video. `{action}` comes from `SCAIL_ACTIONS`, `{identity}` is the bible.
+SCAIL_PROMPT = (
+    "A 32-bit arcade pixel-art sprite of the character from the reference image {action}: "
+    "{identity} The same face, hair, costume and pixel-art style with a black outline in "
+    "every frame. Full body. Flat solid magenta background. Static camera."
+)
+
+#: What the character is doing in the footage, per set. Only dances have been
+#: drawn this way; any other set says only that it moves.
+SCAIL_ACTIONS = {"dance": "dancing in place"}
+
+
+def scail_prompt(set_name: str, bible: str) -> str:
+    """The SCAIL-2 prompt for one set, quoting the bible as its identity."""
+    identity = bible.strip()
+    if identity and identity[-1] not in ".!?":
+        identity += "."
+    return SCAIL_PROMPT.format(
+        action=SCAIL_ACTIONS.get(set_name, "moving in place"), identity=identity
+    )
+
+
+#: The restyle's style clause, short on purpose: it rides beside `<image2>`,
+#: which shows the style, rather than standing in for it the way `STYLE` does.
+RESTYLE_STYLE = (
+    "mid-1990s 32-bit arcade pixel-art sprite, visible pixel grid, banded shading, solid black "
+    "outline, flat pure magenta background"
+)
+
+#: One restyle: a SCAIL frame redrawn in the set reference's art. The SCAIL frame
+#: is `<image1>` because the edit's latent takes its size from the first image.
+RESTYLE = (
+    "Redraw <image1> in exactly the art style of <image2>: " + RESTYLE_STYLE + ". Keep "
+    "everything in <image1>: the pose and position of every limb, both hands, the face and "
+    "expression, the figure's size and place in the frame. Match <image2>'s colours and every "
+    "costume detail."
+)
+
+#: What the mask pass tracks: SAM3 reads it as a text query, not a prompt.
+MASK_PASS_PROMPT = "human"

@@ -123,6 +123,10 @@ def test_a_render_with_scenery_behind_it_is_redrawn_not_kept(monkeypatch, tmp_pa
         draw("a singer", tmp_path / "art.png")
     assert len(attempts) == 2
     assert not (tmp_path / "art.png").exists()
+    # Each unusable attempt is kept aside to be looked at, never resumed from.
+    assert sorted(p.name for p in tmp_path.glob("art.unusable-*.png")) == [
+        "art.unusable-0.png", "art.unusable-1.png"
+    ]
 
 
 def test_verification_never_deletes_an_existing_render(tmp_path):
@@ -160,3 +164,89 @@ def test_scenery_is_refused_separately_from_colour():
     usable, why_not = backdrop_is_usable(scenery())
     assert not usable
     assert "scenery behind the character" in why_not
+
+
+def test_a_washed_out_magenta_is_refused():
+    """The key cuts costume away against an orchid backdrop, so it is drawn again."""
+    from cag.draw import backdrop_is_usable
+
+    # What Nano Banana painted behind two of Belter's frame sheets.
+    for colour in ((194, 80, 159), (203, 62, 184)):
+        usable, why_not = backdrop_is_usable(Image.new("RGB", (64, 64), colour))
+        assert not usable
+        assert "washed-out magenta" in why_not
+    # What it painted behind the rest, and what the prompt asks for.
+    for colour in ((252, 3, 250), (255, 0, 255)):
+        assert backdrop_is_usable(Image.new("RGB", (64, 64), colour))[0], colour
+
+
+def test_a_fixed_seed_moves_on_for_every_redraw_even_across_runs(monkeypatch, tmp_path):
+    """A fixed seed that failed once would fail again; each try is the next seed on."""
+    from cag import draw as drawing
+
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text('{"1": {"class_type": "Edit", "inputs": {"prompt": "$prompt"}}}')
+    seeds, pictures = [], []
+
+    def run(prompt, out_path, references, loaded, timeout, scene, local, seed=None):
+        seeds.append(seed)
+        (pictures.pop(0) if pictures else scenery()).save(out_path)
+        return ""
+
+    monkeypatch.setattr(drawing, "_run_comfy", run)
+    out = tmp_path / "art.png"
+    with pytest.raises(DrawError):
+        draw("a singer", out, backend="comfy", workflow=workflow, seed=100)
+    first = (tmp_path / "art.unusable-0.png").read_bytes()
+    with pytest.raises(DrawError):
+        draw("a singer", out, backend="comfy", workflow=workflow, seed=100)
+    assert seeds == [100, 101, 102, 103]
+    # Evidence from the first run is kept, not overwritten by the second.
+    assert sorted(p.name for p in tmp_path.glob("art.unusable-*.png")) == [
+        f"art.unusable-{n}.png" for n in range(4)
+    ]
+    assert (tmp_path / "art.unusable-0.png").read_bytes() == first
+
+    pictures.append(Image.new("RGB", (64, 64), (255, 0, 255)))
+    assert draw("a singer", out, backend="comfy", workflow=workflow, seed=100) == out
+    assert seeds[-1] == 104, "unusable-N is always the picture seed + N made"
+
+
+def test_without_a_seed_every_try_is_a_random_roll(monkeypatch, tmp_path):
+    from cag import draw as drawing
+
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text('{"1": {"class_type": "Edit", "inputs": {"prompt": "$prompt"}}}')
+    seeds = []
+
+    def run(prompt, out_path, references, loaded, timeout, scene, local, seed=None):
+        seeds.append(seed)
+        scenery().save(out_path)
+        return ""
+
+    monkeypatch.setattr(drawing, "_run_comfy", run)
+    (tmp_path / "art.unusable-0.png").write_bytes(b"from an earlier run")
+    with pytest.raises(DrawError):
+        draw("a singer", tmp_path / "art.png", backend="comfy", workflow=workflow)
+    assert seeds == [None, None]
+    assert (tmp_path / "art.unusable-0.png").read_bytes() == b"from an earlier run"
+    assert (tmp_path / "art.unusable-2.png").exists()
+
+
+def test_a_workflows_own_placeholders_reach_the_render(monkeypatch, tmp_path):
+    """A machine profile's `$resolution` has no other way into a restyle."""
+    from cag import draw as drawing
+
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text('{"1": {"class_type": "Edit", "inputs": {"prompt": "$prompt"}}}')
+    sent = []
+
+    def run(prompt, out_path, references, loaded, timeout, scene, local, extra=None, seed=None):
+        sent.append(extra)
+        Image.new("RGB", (64, 64), (255, 0, 255)).save(out_path)
+        return ""
+
+    monkeypatch.setattr(drawing, "_run_comfy", run)
+    draw("a singer", tmp_path / "art.png", backend="comfy", workflow=workflow,
+         extra={"$resolution": 512})
+    assert sent == [{"$resolution": 512}]

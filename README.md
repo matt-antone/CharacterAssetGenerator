@@ -4,7 +4,7 @@ Turns a short character brief into game-ready sprite assets: a projection sheet
 of static views, and a masked animation set per animation the brief names.
 
 ```bash
-uv run cag build specs/default/belter.json
+uv run cag build specs/default/belter.json --draw-backend codex
 ```
 
 The first run stops after the key art and waits for a human. Look at
@@ -74,7 +74,7 @@ cp -R ../MotionArtist/work/shuffle motions/shuffle-1
 one file, overriding whatever the brief names:
 
 ```bash
-uv run cag build specs/default/crooner.json --set dance --motion ../MotionArtist/work/shuffle/motion.json
+uv run cag build specs/default/crooner.json --draw-backend codex --set dance --motion ../MotionArtist/work/shuffle/motion.json
 ```
 
 ## How it runs
@@ -124,6 +124,93 @@ cut off footage at that speed and another rate is the dance at the wrong tempo.
 So how a set repeats is written down once, in whichever of the three places owns
 it: the trace, or this character's brief, or the plan. Belter's dance can
 pingpong while the crooner's loops without either of them touching `sets.py`.
+
+## Who draws
+
+Every render goes through one backend, picked per build:
+
+```bash
+uv run cag build specs/default/belter.json --draw-backend codex   # OpenAI, via codex
+uv run cag build specs/default/belter.json --draw-backend comfy   # Comfy Cloud
+uv run cag build specs/default/belter.json --draw-backend local   # your own ComfyUI
+```
+
+There is no default: a build that names none, by flag or `CAG_DRAW_BACKEND`,
+stops before drawing anything. The rest of a build — briefs, prompts, the
+key art gate, the mask, assembly, and the text — is the same whichever draws.
+
+**codex** is an agent with an image tool: it is handed the prompt plus
+instructions to save the file and to redraw until the backdrop is magenta.
+
+**comfy** runs a ComfyUI workflow on [Comfy Cloud](https://cloud.comfy.org).
+It needs `COMFY_CLOUD_API_KEY`, made at platform.comfy.org (Standard plan or
+above). The workflow it runs is `comfy/workflow.json`, which ships with the
+repo: Nano Banana Pro at 2K, taking up to fourteen reference images and
+following a long prompt closely. Partner nodes like it bill to the same key.
+
+The model is the workflow's choice, not cag's, so changing models means changing
+that file, or pointing `--comfy-workflow` / `CAG_COMFY_WORKFLOW` at another one.
+To make one, build it in Comfy, export it with **Workflow > Export (API)**, and
+set these node inputs to placeholder strings. cag fills them in for each render:
+
+| Placeholder | Filled with |
+| --- | --- |
+| `$prompt` | the render's prompt. Required |
+| `$image1` .. `$imageN` | the reference images, in order, on `LoadImage` nodes. A render sends up to four: key art, the carried last frame, detail, the pose grid. The prompt calls the pose grid "the last reference image", so keep them in order |
+| `$seed` | a fresh random seed, so a redraw is a new roll |
+| `$width`, `$height` | the canvas in pixels: 1536x864 for a location, 1536x1024 for a frame sheet, 1024x1536 for a single figure |
+| `$aspect` | the same canvas as a ratio, `16:9`, `3:2` or `2:3`, for models that take one |
+
+A render with fewer references than there are slots drops the unused
+`LoadImage` nodes. A batch node left holding one image passes it straight
+through, and one left with none goes, so batched references shrink on their own.
+A render with more references than slots fails before anything is uploaded.
+
+Every reference is uploaded letterboxed onto a 1536 square, in its own border
+colour. ComfyUI batches images as one tensor and crops each to the first one's
+size to do it, which would cut the outer pose cards off a landscape pose grid
+batched behind portrait key art.
+
+The magenta check still applies: a render with scenery behind the character is
+drawn again, the same as under codex.
+
+**local** runs the same kind of workflow on a ComfyUI server of your own, at
+`http://127.0.0.1:8188` unless `CAG_LOCAL_COMFY_URL` says otherwise. It needs no
+key and bills nothing, but it can only run nodes and models installed there, so
+no partner nodes: Nano Banana does not exist on a local server. Its default
+workflow is `comfy/qwen-image-2.1.json` (`--comfy-workflow` or
+`CAG_LOCAL_COMFY_WORKFLOW` names another). Qwen-Image-2.1's weights are under
+the Qwen Research License, research and evaluation only, so a package meant for
+anything else draws with an Apache-licensed workflow instead.
+
+A traced set under either workflow backend is drawn a frame at a time by
+`comfy/pose-edit.json` (`--comfy-pose-workflow` or `CAG_COMFY_POSE_WORKFLOW`):
+Qwen-Image-Edit-2511 at fp8 with the AnyPose LoRAs and the Lightning 4-step
+LoRA, which re-poses the set's reference into each traced photograph. Every file
+it loads runs on a 16 GB card, so Comfy Cloud and a local server draw the same
+dance. Each frame is then snapped back onto the reference's pixel grid and
+palette, with a black outline, on exact magenta (`cag.snap`): the workflow keeps
+the character, not the pixel art. The render as drawn is kept as `NN.raw.png`.
+
+## Who writes
+
+The text steps (the bible where a brief does not assemble its own, a written
+motion sheet, the motion director) are written by the AI session running the
+build, whichever agent that is. cag calls no model for them. A step with no
+reply writes its prompt to `work/<slug>/text/<key>.prompt.md` and the build
+stops there, the way it stops for key art approval:
+
+```
+[dance] waiting for text: answer work/belter/text/3f2a….prompt.md by writing the reply to work/belter/text/3f2a….md, then build again
+[sets] ko, sing, victory wait for dance
+```
+
+The session reads the request, writes the reply beside it, and builds again.
+`key` is a digest of the prompt, so a reply only answers the question it was
+written for. A set waiting for text stops the chain, because every later set
+starts from its last frame. A written set takes two rounds: its motion sheet,
+then its director. `CAG_TEXT_MODEL=codex` sends the text to the `codex` CLI
+instead.
 
 ## Every set needs a hand pass
 
@@ -182,11 +269,14 @@ the sheet and loses the edits**. Opened straight from disk instead of through
 
 ## Constraints this was built under
 
-- **No OpenAI API.** Both the model calls and the image generation go through
-  the local `codex` CLI on a ChatGPT subscription. `cag.chat_codex.ChatCodex` is
-  a LangChain `BaseChatModel` that shells out to `codex exec`.
-- **macOS only.** The cutout's fallback path is Apple's Vision framework
-  (`VNGenerateForegroundInstanceMaskRequest`) through pyobjc.
+- **No OpenAI API.** Codex image generation goes through the local `codex` CLI
+  on a ChatGPT subscription, as does text under `CAG_TEXT_MODEL=codex`.
+  `cag.chat_codex.ChatCodex` is a LangChain `BaseChatModel` that shells out to
+  `codex exec`; `cag.chat_session.ChatSession` is the one the session answers.
+- **Vision is macOS only.** The cutout's fallback path is Apple's Vision
+  framework (`VNGenerateForegroundInstanceMaskRequest`) through pyobjc. pyobjc
+  installs only on macOS; elsewhere the chroma key does all the cutting, and a
+  render it cannot read fails instead of falling back.
 
 ## The look
 

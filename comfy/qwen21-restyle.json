@@ -1,0 +1,56 @@
+{
+  "unet": {
+    "class_type": "UNETLoader",
+    "inputs": {"unet_name": "qwen_image_2.1_bf16.safetensors", "weight_dtype": "fp8_e4m3fn"},
+    "_meta": {"title": "Qwen-Image-2.1, held at fp8 as the research run (t21) drew it"}
+  },
+  "clip": {
+    "class_type": "CLIPLoader",
+    "inputs": {"clip_name": "qwen3vl_8b_fp8_scaled.safetensors", "type": "qwen_image", "device": "default"},
+    "_meta": {"title": "text and image encoder; a machine profile may move it to the CPU"}
+  },
+  "vae": {
+    "class_type": "VAELoader",
+    "inputs": {"vae_name": "qwen_image_2.1_vae_bf16.safetensors"}
+  },
+  "in1": {
+    "class_type": "LoadImage",
+    "inputs": {"image": "$image1"},
+    "_meta": {"title": "one SCAIL frame, at the set reference's size: the pose and place to keep"}
+  },
+  "in2": {
+    "class_type": "LoadImage",
+    "inputs": {"image": "$image2"},
+    "_meta": {"title": "the set reference: the style, colours and costume to match"}
+  },
+  "enc": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "clip": ["clip", 0],
+      "vae": ["vae", 0],
+      "prompt": "$prompt",
+      "negative_prompt": "",
+      "resolution": "$resolution",
+      "images.image_1": ["in1", 0],
+      "images.image_2": ["in2", 0]
+    },
+    "_meta": {"title": "edit mode; the latent takes its size from image_1, so the SCAIL frame goes first"}
+  },
+  "K": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["unet", 0],
+      "positive": ["enc", 0],
+      "negative": ["enc", 1],
+      "latent_image": ["enc", 2],
+      "seed": "$seed",
+      "steps": "$steps",
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "V": {"class_type": "VAEDecode", "inputs": {"samples": ["K", 0], "vae": ["vae", 0]}},
+  "O": {"class_type": "SaveImage", "inputs": {"images": ["V", 0], "filename_prefix": "cag-restyle"}}
+}

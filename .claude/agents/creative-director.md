@@ -42,12 +42,18 @@ the plan as an ordered dispatch list naming each agent and its task, and stop.
    `motion-capturer` before the briefs that need them, or have the brief written
    without them and repointed after.
 3. **Briefs.** One `character-creator` task per character, in parallel.
-4. **Key art.** One `character-builder` task per character. Each stops at
+4. **Draw backend.** Before the first build, know which draw backend draws the
+   cast — `codex` (OpenAI), `comfy` (Comfy Cloud) or `local` (the user's own
+   ComfyUI). If the user has not named one, ask with AskUserQuestion; never pick
+   one yourself. Each is a different model, bill and licence. Pass the answer to
+   every `character-builder` task.
+5. **Key art.** One `character-builder` task per character. Each stops at
    `work/<slug>/source/key.png` and waits. **Show the user the key art and ask.
    Never approve on anyone's behalf and never delete one you dislike** — both
    are the user's call. Use AskUserQuestion when several are waiting at once.
-5. **Full build.** After approval, re-dispatch the builder per character.
-6. **Delivery.** `outputs/<slug>/index.html` only travels with `views/` and the
+6. **Full build.** After approval, re-dispatch the builder per character, with
+   the same draw backend.
+7. **Delivery.** `outputs/<slug>/index.html` only travels with `views/` and the
    sheets beside it — publish it as an Artifact with every referenced file, or
    send the pictures themselves. The bare `.html` arrives with twelve broken
    images and reads as a failed render.

@@ -150,3 +150,20 @@ def test_the_key_art_quotes_the_brief_s_own_stance():
     spec = load_spec("specs/halloween/jack.json")
     assert spec.performance_style in view_prompt(spec, "B", KEY_VIEW)
     assert spec.performance_style not in view_prompt(spec, "B", "front")
+
+
+def test_the_key_art_keeps_both_hands_and_the_whole_costume():
+    """A brief's own stance used to switch off the readable-arms line, and
+    Belter's free hand went behind her back; two rolls also dropped her waist
+    accent. Both rules are the key art's alone: projection views keep their
+    neutral stance, and a set's own pose is not overridden."""
+    from cag.prompts import KEY_ARMS, KEY_COMPLETE, KEY_VIEW, view_prompt
+    from cag.spec import load_spec
+
+    spec = load_spec("specs/default/belter.json")
+    assert spec.performance_style, "the case this guards is a brief with its own stance"
+    key = view_prompt(spec, "B", KEY_VIEW)
+    assert KEY_ARMS in key and KEY_COMPLETE in key
+    front = view_prompt(spec, "B", "front")
+    assert KEY_ARMS not in front and KEY_COMPLETE not in front
+    assert KEY_ARMS not in view_prompt(spec, "B", KEY_VIEW, pose="arms crossed")

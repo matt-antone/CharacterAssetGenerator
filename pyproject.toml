@@ -8,8 +8,11 @@ dependencies = [
     "langgraph>=1.0",
     "pillow>=10",
     "numpy>=1.26",
-    "pyobjc-framework-Vision>=10",
-    "pyobjc-framework-Quartz>=10",
+    "httpx>=0.28",
+    # Vision is the mask's fallback and is imported at call time, so the rest of
+    # the pipeline, and the tests, install anywhere.
+    "pyobjc-framework-Vision>=10; sys_platform == 'darwin'",
+    "pyobjc-framework-Quartz>=10; sys_platform == 'darwin'",
 ]
 
 [project.scripts]

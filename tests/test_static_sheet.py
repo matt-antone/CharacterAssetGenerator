@@ -270,3 +270,35 @@ def test_a_brief_with_no_location_draws_none(tmp_path, monkeypatch):
     static_sheet.approve(tmp_path / "lou")
 
     assert "location" not in graph.invoke(state)
+
+
+def test_under_comfy_only_the_key_art_gets_the_detail_sample(tmp_path, monkeypatch):
+    """Nano Banana copies the person out of the sample, so only the approved
+    key art is drawn with it; everything after takes its detail from that."""
+    from cag.style import DEFAULT_DETAIL_LEVEL, detail_frame
+
+    sample = detail_frame(DEFAULT_DETAIL_LEVEL)
+    fake_draw.calls = []
+    monkeypatch.setattr(static_sheet, "cutout", flat_cutout)
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    graph = static_sheet.build_static_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(BIBLE)]), draw_fn=fake_draw
+    )
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    state = {"spec": spec, "work_dir": tmp_path / "lou", "detail_after_key": False}
+    with pytest.raises(static_sheet.ApprovalRequired):
+        graph.invoke(state)
+    static_sheet.approve(tmp_path / "lou")
+    drawn = graph.invoke(state)
+    # A set that faces another way gets its own reference drawn from the key art.
+    set_key_art(spec, "dance", BIBLE, tmp_path / "lou", drawn["sources"][KEY_VIEW],
+                fake_draw, "profile", detail_after_key=False)
+
+    by_view = {call["out"].stem: call for call in character_calls()}
+    assert sample in by_view[KEY_VIEW]["refs"]
+    later = [call for stem, call in by_view.items() if stem != KEY_VIEW]
+    assert "dance-key-profile" in by_view and len(later) >= 2
+    for call in later:
+        assert sample not in call["refs"], call["out"].stem
+        # The prompt no longer describes a sample that is not attached.
+        assert "detail-level sample" not in call["prompt"], call["out"].stem

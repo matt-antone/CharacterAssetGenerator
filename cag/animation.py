@@ -9,6 +9,8 @@ cross-fade, no optical flow, no frame grid used as a creative source.
 from __future__ import annotations
 
 import hashlib
+import math
+import sys
 from functools import partial
 from pathlib import Path
 from typing import Callable, TypedDict
@@ -20,18 +22,28 @@ from langgraph.graph import END, START, StateGraph
 from .assemble import tile
 from .draw import DrawError, draw
 from .geometry import ANIM_PX_PER_INCH, PX_PER_INCH
-from .mask import MaskError, home_x, pose_to_cell, set_to_cells, slice_frame_sheet
-from .motion import Frame, MotionSheet
+from .mask import (
+    MaskError,
+    canvas_to_cells,
+    home_x,
+    pose_to_cell,
+    set_to_cells,
+    slice_frame_sheet,
+)
+from .machines import Machine
+from .motion import Frame, MotionError, MotionSheet
 from .prompts import (
     DIRECTOR_SYSTEM,
     EMPTY_HANDS,
     FRAME_VIEWS,
+    POSE_EDIT,
     director_request,
     frame_prompt,
     frame_sheet_prompt,
 )
 from .poses import CARD_HEIGHT, CARD_WIDTH, write_photos
 from .props import clauses
+from .snap import snap_file
 from .style import detail_frame
 from .spec import CharacterSpec
 
@@ -58,6 +70,34 @@ class AnimationState(TypedDict, total=False):
     #: is a person to copy a pose off and take nothing else from, the other a
     #: colour-coded diagram carrying no costume at all.
     photographic: bool
+    #: Whether frames get the detail sample beside the key art. Missing means
+    #: true. See `DETAIL_FRAMES`.
+    detail_after_key: bool
+    #: The most figures one sheet-mode render takes. Missing means the
+    #: eight-figure batching; see `sheet_layout`.
+    frames_per_sheet: int
+    #: A workflow that re-poses the set's reference into each traced photograph,
+    #: one frame per render. Set, a traced set is drawn that way instead of on a
+    #: frame sheet; see `pose_edit_frames`.
+    pose_workflow: Path
+    #: Put each re-posed frame back on the reference's pixel grid and palette
+    #: (see `cag.snap`): the pose workflow keeps the character, not the art.
+    snap_to_key: bool
+    #: Every frame is its own render of the same reference on the same canvas,
+    #: so the set is registered with one transform; see `canvas_to_cells`.
+    shared_canvas: bool
+    #: The machine profile a traced set is drawn from its source clip on. Set,
+    #: a traced set takes the video path (`cag.video`) instead of the pose-edit
+    #: path, and one with no source clip fails rather than falling back.
+    machine: Machine
+    #: The video path's graphs as this machine patched them, by stage: `video`,
+    #: `restyle` and `mask` (see `cag.machines.materialise`).
+    machine_graphs: dict[str, Path]
+    #: Whether those graphs run on your own ComfyUI rather than Comfy Cloud.
+    local: bool
+    #: Whether the video path stops at the SCAIL video: each traced frame's
+    #: SCAIL frame is the set's frame, and nothing is restyled (`--no-restyle`).
+    scail_only: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
@@ -140,6 +180,54 @@ def motion_digest(motion: MotionSheet) -> str:
     return digest.hexdigest()
 
 
+def drawn_stamp(state: AnimationState) -> Path:
+    return state["work_dir"] / "source" / state["set_name"] / "drawn.sha"
+
+
+def claim_frames(state: AnimationState, key: str, adopt: bool = False) -> None:
+    """Leave `source/<set>/` holding only frames drawn under `key`, and stamp it so.
+
+    `key` is the path's name, a tab, and a digest of everything its frames are
+    a function of. A frame on disk is otherwise reused by `draw` for whatever
+    reason it is there, which is how a different motion with the same frame
+    count once kept the old art without a word. Frames stamped with another
+    key — or with none, unless `adopt` vouches for them — are moved with
+    everything drawn beside them (`.raw.png`, `.txt`, `.ruled.png`,
+    `.unusable-N.png`) into `superseded/<path>-<digest8>/`, kept to compare
+    against, never deleted. The stamp is written before anything is drawn, so a
+    set stopped halfway resumes under the same key.
+    """
+    stamp = drawn_stamp(state)
+    held = stamp.read_text().strip() if stamp.exists() else ""
+    if held == key:
+        return
+    folder = stamp.parent
+    drawn = sorted(folder.glob("[0-9][0-9].*"))
+    if drawn and (held or not adopt):
+        kind, _, digest = held.partition("\t")
+        into = folder / "superseded" / (f"{kind}-{digest[:8]}" if held else "unstamped")
+        into = next(
+            candidate
+            for candidate in (into, *(into.with_name(f"{into.name}-{n}") for n in range(1, 1000)))
+            if not candidate.exists()
+        )
+        into.mkdir(parents=True)
+        for path in drawn:
+            path.rename(into / path.name)
+        print(
+            f"[{state['set_name']}] {len(drawn)} files drawn under another stamp moved to {into}",
+            file=sys.stderr,
+            flush=True,
+        )
+    stamp.parent.mkdir(parents=True, exist_ok=True)
+    stamp.write_text(key + "\n")
+
+
+def draws_by_video(state: AnimationState) -> bool:
+    """Whether this set takes the video path: a machine is named and the set is traced."""
+    return bool(state.get("machine") and state.get("photographic") and state.get("poses"))
+
+
 def sources_are_current(state: AnimationState) -> bool:
     """Frames on disk that this motion sheet would only draw again the same way.
 
@@ -169,6 +257,9 @@ def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
     A set about to be redrawn from a different sheet asks for a new one.
     """
     record = set_note_path(state)
+    if draws_by_video(state):
+        # Nothing on the video path reads a note: the footage is the direction.
+        return {"set_note": ""}
     if sources_are_current(state):
         return {"set_note": record.read_text().strip() if record.exists() else ""}
     motion = state["motion"]
@@ -200,7 +291,7 @@ def _draw_frame(
     spec = state["spec"]
     cue = frame.instruction
     pose = state.get("poses", {}).get(frame.index)
-    detail = detail_frame(spec.detail_level)
+    detail = detail_frame(spec.detail_level) if state.get("detail_after_key", True) else None
     prompt = frame_prompt(
         spec,
         state["bible"],
@@ -273,8 +364,83 @@ def tween(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState
 FRAME_SHEET_SIZE = 8
 FIGURES_PER_ROW = 4
 
+#: The most figures one render takes when a set is drawn whole, as the Comfy
+#: backend draws it. Batches of eight are separate rolls, and Nano Banana's
+#: rolls drift apart in style — the hair fuller on one batch, the jacket pinker
+#: on the next — where figures on one canvas are drawn together. So a set goes
+#: in one render, eight to a row, and only one longer than this is split, into
+#: equal parts. The ladder above was measured on codex, not on Nano Banana.
+WHOLE_SET_SHEET = 24
+
+
+def sheet_layout(frame_count: int, most: int = FRAME_SHEET_SIZE) -> tuple[int, int]:
+    """Figures per render and per row, for a set of `frame_count` frames.
+
+    `most` at `FRAME_SHEET_SIZE` is the eight-figure batching, unchanged. Below
+    it, batches of `most` are laid out as near square as they go: four in a row
+    on a landscape canvas leaves each figure the slot too narrow for Belter's
+    hair and mic arm that eight across did. Above it the set is split into as
+    few renders as `most` allows, as evenly as they go, and laid out eight to a row.
+    """
+    if most == FRAME_SHEET_SIZE:
+        return most, FIGURES_PER_ROW
+    if most < FRAME_SHEET_SIZE:
+        return most, max(2, math.ceil(math.sqrt(most)))
+    size = -(-frame_count // -(-frame_count // most))
+    if size <= FRAME_SHEET_SIZE:
+        return size, FIGURES_PER_ROW
+    rows = -(-size // FRAME_SHEET_SIZE)
+    return size, -(-size // rows)
+
 #: Draws allowed per sheet before the set is given up on.
 SHEET_ATTEMPTS = 4
+
+
+def pose_edit_frames(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
+    """Draw a traced set one frame per render, each an edit of the set's reference.
+
+    Every frame is the approved reference re-posed into one traced photograph,
+    at full size. Nothing is drawn from a description, so nothing drifts
+    between frames the way separate renders of a sheet did; and nothing shares
+    a canvas, so no figure is shrunk to fit.
+
+    The frames are registered together, with one transform for the set (see
+    `canvas_to_cells`): every render is an edit of the same reference on the
+    same canvas, so the generator's own sizes and positions are the ones to
+    keep. They were not always: Belter's `shuffle-01` dance once came back
+    between 1178 and 1430px tall, which is why frames were each rescaled off
+    their traced pose, and why a frame that far out is now reported by name
+    instead of being quietly rescaled.
+
+    A frame on disk is kept, as `draw` keeps every render, so an interrupted set
+    resumes where it stopped — but only one drawn this way from this motion
+    (`claim_frames`). Anything else in the folder is moved aside first. A set
+    from before the stamp is adopted when its `motion.sha` still matches.
+    """
+    motion = state["motion"]
+    digest = motion_digest(motion)
+    stamp = motion_stamp(state)
+    claim_frames(
+        state,
+        "pose-edit\t" + digest,
+        adopt=stamp.exists() and stamp.read_text().strip() == digest,
+    )
+    sources = {}
+    for frame in motion.frames:
+        sources[frame.index] = draw_fn(
+            POSE_EDIT,
+            frame_path(state, "source", frame.index),
+            references=[state["key_art"], state["poses"][frame.index]],
+            workflow=state["pose_workflow"],
+        )
+        if state.get("snap_to_key"):
+            snap_file(sources[frame.index], state["key_art"])
+    stamp.write_text(digest + "\n")
+    return {
+        "sources": sources,
+        "frame_sheets": [[index] for index in sorted(sources)],
+        "shared_canvas": True,
+    }
 
 
 def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> AnimationState:
@@ -285,11 +451,32 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
     side the same size unasked. Layout is found afterwards by the backdrop
     between figures, never assumed, so a sheet that came back with the wrong
     number of figures is thrown away and drawn again.
+
+    A traced set under a pose workflow is drawn frame by frame instead; see
+    `pose_edit_frames`. Under a machine profile it is drawn from its source
+    clip; see `cag.video`. A written set has no photographs to pose from, so it
+    still comes here.
     """
+    if draws_by_video(state):
+        motion = state["motion"]
+        if motion.clip is None or not motion.frame_times:
+            # No quiet fallback to the pose-edit path: a machine was asked for,
+            # and a set drawn some other way would pass for its output.
+            raise MotionError(
+                motion.clip_problem
+                or f"{motion.name} carries no source clip; --machine draws traced sets from "
+                f"video. Run `cag clips {motion.name}`, or build without --machine"
+            )
+        # Imported here: the video path builds on this module's paths and stamps.
+        from .video import video_frames
+
+        return video_frames(state, draw_fn)
+    if state.get("pose_workflow") and state.get("photographic") and state.get("poses"):
+        return pose_edit_frames(state, draw_fn)
     spec = state["spec"]
     motion = state["motion"]
     poses = state.get("poses", {})
-    detail = detail_frame(spec.detail_level)
+    detail = detail_frame(spec.detail_level) if state.get("detail_after_key", True) else None
     sources = {}
     frame_sheets = []
     digest = motion_digest(motion)
@@ -302,8 +489,11 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
     #: cards and flattening the movement. The set before this one, when there was
     #: one, hands over its last frame to start the chain off.
     carry: Path | None = state.get("carry")
-    for start in range(0, len(motion.frames), FRAME_SHEET_SIZE):
-        chunk = motion.frames[start : start + FRAME_SHEET_SIZE]
+    size, per_row = sheet_layout(
+        len(motion.frames), state.get("frames_per_sheet") or FRAME_SHEET_SIZE
+    )
+    for start in range(0, len(motion.frames), size):
+        chunk = motion.frames[start : start + size]
         frame_sheets.append([frame.index for frame in chunk])
         # Every frame of this chunk is already cut out and on disk. Redrawing the sheet
         # to slice it again would spend a render to arrive back at these same files, and
@@ -321,7 +511,7 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
             pose_grid = tile(
                 [poses[frame.index] for frame in chunk],
                 state["work_dir"] / "poses" / state["set_name"] / f"pose-grid-{start:02d}.png",
-                columns=FIGURES_PER_ROW,
+                columns=per_row,
                 cell=(CARD_WIDTH, CARD_HEIGHT),
             )
         prompt = frame_sheet_prompt(
@@ -333,7 +523,7 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
             pose_reference=pose_grid is not None,
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
-            per_row=FIGURES_PER_ROW,
+            per_row=per_row,
             props=prop_clause(state),
             photographic=state.get("photographic", False),
             carry_reference=carry is not None,
@@ -393,6 +583,24 @@ def mask_frames(state: AnimationState, single_scale: bool = False) -> AnimationS
     fallback = state["scale"] * ANIM_PX_PER_INCH / PX_PER_INCH
     poses = {frame.index: frame.pts for frame in motion.frames}
     airborne = frozenset(frame.index for frame in motion.frames if frame.airborne)
+    if state.get("shared_canvas"):
+        cells, outliers = canvas_to_cells(
+            state["sources"],
+            partial(frame_path, state, "cells"),
+            poses,
+            motion.floor_y,
+            motion.body_h,
+            state["spec"].height_inches,
+            airborne,
+        )
+        if outliers:
+            print(
+                f"[{state['set_name']}] frames {outliers} are more than 10% off the set's "
+                "height: the generator may have drawn them at another zoom",
+                file=sys.stderr,
+                flush=True,
+            )
+        return {"cells": cells}
     if single_scale:
         return {
             "cells": set_to_cells(
