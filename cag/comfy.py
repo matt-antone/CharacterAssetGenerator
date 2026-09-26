@@ -543,11 +543,13 @@ def render(
     rules: bool = True,
     local: bool = False,
     seed: int | None = None,
+    extra: Mapping[str, Any] | None = None,
 ) -> None:
     """Draw `prompt` with `workflow` and write the result to `out_path` as a PNG.
 
     `local` runs it on your own ComfyUI server rather than Comfy Cloud. `seed`
-    fills `$seed`; left out, every render is a fresh random roll.
+    fills `$seed`; left out, every render is a fresh random roll. `extra` fills
+    the workflow's own placeholders, as in `fill`.
 
     `rules` paints out panel rules (see `erase_panel_rules`). A location turns
     it off: a stage edge or a lighting truss is a long dark line that belongs.
@@ -560,7 +562,7 @@ def render(
     boxed = any(node.get("class_type") in BATCH_NODES for node in workflow.values())
     names = [client.upload(reference, boxed) for reference in references]
     seed = random.randrange(2**32) if seed is None else seed
-    filled = fill(workflow, prompt, names, seed, canvas(prompt))
+    filled = fill(workflow, prompt, names, seed, canvas(prompt), extra)
     job = client.wait(client.submit(filled), timeout)
     data = client.download(first_image(job.get("outputs") or {}))
     with Image.open(io.BytesIO(data)) as image:

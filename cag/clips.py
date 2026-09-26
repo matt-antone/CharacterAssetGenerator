@@ -309,6 +309,18 @@ def recover_box(
     return box, -statistics.median_low(shift) / fps, score
 
 
+def bundle_roots(root: Path | str) -> dict[str, Path]:
+    """Every bundle under `root`, by name, read off its manifest alone.
+
+    Not `library()`: that checks every clip on disk against its hash, and a
+    clip that fails the check is exactly what `backfill` is here to repair.
+    """
+    found = {}
+    for manifest in sorted(Path(root).rglob(BUNDLE)):
+        found[json.loads(manifest.read_text()).get("name", manifest.parent.name)] = manifest.parent
+    return found
+
+
 @dataclass(frozen=True)
 class Backfill:
     """What `backfill` found, and whether it wrote it."""

@@ -14,7 +14,7 @@ from typing import Callable
 
 from langchain_core.language_models.chat_models import BaseChatModel
 
-from . import comfy
+from . import clips, comfy
 from .animation import WHOLE_SET_SHEET, build_animation_graph
 from .assemble import (
     MANIFEST,
@@ -31,7 +31,8 @@ from .chat_session import ChatSession, TextPending
 from .draw import BACKENDS, WORKFLOW_BACKENDS, draw
 from .edit import serve
 from .fidelity import report as fidelity_report
-from .motion import BUNDLE, MotionError, library, load_motion, read_bundle
+from .machines import STAGES, Machine, MachineError, load_machine, machine_names, materialise
+from .motion import BUNDLE, MotionError, clip_status, library, load_motion, read_bundle
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
 from .sets import plan_for, wanted
@@ -171,6 +172,8 @@ def render_set(
     carry: Path | None = None,
     backend: str = "codex",
     frames_per_sheet: int | None = None,
+    machine: Machine | None = None,
+    graphs: dict[str, Path] | None = None,
 ) -> dict:
     """Draw and mask one animation set, continuing from the set drawn before it.
 
@@ -205,7 +208,7 @@ def render_set(
             "motion": motion,
             "set_name": set_name,
             "work_dir": work_dir,
-            **backend_state(backend, frames_per_sheet),
+            **backend_state(backend, frames_per_sheet, machine, graphs),
             **({"carry": carry} if carry else {}),
         }
     )
@@ -230,6 +233,8 @@ def build(
     motion_root: Path = MOTION_ROOT,
     backend: str = "codex",
     frames_per_sheet: int | None = None,
+    machine: Machine | None = None,
+    graphs: dict[str, Path] | None = None,
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -287,6 +292,8 @@ def build(
                     carry,
                     backend,
                     frames_per_sheet,
+                    machine,
+                    graphs,
                 )
             except TextPending as pending:
                 # Not a failure: the session's AI answers it and the build goes on.
@@ -389,6 +396,22 @@ def main(argv: list[str] | None = None) -> int:
         f"Default: $CAG_COMFY_POSE_WORKFLOW, else {comfy.POSE_WORKFLOW}",
     )
     build_parser.add_argument(
+        "--machine",
+        choices=machine_names(),
+        default=os.environ.get("CAG_MACHINE"),
+        help="draw traced sets from their source clip, through SCAIL-2 and a restyle, with "
+        "this machine profile's model files and sizes (comfy/machines/<name>.json). "
+        "Default: $CAG_MACHINE; without one, traced sets take the pose-edit path",
+    )
+    for stage, flag in (("video", "scail"), ("restyle", "restyle"), ("mask", "mask")):
+        variable, default = STAGES[stage]
+        build_parser.add_argument(
+            f"--comfy-{flag}-workflow",
+            type=Path,
+            help=f"API-format ComfyUI workflow for the video path's {stage} stage, before the "
+            f"machine profile patches it. Default: ${variable}, else {default}",
+        )
+    build_parser.add_argument(
         "--frames-per-sheet",
         type=int,
         help="most frames drawn in one sheet-mode render. Default: 8 under codex, "
@@ -399,6 +422,35 @@ def main(argv: list[str] | None = None) -> int:
         "motions", help="list the traced sheets a brief can name"
     )
     motions_parser.add_argument("--motion-root", type=Path, default=MOTION_ROOT)
+
+    machines_parser = sub.add_parser(
+        "machines", help="list the machine profiles the video path can draw on"
+    )
+    machines_parser.add_argument(
+        "--check",
+        metavar="NAME",
+        help="ask that machine's ComfyUI for every node and model file its graphs load, "
+        "and list what is missing: the download checklist",
+    )
+    machines_parser.add_argument("--work", type=Path, default=Path("work"))
+
+    clips_parser = sub.add_parser(
+        "clips",
+        help="cut traced bundles' source clips back out of the videos they were traced off",
+    )
+    clips_parser.add_argument("names", nargs="*", help="bundles, by the name a brief uses")
+    clips_parser.add_argument(
+        "--cast", action="store_true", help=f"every bundle a brief under {SPECS_ROOT} names"
+    )
+    clips_parser.add_argument(
+        "--check", action="store_true", help="say what each bundle holds of its clip; fetch nothing"
+    )
+    clips_parser.add_argument(
+        "--dry-run", action="store_true", help="find each clip and its box, but write nothing"
+    )
+    clips_parser.add_argument("--motion-root", type=Path, default=MOTION_ROOT)
+    clips_parser.add_argument("--specs", type=Path, default=SPECS_ROOT)
+    clips_parser.add_argument("--cache", type=Path, default=clips.SOURCES)
 
     approve_parser = sub.add_parser(
         "approve", help="sign off on a character's key art so the rest can be drawn"
@@ -443,7 +495,7 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         print(
             f"{'name':16s} {'title':18s} {'frames':>6} {'fps':>4} {'view':>7} "
-            f"{'travel':>7}  {'poses':5s}  seam"
+            f"{'travel':>7}  {'poses':5s}  {'clip':7s}  seam"
         )
         for name, bundle in sorted(sheets.items()):
             # The header is the manifest's; travel and poses are only in the landmarks.
@@ -451,9 +503,14 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"{name:16s} {bundle.title[:18]:18s} {bundle.frame_count:6d} "
                 f"{bundle.fps:4d} {bundle.view:>7s} {motion.travel:7.3f}  "
-                f"{'yes' if motion.has_poses else 'no':5s}  {bundle.seam or '-'}"
+                f"{'yes' if motion.has_poses else 'no':5s}  {clip_status(bundle):7s}  "
+                f"{bundle.seam or '-'}"
             )
         return 0
+    if args.command == "machines":
+        return check_machine(args.check, args.work) if args.check else list_machines()
+    if args.command == "clips":
+        return clip_bundles(args)
     if args.command == "edit":
         serve(args.out, args.port)
         return 0
@@ -472,6 +529,18 @@ def main(argv: list[str] | None = None) -> int:
     if args.comfy_pose_workflow:
         # Every set reads it through `comfy.pose_workflow_path`, as the env var does.
         os.environ["CAG_COMFY_POSE_WORKFLOW"] = str(args.comfy_pose_workflow)
+    machine, graphs = None, None
+    if args.machine:
+        machine, graphs = machine_with(
+            args.draw_backend,
+            args.machine,
+            args.work,
+            {
+                "video": args.comfy_scail_workflow,
+                "restyle": args.comfy_restyle_workflow,
+                "mask": args.comfy_mask_workflow,
+            },
+        )
     build(
         args.spec,
         args.motion,
@@ -483,6 +552,8 @@ def main(argv: list[str] | None = None) -> int:
         args.motion_root,
         backend=args.draw_backend,
         frames_per_sheet=args.frames_per_sheet,
+        machine=machine,
+        graphs=graphs,
     )
     return 0
 
@@ -498,13 +569,21 @@ def text_model(work_dir: Path) -> BaseChatModel:
     return ChatSession(folder=work_dir / "text")
 
 
-def backend_state(backend: str, frames_per_sheet: int | None = None) -> dict:
+def backend_state(
+    backend: str,
+    frames_per_sheet: int | None = None,
+    machine: Machine | None = None,
+    graphs: dict[str, Path] | None = None,
+) -> dict:
     """How the graphs draw for this backend, where the backends differ.
 
     Under Comfy, Nano Banana copies the person out of the detail sample (see
     `DETAIL_FRAMES`), and its separate renders of one set drift apart in style,
     so a set is drawn whole (see `WHOLE_SET_SHEET`). Codex keeps both as they
     were measured. `frames_per_sheet`, when given, overrides either default.
+
+    A `machine`, with the `graphs` `machine_with` wrote for it, sends every
+    traced set down the video path instead of the pose-edit path.
     """
     state = {} if backend not in WORKFLOW_BACKENDS else {
         "detail_after_key": False,
@@ -516,7 +595,135 @@ def backend_state(backend: str, frames_per_sheet: int | None = None) -> dict:
     }
     if frames_per_sheet:
         state["frames_per_sheet"] = frames_per_sheet
+    if machine:
+        state.update(machine=machine, machine_graphs=dict(graphs or {}), local=backend == "local")
     return state
+
+
+def machine_with(
+    backend: str,
+    name: str,
+    work_root: Path,
+    given: dict[str, Path | None] | None = None,
+    client: comfy.Client | None = None,
+) -> tuple[Machine, dict[str, Path]]:
+    """The machine profile a build draws the video path on, its graphs written and checked.
+
+    Checked here, once, before anything is drawn: a profile for the other
+    backend, a missing ffmpeg, or — on your own ComfyUI — a node or model file
+    the server lacks each stops the build by name, every missing file at once,
+    instead of failing each set in turn an hour in.
+    """
+    if backend not in WORKFLOW_BACKENDS:
+        raise SystemExit(
+            f"[build] --machine draws through ComfyUI graphs; --draw-backend {backend} has none"
+        )
+    try:
+        machine = load_machine(name)
+    except MachineError as error:
+        raise SystemExit(f"[build] {error}") from None
+    if machine.backend != backend:
+        raise SystemExit(
+            f"[build] machine {name!r} runs on --draw-backend {machine.backend}, not {backend}"
+        )
+    if not shutil.which("ffmpeg"):
+        raise SystemExit("[build] the video path cuts drive videos with ffmpeg, which is not installed")
+    try:
+        graphs = {
+            stage: materialise(machine, stage, work_root / "comfy", (given or {}).get(stage))
+            for stage in STAGES
+        }
+        if backend == "local":
+            missing = comfy.preflight(client or comfy.Client(local=True), graphs.values())
+            if missing:
+                raise SystemExit(
+                    f"[local] machine {name!r} cannot draw; the server lacks:\n  "
+                    + "\n  ".join(missing)
+                    + f"\n  (uv run cag machines --check {name} lists this again)"
+                )
+    except comfy.ComfyError as error:
+        raise SystemExit(f"[{backend}] {error}") from None
+    log(
+        f"[{backend}] traced sets with a clip: SCAIL-2 + restyle on {name}"
+        + ("" if machine.verified else " (UNVERIFIED profile)")
+    )
+    return machine, graphs
+
+
+def list_machines() -> int:
+    names = machine_names()
+    if not names:
+        log("no machine profiles")
+        return 1
+    print(f"{'name':10s} {'backend':7s} {'verified':8s} {'video':>9s} {'fps':>4s} {'cap':>4s} "
+          f"{'steps':>5s} {'restyle':>8s}")
+    for name in names:
+        m = load_machine(name)
+        print(
+            f"{name:10s} {m.backend:7s} {'yes' if m.verified else 'no':8s} "
+            f"{f'{m.width}x{m.height}':>9s} {m.rate:4g} {m.max_length:4d} {m.steps:5d} "
+            f"{f'{m.restyle_resolution}/{m.restyle_steps}':>8s}"
+        )
+    return 0
+
+
+def check_machine(name: str, work_root: Path, client: comfy.Client | None = None) -> int:
+    """List every node and model file `name`'s graphs load that its ComfyUI lacks."""
+    try:
+        machine = load_machine(name)
+        graphs = [materialise(machine, stage, work_root / "comfy") for stage in STAGES]
+        missing = comfy.preflight(client or comfy.Client(local=machine.backend == "local"), graphs)
+    except comfy.ComfyError as error:
+        log(f"[{name}] {error}")
+        return 1
+    if not shutil.which("ffmpeg"):
+        missing.append("ffmpeg is not installed")
+    for line in missing:
+        print(line)
+    log(f"[{name}] " + (f"{len(missing)} missing" if missing else "nothing missing"))
+    return 1 if missing else 0
+
+
+def clip_bundles(args: argparse.Namespace) -> int:
+    """`cag clips`: backfill, or with --check report, each asked-for bundle's source clip."""
+    roots = clips.bundle_roots(args.motion_root)
+    names = list(args.names)
+    if args.cast:
+        names += cast_bundles(args.specs)
+    names = list(dict.fromkeys(names))
+    if not names:
+        log("name bundles, or pass --cast for every bundle a brief names")
+        return 1
+    failed = 0
+    for name in names:
+        if name not in roots:
+            print(f"{name} REFUSED: no bundle under {args.motion_root} calls itself that")
+            failed += 1
+            continue
+        if args.check:
+            try:
+                status = clip_status(read_bundle(roots[name] / BUNDLE))
+            except MotionError as error:
+                status = f"bad ({error})"
+            print(f"{name} clip={status}")
+            failed += status != "ok"
+            continue
+        try:
+            print(clips.backfill(roots[name], args.cache, dry_run=args.dry_run))
+        except clips.ClipError as error:
+            print(f"{name} REFUSED: {error}")
+            failed += 1
+    return 1 if failed else 0
+
+
+def cast_bundles(specs_root: Path = SPECS_ROOT) -> list[str]:
+    """Every bundle a brief under `specs_root` names by name, in brief order."""
+    names = []
+    for path in sorted(specs_root.rglob("*.json")):
+        if path.name.endswith(".schema.json"):
+            continue
+        names += [n for n in load_spec(path).motions.values() if n and n != AUTO]
+    return list(dict.fromkeys(names))
 
 
 def draw_with(backend: str, workflow: Path | None = None) -> Callable[..., Path] | None:

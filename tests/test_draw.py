@@ -231,3 +231,22 @@ def test_without_a_seed_every_try_is_a_random_roll(monkeypatch, tmp_path):
     assert seeds == [None, None]
     assert (tmp_path / "art.unusable-0.png").read_bytes() == b"from an earlier run"
     assert (tmp_path / "art.unusable-2.png").exists()
+
+
+def test_a_workflows_own_placeholders_reach_the_render(monkeypatch, tmp_path):
+    """A machine profile's `$resolution` has no other way into a restyle."""
+    from cag import draw as drawing
+
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text('{"1": {"class_type": "Edit", "inputs": {"prompt": "$prompt"}}}')
+    sent = []
+
+    def run(prompt, out_path, references, loaded, timeout, scene, local, extra=None, seed=None):
+        sent.append(extra)
+        Image.new("RGB", (64, 64), (255, 0, 255)).save(out_path)
+        return ""
+
+    monkeypatch.setattr(drawing, "_run_comfy", run)
+    draw("a singer", tmp_path / "art.png", backend="comfy", workflow=workflow,
+         extra={"$resolution": 512})
+    assert sent == [{"$resolution": 512}]

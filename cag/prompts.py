@@ -541,3 +541,51 @@ POSE_EDIT = (
     "clothes, hair, face or shoes, not the scenery, not the camera angle. Draw the whole figure, "
     "head to feet, with nothing cropped."
 )
+
+
+# The video path's prompts (see `cag.video`). Each is the string a measured
+# render sent, give or take the bible standing in for a hand-written costume
+# sentence. One roll per character is all that is behind them, so a change is
+# rolled twice before it is kept.
+
+#: The SCAIL-2 job's prompt: one video of the set reference following the drive
+#: video. `{action}` comes from `SCAIL_ACTIONS`, `{identity}` is the bible.
+SCAIL_PROMPT = (
+    "A 32-bit arcade pixel-art sprite of the character from the reference image {action}: "
+    "{identity} The same face, hair, costume and pixel-art style with a black outline in "
+    "every frame. Full body. Flat solid magenta background. Static camera."
+)
+
+#: What the character is doing in the footage, per set. Only dances have been
+#: drawn this way; any other set says only that it moves.
+SCAIL_ACTIONS = {"dance": "dancing in place"}
+
+
+def scail_prompt(set_name: str, bible: str) -> str:
+    """The SCAIL-2 prompt for one set, quoting the bible as its identity."""
+    identity = bible.strip()
+    if identity and identity[-1] not in ".!?":
+        identity += "."
+    return SCAIL_PROMPT.format(
+        action=SCAIL_ACTIONS.get(set_name, "moving in place"), identity=identity
+    )
+
+
+#: The restyle's style clause, short on purpose: it rides beside `<image2>`,
+#: which shows the style, rather than standing in for it the way `STYLE` does.
+RESTYLE_STYLE = (
+    "mid-1990s 32-bit arcade pixel-art sprite, visible pixel grid, banded shading, solid black "
+    "outline, flat pure magenta background"
+)
+
+#: One restyle: a SCAIL frame redrawn in the set reference's art. The SCAIL frame
+#: is `<image1>` because the edit's latent takes its size from the first image.
+RESTYLE = (
+    "Redraw <image1> in exactly the art style of <image2>: " + RESTYLE_STYLE + ". Keep "
+    "everything in <image1>: the pose and position of every limb, both hands, the face and "
+    "expression, the figure's size and place in the frame. Match <image2>'s colours and every "
+    "costume detail."
+)
+
+#: What the mask pass tracks: SAM3 reads it as a text query, not a prompt.
+MASK_PASS_PROMPT = "human"

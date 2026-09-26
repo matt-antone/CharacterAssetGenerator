@@ -30,7 +30,8 @@ from .mask import (
     set_to_cells,
     slice_frame_sheet,
 )
-from .motion import Frame, MotionSheet
+from .machines import Machine
+from .motion import Frame, MotionError, MotionSheet
 from .prompts import (
     DIRECTOR_SYSTEM,
     EMPTY_HANDS,
@@ -85,6 +86,15 @@ class AnimationState(TypedDict, total=False):
     #: Every frame is its own render of the same reference on the same canvas,
     #: so the set is registered with one transform; see `canvas_to_cells`.
     shared_canvas: bool
+    #: The machine profile a traced set is drawn from its source clip on. Set,
+    #: a traced set takes the video path (`cag.video`) instead of the pose-edit
+    #: path, and one with no source clip fails rather than falling back.
+    machine: Machine
+    #: The video path's graphs as this machine patched them, by stage: `video`,
+    #: `restyle` and `mask` (see `cag.machines.materialise`).
+    machine_graphs: dict[str, Path]
+    #: Whether those graphs run on your own ComfyUI rather than Comfy Cloud.
+    local: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
@@ -167,6 +177,54 @@ def motion_digest(motion: MotionSheet) -> str:
     return digest.hexdigest()
 
 
+def drawn_stamp(state: AnimationState) -> Path:
+    return state["work_dir"] / "source" / state["set_name"] / "drawn.sha"
+
+
+def claim_frames(state: AnimationState, key: str, adopt: bool = False) -> None:
+    """Leave `source/<set>/` holding only frames drawn under `key`, and stamp it so.
+
+    `key` is the path's name, a tab, and a digest of everything its frames are
+    a function of. A frame on disk is otherwise reused by `draw` for whatever
+    reason it is there, which is how a different motion with the same frame
+    count once kept the old art without a word. Frames stamped with another
+    key — or with none, unless `adopt` vouches for them — are moved with
+    everything drawn beside them (`.raw.png`, `.txt`, `.ruled.png`,
+    `.unusable-N.png`) into `superseded/<path>-<digest8>/`, kept to compare
+    against, never deleted. The stamp is written before anything is drawn, so a
+    set stopped halfway resumes under the same key.
+    """
+    stamp = drawn_stamp(state)
+    held = stamp.read_text().strip() if stamp.exists() else ""
+    if held == key:
+        return
+    folder = stamp.parent
+    drawn = sorted(folder.glob("[0-9][0-9].*"))
+    if drawn and (held or not adopt):
+        kind, _, digest = held.partition("\t")
+        into = folder / "superseded" / (f"{kind}-{digest[:8]}" if held else "unstamped")
+        into = next(
+            candidate
+            for candidate in (into, *(into.with_name(f"{into.name}-{n}") for n in range(1, 1000)))
+            if not candidate.exists()
+        )
+        into.mkdir(parents=True)
+        for path in drawn:
+            path.rename(into / path.name)
+        print(
+            f"[{state['set_name']}] {len(drawn)} files drawn under another stamp moved to {into}",
+            file=sys.stderr,
+            flush=True,
+        )
+    stamp.parent.mkdir(parents=True, exist_ok=True)
+    stamp.write_text(key + "\n")
+
+
+def draws_by_video(state: AnimationState) -> bool:
+    """Whether this set takes the video path: a machine is named and the set is traced."""
+    return bool(state.get("machine") and state.get("photographic") and state.get("poses"))
+
+
 def sources_are_current(state: AnimationState) -> bool:
     """Frames on disk that this motion sheet would only draw again the same way.
 
@@ -196,6 +254,9 @@ def direct(state: AnimationState, model: BaseChatModel) -> AnimationState:
     A set about to be redrawn from a different sheet asks for a new one.
     """
     record = set_note_path(state)
+    if draws_by_video(state):
+        # Nothing on the video path reads a note: the footage is the direction.
+        return {"set_note": ""}
     if sources_are_current(state):
         return {"set_note": record.read_text().strip() if record.exists() else ""}
     motion = state["motion"]
@@ -382,9 +443,23 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
     number of figures is thrown away and drawn again.
 
     A traced set under a pose workflow is drawn frame by frame instead; see
-    `pose_edit_frames`. A written set has no photographs to pose from, so it
+    `pose_edit_frames`. Under a machine profile it is drawn from its source
+    clip; see `cag.video`. A written set has no photographs to pose from, so it
     still comes here.
     """
+    if draws_by_video(state):
+        motion = state["motion"]
+        if motion.clip is None or not motion.frame_times:
+            # No quiet fallback to the pose-edit path: a machine was asked for,
+            # and a set drawn some other way would pass for its output.
+            raise MotionError(
+                f"{motion.name} carries no source clip; --machine draws traced sets from "
+                f"video. Run `cag clips {motion.name}`, or build without --machine"
+            )
+        # Imported here: the video path builds on this module's paths and stamps.
+        from .video import video_frames
+
+        return video_frames(state, draw_fn)
     if state.get("pose_workflow") and state.get("photographic") and state.get("poses"):
         return pose_edit_frames(state, draw_fn)
     spec = state["spec"]

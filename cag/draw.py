@@ -16,7 +16,7 @@ from __future__ import annotations
 import subprocess
 from functools import partial
 from pathlib import Path
-from typing import Literal, Sequence
+from typing import Any, Literal, Mapping, Sequence
 
 import httpx
 import numpy
@@ -170,13 +170,14 @@ def _run_comfy(
     timeout: int,
     scene: bool,
     local: bool = False,
+    extra: Mapping[str, Any] | None = None,
     seed: int | None = None,
 ) -> str:
     """One ComfyUI job. Returns why it failed, or "" if it saved an image."""
     try:
         comfy.render(
             prompt, out_path, references, workflow, timeout, rules=not scene, local=local,
-            seed=seed,
+            seed=seed, extra=extra,
         )
     except (comfy.ComfyError, httpx.HTTPError) as error:
         return str(error)
@@ -194,6 +195,7 @@ def draw(
     scene: bool = False,
     workflow: Path | str | None = None,
     seed: int | None = None,
+    extra: Mapping[str, Any] | None = None,
 ) -> Path:
     """Generate one image for `prompt` and save it at `out_path`.
 
@@ -218,6 +220,9 @@ def draw(
     drawn with `seed + N` — so a redraw is a new roll even when the seed is
     fixed, even across runs, and `unusable-N` is always the picture `seed + N`
     made. Without a seed each try is a random roll.
+
+    `extra` fills a workflow's own placeholders (`comfy.fill`), such as a
+    machine profile's `$resolution`; codex has none and ignores it.
     """
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -237,7 +242,8 @@ def draw(
             raise DrawError(f"could not draw {out_path.name}: {error}") from error
         sent = prompt
         run = partial(
-            _run_comfy, prompt, out_path, references, loaded, timeout, scene, backend == "local"
+            _run_comfy, prompt, out_path, references, loaded, timeout, scene, backend == "local",
+            **({"extra": extra} if extra else {}),
         )
     else:
         instructions = SCENE_INSTRUCTIONS if scene else INSTRUCTIONS
