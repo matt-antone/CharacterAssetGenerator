@@ -556,11 +556,17 @@ def test_the_head_box_is_the_research_box_on_a_576_drive():
     assert abs(x0 - (248 - 6)) <= 2 and abs(x1 - (328 + 6)) <= 2
 
 
+def near(a, b, slack=2):
+    return a is not None and b is not None and all(abs(p - q) <= slack for p, q in zip(a, b))
+
+
 def test_a_raised_hand_and_a_speck_do_not_move_the_head_box():
     plain = head_box(dancer())
-    assert head_box(dancer(arm=True)) == plain, "the hand is above and beside the head"
+    # The raised hand makes the figure taller, so the opening is a little wider
+    # and rounds the head a pixel narrower; it moves nothing further.
+    assert near(head_box(dancer(arm=True)), plain), "the hand is above and beside the head"
     assert head_box(dancer(speck=True)) == plain, "only the largest region is the figure"
-    assert head_box(dancer(arm=True, speck=True)) == plain
+    assert near(head_box(dancer(arm=True, speck=True)), plain)
 
 
 def test_a_hand_at_head_height_beside_it_is_not_the_head():
@@ -569,6 +575,73 @@ def test_a_hand_at_head_height_beside_it_is_not_the_head():
     mask[150:200, 380:400] = True
     x0, _, x1, _ = head_box(mask)
     assert x1 < 360, "the band's region nearest the torso's centre is the head"
+
+
+def raised(mask, pose):
+    """The dancer with both arms over the head: hands clasped, one arm straight up, or forearms pressed together."""
+    image = Image.fromarray(mask)
+    draw = ImageDraw.Draw(image)
+    if pose == "clasped":
+        draw.line([(236, 215), (278, 30)], fill=1, width=22)
+        draw.line([(340, 215), (298, 30)], fill=1, width=22)
+        draw.ellipse([264, 8, 312, 52], fill=1)
+    elif pose == "straight up":
+        draw.line([(330, 215), (296, 10)], fill=1, width=22)
+    else:
+        draw.line([(236, 215), (262, 60)], fill=1, width=22)
+        draw.line([(340, 215), (314, 60)], fill=1, width=22)
+        draw.rectangle([264, 10, 312, 90], fill=1)
+    return numpy.array(image)
+
+
+@pytest.mark.parametrize("pose", ["clasped", "straight up", "pressed"])
+def test_hands_over_the_crown_are_not_the_head(pose):
+    # The fingertips used to be the head's top: the box sat on the hands and
+    # the face below went to SCAIL-2 sharp.
+    x0, y0, x1, y1 = head_box(raised(dancer(), pose))
+    assert 90 <= y0 <= 100 and y1 >= 190, "the box reaches from the crown to the chin, not from the hands"
+    # Forearms pressed to the sides of the head may widen it a little.
+    assert 248 - 20 <= x0 <= 248 and 328 <= x1 <= 328 + 20, "and across the head"
+
+
+def leaning(dx):
+    """The dancer with the head `dx` to the right of the torso, on a slanted neck."""
+    image = Image.new("1", (576, 864), 0)
+    draw = ImageDraw.Draw(image)
+    draw.ellipse([248 + dx, 100, 328 + dx, 200], fill=1)
+    draw.line([(288, 230), (288 + dx, 170)], fill=1, width=40)
+    draw.rectangle([228, 195, 348, 500], fill=1)
+    draw.rectangle([238, 500, 338, 800], fill=1)
+    return numpy.array(image)
+
+
+@pytest.mark.parametrize("dx", [0, 50, 90, 120])
+def test_a_head_leaning_off_the_torso_is_still_found(dx):
+    # Past about 70 px the head's top used to be looked for over the torso
+    # alone, and the box landed on the shoulder.
+    x0, y0, x1, y1 = head_box(leaning(dx))
+    assert y0 <= 100 and y1 >= 190, "the box reaches from the crown to the chin"
+    assert x0 <= 248 + dx and x1 >= 328 + dx, "and across the head"
+    assert x0 >= 248 + dx - 12 and x1 <= 328 + dx + 12, "and no further"
+
+
+def lying():
+    """A figure lying on the floor, head at the left, one arm propped up."""
+    image = Image.new("1", (576, 864), 0)
+    draw = ImageDraw.Draw(image)
+    draw.ellipse([40, 690, 124, 750], fill=1)
+    draw.rectangle([120, 695, 520, 750], fill=1)
+    draw.line([(250, 720), (252, 600)], fill=1, width=25)
+    return numpy.array(image)
+
+
+def test_a_lying_figure_has_no_head_to_find_and_is_named():
+    # It used to get a box on the propped arm, and `skipped` said it was blurred.
+    assert head_box(lying()) is None
+    frames = [noisy(576, 864, k) for k in range(2)]
+    out, report = blur_faces(frames, [dancer(), lying()])
+    assert report["skipped"] == [1] and report["boxes"][1] is None
+    assert out[1].tobytes() == frames[1].tobytes()
 
 
 def test_the_head_box_scales_to_a_256_wide_drive():
@@ -628,8 +701,8 @@ def test_blur_faces_leaves_a_frame_with_no_figure_alone_and_says_so():
 def test_the_drive_version_is_part_of_the_digest(monkeypatch):
     clip = Clip(Path("clip.mp4"), start=10.0, fps=24, frame_count=48, size=(96, 64), box=None, sha256="ab" * 32)
     now = drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48)
-    assert drive.DRIVE_VERSION == "drive/3", "face blur: every drive before it is stale"
-    monkeypatch.setattr(drive, "DRIVE_VERSION", "drive/2")
+    assert drive.DRIVE_VERSION == "drive/4", "the face blur's head search: every drive before it is stale"
+    monkeypatch.setattr(drive, "DRIVE_VERSION", "drive/3")
     assert drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48) != now
 
 

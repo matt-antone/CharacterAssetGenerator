@@ -63,8 +63,9 @@ the hardware and the bill.
   (GTX 1050 Ti: 256x384, 9 frames, 2 steps) is wiring only, never art: nothing
   drawn on it is judged. `uv run cag machines --check <name>` lists every node
   and model file that machine's ComfyUI lacks, and a `local` build will not
-  start while anything the video or restyle graph loads is missing. The mask
-  pass's SAM3 checkpoint only warns: most footage never runs it.
+  start while anything the video graph loads is missing, nor, unless it is a
+  `--no-restyle` build, anything the restyle graph loads. The mask pass's SAM3
+  checkpoint only warns: most footage never runs it.
 - **Three caches, each keyed on what it is made from.** The drive under
   `work/drive/` is shared by every character dancing that bundle, and locked
   while it is cut, so parallel builds cut it once; a mask pass is keyed on its
@@ -72,8 +73,9 @@ the hardware and the bill.
   `rejected-mask-pass-N/` and run again next build. The SCAIL
   video under `work/<slug>/video/<set>/` records its job id in `pending.json`
   the moment it is submitted, so a stopped build resumes the job rather than
-  paying for another. The restyles are `source/<set>/NN.png`, stamped in
-  `drawn.sha`: a changed restyle graph or prompt moves them into
+  paying for another. The set's frames are `source/<set>/NN.png` — restyles,
+  or under `--no-restyle` the SCAIL frames cut back to size — stamped in
+  `drawn.sha` (`video` or `scail`): a changed restyle graph or prompt moves them into
   `source/<set>/superseded/` and keeps the SCAIL video, and a changed set
   reference draws a new SCAIL video. A failed restyle fails the set by frame
   number, and a rebuild draws only those.
@@ -89,19 +91,28 @@ the hardware and the bill.
   the pose (one scratch roll on `local16`, 2026-09-26). The trade-off: the
   character's expression now comes from the key art, not the performer, so a
   set does not mouth or grimace along with the footage. The head is found from
-  the drive mask — the figure's largest region, the top 13% of its height, the
-  part of that nearest the torso's centre column, so a raised hand is not taken
-  for the head — and the blur's sizes, measured at 576x864, scale to the
-  drive's own. A frame with no figure to find a head in is left unblurred and
-  named in `drive.json`. The mask pass reads the drive before it is blurred.
-  `drive/3` made every earlier drive, and so every earlier SCAIL video, stale.
+  the drive mask: the figure's largest region is opened (eroded, then dilated)
+  by an octagon 7% of its height across, which drops the arms and hands and
+  keeps the head and torso; the head's top is the opened figure's highest
+  pixel, and its width the part of the top 13% nearest that pixel. So hands
+  raised over the crown, clasped there or off to one side, and a head leaning
+  off the torso, all still find the head. The blur's sizes, measured at
+  576x864, scale to the drive's own. A frame with no figure to find a head in,
+  or whose opened figure is wider than it is tall (lying down), is left
+  unblurred and named in `drive.json` and the build log. What still fools it: a
+  figure bent over so its back is higher than its head, or upside down. The
+  mask pass reads the drive before it is blurred. `drive/4` made every earlier
+  drive, and so every earlier SCAIL video, stale.
 - **`--no-restyle` stops at the SCAIL video** (with `--machine` only; without
   it the build refuses). Each traced frame's SCAIL frame, cut back to the set
   reference's size, is written as `source/<set>/NN.png` and nothing is
   restyled. Why: a restyle takes about 7.5 minutes a frame on the RX 9070,
-  no prompt wording moved the face it draws, SCAIL frames alone read as a
-  smooth illustration, and without the restyle nothing the video path draws
-  goes through Qwen-Image-2.1, so its research-only licence does not apply.
+  no prompt wording moved the face it draws, and SCAIL frames alone read as a
+  smooth illustration. It does **not** clear the Qwen-Image-2.1 licence above:
+  a `local` build draws the key art and every set reference with
+  Qwen-Image-2.1 (`comfy/qwen-image-2.1.json`, or the fp8 copy on `local16`),
+  and SCAIL-2 animates that set reference, so every frame is still derived
+  from a research-licensed render.
   The two modes are stamped apart in `drawn.sha` (`scail` and `video`), so
   switching moves the other mode's frames into `source/<set>/superseded/`, and
   both reuse the one SCAIL video. A local `--no-restyle` build starts with the
@@ -383,7 +394,7 @@ A new term is named here before it is used.
 | **SCAIL video** | every image one SCAIL-2 job returns: `work/<char>/video/<set>/<digest12>/NNN.png` |
 | **SCAIL frame** | one image of a SCAIL video |
 | **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
-| **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png` |
+| **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.

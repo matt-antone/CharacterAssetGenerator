@@ -55,7 +55,10 @@ SCAIL_MAX_LENGTH = 81
 #: Bumped whenever the way a drive is cut changes, so every cached drive goes
 #: stale at once rather than one being quietly reused under the new rules.
 #: drive/3: the performer's face is blurred in every drive frame.
-DRIVE_VERSION = "drive/3"
+#: drive/4: the head is found in the figure opened past its limbs, so hands over
+#: the crown or a leaning head no longer misplace the blur, and a lying figure
+#: is left unblurred and named.
+DRIVE_VERSION = "drive/4"
 
 #: The record a finished drive leaves; written last, so its presence means done.
 DRIVE_RECORD = "drive.json"
@@ -119,13 +122,21 @@ HEAD_RISE = 4
 FACE_BLUR = 14
 FACE_FEATHER = 4
 
-#: The rows, as shares of the figure's height from its top, whose median column
-#: is the torso's centre. The head is looked for over it, so a raised hand off
-#: to one side is never taken for the head.
-TORSO_BAND = (0.30, 0.55)
-#: How far either side of the torso's centre, as a share of the figure's
-#: height, the head's top is looked for.
-HEAD_REACH = 0.06
+#: Arms, hands and fingers are thinner than a head. The head is looked for in
+#: the figure opened (eroded, then dilated) by an octagon this share of the
+#: figure's height across: that drops a limb wherever it is, off to one side,
+#: raised straight over the crown or clasped there, and keeps the head. With
+#: the arms up the figure is taller, so the octagon is wider just when two
+#: forearms pressed together need it to be.
+LIMB_WIDTH = 0.07
+#: The opened figure's topmost pixel is the head's top, which the octagon may
+#: have rounded off: the top is walked up the mask from there, but no further
+#: than this share of the octagon's radius, so a hand resting on the crown
+#: does not carry it off.
+HEAD_REGROW = 0.5
+#: An opened figure wider than this many times its height is lying down, and
+#: its top is not its head: the frame is left unblurred and named.
+UPRIGHT = 1.0
 #: The widest the head is taken to be before the margins, as a share of the
 #: figure's height: a hand touching the head does not widen the blur past it.
 HEAD_WIDTH = 0.18
@@ -395,20 +406,42 @@ def _largest_component(mask: numpy.ndarray) -> numpy.ndarray:
     return out
 
 
+def _open_mask(mask: numpy.ndarray, steps: int) -> numpy.ndarray:
+    """`mask` opened by an octagon `steps` pixels in radius: eroded, then dilated.
+
+    The octagon is `steps` alternating 3x3 squares and crosses. Past the frame
+    the mask carries on as its edge row or column does, so a figure the frame
+    cuts is not eaten from the cut.
+    """
+
+    def step(image: numpy.ndarray, square: bool, grow: bool) -> numpy.ndarray:
+        p = numpy.pad(image, 1, mode="edge")
+        parts = [p[1:-1, 1:-1], p[:-2, 1:-1], p[2:, 1:-1], p[1:-1, :-2], p[1:-1, 2:]]
+        if square:
+            parts += [p[:-2, :-2], p[:-2, 2:], p[2:, :-2], p[2:, 2:]]
+        return numpy.logical_or.reduce(parts) if grow else numpy.logical_and.reduce(parts)
+
+    out = numpy.asarray(mask, bool)
+    for grow in (False, True):
+        for k in range(steps):
+            out = step(out, k % 2 == 0, grow)
+    return out
+
+
 def head_box(mask: numpy.ndarray) -> tuple[int, int, int, int] | None:
     """Where the performer's head is in one drive mask frame, as (x0, y0, x1, y1), inclusive.
 
-    The figure is the mask's largest region, so a stray speck is never it. The
-    torso's centre is the median column of the figure between `TORSO_BAND` of
-    its height, and the head's top is the highest figure pixel within
-    `HEAD_REACH` of that column, so a hand raised above the head is not taken
-    for its top. Both are found twice, the second time from the head's top, so
-    the raised hand does not stretch the height either. Across, the head is
-    the region of the top `HEAD_BAND` nearest the torso's centre: a hand at
-    head height beside it is a region of its own there.
+    The figure is the mask's largest region, so a stray speck is never it. It
+    is opened by an octagon `LIMB_WIDTH` of its height across, which leaves the
+    head and torso and drops the limbs, so a hand raised above the head — to one
+    side, straight up, or clasped with the other over the crown — is never taken
+    for its top. The head's top is the opened figure's highest pixel, wherever
+    it is across, so an upper body leaning to one side still finds its head.
+    Across, the head is the region of the opened figure's top `HEAD_BAND`
+    nearest that pixel.
 
-    Clamped to the frame. None for an empty mask, or a figure under
-    `FACE_MIN_FIGURE` of the frame's height.
+    Clamped to the frame. None for an empty mask, a figure under
+    `FACE_MIN_FIGURE` of the frame's height, or one lying down (`UPRIGHT`).
     """
     mask = numpy.asarray(mask, bool)
     height, width = mask.shape
@@ -419,18 +452,25 @@ def head_box(mask: numpy.ndarray) -> tuple[int, int, int, int] | None:
     top, bottom = int(ys.min()), int(ys.max())
     if bottom - top + 1 < FACE_MIN_FIGURE * height:
         return None
-    centre = float(numpy.median(xs))
-    for _ in range(2):
-        tall = bottom - top
-        torso = (ys >= top + TORSO_BAND[0] * tall) & (ys <= top + TORSO_BAND[1] * tall)
-        if torso.any():
-            centre = float(numpy.median(xs[torso]))
-        near = numpy.abs(xs - centre) <= max(HEAD_REACH * tall, 1.0)
-        if near.any():
-            top = int(ys[near].min())
+    radius = max(round(LIMB_WIDTH * (bottom - top) / 2), 1)
+    y0, y1 = max(top - radius - 1, 0), min(bottom + radius + 2, height)
+    x0, x1 = max(int(xs.min()) - radius - 1, 0), min(int(xs.max()) + radius + 2, width)
+    core = numpy.zeros_like(figure)
+    core[y0:y1, x0:x1] = _open_mask(figure[y0:y1, x0:x1], radius)
+    cys, cxs = numpy.nonzero(core)
+    if not len(cys):
+        return None
+    if cxs.max() - cxs.min() + 1 > UPRIGHT * (cys.max() - cys.min() + 1):
+        return None
+    top = int(cys.min())
+    column = int(round(float(numpy.median(cxs[cys == top]))))
+    for _ in range(round(HEAD_REGROW * radius)):
+        if top == 0 or not figure[top - 1, column]:
+            break
+        top -= 1
     tall = bottom - top
     band_rows = max(math.ceil(HEAD_BAND * tall), 1)
-    runs, regions = _label_runs(figure[top : top + band_rows])
+    runs, regions = _label_runs(core[top : top + band_rows])
     spans: dict[int, list[float]] = {}
     for (_, start, end), region in zip(runs, regions):
         span = spans.setdefault(region, [start, end - 1, 0.0, 0.0])
@@ -440,7 +480,7 @@ def head_box(mask: numpy.ndarray) -> tuple[int, int, int, int] | None:
 
     def distance(region: int) -> tuple[float, float]:
         left, right, size, _ = spans[region]
-        return max(left - centre, centre - right, 0.0), -size
+        return max(left - column, column - right, 0.0), -size
 
     left, right, size, moment = spans[min(spans, key=distance)]
     widest = HEAD_WIDTH * tall
@@ -913,7 +953,7 @@ def _cut_drive(
     video, faces = blur_faces(video, masks)
     if faces["skipped"]:
         _log(
-            f"{motion.name}: no head found in drive frames "
+            f"{motion.name}: no upright head found in drive frames "
             f"{', '.join(f'{k:02d}' for k in faces['skipped'])}; left unblurred"
         )
     write_apng(video, here / DRIVE_VIDEO, ms)

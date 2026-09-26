@@ -418,7 +418,8 @@ def main(argv: list[str] | None = None) -> int:
         dest="scail_only",
         action="store_true",
         help="with --machine: keep each traced frame's SCAIL frame as drawn and skip the "
-        "Qwen-Image-2.1 restyle (minutes a frame on a local GPU, and research-only licence)",
+        "Qwen-Image-2.1 restyle (minutes a frame on a local GPU). The key art and set "
+        "reference SCAIL animates are still drawn by the draw backend's own workflow",
     )
     for stage, flag in (("video", "scail"), ("restyle", "restyle"), ("mask", "mask")):
         variable, default = STAGES[stage]
