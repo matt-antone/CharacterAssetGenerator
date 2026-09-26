@@ -39,6 +39,50 @@ prompting. A frame traced at 28 degrees of body yaw comes back square-on in
 every condition tried — 1, 4, 8 and 12 figures per render, photographs or
 skeletons, and three separate rewordings.
 
+## The video path
+
+`--machine <profile>` (or `CAG_MACHINE`), under `--draw-backend comfy` or
+`local`, draws every traced set from its bundle's source clip instead of its
+pose cards: a drive video cut from the clip, one SCAIL-2 job that animates the
+set reference along it, then one Qwen-Image-2.1 restyle per traced frame, of the
+SCAIL frame at the trace index. Without `--machine` a traced set takes the
+pose-edit path as before. Like the backend, the profile is the user's call: it
+names the hardware and the bill.
+
+- **A traced set with no source clip fails,** and says to run
+  `uv run cag clips <bundle>`. It never falls back to the pose-edit path, because
+  a set drawn the other way would pass for this one's output. `cag motions`
+  shows each bundle's clip as `ok`, `missing` or `none`.
+- **Profiles** live in `comfy/machines/`. `cloud` is the only verified one — the
+  research run's settings. `local16` (RX 9070) has drawn nothing yet. `smoke4`
+  (GTX 1050 Ti: 256x384, 9 frames, 2 steps) is wiring only, never art: nothing
+  drawn on it is judged. `uv run cag machines --check <name>` lists every node
+  and model file that machine's ComfyUI lacks, and a `local` build will not
+  start while anything is missing.
+- **Three caches, each keyed on what it is made from.** The drive under
+  `work/drive/` is shared by every character dancing that bundle. The SCAIL
+  video under `work/<slug>/video/<set>/` records its job id in `pending.json`
+  the moment it is submitted, so a stopped build resumes the job rather than
+  paying for another. The restyles are `source/<set>/NN.png`, stamped in
+  `drawn.sha`: a changed restyle graph or prompt moves them into
+  `source/<set>/superseded/` and keeps the SCAIL video, and a changed set
+  reference draws a new SCAIL video. A failed restyle fails the set by frame
+  number, and a rebuild draws only those.
+- **Only footage on a light backdrop** gets a threshold drive mask. Anything
+  else runs the mask pass (SAM3), which no render has exercised yet.
+- **Qwen-Image-2.1 is licensed for research only.** Nothing the video path draws
+  ships until that is cleared.
+
+Trial renders on a branch are scratch, as below. What is established so far is
+one roll each for two characters, from scratch scripts that hand-assembled
+their prompts rather than through `cag build`, on one dance: `club-01`, a
+pingpong, its out leg only. Belter came back at 0.80-0.91 detail against the
+reference and a colour delta of 0.8-3.3; the trooper's colour delta was over
+the 8.1 bar in 6 of 15 frames (8.2 to 10.6). The shipped SCAIL prompt quotes
+the bible where those runs had a hand-written costume sentence, which is
+untested. There is no pose-fidelity floor for this path either. Roll twice
+before calling any of it settled.
+
 ## Real renders happen on main
 
 A render that counts is drawn on `main`, from the committed code, into the
@@ -164,20 +208,21 @@ skipped, so it costs almost nothing and puts every set back on the page.
 
 ## Installing a motion bundle
 
-Bundles arrive as zips. `library()` globs `motions/*/manifest.json`, so a zip in
-`motions/` is inert — nothing reads it and nothing warns you.
+Bundles arrive as zips. `library()` finds every `manifest.json` under `motions/`,
+at any depth — the layout is `motions/<genre>/<genre>-NN/` — so a zip in
+`motions/` is inert: nothing reads it and nothing warns you.
 
 Installing one is a single action with four parts. Doing three of them leaves
 the library lying:
 
-1. Extract into `motions/`, keeping the bundle's own directory name exactly.
+1. Extract into `motions/<genre>/`, keeping the bundle's own directory name exactly.
    **Never rename on the way in.** A bundle carries its name in three places —
    the directory, the manifest's `name`, and the `name` inside `motion.json` —
    and renaming one desyncs it from the other two. `library()` keys on the
    manifest; the build log prints the motion sheet's copy.
 2. Delete the zip.
-3. Delete the bundle it supersedes. A re-cut arrives under its own trace name
-   and lands *beside* the old one rather than over it, so nothing breaks and a
+3. Delete the bundle it supersedes. A re-cut that arrives under a new name
+   lands *beside* the old one rather than over it, so nothing breaks and a
    brief still naming the old one silently renders the old motion. Silence is
    the failure mode here.
 4. Repoint every brief that named the old bundle. A brief naming a bundle that
@@ -187,17 +232,21 @@ Then check it before trusting it:
 
 ```bash
 .venv/bin/python -c "
-from cag.motion import library
+from cag.motion import clip_status, library
 for n, b in sorted(library('motions').items()):
     m = b.load()
     print(f'{n}: {b.frame_count}f @ {b.fps}fps {b.view} {m.playback} seam={b.seam!r} '
           f'photos={len(m.photos)} airborne={[f.index for f in m.frames if f.airborne]} '
-          f'travel={m.travel:.3f}')"
+          f'travel={m.travel:.3f} clip={clip_status(b)}')"
 ```
 
 One pass catches everything that matters. A manifest that disagrees with its
-motion sheet raises. A short thumb set shows as `photos=0`, which means that set
-renders with no pose reference at all. `playback` must suit the set: a `loop`
+motion sheet raises, and so does a source clip on disk that is not the one its
+manifest hashed, or one that does not span the traced frames. A short thumb set
+shows as `photos=0`, which means that set renders with no pose reference at all.
+`clip=none` means the video path cannot draw the bundle until
+`uv run cag clips <name>` backfills it; `clip=missing` is every backfilled bundle
+on a fresh clone, and `uv run cag clips --cast` cuts them all again. `playback` must suit the set: a `loop`
 trace seams back to frame 0, a `pingpong` turns around on its ends and plays
 back down the frames it just played, a `one-shot` does neither, and driving a
 looping set from a one-shot cut gives a dance that plays once.
@@ -221,9 +270,22 @@ holds a set's last frame is the set plan's call, not the trace's. A set is drive
 prompt or the other: its motion spec, or the brief that writes it a sheet. The
 set plan in `cag/sets.py` is only the default for a brief that says nothing.
 
-A bundle's name is its trace — label, video id and start second — because a
-label alone is a genre. Two different dances once collided on `shuffle`, and the
-baselines measured against one silently came to refer to the other.
+The source clip is the one edit cag makes to an installed bundle. `cag clips`
+fetches the source video into `work/sources/`, cuts the traced window at native
+rate and size, finds the clip box by matching the bundle's own traced frames
+against it, and refuses below a 0.90 match. It writes `clip.mp4`, which is
+git-ignored, and a `clip` block in the manifest marked
+`"backfilled_by": "cag"`, which is committed. It never touches `motion.json` or
+the manifest's `files`. A MotionArtist re-export replaces the block; run
+`cag clips` on the new bundle if it arrives without one.
+
+A bundle is named `<genre>-NN` — `club-01` — and what it traced, the video id
+and start second, is in its `source` block. Two cuts of one video are two
+names: `club-01` and `club-04` are both from `P4QeqpsY8v8`. Names used to be
+the trace itself (`shuffle-1-b0ARQ5kM85Y-13.6s`), after two different dances
+collided on the bare label `shuffle` and the baselines measured against one
+silently came to refer to the other. A baseline names the bundle it was
+measured on.
 
 `motions/sample` is the worked example of the format and the only motion fixture
 the tests use. It is not a trace; leave it installed.
@@ -238,7 +300,7 @@ A new term is named here before it is used.
 
 | term | what it is |
 | --- | --- |
-| **motion bundle** | `motions/<name>/`, identified by its manifest (`Bundle`) |
+| **motion bundle** | `motions/<genre>/<name>/`, identified by its manifest (`Bundle`) |
 | **manifest** | the bundle's `manifest.json` (`read_bundle`) |
 | **motion sheet** | the contents of `motion.json` (`MotionSheet`, `load_motion`). The one place "sheet" may appear, always qualified |
 | **traced sheet** / **written sheet** | a motion sheet from a bundle, versus one `cag/motion_writer.py` generated from the brief's prose. A written sheet has no traced frames and therefore no pose reference at all |
