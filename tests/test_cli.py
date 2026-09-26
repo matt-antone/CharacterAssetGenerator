@@ -323,15 +323,42 @@ def test_a_local_machine_lists_everything_its_server_lacks(tmp_path, monkeypatch
     asked = []
 
     def preflight(client, workflows):
-        asked.extend(Path(w).name for w in workflows)
+        names = [Path(w).name for w in workflows]
+        asked.append(names)
         return ["video.json: UnetLoaderGGUF unet_name SCAIL-2-Q2_K.gguf is not installed",
-                "mask.json: node SAM3_VideoTrack is not installed"]
+                "restyle.json: node TextEncodeQwenImageEdit is not installed"] if "video.json" in names else []
 
     monkeypatch.setattr(cli.comfy, "preflight", preflight)
     monkeypatch.setattr(cli.shutil, "which", lambda name: f"/usr/bin/{name}")
-    with pytest.raises(SystemExit, match=r"(?s)SCAIL-2-Q2_K\.gguf.*SAM3_VideoTrack.*machines --check smoke4"):
+    with pytest.raises(SystemExit, match=r"(?s)SCAIL-2-Q2_K\.gguf.*TextEncodeQwenImageEdit.*machines --check smoke4"):
         cli.machine_with("local", "smoke4", tmp_path, client=object())
-    assert asked == ["video.json", "restyle.json", "mask.json"]
+    assert asked == [["video.json", "restyle.json"]]
+
+
+def test_a_local_machine_without_the_mask_model_still_draws_and_says_so(tmp_path, monkeypatch, capsys):
+    def preflight(client, workflows):
+        names = [Path(w).name for w in workflows]
+        return ["mask.json: CheckpointLoaderSimple ckpt_name sam3.1_multiplex_fp16.safetensors "
+                "is not installed"] if names == ["mask.json"] else []
+
+    monkeypatch.setattr(cli.comfy, "preflight", preflight)
+    monkeypatch.setattr(cli.shutil, "which", lambda name: f"/usr/bin/{name}")
+    machine, graphs = cli.machine_with("local", "smoke4", tmp_path, client=object())
+    assert machine.name == "smoke4" and set(graphs) == {"video", "restyle", "mask"}
+    assert "sam3.1_multiplex_fp16.safetensors is not installed; a set whose footage needs the mask pass" in (
+        capsys.readouterr().err
+    )
+
+
+def test_no_machine_turns_the_video_path_off_whatever_cag_machine_says(tmp_path, monkeypatch):
+    monkeypatch.setenv("CAG_MACHINE", "cloud")
+    seen = {}
+    monkeypatch.setattr(cli, "build", lambda *a, **kw: seen.update(kw))
+    assert cli.main([*BUILD, "--draw-backend", "codex", "--no-machine",
+                     "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")]) == 0
+    assert seen["machine"] is None and seen["graphs"] is None
+    with pytest.raises(SystemExit, match="--draw-backend codex has none"):
+        cli.main([*BUILD, "--draw-backend", "codex", "--work", str(tmp_path / "w")])
 
 
 def test_backend_state_carries_the_machine_to_the_animation_graph(tmp_path):
@@ -391,6 +418,48 @@ def test_clips_backfills_each_name_and_says_which_it_refused(tmp_path, monkeypat
     assert "sample REFUSED: records no source url" in out
     assert "nobody REFUSED: no bundle under motions calls itself that" in out
     assert done == [("sample", True)]
+
+
+def test_one_bundles_fault_is_its_own_line_and_the_batch_goes_on(tmp_path, monkeypatch, capsys):
+    from cag import clips
+
+    for name in ("a", "b"):
+        shutil.copytree("motions/sample", tmp_path / name)
+        manifest = json.loads((tmp_path / name / "manifest.json").read_text())
+        (tmp_path / name / "manifest.json").write_text(json.dumps({**manifest, "name": name}))
+    done = []
+
+    def backfill(root, cache, dry_run=False):
+        if root.name == "a":
+            raise FileNotFoundError(2, "No such file or directory", str(root / "thumbs" / "f07.jpg"))
+        done.append(root.name)
+        return f"{root.name} OK"
+
+    monkeypatch.setattr(clips, "backfill", backfill)
+    assert cli.main(["clips", "a", "b", "--motion-root", str(tmp_path)]) == 1
+    out = capsys.readouterr().out
+    assert "a REFUSED: FileNotFoundError: [Errno 2] No such file or directory" in out
+    assert "b OK" in out and done == ["b"]
+
+
+def test_clips_missing_is_every_declared_clip_not_on_disk(tmp_path, monkeypatch, capsys):
+    from cag import clips
+
+    block = {"file": "clip.mp4", "start": 0.0, "fps": 24, "frame_count": 10, "size": [64, 48],
+             "sha256": "ab" * 32}
+    for name, clip in (("fresh", None), ("stale", b"another cut"), ("never", None)):
+        shutil.copytree("motions/sample", tmp_path / name)
+        manifest = json.loads((tmp_path / name / "manifest.json").read_text())
+        manifest["name"] = name
+        if name != "never":
+            manifest["clip"] = block
+        (tmp_path / name / "manifest.json").write_text(json.dumps(manifest))
+        if clip:
+            (tmp_path / name / "clip.mp4").write_bytes(clip)
+    done = []
+    monkeypatch.setattr(clips, "backfill", lambda root, cache, dry_run=False: done.append(root.name) or "OK")
+    assert cli.main(["clips", "--missing", "--motion-root", str(tmp_path)]) == 0
+    assert sorted(done) == ["fresh", "stale"]
 
 
 def test_clips_check_reports_without_fetching(monkeypatch, capsys):

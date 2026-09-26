@@ -21,3 +21,5 @@ motions/*.zip
 # A bundle's source clip is cut again by `cag clips` from the recorded source;
 # the manifest's clip block, which describes it, is tracked.
 motions/**/clip.mp4
+# The clip's hash as this machine cut it; see `CLIP_SHA` in cag/motion.py.
+motions/**/clip.sha256

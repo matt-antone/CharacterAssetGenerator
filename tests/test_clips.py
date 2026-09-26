@@ -8,7 +8,7 @@ from PIL import Image, ImageFilter
 
 from cag import clips
 from cag.clips import ClipError, Probe, backfill, cut, fetch, recover_box, video_id
-from cag.motion import read_bundle, sha256_of
+from cag.motion import clip_status, read_bundle, sha256_of
 
 FPS = 24
 #: A synthetic clip: 30 frames of 320x240, whose traced frames were cut through
@@ -115,6 +115,26 @@ def test_recover_box_keeps_the_box_inside_the_frame():
     x, y, w, h = box
     assert x >= 0 and y >= 0 and x + w <= 320 and y + h <= 240
     assert all(abs(got - want) <= 2 for got, want in zip(box, corner))
+
+
+@pytest.mark.parametrize(
+    "size, box",
+    [((854, 480), (246, 0, 360, 480)), ((1024, 576), (300, 0, 432, 576))],
+)
+def test_recover_box_reaches_a_full_height_box_where_the_coarse_steps_stop_short(size, box):
+    # At 480p the tallest coarse box is 117 of 120 rows; the refine has to reach 480.
+    width, height = size
+    rng = np.random.default_rng(0)
+    shared = texture(rng, height, width)
+    frames = np.stack(
+        [(0.5 * shared + 0.5 * texture(rng, height, width)).round().astype(np.uint8) for _ in range(30)]
+    )
+    thumbs = [traced_frame(frames[j], box) for j in TRACED]
+
+    found, _, score = recover_box(frames, FPS, CLIP_START, traced_times(), thumbs)
+
+    assert all(abs(got - want) <= 2 for got, want in zip(found, box)), found
+    assert found[3] == height and score >= clips.MATCH
 
 
 def test_recover_box_scores_shuffled_traced_frames_under_the_floor():
@@ -330,6 +350,45 @@ def test_backfill_is_idempotent(tmp_path, monkeypatch):
 
     assert rebuilt.written and (root / "clip.mp4").exists()
     assert (root / "manifest.json").read_bytes() == written
+
+
+def test_a_fresh_clone_on_another_x264_keeps_the_committed_block(tmp_path, monkeypatch):
+    frames = synthetic_clip()
+    root = make_bundle(tmp_path / "club-09", frames)
+    fake_video(monkeypatch, frames)
+    backfill(root, cache=tmp_path / "sources")
+    committed = (root / "manifest.json").read_bytes()
+    first_sha = json.loads(committed)["clip"]["sha256"]
+
+    # Another machine: the clone has the block, and its x264 writes other bytes.
+    (root / "clip.mp4").unlink()
+    (root / "clip.sha256").unlink()
+
+    def other_x264(src, start, end, pad, out):
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_bytes(b"the same frames, another x264 build")
+        return CLIP_START, len(frames)
+
+    monkeypatch.setattr(clips, "cut", other_x264)
+    rebuilt = backfill(root, cache=tmp_path / "sources")
+
+    assert rebuilt.written
+    assert (root / "manifest.json").read_bytes() == committed, "a tracked file is not rewritten"
+    bundle = read_bundle(root)
+    assert bundle.clip is not None and bundle.clip.sha256 != first_sha
+    assert bundle.clip.sha256 == sha256_of(root / "clip.mp4")
+    assert not backfill(root, cache=tmp_path / "sources").written, "and it is idempotent there"
+
+
+def test_a_stale_clip_is_cut_again(tmp_path, monkeypatch):
+    frames = synthetic_clip()
+    root = make_bundle(tmp_path / "club-09", frames)
+    fake_video(monkeypatch, frames)
+    backfill(root, cache=tmp_path / "sources")
+    (root / "clip.mp4").write_bytes(b"half a download")
+    assert clip_status(read_bundle(root)) == "stale"
+    assert backfill(root, cache=tmp_path / "sources").written
+    assert clip_status(read_bundle(root)) == "ok"
 
 
 def test_backfill_dry_run_writes_nothing(tmp_path, monkeypatch):

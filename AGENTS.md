@@ -46,21 +46,28 @@ skeletons, and three separate rewordings.
 pose cards: a drive video cut from the clip, one SCAIL-2 job that animates the
 set reference along it, then one Qwen-Image-2.1 restyle per traced frame, of the
 SCAIL frame at the trace index. Without `--machine` a traced set takes the
-pose-edit path as before. Like the backend, the profile is the user's call: it
-names the hardware and the bill.
+pose-edit path as before, and `--no-machine` takes it for one build whatever
+`CAG_MACHINE` says. Like the backend, the profile is the user's call: it names
+the hardware and the bill.
 
 - **A traced set with no source clip fails,** and says to run
   `uv run cag clips <bundle>`. It never falls back to the pose-edit path, because
   a set drawn the other way would pass for this one's output. `cag motions`
-  shows each bundle's clip as `ok`, `missing` or `none`.
+  shows each bundle's clip as `ok`, `missing`, `stale` or `none`. A `stale` clip
+  (a file on disk that is not the one declared) fails only the video path's
+  sets of that bundle; every other build reads the library as usual.
 - **Profiles** live in `comfy/machines/`. `cloud` is the only verified one — the
   research run's settings. `local16` (RX 9070) has drawn nothing yet. `smoke4`
   (GTX 1050 Ti: 256x384, 9 frames, 2 steps) is wiring only, never art: nothing
   drawn on it is judged. `uv run cag machines --check <name>` lists every node
   and model file that machine's ComfyUI lacks, and a `local` build will not
-  start while anything is missing.
+  start while anything the video or restyle graph loads is missing. The mask
+  pass's SAM3 checkpoint only warns: most footage never runs it.
 - **Three caches, each keyed on what it is made from.** The drive under
-  `work/drive/` is shared by every character dancing that bundle. The SCAIL
+  `work/drive/` is shared by every character dancing that bundle, and locked
+  while it is cut, so parallel builds cut it once; a mask pass is keyed on its
+  graph and prompt, and one whose drive mask fails is moved aside to
+  `rejected-mask-pass-N/` and run again next build. The SCAIL
   video under `work/<slug>/video/<set>/` records its job id in `pending.json`
   the moment it is submitted, so a stopped build resumes the job rather than
   paying for another. The restyles are `source/<set>/NN.png`, stamped in
@@ -241,12 +248,13 @@ for n, b in sorted(library('motions').items()):
 ```
 
 One pass catches everything that matters. A manifest that disagrees with its
-motion sheet raises, and so does a source clip on disk that is not the one its
-manifest hashed, or one that does not span the traced frames. A short thumb set
-shows as `photos=0`, which means that set renders with no pose reference at all.
-`clip=none` means the video path cannot draw the bundle until
-`uv run cag clips <name>` backfills it; `clip=missing` is every backfilled bundle
-on a fresh clone, and `uv run cag clips --cast` cuts them all again. `playback` must suit the set: a `loop`
+motion sheet raises, and so does a source clip that does not span the traced
+frames. A short thumb set shows as `photos=0`, which means that set renders with
+no pose reference at all. `clip=none` means the video path cannot draw the
+bundle until `uv run cag clips <name>` backfills it; `clip=missing` is every
+backfilled bundle on a fresh clone, `clip=stale` is a file on disk that is not
+the declared one, and `uv run cag clips --missing` cuts both kinds again.
+`--cast` covers only the bundles a brief names. `playback` must suit the set: a `loop`
 trace seams back to frame 0, a `pingpong` turns around on its ends and plays
 back down the frames it just played, a `one-shot` does neither, and driving a
 looping set from a one-shot cut gives a dance that plays once.
@@ -275,7 +283,10 @@ fetches the source video into `work/sources/`, cuts the traced window at native
 rate and size, finds the clip box by matching the bundle's own traced frames
 against it, and refuses below a 0.90 match. It writes `clip.mp4`, which is
 git-ignored, and a `clip` block in the manifest marked
-`"backfilled_by": "cag"`, which is committed. It never touches `motion.json` or
+`"backfilled_by": "cag"`, which is committed. x264 writes its own build into
+every file, so another machine's cut of the same frames has another hash: that
+hash goes in `clip.sha256` beside the clip, also ignored, and the committed
+block is left as it is. Only a cut of different frames rewrites the block. It never touches `motion.json` or
 the manifest's `files`. A MotionArtist re-export replaces the block; run
 `cag clips` on the new bundle if it arrives without one.
 
@@ -305,7 +316,7 @@ A new term is named here before it is used.
 | **motion sheet** | the contents of `motion.json` (`MotionSheet`, `load_motion`). The one place "sheet" may appear, always qualified |
 | **traced sheet** / **written sheet** | a motion sheet from a bundle, versus one `cag/motion_writer.py` generated from the brief's prose. A written sheet has no traced frames and therefore no pose reference at all |
 | **traced frame** | one photograph of the performer, `thumbs/fNN.jpg` in a bundle |
-| **source clip** | the footage a bundle was traced from, `motions/<genre>/<name>/clip.mp4`: native rate and size, uncropped, the traced window ±0.5 s. Described by the manifest's `clip` block (`Clip`, `Bundle.clip`), the one manifest edit cag makes (`"backfilled_by": "cag"`), written by `cag clips <name>`. The block is committed and the `.mp4` is git-ignored and absent from `files`, so a fresh clone loads with `clip=None` until `cag clips` runs. A file on disk whose sha256 disagrees with the block raises |
+| **source clip** | the footage a bundle was traced from, `motions/<genre>/<name>/clip.mp4`: native rate and size, uncropped, the traced window ±0.5 s. Described by the manifest's `clip` block (`Clip`, `Bundle.clip`), the one manifest edit cag makes (`"backfilled_by": "cag"`), written by `cag clips <name>`. The block is committed and the `.mp4` is git-ignored and absent from `files`, so a fresh clone loads with `clip=None` until `cag clips` runs. A file on disk whose sha256 is neither the block's nor this machine's own cut (`clip.sha256`) is `stale`, and the video path raises it |
 | **clip box** | the 3:4 box, in source-clip pixels, that the traced frames were cut from (`Clip.box`). Always inside the frame |
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |
 | **pose grid** | pose cards tiled `FIGURES_PER_ROW` across, `FRAME_SHEET_SIZE` per image, handed to the generator as the last reference image — `work/<char>/poses/<set>/pose-grid-NN.png` |

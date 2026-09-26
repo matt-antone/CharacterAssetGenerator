@@ -12,7 +12,8 @@ line up: a mean below `MATCH` is refused, never written.
 What lands in the bundle is `clip.mp4` and a `clip` block in its manifest,
 marked `backfilled_by: "cag"`. The clip is git-ignored and the block is
 committed, so a fresh clone has the block without the file, and running this
-again rebuilds the file. `motion.json` is never touched, and neither is the
+again rebuilds the file. The block's hash is the committing machine's; another
+machine's cut is recorded beside the clip in `clip.sha256`, also ignored. `motion.json` is never touched, and neither is the
 manifest's `files` map: that lists what MotionArtist shipped, and a clip absent
 on a fresh clone would fail every check that reads it.
 """
@@ -34,7 +35,7 @@ from urllib.parse import parse_qs, urlparse
 import numpy as np
 from PIL import Image
 
-from .motion import BUNDLE, Bundle, sha256_of
+from .motion import BUNDLE, CLIP_SHA, Bundle, sha256_of
 
 #: Whole source videos, one per video id, shared by every bundle cut from them.
 SOURCES = Path("work/sources")
@@ -262,26 +263,29 @@ def recover_box(
         for k in needed
     }
     candidates = [[coarse[j + s] for s in own] for j, own in zip(base, skews)]
-    found = [
-        _best(candidates, pictures, round(box_h * aspect), box_h, skews)
-        for box_h in _heights(small_h, small_w, aspect)
-    ]
+    heights = _heights(small_h, small_w, aspect)
+    found = [_best(candidates, pictures, round(box_h * aspect), box_h, skews) for box_h in heights]
     if not found:
         raise ClipError(f"a {width}x{height} clip is too small to search for a box")
-    _, (x, y, box_w, box_h), _ = max(found, key=lambda f: f[0])
+    top = max(range(len(found)), key=lambda k: found[k][0])
+    _, (x, y, box_w, box_h), _ = found[top]
     centre_x, centre_y = (x + box_w / 2) * COARSE, (y + box_h / 2) * COARSE
     around = box_h * COARSE
 
     # Refine at full size, within a couple of percent of the coarse height and a
     # few pixels of its place. One region holds every size tried, so each clip
     # frame is transformed once; heights are stepped through at a stride, then
-    # pixel by pixel either side of the best.
-    tallest = min(height, round(around * (1 + RESIZE)), math.floor(width / aspect))
+    # pixel by pixel either side of the best. The tallest coarse height can sit
+    # a whole step short of the frame (117 of 120 coarse rows at 480p), so when
+    # it wins the refine reaches all the way: a full-height box is the commonest
+    # there is, since MotionArtist cuts landscape footage full height.
+    limit = min(height, math.floor(width / aspect))
+    tallest = limit if top == len(heights) - 1 else min(limit, round(around * (1 + RESIZE)))
     shortest = min(tallest, round(around * (1 - RESIZE)))
     reach_y = tallest / 2 + NUDGE
     reach_x = round(tallest * aspect) / 2 + NUDGE
-    rows = slice(max(0, math.floor(centre_y - reach_y)), min(height, math.ceil(centre_y + reach_y)))
-    cols = slice(max(0, math.floor(centre_x - reach_x)), min(width, math.ceil(centre_x + reach_x)))
+    rows = _span(centre_y, reach_y, height)
+    cols = _span(centre_x, reach_x, width)
     candidates = [[_Plane(grey[j + s, rows, cols]) for s in own] for j, own in zip(base, skews)]
     tried: dict[int, tuple] = {}
 
@@ -349,8 +353,10 @@ def backfill(
 ) -> Backfill:
     """Rebuild one bundle's `clip.mp4` and write its `clip` block.
 
-    Idempotent: a clip already on disk whose hash is the block's is left alone,
-    and a rebuild that comes out the same leaves the manifest byte for byte.
+    Idempotent: a clip already on disk whose hash is the block's, or this
+    machine's own cut of it (`CLIP_SHA`), is left alone. A rebuild of the same
+    frames of the same video leaves the manifest byte for byte, even when this
+    machine's x264 writes other bytes than the one that committed the block.
     Raises ClipError, writing nothing, for a bundle with no source recorded, no
     traced times or traced frames, or a match under `MATCH`.
     """
@@ -362,7 +368,7 @@ def backfill(
     name = data.get("name", root.name)
 
     held = data.get("clip")
-    if held and (root / CLIP).exists() and sha256_of(root / CLIP) == held.get("sha256"):
+    if held and (root / CLIP).exists() and sha256_of(root / CLIP) in _accepted(root, held):
         return _result(name, held, written=False)
 
     source = data.get("source") or {}
@@ -393,6 +399,16 @@ def backfill(
             "the box or the traced times are wrong"
         )
 
+    if held and _same_cut(held, start, found, count):
+        # The footage the committed block describes, cut on a machine whose
+        # x264 writes other bytes. The block stays as committed, so two
+        # machines never take turns rewriting a tracked manifest; this
+        # machine's hash is kept beside the clip instead.
+        if not dry_run:
+            shutil.move(made, root / CLIP)
+            (root / CLIP_SHA).write_text(sha256_of(root / CLIP) + "\n")
+        return _result(name, held, written=not dry_run)
+
     block = {
         "file": CLIP,
         "start": round(start, 6),
@@ -408,6 +424,7 @@ def backfill(
     if dry_run:
         return _result(name, block, written=False)
     shutil.move(made, root / CLIP)
+    (root / CLIP_SHA).write_text(block["sha256"] + "\n")
     text = json.dumps(_with_clip(data, block), indent=1)
     if text != manifest.read_text():
         manifest.write_text(text)
@@ -502,6 +519,13 @@ def _fast(n: int) -> int:
         n += 1
 
 
+def _span(centre: float, reach: float, size: int) -> slice:
+    """`centre` ± `reach`, slid back inside `[0, size)` rather than cut short by its edge."""
+    length = min(size, math.ceil(2 * reach))
+    start = min(max(0, math.floor(centre - reach)), size - length)
+    return slice(start, start + length)
+
+
 def _heights(rows: int, cols: int, aspect: float) -> list[int]:
     """Coarse box heights to try, each SIZE_STEP taller, the box inside the frame."""
     heights, h = [], max(8, math.ceil(rows * SMALLEST))
@@ -546,6 +570,22 @@ def _traced_times(root: Path, data: dict) -> list[float]:
     if any(b <= a for a, b in zip(times, times[1:])):
         raise ClipError(f"{root / named[0]} traced times do not run forwards")
     return [float(t) for t in times]
+
+
+def _accepted(root: Path, held: dict) -> set[str]:
+    """The hashes a clip on disk may have: the committed block's, and this machine's own cut."""
+    local = root / CLIP_SHA
+    return {held.get("sha256"), local.read_text().strip() if local.exists() else None} - {None, ""}
+
+
+def _same_cut(held: dict, start: float, found: Probe, count: int) -> bool:
+    """Is a fresh cut the same frames of the same video as the committed block?"""
+    return (
+        round(start, 6) == held.get("start")
+        and float(found.fps) == held.get("fps")
+        and count == held.get("frame_count")
+        and list(found.size) == held.get("size")
+    )
 
 
 def _with_clip(data: dict, block: dict) -> dict:

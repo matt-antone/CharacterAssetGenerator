@@ -277,11 +277,35 @@ def test_a_declared_clip_that_is_not_on_disk_is_missing_not_an_error(tmp_path):
     assert bundle.load().clip is None
 
 
-def test_a_clip_that_is_not_the_one_declared_is_refused(tmp_path):
+def test_a_clip_that_is_not_the_one_declared_is_stale_and_only_the_video_path_refuses_it(tmp_path):
     root = timed_bundle(tmp_path, clip={})
     (root / "clip.mp4").write_bytes(b"a different cut")
-    with pytest.raises(MotionError, match="cag clips shuffle"):
-        read_bundle(root)
+    bundle = read_bundle(root)
+    assert bundle.clip is None and clip_status(bundle) == "stale"
+    assert "cag clips shuffle" in bundle.clip_problem
+    motion = bundle.load()
+    assert motion.clip is None and motion.clip_problem == bundle.clip_problem
+
+
+def test_one_stale_clip_does_not_stop_the_rest_of_the_library(tmp_path):
+    root = timed_bundle(tmp_path, clip={})
+    (root / "clip.mp4").write_bytes(b"a different cut")
+    shutil.copytree("motions/sample", tmp_path / "sample")
+    found = library(tmp_path)
+    assert sorted(found) == ["sample", "shuffle"]
+    assert clip_status(found["shuffle"]) == "stale" and found["sample"].load()
+
+
+def test_a_clip_this_machine_cut_is_its_own_even_when_the_block_is_anothers(tmp_path):
+    """x264 writes its build into every file: the same footage cut elsewhere is other bytes."""
+    root = timed_bundle(tmp_path, clip={})
+    (root / "clip.mp4").write_bytes(b"the same frames, another x264")
+    (root / "clip.sha256").write_text(hashlib.sha256(b"the same frames, another x264").hexdigest() + "\n")
+    bundle = read_bundle(root)
+    assert clip_status(bundle) == "ok"
+    assert bundle.clip.sha256 == hashlib.sha256(b"the same frames, another x264").hexdigest(), (
+        "a drive is keyed on the bytes on disk"
+    )
 
 
 @pytest.mark.parametrize(

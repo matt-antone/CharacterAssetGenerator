@@ -150,13 +150,13 @@ def test_a_traced_set_with_a_machine_is_drawn_from_its_clip(world):
     for index, call in enumerate(restyle.calls):
         assert call["prompt"] == RESTYLE
         assert call["out"] == state["work_dir"] / "source" / "dance" / f"{index:02d}.png"
-        assert call["refs"][0] == job["out"] / f"traced-{index:02d}.png", "the SCAIL frame is image 1"
+        assert call["refs"][0] == job["out"] / f"picked-{INDEX[index]:03d}.png", "the SCAIL frame is image 1"
         assert call["refs"][1] == state["key_art"], "the set reference is image 2"
         assert call["workflow"] == state["machine_graphs"]["restyle"]
         assert call["timeout"] == state["machine"].restyle_timeout and call["seed"] == 1234
         assert call["extra"] == {"$resolution": 1248, "$steps": 40}
     # The traced frame is the SCAIL frame at its traced time, at the reference's size.
-    with Image.open(job["out"] / "traced-05.png") as picked, Image.open(job["out"] / f"{INDEX[5]:03d}.png") as frame:
+    with Image.open(job["out"] / f"picked-{INDEX[5]:03d}.png") as picked, Image.open(job["out"] / f"{INDEX[5]:03d}.png") as frame:
         assert picked.size == (100, 150)
         assert picked.getpixel((50, 75)) == frame.resize((100, 150)).getpixel((50, 75))
     assert json.loads((job["out"] / "trace-index.json").read_text()) == INDEX
@@ -224,6 +224,14 @@ def test_a_traced_set_without_a_clip_says_how_to_get_one(world):
     assert world["scail"].calls == []
 
 
+def test_a_stale_clip_fails_the_set_saying_so(world):
+    problem = "motions/x/manifest.json declares clip clip.mp4 with sha256 abc, but the file on disk is not it"
+    motion = replace(world["state"]["motion"], clip=None, clip_problem=problem)
+    with pytest.raises(MotionError, match="the file on disk is not it"):
+        world["build"](motion=motion)
+    assert world["scail"].calls == []
+
+
 def test_footage_with_no_light_backdrop_runs_the_mask_pass(world, monkeypatch):
     monkeypatch.setattr(drive, "decode", footage(light=False))
     scail = world["scail"]
@@ -256,3 +264,51 @@ def test_without_a_machine_a_traced_set_still_takes_the_pose_edit_path(world):
              if key not in ("machine", "machine_graphs", "local")}
     assert not animation.draws_by_video({**state, "photographic": True, "poses": {0: Path("x")}})
     assert animation.draws_by_video({**world["state"], "photographic": True, "poses": {0: Path("x")}})
+
+
+def test_a_retrace_that_moves_a_frame_restyles_it_from_its_new_scail_frame(world):
+    world["build"]()
+    motion = world["state"]["motion"]
+    # Same ends, same clip, one frame between them traced later.
+    moved = tuple(replace(f, t=f.t + 0.05) if f.index == 5 else f for f in motion.frames)
+    _, restyle = world["build"](motion=replace(motion, frames=moved))
+    assert len(world["scail"].calls) == 1, "the SCAIL video is the same video"
+    assert len(restyle.calls) == 16, "a new trace index restyles every frame"
+    fresh = round((TIMES[5] + 0.05 - TIMES[0]) * 16)
+    assert fresh != INDEX[5]
+    assert restyle.calls[5]["refs"][0].name == f"picked-{fresh:03d}.png"
+
+
+def test_a_trace_index_short_of_the_traced_frames_fails_the_set(world, monkeypatch):
+    real = drive.build_drive
+
+    def short(*args, **kwargs):
+        made = real(*args, **kwargs)
+        return replace(made, index=made.index[:10])
+
+    monkeypatch.setattr(drive, "build_drive", short)
+    with pytest.raises(DrawError, match="trace index holds 10 SCAIL frames for 16 traced frames"):
+        world["build"]()
+
+
+def test_a_scail_frame_from_a_padded_reference_is_not_stretched(world, monkeypatch):
+    # A 3:4 set reference is padded to 2:3 for SCAIL; the pick is cut back to 3:4.
+    Image.new("RGB", (120, 160), (255, 0, 255)).save(world["state"]["key_art"])
+    scail = world["scail"]
+
+    def padded(prompt, out_dir, references, workflow, timeout, **kwargs):
+        paths = scail(prompt, out_dir, references, workflow, timeout, **kwargs)
+        for path in paths:
+            # SCAIL draws on the padded canvas: magenta above and below the reference.
+            image = Image.new("RGB", (64, 96), (255, 0, 255))
+            image.paste((20, 200, 20), (0, 5, 64, 91))
+            image.save(path)
+        return paths
+
+    monkeypatch.setattr(comfy, "render_frames", padded)
+    world["build"]()
+    (folder,) = (world["state"]["work_dir"] / "video" / "dance").iterdir()
+    with Image.open(folder / f"picked-{INDEX[0]:03d}.png") as picked:
+        assert picked.size == (120, 160)
+        top, bottom = picked.getpixel((60, 1)), picked.getpixel((60, 158))
+    assert top[1] > 150 and bottom[1] > 150, "no magenta band: the padding was cut off, not squashed"

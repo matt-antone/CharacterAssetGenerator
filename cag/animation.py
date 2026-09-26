@@ -460,7 +460,8 @@ def frame_sheet(state: AnimationState, draw_fn: Callable[..., Path]) -> Animatio
             # No quiet fallback to the pose-edit path: a machine was asked for,
             # and a set drawn some other way would pass for its output.
             raise MotionError(
-                f"{motion.name} carries no source clip; --machine draws traced sets from "
+                motion.clip_problem
+                or f"{motion.name} carries no source clip; --machine draws traced sets from "
                 f"video. Run `cag clips {motion.name}`, or build without --machine"
             )
         # Imported here: the video path builds on this module's paths and stamps.

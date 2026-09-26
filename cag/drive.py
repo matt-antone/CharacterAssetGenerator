@@ -20,6 +20,7 @@ backdrop needs the mask pass, which no render has exercised yet.
 
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
 import math
@@ -49,13 +50,21 @@ SCAIL_MAX_LENGTH = 81
 
 #: Bumped whenever the way a drive is cut changes, so every cached drive goes
 #: stale at once rather than one being quietly reused under the new rules.
-DRIVE_VERSION = "drive/1"
+DRIVE_VERSION = "drive/2"
 
 #: The record a finished drive leaves; written last, so its presence means done.
 DRIVE_RECORD = "drive.json"
 DRIVE_VIDEO = "drive.png"
 DRIVE_MASK = "drive-mask.png"
 MASK_PASS_DIR = "mask-pass"
+#: Held while a drive is cut, so two builds never cut one drive at once.
+DRIVE_LOCK = "cutting.lock"
+#: The mask pass's resumable job record (`comfy.render_frames`), beside its
+#: frames. While it is there the frames in `mask-pass/` are not finished.
+MASK_PENDING = "mask-pending.json"
+#: Inside `mask-pass/`: the digest of the graph, prompt and settings the frames
+#: were drawn with. Frames under any other are never reused.
+MASK_PASS_KEY = "key.txt"
 
 #: Channel value above which a pixel is backdrop-bright. The research rule: on
 #: club-01's white studio a pixel is the performer when any channel is below it.
@@ -166,13 +175,15 @@ def decode(path: Path | str) -> numpy.ndarray:
     Decoded at the native rate with nothing dropped or doubled, so array index j
     is the clip's frame j. Frames come out as a PPM stream, which carries its own
     size, so a clip with rotation metadata is read the way ffmpeg displays it.
+    Pinned to 8 bits a channel: left to itself, ffmpeg writes a 10-bit clip as
+    16-bit PPM, which this would misread.
     """
     try:
         run = subprocess.run(
             [
                 "ffmpeg", "-v", "error", "-nostdin", "-i", str(path),
                 "-map", "0:v:0", "-fps_mode", "passthrough",
-                "-f", "image2pipe", "-c:v", "ppm", "-",
+                "-f", "image2pipe", "-c:v", "ppm", "-pix_fmt", "rgb24", "-",
             ],
             capture_output=True,
             check=True,
@@ -393,23 +404,48 @@ def reference_mask(image: Image.Image | Path | str) -> Image.Image:
     return paint(~backdrop, REF_MASK_BACKGROUND)
 
 
+def _padded(size: tuple[int, int], width: int, height: int) -> tuple[tuple[int, int], tuple[int, int]]:
+    """The canvas `fit` pads a reference of `size` onto, and where the reference sits on it."""
+    w, h = size
+    if w * height == h * width:
+        return (w, h), (0, 0)
+    wide = round(h * width / height)
+    tall = round(w * height / width)
+    canvas = (wide, h) if wide >= w else (w, tall)
+    return canvas, ((canvas[0] - w) // 2, (canvas[1] - h) // 2)
+
+
 def fit(reference: Image.Image, width: int, height: int) -> Image.Image:
     """The set reference at the drive's size, padded with magenta to its shape first.
 
     SCAIL-2 centre-crops a reference that is not the drive's shape, which would
     cut into the character; padding with the backdrop costs nothing but canvas.
+    `unfit` takes a SCAIL frame back to the reference's own shape.
     """
     image = reference.convert("RGB")
-    w, h = image.size
-    if w * height != h * width:
-        wide = round(h * width / height)
-        tall = round(w * height / width)
-        canvas = (wide, h) if wide >= w else (w, tall)
+    canvas, at = _padded(image.size, width, height)
+    if canvas != image.size:
         padded = Image.new("RGB", canvas, MAGENTA)
-        padded.paste(image, ((canvas[0] - w) // 2, (canvas[1] - h) // 2))
-        _log(f"set reference is {w}x{h}, not {width}:{height}; padded with magenta to {canvas[0]}x{canvas[1]}")
+        padded.paste(image, at)
+        _log(
+            f"set reference is {image.width}x{image.height}, not {width}:{height}; "
+            f"padded with magenta to {canvas[0]}x{canvas[1]}"
+        )
         image = padded
     return image.resize((width, height), Image.LANCZOS)
+
+
+def unfit(frame: Image.Image, size: tuple[int, int]) -> Image.Image:
+    """A SCAIL frame at the set reference's `size`: `fit`'s padding cut off, then scaled.
+
+    Scaling the whole frame straight to `size` would stretch a reference that
+    `fit` padded, and every restyle drawn on it would inherit the stretch.
+    """
+    image = frame.convert("RGB")
+    canvas, (x, y) = _padded(size, image.width, image.height)
+    sx, sy = image.width / canvas[0], image.height / canvas[1]
+    box = (round(x * sx), round(y * sy), round((x + size[0]) * sx), round((y + size[1]) * sy))
+    return image.crop(box).resize(size, Image.LANCZOS)
 
 
 def write_apng(frames: Sequence[Image.Image], path: Path | str, ms: int) -> Path:
@@ -419,6 +455,9 @@ def write_apng(frames: Sequence[Image.Image], path: Path | str, ms: int) -> Path
     and a drive one frame short leaves SCAIL's tail unguided — the research's
     mannequin drive lost a frame that way. So a repeat has the lowest bit of
     one pixel's blue flipped, which no model can see, and the count is checked.
+
+    Written beside `path` and moved over it once checked, so nothing reading
+    `path` ever sees half a file.
     """
     images = [frame.convert("RGB").copy() for frame in frames]
     if not images:
@@ -429,13 +468,15 @@ def write_apng(frames: Sequence[Image.Image], path: Path | str, ms: int) -> Path
             images[i].putpixel((0, 0), (r, g, b ^ 1))
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    partial = path.with_name(path.name + ".part")
     images[0].save(
-        path, format="PNG", save_all=True, append_images=images[1:], duration=ms, loop=0
+        partial, format="PNG", save_all=True, append_images=images[1:], duration=ms, loop=0
     )
-    with Image.open(path) as check:
+    with Image.open(partial) as check:
         written = getattr(check, "n_frames", 1)
     if written != len(images):
         raise DriveError(f"{path} holds {written} frames, not {len(images)}")
+    partial.replace(path)
     return path
 
 
@@ -452,10 +493,16 @@ def _sha(path: Path) -> str:
 def drive_digest(
     clip: Clip, t0: float, rate: float, length: int, width: int, height: int
 ) -> str:
-    """Everything a drive is a function of. Change any of it and the drive is redrawn."""
+    """Everything a drive is a function of. Change any of it and the drive is redrawn.
+
+    Only the first traced time: the drive runs from it at the rate for the
+    length, whatever the traced frames between. The trace index does depend on
+    them, so it is never cached with the drive; see `Drive.read`.
+    """
     parts = (
         clip.sha256 or _sha(clip.path),
         f"{clip.start:.6f}",
+        f"{clip.fps:.6f}",
         f"{clip.t_offset:.6f}",
         list(clip.box) if clip.box else None,
         f"{t0:.6f}",
@@ -481,8 +528,12 @@ class Drive:
     box: tuple[int, int, int, int]
     #: "light-backdrop" or "mask-pass": how the drive mask was made.
     method: str
-    #: The SCAIL frame for each traced frame; see `trace_index`.
+    #: The SCAIL frame for each traced frame; see `trace_index`. Worked out
+    #: afresh from the motion every time, never read back from the record: a
+    #: re-trace can move frames without changing the drive.
     index: tuple[int, ...]
+    #: What the mask pass was drawn under, when it made the drive mask.
+    mask_key: str = ""
 
     @property
     def video(self) -> Path:
@@ -493,7 +544,7 @@ class Drive:
         return self.root / DRIVE_MASK
 
     @classmethod
-    def read(cls, root: Path) -> Drive:
+    def read(cls, root: Path, index: Sequence[int]) -> Drive:
         data = json.loads((root / DRIVE_RECORD).read_text())
         return cls(
             root=root,
@@ -503,7 +554,8 @@ class Drive:
             size=(int(data["width"]), int(data["height"])),
             box=tuple(data["box"]),
             method=data["method"],
-            index=tuple(data["trace_index"]),
+            index=tuple(index),
+            mask_key=data.get("mask_key", ""),
         )
 
 
@@ -512,18 +564,52 @@ class Drive:
 MaskPass = Callable[[Path, Path, int], Sequence[Path]]
 
 
+def _move_aside(folder: Path, prefix: str) -> Path:
+    """Move `folder` to `<prefix>N` beside it, for the first N not taken, and say where."""
+    n = 0
+    while (folder.parent / f"{prefix}{n}").exists():
+        n += 1
+    kept = folder.parent / f"{prefix}{n}"
+    folder.replace(kept)
+    return kept
+
+
 def _mask_pass_masks(
-    mask_pass: MaskPass | None, here: Path, length: int, size: tuple[int, int], pad: numpy.ndarray
+    mask_pass: MaskPass | None,
+    here: Path,
+    length: int,
+    size: tuple[int, int],
+    pad: numpy.ndarray,
+    key: str = "",
 ) -> list[numpy.ndarray]:
-    """The drive mask from the mask pass, reusing one already downloaded."""
+    """The drive mask from the mask pass, reusing one already downloaded.
+
+    Reused only when every frame is there, no job is still pending (its frames
+    are written one by one and the pending record removed last), and they were
+    drawn under `key`. Frames from another graph or prompt are moved aside.
+    """
     if mask_pass is None:
         raise DriveError(
             f"{here.name}: the footage has no light backdrop, so its drive mask needs the "
             "mask pass, and none was given"
         )
     into = here / MASK_PASS_DIR
+    stamp = into / MASK_PASS_KEY
+    drawn_under = stamp.read_text().strip() if stamp.exists() else None
+    if into.exists() and drawn_under != key:
+        # A job still pending was asked for under the old key too.
+        (here / MASK_PENDING).unlink(missing_ok=True)
+        kept = _move_aside(into, "superseded-mask-pass-")
+        _log(f"{here.name}: the mask pass changed; its old frames are in {kept}")
     done = sorted(into.glob("*.png"))
-    paths = done if len(done) == length else list(mask_pass(here / DRIVE_VIDEO, into, length))
+    if len(done) == length and not (here / MASK_PENDING).exists():
+        paths = done
+    else:
+        # Stamped before the job, so a job this build leaves pending is known
+        # to be the one asked for when the next build resumes it.
+        into.mkdir(parents=True, exist_ok=True)
+        stamp.write_text(key + "\n")
+        paths = list(mask_pass(here / DRIVE_VIDEO, into, length))
     if len(paths) != length:
         raise DriveError(f"{here.name}: the mask pass returned {len(paths)} frames, not {length}")
     masks = []
@@ -538,12 +624,24 @@ def _mask_pass_masks(
     return masks
 
 
+def _cached(here: Path, index: Sequence[int], mask_key: str) -> Drive | None:
+    """The finished drive in `here`, if it is the one asked for."""
+    if not all((here / name).exists() for name in (DRIVE_RECORD, DRIVE_VIDEO, DRIVE_MASK)):
+        return None
+    made = Drive.read(here, index)
+    if made.method == "mask-pass" and made.mask_key != mask_key:
+        _log(f"{here.name}: the mask pass changed since this drive was cut; cutting again")
+        return None
+    return made
+
+
 def build_drive(
     motion: MotionSheet,
     m: Machine,
     root: Path | str,
     mask_pass: MaskPass | None = None,
     decode: Callable[[Path], numpy.ndarray] = decode,
+    mask_key: str = "",
 ) -> Drive:
     """The drive video and drive mask for `motion` on machine `m`, cached under `root`.
 
@@ -551,6 +649,11 @@ def build_drive(
     size and length, not the character, so every character dancing this bundle
     on this machine shares one drive. `drive.json` is written last and is what
     says a drive is complete.
+
+    `mask_key` is a digest of the mask pass's graph, prompt and settings: a
+    drive whose mask came from another one is cut again. Characters are built
+    in parallel, so the folder is locked while a drive is cut; a second build
+    wanting the same drive waits, then finds it done.
     """
     clip = getattr(motion, "clip", None)
     times = tuple(getattr(motion, "frame_times", ()))
@@ -564,9 +667,36 @@ def build_drive(
     size = (int(m.width), int(m.height))
     digest = drive_digest(clip, times[0], rate, length, *size)
     here = Path(root) / f"{motion.name}-{digest[:12]}"
-    if all((here / name).exists() for name in (DRIVE_RECORD, DRIVE_VIDEO, DRIVE_MASK)):
-        return Drive.read(here)
+    made = _cached(here, index, mask_key)
+    if made:
+        return made
+    here.mkdir(parents=True, exist_ok=True)
+    with open(here / DRIVE_LOCK, "w") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            _log(f"{here.name}: another build is cutting this drive; waiting for it")
+            fcntl.flock(lock, fcntl.LOCK_EX)
+        return _cached(here, index, mask_key) or _cut_drive(
+            motion, clip, times, rate, length, size, index, digest, here, mask_pass, decode, mask_key
+        )
 
+
+def _cut_drive(
+    motion: MotionSheet,
+    clip: Clip,
+    times: tuple[float, ...],
+    rate: float,
+    length: int,
+    size: tuple[int, int],
+    index: list[int],
+    digest: str,
+    here: Path,
+    mask_pass: MaskPass | None,
+    decode: Callable[[Path], numpy.ndarray],
+    mask_key: str,
+) -> Drive:
+    """Cut the drive into `here`; the caller holds its lock."""
     native = decode(clip.path)
     height, width = native.shape[1:3]
     if clip.size and tuple(clip.size) != (width, height):
@@ -602,11 +732,17 @@ def build_drive(
         else:
             _log(f"{motion.name}: the threshold drive mask fails ({problems[0]}); running the mask pass")
     if method == "mask-pass":
-        masks = _mask_pass_masks(mask_pass, here, length, size, pad)
+        masks = _mask_pass_masks(mask_pass, here, length, size, pad, mask_key)
         stats = mask_stats(masks)
         problems = check_masks(masks, stats)
         if problems:
-            raise DriveError(f"{motion.name}: the mask pass's drive mask fails: " + "; ".join(problems))
+            # Moved aside, or every later build would reuse the same failing
+            # frames and never run the mask pass again.
+            kept = _move_aside(here / MASK_PASS_DIR, "rejected-mask-pass-")
+            raise DriveError(
+                f"{motion.name}: the mask pass's drive mask fails: " + "; ".join(problems)
+                + f"; its frames are kept in {kept}, and the next build runs it again"
+            )
     write_apng([paint(mask) for mask in masks], here / DRIVE_MASK, ms)
 
     record: dict[str, Any] = {
@@ -622,8 +758,10 @@ def build_drive(
         "box": list(box),
         "source_frames": picks,
         "method": method,
-        "trace_index": index,
+        "mask_key": mask_key if method == "mask-pass" else "",
         "masks": stats,
     }
-    (here / DRIVE_RECORD).write_text(json.dumps(record, indent=2) + "\n")
-    return Drive.read(here)
+    partial = here / f"{DRIVE_RECORD}.part"
+    partial.write_text(json.dumps(record, indent=2) + "\n")
+    partial.replace(here / DRIVE_RECORD)
+    return Drive.read(here, index)

@@ -1,6 +1,9 @@
 import json
 import shutil
 import subprocess
+import threading
+import time
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -23,6 +26,7 @@ from cag.drive import (
     drive_box,
     figure_mask,
     fit,
+    unfit,
     light_backdrop,
     mask_stats,
     plan,
@@ -204,6 +208,22 @@ def test_fit_pads_a_square_reference_with_magenta_before_resizing(capsys):
     assert "padded with magenta" in capsys.readouterr().err
 
 
+def test_unfit_cuts_fits_padding_off_before_scaling_back():
+    ref = Image.new("RGB", (120, 160), (0, 200, 0))
+    back = numpy.asarray(unfit(fit(ref, 60, 90), (120, 160)))
+    assert back.shape == (160, 120, 3)
+    # Magenta at any edge would be padding squashed into the frame.
+    for pixel in (back[0, 60], back[-1, 60], back[80, 0], back[80, -1]):
+        assert abs(int(pixel[1]) - 200) < 20 and int(pixel[0]) < 30
+    square = numpy.asarray(unfit(fit(Image.new("RGB", (100, 100), (0, 200, 0)), 60, 90), (100, 100)))
+    assert square.shape == (100, 100, 3) and int(square[1, 50][0]) < 30
+
+
+def test_unfit_of_a_2_by_3_reference_is_a_plain_resize():
+    frame = Image.new("RGB", (64, 96), (9, 9, 9))
+    assert unfit(frame, (100, 150)).size == (100, 150)
+
+
 def test_fit_leaves_a_2_by_3_reference_unpadded(capsys):
     assert fit(Image.new("RGB", (1024, 1536), (1, 2, 3)), 576, 864).size == (576, 864)
     assert capsys.readouterr().err == ""
@@ -276,7 +296,7 @@ def test_build_drive_on_a_light_backdrop_never_runs_the_mask_pass(tmp_path):
     assert len(read_apng(built.video)) == 17 and len(read_apng(built.mask)) == 17
     record = json.loads((built.root / DRIVE_RECORD).read_text())
     assert record["source_frames"] == [round((0.5 + k / 16) * 24) for k in range(17)]
-    assert record["trace_index"] == [0, 4, 8, 12, 16] == list(built.index)
+    assert list(built.index) == [0, 4, 8, 12, 16] and "trace_index" not in record
     assert len(record["masks"]) == 17 and record["box"] == [26, 0, 43, 64]
     colours = {tuple(c) for c in read_apng(built.mask)[3].reshape(-1, 3)}
     assert colours <= {(0, 0, 0), (0, 0, 1), MASK_FIGURE}
@@ -306,6 +326,104 @@ def test_build_drive_runs_the_mask_pass_once_for_a_dark_backdrop(tmp_path):
     (built.root / DRIVE_RECORD).unlink()
     build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), dark)
     assert len(calls) == 1
+
+
+def mask_pass_empty(calls):
+    """A mask pass that loses the performer in every frame."""
+
+    def mask_pass(video, into, length):
+        calls.append(video)
+        into.mkdir(parents=True, exist_ok=True)
+        for k in range(length):
+            Image.new("RGB", (32, 48)).save(into / f"{k:03d}.png")
+        return sorted(into.glob("*.png"))
+
+    return mask_pass
+
+
+def DARK(path):  # noqa: N802
+    return native(backdrop=(40, 30, 30), figure=(250, 250, 250))
+
+
+def test_a_failing_mask_pass_is_moved_aside_and_run_again(tmp_path):
+    calls = []
+    motion = bundle(tmp_path)
+    for attempt in range(2):
+        with pytest.raises(DriveError, match="mask pass's drive mask fails.*runs it again"):
+            build_drive(motion, SMALL, tmp_path / "drive", mask_pass_empty(calls), DARK)
+    assert len(calls) == 2, "the failing frames are never reused"
+    (here,) = (tmp_path / "drive").iterdir()
+    assert sorted(p.name for p in here.glob("rejected-mask-pass-*")) == [
+        "rejected-mask-pass-0", "rejected-mask-pass-1"
+    ]
+    built = build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), DARK)
+    assert built.method == "mask-pass" and len(calls) == 3
+
+
+def test_a_changed_mask_pass_cuts_the_drive_again(tmp_path):
+    calls = []
+    motion = bundle(tmp_path)
+    first = build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), DARK, mask_key="sam3-a")
+    assert build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), DARK, mask_key="sam3-a") == first
+    assert len(calls) == 1
+    second = build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), DARK, mask_key="sam3-b")
+    assert len(calls) == 2 and second.mask_key == "sam3-b"
+    assert [p.name for p in first.root.glob("superseded-mask-pass-*")] == ["superseded-mask-pass-0"]
+    # A light-backdrop drive has no mask pass, so no mask key to go stale.
+    light = build_drive(motion, SMALL, tmp_path / "light", None, lambda p: native(), mask_key="x")
+    assert build_drive(motion, SMALL, tmp_path / "light", None, lambda p: native(), mask_key="y") == light
+
+
+def test_mask_pass_frames_with_a_job_still_pending_are_not_reused(tmp_path):
+    calls = []
+    motion = bundle(tmp_path)
+    built = build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), DARK)
+    # Stopped while the last frame was being written: every file there, the job still pending.
+    (built.root / DRIVE_RECORD).unlink()
+    (built.root / drive.MASK_PENDING).write_text('{"job_id": "job-1"}')
+    build_drive(motion, SMALL, tmp_path / "drive", mask_pass_writing(calls), DARK)
+    assert len(calls) == 2, "the pending job is picked up again, not its half-written frames"
+
+
+def test_a_retrace_that_keeps_its_ends_gets_its_own_trace_index(tmp_path):
+    first = build_drive(bundle(tmp_path), SMALL, tmp_path / "drive", None, lambda p: native())
+    assert first.index == (0, 4, 8, 12, 16)
+
+    def no_decode(path):
+        raise AssertionError("the drive itself did not change")
+
+    moved = SimpleNamespace(**{**vars(bundle(tmp_path)), "frame_times": (10.5, 10.6, 10.9, 11.3, 11.5)})
+    again = build_drive(moved, SMALL, tmp_path / "drive", None, no_decode)
+    assert again.root == first.root and again.index == (0, 2, 6, 13, 16)
+    fewer = SimpleNamespace(**{**vars(bundle(tmp_path)), "frame_times": (10.5, 10.75, 11.5)})
+    assert build_drive(fewer, SMALL, tmp_path / "drive", None, no_decode).index == (0, 4, 16)
+
+
+def test_the_clips_rate_is_part_of_the_drive(tmp_path):
+    motion = bundle(tmp_path)
+    first = build_drive(motion, SMALL, tmp_path / "drive", None, lambda p: native())
+    faster = SimpleNamespace(**{**vars(motion), "clip": replace(motion.clip, fps=25)})
+    assert build_drive(faster, SMALL, tmp_path / "drive", None, lambda p: native()).root != first.root
+
+
+def test_two_builds_wanting_one_drive_cut_it_once(tmp_path):
+    motion = bundle(tmp_path)
+    decoded, started = [], threading.Event()
+
+    def slow(path):
+        decoded.append(path)
+        started.set()
+        time.sleep(0.3)
+        return native()
+
+    results = []
+    first = threading.Thread(target=lambda: results.append(build_drive(motion, SMALL, tmp_path / "drive", None, slow)))
+    first.start()
+    started.wait(5)
+    results.append(build_drive(motion, SMALL, tmp_path / "drive", None, slow))
+    first.join()
+    assert len(decoded) == 1, "the second build waited, then found the drive done"
+    assert results[0] == results[1]
 
 
 def test_a_dark_backdrop_without_a_mask_pass_is_refused(tmp_path):
@@ -388,3 +506,20 @@ def test_each_drive_frame_is_the_right_native_frame_of_a_real_clip(tmp_path):
 def test_the_drive_files_are_named_as_documented():
     assert (DRIVE_VIDEO, DRIVE_MASK, DRIVE_RECORD) == ("drive.png", "drive-mask.png", "drive.json")
     assert drive.SCAIL_MAX_LENGTH == 81
+
+
+@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="needs ffmpeg")
+def test_a_clip_deeper_than_8_bits_decodes_as_8(tmp_path):
+    frames = numbered(6)
+    clip_path = tmp_path / "deep.mkv"
+    subprocess.run(
+        [
+            "ffmpeg", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "96x64",
+            "-r", "24", "-i", "-", "-c:v", "ffv1", "-pix_fmt", "yuv444p10le", str(clip_path),
+        ],
+        input=frames.tobytes(),
+        check=True,
+    )
+    decoded = decode(clip_path)
+    assert decoded.shape == (6, 64, 96, 3) and decoded.dtype == numpy.uint8
+    assert [read_number(f, 0) for f in decoded] == list(range(6))

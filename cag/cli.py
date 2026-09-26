@@ -403,6 +403,13 @@ def main(argv: list[str] | None = None) -> int:
         "this machine profile's model files and sizes (comfy/machines/<name>.json). "
         "Default: $CAG_MACHINE; without one, traced sets take the pose-edit path",
     )
+    build_parser.add_argument(
+        "--no-machine",
+        dest="machine",
+        action="store_const",
+        const=None,
+        help="take the pose-edit path for this build even with $CAG_MACHINE set",
+    )
     for stage, flag in (("video", "scail"), ("restyle", "restyle"), ("mask", "mask")):
         variable, default = STAGES[stage]
         build_parser.add_argument(
@@ -441,6 +448,12 @@ def main(argv: list[str] | None = None) -> int:
     clips_parser.add_argument("names", nargs="*", help="bundles, by the name a brief uses")
     clips_parser.add_argument(
         "--cast", action="store_true", help=f"every bundle a brief under {SPECS_ROOT} names"
+    )
+    clips_parser.add_argument(
+        "--missing",
+        action="store_true",
+        help="every bundle whose manifest declares a clip that is not on disk, or is stale: "
+        "what a fresh clone needs",
     )
     clips_parser.add_argument(
         "--check", action="store_true", help="say what each bundle holds of its clip; fetch nothing"
@@ -638,13 +651,18 @@ def machine_with(
             for stage in STAGES
         }
         if backend == "local":
-            missing = comfy.preflight(client or comfy.Client(local=True), graphs.values())
+            client = client or comfy.Client(local=True)
+            missing = comfy.preflight(client, [graphs["video"], graphs["restyle"]])
             if missing:
                 raise SystemExit(
                     f"[local] machine {name!r} cannot draw; the server lacks:\n  "
                     + "\n  ".join(missing)
                     + f"\n  (uv run cag machines --check {name} lists this again)"
                 )
+            # Only footage with no light backdrop runs the mask pass, so its
+            # model is not a reason to refuse a build that may never load it.
+            for line in comfy.preflight(client, [graphs["mask"]]):
+                log(f"[local] {line}; a set whose footage needs the mask pass will fail")
     except comfy.ComfyError as error:
         raise SystemExit(f"[{backend}] {error}") from None
     log(
@@ -688,15 +706,22 @@ def check_machine(name: str, work_root: Path, client: comfy.Client | None = None
     return 1 if missing else 0
 
 
+#: What one bundle can raise that says nothing about the next: a refused clip,
+#: an unreadable manifest, a listed file that is not on disk, a missing key.
+BUNDLE_FAULTS = (clips.ClipError, MotionError, OSError, KeyError, ValueError)
+
+
 def clip_bundles(args: argparse.Namespace) -> int:
     """`cag clips`: backfill, or with --check report, each asked-for bundle's source clip."""
     roots = clips.bundle_roots(args.motion_root)
     names = list(args.names)
     if args.cast:
         names += cast_bundles(args.specs)
+    if getattr(args, "missing", False):
+        names += [name for name, root in roots.items() if _needs_cut(root)]
     names = list(dict.fromkeys(names))
     if not names:
-        log("name bundles, or pass --cast for every bundle a brief names")
+        log("name bundles, or pass --cast for every bundle a brief names, or --missing")
         return 1
     failed = 0
     for name in names:
@@ -704,20 +729,33 @@ def clip_bundles(args: argparse.Namespace) -> int:
             print(f"{name} REFUSED: no bundle under {args.motion_root} calls itself that")
             failed += 1
             continue
+        # One bundle's fault is that bundle's line, never the end of the batch.
         if args.check:
             try:
                 status = clip_status(read_bundle(roots[name] / BUNDLE))
-            except MotionError as error:
+            except BUNDLE_FAULTS as error:
                 status = f"bad ({error})"
             print(f"{name} clip={status}")
             failed += status != "ok"
             continue
         try:
             print(clips.backfill(roots[name], args.cache, dry_run=args.dry_run))
-        except clips.ClipError as error:
-            print(f"{name} REFUSED: {error}")
+        except BUNDLE_FAULTS as error:
+            said = error if isinstance(error, (clips.ClipError, MotionError)) else (
+                f"{type(error).__name__}: {error}"
+            )
+            print(f"{name} REFUSED: {said}")
             failed += 1
     return 1 if failed else 0
+
+
+def _needs_cut(root: Path) -> bool:
+    """Does this bundle declare a clip that is not on disk as declared? A bundle
+    that will not read is included, so its fault gets a line of its own."""
+    try:
+        return clip_status(read_bundle(root / BUNDLE)) in ("missing", "stale")
+    except BUNDLE_FAULTS:
+        return True
 
 
 def cast_bundles(specs_root: Path = SPECS_ROOT) -> list[str]:

@@ -97,16 +97,28 @@ def video_frames(
     local = state.get("local", machine.backend == "local")
     reference = Path(state["key_art"])
 
+    mask_graph = Path(graphs["mask"])
+    mask_extra = machine.placeholders("mask")
+
     def mask_pass(video: Path, into: Path, length: int) -> Sequence[Path]:
         return frames_fn(
-            MASK_PASS_PROMPT, into, [video], comfy.load_workflow(graphs["mask"]),
-            machine.mask_timeout, raw=[True], extra=machine.placeholders("mask"), expect=length,
-            pending=into.parent / f"mask-{PENDING}", seed=machine.seed, local=local,
+            MASK_PASS_PROMPT, into, [video], comfy.load_workflow(mask_graph),
+            machine.mask_timeout, raw=[True], extra=mask_extra, expect=length,
+            pending=into.parent / drive.MASK_PENDING, seed=machine.seed, local=local,
         )
 
     made = drive.build_drive(
-        motion, machine, drive_root(state), mask_pass, decode=decode or drive.decode
+        motion, machine, drive_root(state), mask_pass, decode=decode or drive.decode,
+        mask_key=_sha(
+            mask_graph.read_bytes(), MASK_PASS_PROMPT, json.dumps(mask_extra, sort_keys=True),
+            str(machine.seed),
+        ),
     )
+    if len(made.index) != len(motion.frames):
+        raise DrawError(
+            f"{state['set_name']}: the drive's trace index holds {len(made.index)} SCAIL frames "
+            f"for {len(motion.frames)} traced frames"
+        )
     _log(
         state,
         f"video path: {motion.name}, {len(motion.frames)} traced -> {made.length} SCAIL frames "
@@ -156,19 +168,22 @@ def video_frames(
         state,
         "video\t"
         + _sha(
-            VIDEO_VERSION, motion_digest(motion), video_key, restyle_graph.read_bytes(), RESTYLE,
-            json.dumps(restyle_extra, sort_keys=True), str(machine.seed),
+            VIDEO_VERSION, motion_digest(motion), video_key, json.dumps(list(made.index)),
+            restyle_graph.read_bytes(), RESTYLE, json.dumps(restyle_extra, sort_keys=True),
+            str(machine.seed),
         ),
     )
     with Image.open(reference) as image:
         size = image.size
     sources, failed = {}, []
-    for frame, pick in zip(motion.frames, made.index):
-        # At the reference's size: the restyle's canvas is its first image's.
-        traced = folder / f"traced-{frame.index:02d}.png"
+    for frame, pick in zip(motion.frames, made.index, strict=True):
+        # At the reference's size and shape: the restyle's canvas is its first
+        # image's. Named by the SCAIL frame, not the traced one, so a trace
+        # index that moves can never pick up another frame's file.
+        traced = folder / f"picked-{pick:03d}.png"
         if not traced.exists():
             with Image.open(frames[pick]) as image:
-                image.convert("RGB").resize(size, Image.LANCZOS).save(traced)
+                drive.unfit(image, size).save(traced)
         try:
             sources[frame.index] = draw_fn(
                 RESTYLE,

@@ -153,6 +153,9 @@ class MotionSheet:
     seam: str = ""
     #: The footage the frames were traced from, when the bundle carries it.
     clip: Clip | None = None
+    #: Why a bundle that declares a clip has none to give: the file on disk is
+    #: not the one it declares. Only the video path reads it, and fails with it.
+    clip_problem: str = ""
 
     @property
     def frame_times(self) -> tuple[float, ...]:
@@ -268,6 +271,11 @@ def load_motion(path: Path | str) -> MotionSheet:
 
 #: The file that says a directory is a motion bundle, and what is in it.
 BUNDLE = "manifest.json"
+#: Beside a bundle's `clip.mp4`, and git-ignored like it: the sha256 of the clip
+#: as this machine cut it. The manifest's hash is the machine that committed the
+#: block, and x264 writes its own build into every file, so a clip cut again on
+#: another machine is the same footage in different bytes.
+CLIP_SHA = "clip.sha256"
 
 #: Bundle layouts this reads. A bundle that declares anything else is refused
 #: rather than guessed at.
@@ -303,8 +311,11 @@ class Bundle:
     #: One traced video frame per motion frame, in order, when the bundle ships
     #: a complete set. The pose reference; see `photos` on MotionSheet.
     photos: tuple[Path, ...] = ()
-    #: The source clip, when it is on disk and matches its hash.
+    #: The source clip, when it is on disk and matches its hash. Its `sha256` is
+    #: the file's own, which is what a drive is keyed on.
     clip: Clip | None = None
+    #: Why a clip on disk was not taken; see `clip_status`.
+    clip_problem: str = ""
     #: The clip the manifest declares, whether or not its file is there.
     #: `clip.mp4` is not tracked, so on a fresh clone every bundle has this and
     #: no `clip` until `cag clips` fetches the footage again.
@@ -328,7 +339,7 @@ class Bundle:
                     f"{self.root / BUNDLE} clip spans {self.clip.start:.3f}-{self.clip.end:.3f}s, "
                     f"which does not cover traced frames {outside}"
                 )
-        return replace(motion, photos=self.photos, clip=self.clip)
+        return replace(motion, photos=self.photos, clip=self.clip, clip_problem=self.clip_problem)
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -371,18 +382,24 @@ def read_bundle(path: Path | str) -> Bundle:
     )
     name = data.get("name", manifest.parent.name)
     declared = read_clip(manifest, data["clip"]) if data.get("clip") else None
+    clip, problem = None, ""
     if declared and declared.path.exists():
         # The clip's hash lives in its own block, never in `files`: `files` is
         # what a fresh clone must already hold, and clip.mp4 is not tracked.
-        if declared.sha256 and sha256_of(declared.path) != declared.sha256:
-            raise MotionError(
+        # A mismatch is not raised here: every build and `cag motions` read the
+        # whole library, and one stale clip would stop all of them. The video
+        # path raises it, for this bundle only.
+        actual = sha256_of(declared.path)
+        local = declared.path.with_name(CLIP_SHA)
+        cut_here = local.read_text().strip() if local.exists() else ""
+        if not declared.sha256 or actual in (declared.sha256, cut_here):
+            clip = replace(declared, sha256=actual)
+        else:
+            problem = (
                 f"{manifest} declares clip {declared.path.name} with sha256 "
                 f"{declared.sha256[:12]}, but the file on disk is not it; "
                 f"run `cag clips {name}` to cut it again"
             )
-        clip = declared
-    else:
-        clip = None
     return Bundle(
         name=name,
         title=data.get("title", ""),
@@ -394,6 +411,7 @@ def read_bundle(path: Path | str) -> Bundle:
         sheet=manifest.parent / named[0],
         photos=photos,
         clip=clip,
+        clip_problem=problem,
         declared_clip=declared,
     )
 
@@ -445,11 +463,14 @@ def clip_status(bundle: Bundle) -> str:
 
     `ok` is a clip on disk that matches its hash. `missing` is a manifest that
     declares one whose file is not there, which is every clip on a fresh clone
-    until `cag clips <name>` cuts it again. `none` is a bundle that has never had
-    one, which only `cag clips` can backfill.
+    until `cag clips <name>` cuts it again. `stale` is a file there that is not
+    the one declared, which `cag clips <name>` also cuts again. `none` is a
+    bundle that has never had one, which only `cag clips` can backfill.
     """
     if bundle.clip:
         return "ok"
+    if bundle.clip_problem:
+        return "stale"
     return "missing" if bundle.declared_clip else "none"
 
 
