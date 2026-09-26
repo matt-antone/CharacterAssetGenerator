@@ -76,19 +76,34 @@ the hardware and the bill.
   reference draws a new SCAIL video. A failed restyle fails the set by frame
   number, and a rebuild draws only those.
 - **Only footage on a light backdrop** gets a threshold drive mask. Anything
-  else runs the mask pass (SAM3), which no render has exercised yet.
+  else runs the mask pass (SAM3). One render has exercised it, on Comfy Cloud:
+  `country-01`, portrait footage in a cluttered shop, gave one clean silhouette
+  per frame (figure 10% of the frame, overlap 0.82-0.95 frame to frame).
 - **Qwen-Image-2.1 is licensed for research only.** Nothing the video path draws
   ships until that is cleared.
 
-Trial renders on a branch are scratch, as below. What is established so far is
-one roll each for two characters, from scratch scripts that hand-assembled
-their prompts rather than through `cag build`, on one dance: `club-01`, a
-pingpong, its out leg only. Belter came back at 0.80-0.91 detail against the
-reference and a colour delta of 0.8-3.3; the trooper's colour delta was over
-the 8.1 bar in 6 of 15 frames (8.2 to 10.6). The shipped SCAIL prompt quotes
-the bible where those runs had a hand-written costume sentence, which is
-untested. There is no pose-fidelity floor for this path either. Roll twice
-before calling any of it settled.
+Trial renders on a branch are scratch, as below. What `cag build` itself has
+drawn on this path, all Belter on the `cloud` profile, 2026-09-25, scratch:
+
+1. **`club-01`, two rolls** (seed 1234, then `CAG_VIDEO_SEED=7`). The trace
+   index came out `[0,3,6,8,…,36,39]`, 41 SCAIL frames at 16 fps, exactly the
+   research run's. All 15 restyles passed first time. On the masked cells the
+   two rolls agree: figure height within 4-5% across a set, the same foot row
+   in every frame, no frame more than 2.6 off its set's mean colour, and the
+   two sets' mean colours within about 3 of each other. Against the set
+   reference the first roll's raw frames read 0.77-0.92 detail and 0.7-5.3
+   colour delta. The second roll's backdrop drifted violet (red 177-211 rather
+   than about 235), which the research `measure.py` threshold reads as figure,
+   so its raw-frame numbers are not comparable; snapping restores pure magenta.
+2. **`country-01`, one roll,** through the mask pass: 14 frames, the foot work
+   (kicks, crossed steps) carried, identity held.
+3. **Cost:** about 118 credits a `club-01` set, and a rebuild of a finished set
+   spends none (the SCAIL video and every restyle are cached).
+
+The SCAIL prompt quoting the bible, untested before these runs, held identity
+on both dances. There is still no pose-fidelity floor for this path, and one
+character is not a cast: the bulky trooper, over the 8.1 colour bar in 6 of 15
+frames in the scratch-script run, has not been drawn through `cag build`.
 
 ## Real renders happen on main
 
