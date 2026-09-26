@@ -577,3 +577,44 @@ def test_machines_check_prints_the_download_checklist(tmp_path, monkeypatch, cap
     assert capsys.readouterr().out.strip() == "x.json: lora_name y is not installed"
     monkeypatch.setattr(cli.comfy, "preflight", lambda client, graphs: [])
     assert cli.main(["machines", "--check", "smoke4", "--work", str(tmp_path)]) == 0
+
+
+@pytest.mark.parametrize("returncode", [0, 1])
+def test_a_build_publishes_its_finished_package_even_with_a_failed_set(
+    tmp_path, monkeypatch, capsys, returncode
+):
+    """A FAILED set still publishes what was written, and a failed publish is a
+    warning: the build succeeds either way."""
+    from cag import publish
+    from tests.test_publish import REMOTE, Rclone, installed
+
+    fake_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    monkeypatch.setattr(static_sheet, "draw", fake_draw)
+    monkeypatch.setattr(
+        cli, "text_model",
+        lambda *a, **kw: FakeMessagesListChatModel(responses=[AIMessage("A lounge performer.")]),
+    )
+    run = Rclone(returncode=returncode, stderr="ERROR : network is unreachable")
+    monkeypatch.setattr(publish.subprocess, "run", run)
+    monkeypatch.setattr(publish.shutil, "which", installed)
+    monkeypatch.setenv(publish.REMOTE_ENV, REMOTE)
+    argv = ["build", "tests/fixtures/velvet-lou.json", "--draw-backend", "codex", "--set", "dance",
+            "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")]
+    with pytest.raises(SystemExit):  # the key art gate: no package yet, nothing published
+        cli.main(argv)
+    assert run.calls == []
+    cli.main(["approve", "tests/fixtures/velvet-lou.json", "--work", str(tmp_path / "w")])
+
+    def fails(*a, **kw):
+        raise RuntimeError("wrong figure count")
+
+    monkeypatch.setattr(cli, "render_set", fails)
+    assert cli.main(argv) == 0
+    [(command, _)] = run.calls
+    assert command[1:4] == ["copy", str(tmp_path / "o" / "velvet-lou"), f"{REMOTE}/velvet-lou"]
+    assert (tmp_path / "o" / "velvet-lou" / "index.html").exists()
+    err = capsys.readouterr().err
+    assert "[dance] FAILED" in err
+    assert ("network is unreachable" in err) == bool(returncode)
+

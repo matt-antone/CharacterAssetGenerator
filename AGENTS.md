@@ -308,6 +308,46 @@ sets' sheets and GIFs are still on disk, untouched — only the page forgot them
 Finish with a full `uv run cag build <spec>` afterwards. Completed frames are cached and
 skipped, so it costs almost nothing and puts every set back on the page.
 
+## Publishing a package to Google Drive
+
+With `CAG_OUTPUT_REMOTE` set to an rclone destination —
+`gdrive:CharacterAssetGenerator/outputs` — every `cag build` ends by
+publishing its package: `rclone copy outputs/<theme>/<slug>
+<remote>/<theme>/<slug> --checksum` (`cag/publish.py`). The remote mirrors the
+local layout, so `index.html` arrives with `views/` and its frame sheets beside
+it. `--output-remote REMOTE` overrides the variable for one build, and
+`--no-publish` skips it. Unset, nothing is published and rclone is never looked
+for.
+
+- **copy, never sync.** Nothing on the remote is deleted. A `--set` build
+  publishes a gallery that lists one set; the other sets' files stay on the
+  remote, and the full build that follows (see above) publishes the whole page.
+- **A publish never fails a build.** No rclone, an unconfigured remote, an
+  expired token or a dropped network is one `[publish] WARNING` line naming
+  the command and the fix, and the build still exits 0. A build with a
+  `FAILED` set publishes what it wrote.
+- **A build stopped at the key art publishes nothing.** The key art is in
+  `work/`, and no package folder is written until it is approved; show the user
+  `work/<slug>/source/key.png` as before.
+- **`uv run cag publish <spec>...`** copies packages already on disk without
+  building; `--all` copies every package under `--out` (each folder holding a
+  `manifest.json`). Use it after fixing the remote, or to push packages built
+  before it existed.
+- **Parallel builds each copy their own folder,** and take turns
+  (`outputs/.publish.lock`): two rclone processes creating one Drive folder at
+  once can create two of the same name. If that ever happens,
+  `rclone dedupe --dedupe-mode merge <remote>` folds them together.
+- **The remote uses `scope=drive.file`:** rclone sees only what it created.
+  Let it create the destination folder; one made by hand in Drive is invisible
+  to it, and it makes a second of the same name beside it. Set it up once with
+  `rclone config create gdrive drive scope=drive.file`. To share, share the
+  top folder in Drive once; everything published under it inherits that.
+
+"Never hand over `index.html` on its own" still holds. The Drive folder carries
+its pictures, but Drive does not serve `index.html` as a web page: in the
+browser it previews as text. Point people at the images in the folder, or have
+them download the whole package folder and open `index.html` from there.
+
 ## Installing a motion bundle
 
 Bundles arrive as zips. `library()` finds every `manifest.json` under `motions/`,
@@ -437,6 +477,8 @@ A new term is named here before it is used.
 | **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
 | **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
 | **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one 64-colour palette per set, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
+| **output remote** | the rclone destination packages are published to: `CAG_OUTPUT_REMOTE` or `--output-remote`, e.g. `gdrive:CharacterAssetGenerator/outputs`. A package lands at its path under `outputs/` |
+| **publish** | `rclone copy` of one package folder to the output remote (`cag/publish.py`): at the end of every build, or by `cag publish`. Never sync, never deletes, never fails a build. Not the same act as publishing an Artifact |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds
 both the pose grid and the frame sheet, and is never a name for either.

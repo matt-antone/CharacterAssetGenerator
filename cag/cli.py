@@ -35,6 +35,7 @@ from .machines import STAGES, Machine, MachineError, load_machine, machine_names
 from .motion import BUNDLE, MotionError, clip_status, library, load_motion, read_bundle
 from .motion_writer import write_motion
 from .prompts import KEY_VIEW
+from .publish import REMOTE_ENV, packages, publish
 from .sets import plan_for, wanted
 from .spec import CharacterSpec, load_spec
 from .static_sheet import (
@@ -239,7 +240,15 @@ def build(
     graphs: dict[str, Path] | None = None,
     scail_only: bool = False,
     finish: bool = True,
+    remote: str | None = None,
 ) -> Path:
+    """Draw one brief's package into `<out>/<theme>/<slug>/`, then publish it.
+
+    With a `remote` the finished folder is copied there (`cag.publish`), whatever
+    sets FAILED: what was written is published, and a failed publish is a warning.
+    A build that stops for the key art's approval publishes nothing — the key art
+    is in `work/`, and the package folder is not written until it is approved.
+    """
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
     out_dir = out_for(out_root, spec_path, spec.slug)
@@ -349,6 +358,7 @@ def build(
         background,
     )
     log(str(page))
+    publish(out_dir, out_root, remote)
     return page
 
 
@@ -445,6 +455,17 @@ def main(argv: list[str] | None = None) -> int:
         help="most frames drawn in one sheet-mode render. Default: 8 under codex, "
         f"the whole set (up to {WHOLE_SET_SHEET}) under comfy",
     )
+    add_remote_flags(build_parser, "publish the package there when the build ends")
+
+    publish_parser = sub.add_parser(
+        "publish", help="copy packages already built to the output remote, building nothing"
+    )
+    publish_parser.add_argument("specs", type=Path, nargs="*", help="briefs whose packages to copy")
+    publish_parser.add_argument(
+        "--all", action="store_true", help="every package under --out, whatever brief wrote it"
+    )
+    publish_parser.add_argument("--out", type=Path, default=Path("outputs"))
+    add_remote_flags(publish_parser, "copy the packages there", skip=False)
 
     motions_parser = sub.add_parser(
         "motions", help="list the traced sheets a brief can name"
@@ -509,6 +530,8 @@ def main(argv: list[str] | None = None) -> int:
     fidelity_parser.add_argument("--motion-root", type=Path, default=MOTION_ROOT)
 
     args = parser.parse_args(argv)
+    if args.command == "publish":
+        return publish_packages(args.specs, args.all, args.out, args.output_remote)
     if args.command == "fidelity":
         spec = load_spec(args.spec)
         name = spec.motions.get(args.set_name)
@@ -603,8 +626,53 @@ def main(argv: list[str] | None = None) -> int:
         graphs=graphs,
         scail_only=args.scail_only,
         finish=args.finish,
+        remote=args.output_remote,
     )
     return 0
+
+
+def add_remote_flags(parser: argparse.ArgumentParser, what: str, skip: bool = True) -> None:
+    parser.add_argument(
+        "--output-remote",
+        metavar="REMOTE",
+        default=os.environ.get(REMOTE_ENV) or None,
+        help=f"an rclone destination, e.g. gdrive:CharacterAssetGenerator/outputs: {what}, "
+        f"at the package's path under --out. Default: ${REMOTE_ENV}; unset, nothing is published",
+    )
+    if not skip:
+        return
+    parser.add_argument(
+        "--no-publish",
+        dest="output_remote",
+        action="store_const",
+        const=None,
+        help=f"publish nothing this time, even with ${REMOTE_ENV} set",
+    )
+
+
+def publish_packages(spec_paths: list[Path], every: bool, out_root: Path, remote: str | None) -> int:
+    """`cag publish`: copy packages already on disk to the output remote.
+
+    A brief whose package was never built is its own line, and the rest go on.
+    """
+    if not remote:
+        log(f"[publish] no remote: set {REMOTE_ENV} or pass --output-remote")
+        return 1
+    folders = packages(out_root, MANIFEST) if every else []
+    missing = 0
+    for spec_path in spec_paths:
+        folder = out_for(out_root, spec_path, load_spec(spec_path).slug)
+        if (folder / MANIFEST).is_file():
+            folders.append(folder)
+        else:
+            log(f"[publish] {spec_path}: no package at {folder}; build it first")
+            missing += 1
+    folders = list(dict.fromkeys(folders))
+    if not folders and not missing:
+        log(f"[publish] name briefs, or pass --all for every package under {out_root}")
+        return 1
+    failed = sum(not publish(folder, out_root, remote) for folder in folders)
+    return 1 if failed or missing else 0
 
 
 def text_model(work_dir: Path) -> BaseChatModel:
