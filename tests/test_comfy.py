@@ -369,3 +369,291 @@ def test_every_backend_is_offered_and_none_goes_missing(capsys):
     with pytest.raises(SystemExit):
         cli.main(["build", "--help"])
     assert "{" + ",".join(BACKENDS) + "}" in capsys.readouterr().out
+
+
+def test_extra_fills_placeholders_of_the_callers_own_and_wins():
+    video = {**WORKFLOW, "9": {"class_type": "WanSCAILToVideo",
+                               "inputs": {"length": "$length", "width": "$width"}}}
+    filled = comfy.fill(video, "a dance", ["a"], 7, comfy.PORTRAIT,
+                        extra={"$length": 41, "$width": 576})
+    assert filled["9"]["inputs"] == {"length": 41, "width": 576}
+    assert filled["7"]["inputs"]["width"] == 576, "extra is applied last"
+
+
+def test_a_placeholder_nothing_fills_is_refused_before_it_is_sent():
+    video = {**WORKFLOW, "9": {"class_type": "WanSCAILToVideo", "inputs": {"length": "$length"}}}
+    with pytest.raises(comfy.ComfyError, match=r"9\.length=\$length"):
+        comfy.fill(video, "a dance", ["a"], 7, comfy.PORTRAIT)
+    with pytest.raises(comfy.ComfyError, match="must start with"):
+        comfy.fill(WORKFLOW, "a dance", ["a"], 7, comfy.PORTRAIT, extra={"length": 41})
+    # Only the workflow's own strings are placeholders: a prompt may start with $.
+    filled = comfy.fill(WORKFLOW, "$5 of glitter", ["a"], 7, comfy.PORTRAIT)
+    assert filled["6"]["inputs"]["prompt"] == "$5 of glitter"
+
+
+@pytest.mark.parametrize("path", [
+    comfy.DEFAULT_WORKFLOW, comfy.LOCAL_WORKFLOW, comfy.POSE_WORKFLOW,
+    Path("comfy/qwen21-mannequin-pose.json"),
+])
+def test_every_workflow_a_render_sends_today_fills_with_nothing_left_over(path):
+    shipped = comfy.load_workflow(path)
+    names = [f"ref{n}" for n in range(comfy.reference_slots(shipped))]
+    filled = comfy.fill(shipped, "a singer", names, 7, comfy.PORTRAIT)
+    assert '"$' not in json.dumps(filled)
+
+
+def test_saved_images_are_every_saved_one_in_filename_order():
+    outputs = {
+        "9": {"images": [{"filename": "p_0001.png", "type": "temp"}]},
+        "8": {"images": [{"filename": f"cag_{n:05d}_.png", "type": "output"} for n in (3, 1, 2)]},
+    }
+    assert [i["filename"] for i in comfy.saved_images(outputs)] == [
+        "cag_00001_.png", "cag_00002_.png", "cag_00003_.png"
+    ]
+    assert comfy.first_image(outputs)["filename"] == "cag_00001_.png"
+    # Previews only when nothing was saved.
+    assert [i["filename"] for i in comfy.saved_images({"9": outputs["9"]})] == ["p_0001.png"]
+    assert comfy.saved_images({}) == []
+    with pytest.raises(comfy.ComfyError, match="Save Image"):
+        comfy.first_image({})
+
+
+def apng(frames: int) -> bytes:
+    buffer = io.BytesIO()
+    first, *rest = [Image.new("RGB", (8, 12), (n * 40, 0, 0)) for n in range(frames)]
+    first.save(buffer, format="PNG", save_all=True, append_images=rest, duration=62)
+    return buffer.getvalue()
+
+
+class FakeServer:
+    """A ComfyUI that runs jobs saving many images, for `render_frames`."""
+
+    def __init__(self, saves=3):
+        self.saves = saves
+        self.requests = []
+        self.uploads = {}
+        self.submitted = []
+        self.status = {}
+        self.object_info = {}
+
+    def __call__(self, request: httpx.Request) -> httpx.Response:
+        self.requests.append(request)
+        path = request.url.path
+        if path == "/api/upload/image":
+            body = request.read()
+            name = body.split(b'filename="')[1].split(b'"')[0].decode()
+            start = body.index(b"\r\n\r\n", body.index(b'filename="')) + 4
+            self.uploads[name] = body[start : body.rindex(b"\r\n--")]
+            return httpx.Response(200, json={"name": name})
+        if path == "/api/prompt":
+            self.submitted.append(json.loads(request.content))
+            job_id = f"job-{len(self.submitted)}"
+            self.status[job_id] = "completed"
+            return httpx.Response(200, json={"prompt_id": job_id})
+        if path.startswith("/api/jobs/"):
+            job_id = path.removeprefix("/api/jobs/")
+            if job_id not in self.status:
+                return httpx.Response(404, json={"error": "Job not found"})
+            images = [{"filename": f"cag_{n:05d}_.png", "subfolder": "", "type": "output"}
+                      for n in reversed(range(self.saves))]
+            return httpx.Response(200, json={
+                "id": job_id, "status": self.status[job_id], "outputs": {"8": {"images": images}},
+            })
+        if path == "/api/view":
+            n = int(request.url.params["filename"].split("_")[1])
+            return httpx.Response(200, content=png((n, 0, 0)))
+        if path.startswith("/api/object_info/"):
+            kind = path.removeprefix("/api/object_info/")
+            known = {kind: self.object_info[kind]} if kind in self.object_info else {}
+            return httpx.Response(200, json=known)
+        return httpx.Response(404)
+
+    def client(self, local=True):
+        return comfy.Client(api_key=None if local else "k", local=local,
+                            transport=httpx.MockTransport(self))
+
+
+VIDEO = {
+    "1": {"class_type": "LoadImage", "inputs": {"image": "$image1"}},
+    "2": {"class_type": "LoadImage", "inputs": {"image": "$image2"}},
+    "5": {"class_type": "WanSCAILToVideo",
+          "inputs": {"prompt": "$prompt", "length": "$length", "seed": "$seed",
+                     "ref": ["1", 0], "drive": ["2", 0]}},
+    "8": {"class_type": "SaveImage", "inputs": {"images": ["5", 0]}},
+}
+
+
+@pytest.fixture
+def video(tmp_path, monkeypatch):
+    monkeypatch.setattr(comfy, "POLL_SECONDS", 0)
+    key = tmp_path / "key.png"
+    key.write_bytes(png())
+    drive = tmp_path / "drive.png"
+    drive.write_bytes(apng(3))
+    return [key, drive]
+
+
+def frames(server, tmp_path, references, **kw):
+    kw = {"raw": [False, True], "extra": {"$length": 3}, "expect": 3,
+          "pending": tmp_path / "out" / "pending.json", **kw}
+    return comfy.render_frames("a dance", tmp_path / "out", references, VIDEO, 60,
+                               client=server.client(), **kw)
+
+
+def test_a_raw_upload_keeps_every_frame_of_an_animated_png(video):
+    server = FakeServer()
+    name = server.client().upload_raw(video[1])
+    assert name.startswith("cag-") and server.uploads[name] == video[1].read_bytes()
+    with Image.open(io.BytesIO(server.uploads[name])) as image:
+        assert image.n_frames == 3
+
+
+def test_render_frames_writes_every_image_in_order(video, tmp_path):
+    server = FakeServer(saves=3)
+    written = frames(server, tmp_path, video, seed=7)
+    assert [p.name for p in written] == ["000.png", "001.png", "002.png"]
+    assert [Image.open(p).getpixel((0, 0))[0] for p in written] == [0, 1, 2]
+    sent = server.submitted[0]["prompt"]
+    assert sent["5"]["inputs"]["length"] == 3 and sent["5"]["inputs"]["seed"] == 7
+    uploaded = server.uploads[sent["2"]["inputs"]["image"]]
+    assert Image.open(io.BytesIO(uploaded)).n_frames == 3, "the drive went up raw"
+    assert not (tmp_path / "out" / "pending.json").exists(), "done, so nothing to resume"
+
+
+def test_render_frames_refuses_a_wrong_count_and_keeps_what_came_back(video, tmp_path):
+    server = FakeServer(saves=2)
+    with pytest.raises(comfy.ComfyError, match="saved 2 images, not the 3"):
+        frames(server, tmp_path, video)
+    with pytest.raises(comfy.ComfyError, match="rejected-1"):
+        frames(server, tmp_path, video)
+    assert sorted(p.name for p in (tmp_path / "out" / "rejected-0").iterdir()) == [
+        "000.png", "001.png"
+    ]
+    assert not (tmp_path / "out" / "000.png").exists()
+    assert not (tmp_path / "out" / "pending.json").exists(), "a finished job is not resumed"
+
+
+def test_render_frames_resumes_a_running_job_instead_of_paying_again(video, tmp_path):
+    server = FakeServer()
+    server.status["job-9"] = "in_progress"
+    pending = tmp_path / "out" / "pending.json"
+    pending.parent.mkdir()
+    pending.write_text(json.dumps({"job_id": "job-9"}))
+    polls = []
+
+    def finish(request):
+        if request.url.path == "/api/jobs/job-9":
+            polls.append(request)
+            if len(polls) == 3:
+                server.status["job-9"] = "completed"
+        return server(request)
+
+    client = comfy.Client(local=True, transport=httpx.MockTransport(finish))
+    written = comfy.render_frames("a dance", tmp_path / "out", video, VIDEO, 60, raw=[False, True],
+                                  extra={"$length": 3}, expect=3, pending=pending, client=client)
+    assert len(written) == 3
+    assert server.submitted == [] and server.uploads == {}
+    assert not any(r.url.path == "/api/queue" for r in server.requests)
+
+
+def test_render_frames_downloads_a_job_that_finished_while_nobody_waited(video, tmp_path):
+    server = FakeServer()
+    server.status["job-9"] = "completed"
+    pending = tmp_path / "out" / "pending.json"
+    pending.parent.mkdir()
+    pending.write_text(json.dumps({"job_id": "job-9"}))
+    assert len(frames(server, tmp_path, video)) == 3
+    assert server.submitted == []
+
+
+@pytest.mark.parametrize("known", [False, True])
+def test_render_frames_submits_again_when_the_job_is_gone_or_failed(video, tmp_path, known):
+    server = FakeServer()
+    if known:
+        server.status["job-9"] = "failed"
+    pending = tmp_path / "out" / "pending.json"
+    pending.parent.mkdir()
+    pending.write_text(json.dumps({"job_id": "job-9"}))
+    assert len(frames(server, tmp_path, video)) == 3
+    assert len(server.submitted) == 1
+
+
+def test_the_pending_job_is_written_before_the_wait(video, tmp_path, monkeypatch):
+    server = FakeServer()
+    pending = tmp_path / "out" / "pending.json"
+    seen = {}
+
+    def stopped(self, job_id, timeout, cancel=True):
+        seen["pending"] = json.loads(pending.read_text())
+        seen["cancel"] = cancel
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(comfy.Client, "wait", stopped)
+    with pytest.raises(KeyboardInterrupt):
+        frames(server, tmp_path, video)
+    assert seen["pending"]["job_id"] == "job-1" and seen["cancel"] is False
+    assert pending.exists(), "a build stopped mid-job resumes it"
+
+
+@pytest.mark.parametrize("cancel", [True, False])
+def test_a_wait_that_times_out_cancels_only_when_asked(monkeypatch, cancel):
+    server = FakeServer()
+    server.status["job-9"] = "in_progress"
+    monkeypatch.setattr(comfy, "POLL_SECONDS", 0)
+    with pytest.raises(comfy.ComfyError, match="timed out" if cancel else "left running"):
+        server.client().wait("job-9", 0, cancel=cancel)
+    assert any(r.url.path == "/api/queue" for r in server.requests) == cancel
+
+
+def test_a_job_the_server_never_heard_of_is_none():
+    assert FakeServer().client().job("job-404") is None
+
+
+def test_render_uses_the_seed_it_is_given(cloud, tmp_path):
+    comfy.render("a singer", tmp_path / "art.png", [], WORKFLOW, 60, client=comfy.Client(), seed=7)
+    assert cloud.submitted[0]["prompt"]["6"]["inputs"]["seed"] == 7
+
+
+def loader(name, files, v3=False):
+    return {"input": {"required": {name: ("COMBO", {"options": files}) if v3 else (files,)}}}
+
+
+def test_preflight_lists_every_missing_node_and_model_file(tmp_path):
+    server = FakeServer()
+    server.object_info = {
+        "UnetLoaderGGUF": loader("unet_name", ["SCAIL-2-Q5_K_M.gguf"]),
+        "LoraLoaderModelOnly": loader("lora_name", ["dpo.safetensors"], v3=True),
+        "CLIPLoader": loader("clip_name", ["umt5.safetensors"]),
+        "LoadImage": loader("image", ["a.png"]),
+        "SaveImage": {"input": {"required": {}}},
+    }
+    video_graph = tmp_path / "video.json"
+    video_graph.write_text(json.dumps({
+        "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "SCAIL-2-Q2_K.gguf"}},
+        "2": {"class_type": "LoraLoaderModelOnly", "inputs": {"lora_name": "lightx2v.safetensors",
+                                                             "model": ["1", 0]}},
+        "3": {"class_type": "LoraLoaderModelOnly", "inputs": {"lora_name": "dpo.safetensors",
+                                                             "model": ["2", 0]}},
+        "4": {"class_type": "LoadImage", "inputs": {"image": "$image1"}},
+        "5": {"class_type": "WanSCAILToVideo", "inputs": {"prompt": "$prompt"}},
+        "6": {"class_type": "SaveImage", "inputs": {"images": ["5", 0]}},
+    }))
+    restyle = {"c": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen3vl.safetensors"}}}
+    missing = comfy.preflight(server.client(), [video_graph, restyle])
+    assert missing == [
+        "video.json: UnetLoaderGGUF unet_name SCAIL-2-Q2_K.gguf is not installed",
+        "video.json: LoraLoaderModelOnly lora_name lightx2v.safetensors is not installed",
+        "video.json: node WanSCAILToVideo is not installed",
+        "workflow 2: CLIPLoader clip_name qwen3vl.safetensors is not installed",
+    ]
+    asked = [r.url.path for r in server.requests]
+    assert asked.count("/api/object_info/LoraLoaderModelOnly") == 1, "each class asked once"
+
+
+def test_preflight_on_a_server_that_cannot_answer_checks_nothing():
+    def cloud(request):
+        return httpx.Response(404)
+
+    client = comfy.Client(api_key="k", transport=httpx.MockTransport(cloud))
+    workflow = {"1": {"class_type": "UNETLoader", "inputs": {"unet_name": "x"}}}
+    assert comfy.preflight(client, [workflow]) == []

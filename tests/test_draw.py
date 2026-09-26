@@ -178,3 +178,56 @@ def test_a_washed_out_magenta_is_refused():
     # What it painted behind the rest, and what the prompt asks for.
     for colour in ((252, 3, 250), (255, 0, 255)):
         assert backdrop_is_usable(Image.new("RGB", (64, 64), colour))[0], colour
+
+
+def test_a_fixed_seed_moves_on_for_every_redraw_even_across_runs(monkeypatch, tmp_path):
+    """A fixed seed that failed once would fail again; each try is the next seed on."""
+    from cag import draw as drawing
+
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text('{"1": {"class_type": "Edit", "inputs": {"prompt": "$prompt"}}}')
+    seeds, pictures = [], []
+
+    def run(prompt, out_path, references, loaded, timeout, scene, local, seed=None):
+        seeds.append(seed)
+        (pictures.pop(0) if pictures else scenery()).save(out_path)
+        return ""
+
+    monkeypatch.setattr(drawing, "_run_comfy", run)
+    out = tmp_path / "art.png"
+    with pytest.raises(DrawError):
+        draw("a singer", out, backend="comfy", workflow=workflow, seed=100)
+    first = (tmp_path / "art.unusable-0.png").read_bytes()
+    with pytest.raises(DrawError):
+        draw("a singer", out, backend="comfy", workflow=workflow, seed=100)
+    assert seeds == [100, 101, 102, 103]
+    # Evidence from the first run is kept, not overwritten by the second.
+    assert sorted(p.name for p in tmp_path.glob("art.unusable-*.png")) == [
+        f"art.unusable-{n}.png" for n in range(4)
+    ]
+    assert (tmp_path / "art.unusable-0.png").read_bytes() == first
+
+    pictures.append(Image.new("RGB", (64, 64), (255, 0, 255)))
+    assert draw("a singer", out, backend="comfy", workflow=workflow, seed=100) == out
+    assert seeds[-1] == 104, "unusable-N is always the picture seed + N made"
+
+
+def test_without_a_seed_every_try_is_a_random_roll(monkeypatch, tmp_path):
+    from cag import draw as drawing
+
+    workflow = tmp_path / "workflow.json"
+    workflow.write_text('{"1": {"class_type": "Edit", "inputs": {"prompt": "$prompt"}}}')
+    seeds = []
+
+    def run(prompt, out_path, references, loaded, timeout, scene, local, seed=None):
+        seeds.append(seed)
+        scenery().save(out_path)
+        return ""
+
+    monkeypatch.setattr(drawing, "_run_comfy", run)
+    (tmp_path / "art.unusable-0.png").write_bytes(b"from an earlier run")
+    with pytest.raises(DrawError):
+        draw("a singer", tmp_path / "art.png", backend="comfy", workflow=workflow)
+    assert seeds == [None, None]
+    assert (tmp_path / "art.unusable-0.png").read_bytes() == b"from an earlier run"
+    assert (tmp_path / "art.unusable-2.png").exists()

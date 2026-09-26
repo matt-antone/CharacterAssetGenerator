@@ -10,9 +10,13 @@ is exactly one of these strings is filled in before the workflow is sent:
 
     $prompt              the render's prompt
     $image1 .. $imageN   the render's reference images, in the order attached
-    $seed                a fresh random seed, so a redraw is a new roll
+    $seed                the seed asked for, or a fresh random one, so a redraw is a new roll
     $width, $height      the canvas in pixels, read off the prompt
     $aspect              the same canvas as a ratio, "2:3", "3:2" or "16:9"
+
+A caller can fill more (`extra`, e.g. a video's `$length`), and its values win.
+Any other input still starting with `$` once these are in is refused before
+anything is sent: ComfyUI would take the placeholder as a literal value.
 
 A render with fewer references than the workflow has slots drops the unused
 `LoadImage` nodes and every link to them. A batch node left with one input is
@@ -38,10 +42,13 @@ import io
 import json
 import os
 import random
+import re
+import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Iterable, Mapping, Sequence
+from urllib.parse import quote
 
 import httpx
 import numpy
@@ -267,12 +274,18 @@ def fill(
     images: Sequence[str],
     seed: int,
     shape: Canvas,
+    extra: Mapping[str, Any] | None = None,
 ) -> dict:
     """A copy of `workflow` with every placeholder replaced.
 
-    `images` are names already uploaded to Comfy, one per reference.
+    `images` are names already uploaded to Comfy, one per reference. `extra`
+    fills placeholders of the caller's own, keyed as written in the workflow
+    ("$length"), and is applied last, so it can also override the canvas.
     """
     check_references(workflow, len(images))
+    unkeyed = [key for key in extra or {} if not key.startswith("$")]
+    if unkeyed:
+        raise ComfyError(f"extra placeholders must start with $: {', '.join(unkeyed)}")
     values: dict[str, Any] = {
         "$prompt": prompt,
         "$seed": seed,
@@ -280,9 +293,10 @@ def fill(
         "$height": shape.height,
         "$aspect": shape.aspect,
         **{f"$image{index}": name for index, name in enumerate(images, start=1)},
+        **(extra or {}),
     }
     filled = copy.deepcopy(workflow)
-    unused = []
+    unused, leftover = [], []
     for node_id, node in filled.items():
         for key, value in node.get("inputs", {}).items():
             if not isinstance(value, str):
@@ -291,6 +305,14 @@ def fill(
                 node["inputs"][key] = values[value]
             elif value.startswith("$image"):
                 unused.append(node_id)
+            elif value.startswith("$"):
+                leftover.append(f"{node_id}.{key}={value}")
+    # Checked while filling, not after: a filled-in prompt may itself start with $.
+    if leftover:
+        raise ComfyError(
+            f"the workflow has placeholders nothing fills: {', '.join(leftover)}. "
+            "ComfyUI would read them as literal values"
+        )
     for node_id in unused:
         _drop(filled, node_id)
     return filled
@@ -398,6 +420,23 @@ class Client:
         _check(response, "upload", self.where)
         return response.json()["name"]
 
+    def upload_raw(self, path: Path | str) -> str:
+        """Upload a file's bytes exactly as they are, and return its name.
+
+        `upload` re-encodes through PIL, which keeps the first frame of an
+        animated PNG and drops the rest; `LoadImage` reads every frame of one
+        into a batch, which is how a video goes in as a reference.
+        """
+        data = Path(path).read_bytes()
+        name = f"cag-{hashlib.sha256(data).hexdigest()[:16]}.png"
+        response = self.http.post(
+            "/api/upload/image",
+            files={"image": (name, data, "image/png")},
+            data={"type": "input", "overwrite": "true"},
+        )
+        _check(response, "upload", self.where)
+        return response.json()["name"]
+
     def submit(self, workflow: dict) -> str:
         # Partner nodes (GPT Image, Nano Banana, ...) bill to the same key. A local
         # server has none to send, and no partner nodes to bill.
@@ -409,21 +448,39 @@ class Client:
             raise ComfyError(f"workflow refused: {body.get('error') or body}")
         return body["prompt_id"]
 
-    def wait(self, job_id: str, timeout: float) -> dict:
-        """Poll a job until it finishes, and return its details."""
+    def job(self, job_id: str) -> dict | None:
+        """One look at a job: its details, or None if the server has never heard of it."""
+        response = self.http.get(f"/api/jobs/{job_id}")
+        if response.status_code == 404:
+            return None
+        _check(response, "job status", self.where)
+        return response.json()
+
+    def wait(self, job_id: str, timeout: float, cancel: bool = True) -> dict:
+        """Poll a job until it finishes, and return its details.
+
+        On timeout the job is cancelled, unless `cancel` is off: a job whose id
+        was written down to be resumed is left running, so the next build can
+        pick up what it has already paid for.
+        """
         deadline = time.monotonic() + timeout
         while True:
-            response = self.http.get(f"/api/jobs/{job_id}")
-            _check(response, "job status", self.where)
-            job = response.json()
+            job = self.job(job_id)
+            if job is None:
+                raise ComfyError(f"{self.where} has no job {job_id}")
             if job.get("status") in TERMINAL:
                 if job["status"] != "completed":
                     detail = job.get("execution_error") or job["status"]
                     raise ComfyError(f"job {job_id} {job['status']}: {detail}")
                 return job
             if time.monotonic() > deadline:
-                self.http.post("/api/queue", json={"delete": [job_id]})
-                raise ComfyError(f"job {job_id} timed out after {timeout:.0f}s")
+                if cancel:
+                    self.http.post("/api/queue", json={"delete": [job_id]})
+                    raise ComfyError(f"job {job_id} timed out after {timeout:.0f}s")
+                raise ComfyError(
+                    f"job {job_id} still running after {timeout:.0f}s; left running, "
+                    "the next build resumes it"
+                )
             time.sleep(POLL_SECONDS)
 
     def download(self, image: dict) -> bytes:
@@ -452,17 +509,28 @@ def _check(response: httpx.Response, what: str, where: str = "Comfy Cloud") -> N
     raise ComfyError(f"{where} {what} failed ({response.status_code}): {why}")
 
 
-def first_image(outputs: dict) -> dict:
-    """The first saved image among a finished job's outputs."""
+def saved_images(outputs: dict) -> list[dict]:
+    """Every saved image among a finished job's outputs, in filename order.
+
+    Saved means written to the output folder; previews are only used when a job
+    saved nothing. A video job saves one image per frame under one prefix, so
+    filename order is frame order.
+    """
     images = [
         image
         for output in outputs.values()
         for image in (output or {}).get("images", [])
     ]
     saved = [image for image in images if image.get("type", "output") == "output"]
-    if not (saved or images):
+    return sorted(saved or images, key=lambda image: image["filename"])
+
+
+def first_image(outputs: dict) -> dict:
+    """The first saved image among a finished job's outputs."""
+    images = saved_images(outputs)
+    if not images:
         raise ComfyError("the job finished without saving an image; add a Save Image node")
-    return (saved or images)[0]
+    return images[0]
 
 
 def render(
@@ -474,10 +542,12 @@ def render(
     client: Client | None = None,
     rules: bool = True,
     local: bool = False,
+    seed: int | None = None,
 ) -> None:
     """Draw `prompt` with `workflow` and write the result to `out_path` as a PNG.
 
-    `local` runs it on your own ComfyUI server rather than Comfy Cloud.
+    `local` runs it on your own ComfyUI server rather than Comfy Cloud. `seed`
+    fills `$seed`; left out, every render is a fresh random roll.
 
     `rules` paints out panel rules (see `erase_panel_rules`). A location turns
     it off: a stage edge or a lighting truss is a long dark line that belongs.
@@ -489,7 +559,8 @@ def render(
     # into its own input reads each at its own shape.
     boxed = any(node.get("class_type") in BATCH_NODES for node in workflow.values())
     names = [client.upload(reference, boxed) for reference in references]
-    filled = fill(workflow, prompt, names, random.randrange(2**32), canvas(prompt))
+    seed = random.randrange(2**32) if seed is None else seed
+    filled = fill(workflow, prompt, names, seed, canvas(prompt))
     job = client.wait(client.submit(filled), timeout)
     data = client.download(first_image(job.get("outputs") or {}))
     with Image.open(io.BytesIO(data)) as image:
@@ -502,3 +573,201 @@ def render(
         cleaned.save(out_path, format="PNG")
     else:
         drawn.save(out_path, format="PNG")
+
+
+def _log(message: str) -> None:
+    print(message, file=sys.stderr, flush=True)
+
+
+def render_frames(
+    prompt: str,
+    out_dir: Path,
+    references: Sequence[Path | str],
+    workflow: dict,
+    timeout: float,
+    *,
+    raw: Sequence[bool],
+    extra: Mapping[str, Any] | None = None,
+    expect: int,
+    pending: Path,
+    seed: int | None = None,
+    client: Client | None = None,
+    local: bool = False,
+) -> list[Path]:
+    """Run one job that saves many images, and write them to `out_dir/000.png` on.
+
+    For a video: one SCAIL-2 job returns every frame. None of it goes through
+    `draw`'s backdrop check — a frame here is an intermediate, not a source.
+
+    `raw` says, per reference, whether its bytes go up untouched
+    (`Client.upload_raw`, an animated PNG keeping every frame) or re-encoded
+    at its own shape. `extra` and `seed` fill the workflow as in `fill`.
+
+    A long job is resumable. Its id is written to `pending` as soon as it is
+    submitted, and a later call finding that file picks the job up instead of
+    paying for it again: waits on it if it is still running, downloads it if
+    it finished, submits afresh only if it failed or the server has forgotten
+    it. Waiting never cancels, so a build stopped mid-job leaves it running.
+
+    A job that saves other than `expect` images is refused, and what it did
+    save is kept in `out_dir/rejected-N/` to be looked at.
+    """
+    out_dir = Path(out_dir)
+    pending = Path(pending)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    client = client or Client(local=local)
+    job_id, job = _resume(client, pending, timeout)
+    if job is None:
+        check_references(workflow, len(references))
+        if len(raw) != len(references):
+            raise ComfyError(f"{len(references)} references but {len(raw)} raw flags")
+        names = [
+            client.upload_raw(reference) if as_is else client.upload(reference, boxed=False)
+            for reference, as_is in zip(references, raw)
+        ]
+        seed = random.randrange(2**32) if seed is None else seed
+        filled = fill(workflow, prompt, names, seed, canvas(prompt), extra)
+        job_id = client.submit(filled)
+        # Written before the wait, so a build stopped now resumes this job.
+        _write_pending(pending, job_id, client)
+        job = client.wait(job_id, timeout, cancel=False)
+
+    images = [client.download(image) for image in saved_images(job.get("outputs") or {})]
+    if len(images) != expect:
+        kept = _next_free(out_dir, "rejected-")
+        _save_all(images, kept)
+        pending.unlink(missing_ok=True)
+        raise ComfyError(
+            f"job {job_id} saved {len(images)} images, not the {expect} asked for; "
+            f"kept in {kept}"
+        )
+    frames = _save_all(images, out_dir)
+    # Last, so a build stopped while downloading downloads again.
+    pending.unlink(missing_ok=True)
+    return frames
+
+
+def _resume(client: Client, pending: Path, timeout: float) -> tuple[str | None, dict | None]:
+    """The job `pending` names, finished, or (None, None) if there is none to pick up."""
+    if not pending.exists():
+        return None, None
+    try:
+        job_id = json.loads(pending.read_text())["job_id"]
+    except (ValueError, KeyError, TypeError):
+        _log(f"{pending} is unreadable; submitting again")
+        return None, None
+    job = client.job(job_id)
+    if job is None:
+        _log(f"{client.where} has no job {job_id}; submitting again")
+        return None, None
+    status = job.get("status")
+    if status == "completed":
+        _log(f"job {job_id} finished while nobody was waiting; downloading it")
+        return job_id, job
+    if status in TERMINAL:
+        _log(f"job {job_id} {status}; submitting again")
+        return None, None
+    _log(f"resuming job {job_id} on {client.where}")
+    return job_id, client.wait(job_id, timeout, cancel=False)
+
+
+def _write_pending(pending: Path, job_id: str, client: Client) -> None:
+    pending.parent.mkdir(parents=True, exist_ok=True)
+    record = {
+        "job_id": job_id,
+        "where": client.where,
+        "url": str(client.http.base_url),
+        "submitted": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+    }
+    partial = pending.with_name(pending.name + ".part")
+    partial.write_text(json.dumps(record, indent=2) + "\n")
+    partial.replace(pending)
+
+
+def _next_free(parent: Path, prefix: str) -> Path:
+    """`parent/<prefix>N` for the first N not already there."""
+    taken = {
+        int(path.name.removeprefix(prefix))
+        for path in parent.glob(f"{prefix}*")
+        if path.name.removeprefix(prefix).isdigit()
+    }
+    return parent / f"{prefix}{next(n for n in range(len(taken) + 1) if n not in taken)}"
+
+
+def _save_all(images: Sequence[bytes], into: Path) -> list[Path]:
+    """Each downloaded image as `into/NNN.png`, in order."""
+    into.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for index, data in enumerate(images):
+        paths.append(into / f"{index:03d}.png")
+        with Image.open(io.BytesIO(data)) as image:
+            image.convert("RGB").save(paths[-1], format="PNG")
+    return paths
+
+
+#: Loader inputs that name a model file: checked against what the server has.
+FILE_INPUT = re.compile(r"(unet|lora|clip|vae|ckpt)_name\d*")
+
+
+def preflight(client: Client, workflows: Iterable[Path | str | dict]) -> list[str]:
+    """Everything the workflows need that the server does not have, or [] if nothing.
+
+    Asks the server for each node class the workflows use, and checks every
+    model file a loader names against the files that node offers — one pass
+    that lists all of it, instead of a job that fails on the first missing
+    file after loading the rest. Meant for a local server, which answers these
+    questions; a server that does not (Comfy Cloud) is not checked.
+    """
+    graphs = []
+    for index, workflow in enumerate(workflows, start=1):
+        if isinstance(workflow, dict):
+            graphs.append((f"workflow {index}", workflow))
+        else:
+            graphs.append((Path(workflow).name, json.loads(Path(workflow).read_text())))
+
+    info: dict[str, dict | None] = {}
+    missing: list[str] = []
+    for label, workflow in graphs:
+        for node_id, node in workflow.items():
+            kind = node.get("class_type", "")
+            if kind not in info:
+                try:
+                    response = client.http.get(f"/api/object_info/{quote(kind, safe='')}")
+                except httpx.TransportError as error:
+                    raise ComfyError(
+                        f"{client.where} is not answering at {client.http.base_url}: {error}"
+                    ) from error
+                if response.status_code == 404 and client.where != "local ComfyUI":
+                    _log(f"preflight unavailable on {client.where}; nothing checked")
+                    return []
+                if response.status_code != 404:
+                    _check(response, "node info", client.where)
+                # A local server answers an unknown class with an empty object.
+                info[kind] = None if response.status_code == 404 else response.json().get(kind)
+            if info[kind] is None:
+                missing.append(f"{label}: node {kind} is not installed")
+                continue
+            declared = {
+                **(info[kind].get("input") or {}).get("required", {}),
+                **(info[kind].get("input") or {}).get("optional", {}),
+            }
+            for key, value in node.get("inputs", {}).items():
+                if not (FILE_INPUT.fullmatch(key) and isinstance(value, str)):
+                    continue
+                if value.startswith("$"):
+                    continue
+                options = _options(declared.get(key))
+                if options is not None and value not in options:
+                    missing.append(f"{label}: {kind} {key} {value} is not installed")
+    return list(dict.fromkeys(missing))
+
+
+def _options(spec: Any) -> list | None:
+    """The choices a node input offers, from either of ComfyUI's two spellings."""
+    if not isinstance(spec, (list, tuple)) or not spec:
+        return None
+    if isinstance(spec[0], list):
+        return spec[0]
+    if spec[0] == "COMBO" and len(spec) > 1 and isinstance(spec[1], dict):
+        return spec[1].get("options")
+    return None

@@ -146,8 +146,11 @@ def _codex_argv(out_path: Path, references: Sequence[Path | str]) -> list[str]:
     return argv
 
 
-def _run_codex(argv: list[str], full_prompt: str, timeout: int) -> str:
-    """One codex turn. Returns why it failed, or "" if it exited cleanly."""
+def _run_codex(argv: list[str], full_prompt: str, timeout: int, seed: int | None = None) -> str:
+    """One codex turn. Returns why it failed, or "" if it exited cleanly.
+
+    codex takes no seed: every turn is a fresh roll whatever `seed` says.
+    """
     try:
         result = subprocess.run(
             argv, capture_output=True, text=True, timeout=timeout, input=full_prompt
@@ -167,11 +170,13 @@ def _run_comfy(
     timeout: int,
     scene: bool,
     local: bool = False,
+    seed: int | None = None,
 ) -> str:
     """One ComfyUI job. Returns why it failed, or "" if it saved an image."""
     try:
         comfy.render(
-            prompt, out_path, references, workflow, timeout, rules=not scene, local=local
+            prompt, out_path, references, workflow, timeout, rules=not scene, local=local,
+            seed=seed,
         )
     except (comfy.ComfyError, httpx.HTTPError) as error:
         return str(error)
@@ -188,6 +193,7 @@ def draw(
     backend: Backend = "codex",
     scene: bool = False,
     workflow: Path | str | None = None,
+    seed: int | None = None,
 ) -> Path:
     """Generate one image for `prompt` and save it at `out_path`.
 
@@ -205,6 +211,13 @@ def draw(
     A render that already exists is kept, never redrawn and never overwritten,
     so a run interrupted at frame twelve resumes at frame twelve. Delete the
     file to force a redraw, or pass `reuse=False` to make its presence an error.
+
+    `seed` fixes a workflow's roll, for a set whose frames must differ only by
+    what they are shown. A render that fails its check is kept aside as
+    `<name>.unusable-N.png`, numbered on from any a past run left, and try N is
+    drawn with `seed + N` — so a redraw is a new roll even when the seed is
+    fixed, even across runs, and `unusable-N` is always the picture `seed + N`
+    made. Without a seed each try is a random roll.
     """
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -240,9 +253,10 @@ def draw(
         + "\n"
     )
 
+    first = _next_unusable(out_path)
     last_error = ""
-    for attempt in range(attempts):
-        failure = run()
+    for number in range(first, first + attempts):
+        failure = run(seed=None if seed is None else seed + number)
         if failure:
             last_error = failure
             continue
@@ -252,11 +266,22 @@ def draw(
             except DrawError as error:
                 # This attempt is unusable, so move it aside and draw again. It is
                 # kept, not deleted: a failure nobody can look at cannot be diagnosed.
-                out_path.replace(out_path.with_name(f"{out_path.stem}.unusable-{attempt}.png"))
+                out_path.replace(out_path.with_name(f"{out_path.stem}.unusable-{number}.png"))
                 last_error = str(error)
                 continue
         last_error = f"{backend} reported success but wrote no file"
     raise DrawError(f"could not draw {out_path.name}: {last_error}")
+
+
+def _next_unusable(out_path: Path) -> int:
+    """The number the next unusable render of `out_path` is kept under."""
+    prefix = f"{out_path.stem}.unusable-"
+    numbers = [
+        int(path.stem.removeprefix(prefix))
+        for path in out_path.parent.glob(f"{prefix}*.png")
+        if path.stem.removeprefix(prefix).isdigit()
+    ]
+    return max(numbers, default=-1) + 1
 
 
 def _verify(path: Path, backdrop: bool = True) -> Path:
