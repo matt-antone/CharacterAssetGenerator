@@ -10,6 +10,7 @@ Produced by https://github.com/matt-antone/MotionArtist —
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass, field, replace
 from pathlib import Path
@@ -55,6 +56,47 @@ def playback_of(declared: str) -> str:
 
 
 @dataclass(frozen=True)
+class Clip:
+    """A bundle's source clip: the footage the traced frames were taken from.
+
+    Kept at the source's native rate and pixel size, uncropped, and cut a little
+    wider than the traced window, so a drive video can be resampled off it at
+    whatever rate the video path asks for. Every time here is a second of the
+    original video, the same clock a traced frame's `t` is on.
+    """
+
+    path: Path
+    #: The source second of the clip's first frame.
+    start: float
+    fps: float
+    frame_count: int
+    #: Width and height of the clip in pixels.
+    size: tuple[int, int]
+    #: The clip box, as (x, y, w, h) in clip pixels: the 3:4 box the traced
+    #: frames were cut from. It always lies inside the frame. None when nobody
+    #: recorded it.
+    box: tuple[int, int, int, int] | None
+    #: How far a traced frame's `t` sits from the clip frame that matches it,
+    #: in seconds. MotionArtist seeks by millisecond and lands on a frame
+    #: boundary; the backfill measures the difference rather than assume none.
+    t_offset: float = 0.0
+    sha256: str = ""
+
+    @property
+    def end(self) -> float:
+        """The source second of the clip's last frame."""
+        return self.start + (self.frame_count - 1) / self.fps
+
+    def frame_at(self, t: float) -> int:
+        """The clip frame shown at source second `t`. Not clamped: an index
+        outside the clip is the caller's to refuse."""
+        return round((t - self.start - self.t_offset) * self.fps)
+
+    def covers(self, t: float) -> bool:
+        return 0 <= self.frame_at(t) < self.frame_count
+
+
+@dataclass(frozen=True)
 class Frame:
     index: int
     role: str
@@ -66,6 +108,9 @@ class Frame:
     #: The tracer's own call that both feet are off the floor. Read, never
     #: re-derived from `pts`: MotionArtist decides contact from the soles.
     airborne: bool = False
+    #: The source second this frame was traced at. None for a motion sheet that does
+    #: not say, which is every written sheet.
+    t: float | None = None
 
     @property
     def is_locked(self) -> bool:
@@ -106,6 +151,18 @@ class MotionSheet:
     #: How the last frame meets the first. "clean" cuts back; anything else is
     #: the tracer saying it does not, and the proof will show the jump.
     seam: str = ""
+    #: The footage the frames were traced from, when the bundle carries it.
+    clip: Clip | None = None
+
+    @property
+    def frame_times(self) -> tuple[float, ...]:
+        """Every frame's traced second, in order; empty unless every frame has one.
+
+        A partial set would pair a frame with the wrong moment of the clip, so
+        it is dropped entirely, the way a partial set of photographs is.
+        """
+        times = tuple(frame.t for frame in self.frames)
+        return () if None in times else times
 
     @property
     def has_poses(self) -> bool:
@@ -179,6 +236,7 @@ def load_motion(path: Path | str) -> MotionSheet:
             note=raw.get("note", "").strip(),
             pts=raw.get("pts", {}),
             airborne=bool(raw.get("features", {}).get("airborne", False)),
+            t=None if raw.get("t") is None else float(raw["t"]),
         )
         for raw in data["frames"]
     )
@@ -245,6 +303,12 @@ class Bundle:
     #: One traced video frame per motion frame, in order, when the bundle ships
     #: a complete set. The pose reference; see `photos` on MotionSheet.
     photos: tuple[Path, ...] = ()
+    #: The source clip, when it is on disk and matches its hash.
+    clip: Clip | None = None
+    #: The clip the manifest declares, whether or not its file is there.
+    #: `clip.mp4` is not tracked, so on a fresh clone every bundle has this and
+    #: no `clip` until `cag clips` fetches the footage again.
+    declared_clip: Clip | None = None
 
     def load(self) -> MotionSheet:
         """The sheet itself, checked against the header that advertised it."""
@@ -254,7 +318,17 @@ class Bundle:
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
                 f"but {self.sheet.name} holds {len(motion.frames)} at {motion.fps}"
             )
-        return replace(motion, photos=self.photos)
+        if self.clip and motion.frame_times:
+            times = motion.frame_times
+            if any(b <= a for a, b in zip(times, times[1:])):
+                raise MotionError(f"{self.sheet} traced times are not strictly increasing")
+            outside = [f.index for f in motion.frames if not self.clip.covers(f.t)]
+            if outside:
+                raise MotionError(
+                    f"{self.root / BUNDLE} clip spans {self.clip.start:.3f}-{self.clip.end:.3f}s, "
+                    f"which does not cover traced frames {outside}"
+                )
+        return replace(motion, photos=self.photos, clip=self.clip)
 
 
 def read_bundle(path: Path | str) -> Bundle:
@@ -295,8 +369,22 @@ def read_bundle(path: Path | str) -> Bundle:
         if len(thumbs) == int(data["frame_count"])
         else ()
     )
+    name = data.get("name", manifest.parent.name)
+    declared = read_clip(manifest, data["clip"]) if data.get("clip") else None
+    if declared and declared.path.exists():
+        # The clip's hash lives in its own block, never in `files`: `files` is
+        # what a fresh clone must already hold, and clip.mp4 is not tracked.
+        if declared.sha256 and sha256_of(declared.path) != declared.sha256:
+            raise MotionError(
+                f"{manifest} declares clip {declared.path.name} with sha256 "
+                f"{declared.sha256[:12]}, but the file on disk is not it; "
+                f"run `cag clips {name}` to cut it again"
+            )
+        clip = declared
+    else:
+        clip = None
     return Bundle(
-        name=data.get("name", manifest.parent.name),
+        name=name,
         title=data.get("title", ""),
         fps=int(data["fps"]),
         frame_count=int(data["frame_count"]),
@@ -305,7 +393,64 @@ def read_bundle(path: Path | str) -> Bundle:
         root=manifest.parent,
         sheet=manifest.parent / named[0],
         photos=photos,
+        clip=clip,
+        declared_clip=declared,
     )
+
+
+def read_clip(manifest: Path, block: dict) -> Clip:
+    """A manifest's `clip` block, checked for sense but not for the file.
+
+    The block records the source clip: `file` beside the manifest, `start` (the
+    source second of its first frame), `fps`, `frame_count`, `size` as [w, h],
+    and optionally `box` as [x, y, w, h], `t_offset` and `sha256`. Anything
+    else in it (`match`, `backfilled_by`) is a note for people and is not read.
+    A missing file is not an error: the footage is untracked and fetched again
+    by `cag clips`, so the manifest outlives it.
+    """
+    missing = {"file", "start", "fps", "frame_count", "size"} - set(block)
+    if missing:
+        raise MotionError(f"{manifest} clip block is missing {', '.join(sorted(missing))}")
+    fps, count = float(block["fps"]), int(block["frame_count"])
+    if fps <= 0 or count < 1:
+        raise MotionError(f"{manifest} clip block has {count} frames at {fps} fps")
+    w, h = (int(n) for n in block["size"])
+    box = None
+    if block.get("box") is not None:
+        x, y, bw, bh = (int(n) for n in block["box"])
+        if bw <= 0 or bh <= 0 or x < 0 or y < 0 or x + bw > w or y + bh > h:
+            raise MotionError(
+                f"{manifest} clip box {[x, y, bw, bh]} does not lie inside the {w}x{h} frame"
+            )
+        box = (x, y, bw, bh)
+    return Clip(
+        path=manifest.parent / block["file"],
+        start=float(block["start"]),
+        fps=fps,
+        frame_count=count,
+        size=(w, h),
+        box=box,
+        t_offset=float(block.get("t_offset", 0.0)),
+        sha256=str(block.get("sha256", "")),
+    )
+
+
+def sha256_of(path: Path) -> str:
+    with open(path, "rb") as f:
+        return hashlib.file_digest(f, "sha256").hexdigest()
+
+
+def clip_status(bundle: Bundle) -> str:
+    """One word for what a bundle holds of its source clip, as `cag motions` shows it.
+
+    `ok` is a clip on disk that matches its hash. `missing` is a manifest that
+    declares one whose file is not there, which is every clip on a fresh clone
+    until `cag clips <name>` cuts it again. `none` is a bundle that has never had
+    one, which only `cag clips` can backfill.
+    """
+    if bundle.clip:
+        return "ok"
+    return "missing" if bundle.declared_clip else "none"
 
 
 def library(root: Path | str) -> dict[str, Bundle]:
