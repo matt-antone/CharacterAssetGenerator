@@ -410,9 +410,18 @@ def pose_edit_frames(state: AnimationState, draw_fn: Callable[..., Path]) -> Ani
     instead of being quietly rescaled.
 
     A frame on disk is kept, as `draw` keeps every render, so an interrupted set
-    resumes where it stopped.
+    resumes where it stopped — but only one drawn this way from this motion
+    (`claim_frames`). Anything else in the folder is moved aside first. A set
+    from before the stamp is adopted when its `motion.sha` still matches.
     """
     motion = state["motion"]
+    digest = motion_digest(motion)
+    stamp = motion_stamp(state)
+    claim_frames(
+        state,
+        "pose-edit\t" + digest,
+        adopt=stamp.exists() and stamp.read_text().strip() == digest,
+    )
     sources = {}
     for frame in motion.frames:
         sources[frame.index] = draw_fn(
@@ -423,9 +432,7 @@ def pose_edit_frames(state: AnimationState, draw_fn: Callable[..., Path]) -> Ani
         )
         if state.get("snap_to_key"):
             snap_file(sources[frame.index], state["key_art"])
-    stamp = motion_stamp(state)
-    stamp.parent.mkdir(parents=True, exist_ok=True)
-    stamp.write_text(motion_digest(motion) + "\n")
+    stamp.write_text(digest + "\n")
     return {
         "sources": sources,
         "frame_sheets": [[index] for index in sorted(sources)],

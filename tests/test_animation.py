@@ -734,3 +734,52 @@ def test_a_written_set_under_a_pose_workflow_still_goes_on_a_frame_sheet(tmp_pat
     })
     assert len(fake_frame_sheet_draw.calls) == 1
     assert " 16 times in one image" in fake_frame_sheet_draw.calls[0]["prompt"]
+
+
+def test_a_pose_edit_set_drawn_from_another_motion_is_moved_aside(tmp_path, monkeypatch):
+    """The same frame count is no longer enough for a frame on disk to be reused."""
+    calls = []
+
+    def fake_pose_draw(prompt, out_path, references=(), **kwargs):
+        if not Path(out_path).exists():
+            calls.append(Path(out_path).name)
+        return fake_draw(prompt, out_path, references)
+
+    fake_draw.calls = []
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    key_art = tmp_path / "key.png"
+    Image.new("RGBA", (10, 10), (255, 0, 255, 255)).save(key_art)
+    graph = animation.build_animation_graph(
+        FakeMessagesListChatModel(responses=[AIMessage(NOTE)] * 3), draw_fn=fake_pose_draw,
+    )
+    motion = posed(load_motion(SAMPLE), tmp_path)
+    state = {
+        "spec": load_spec("tests/fixtures/velvet-lou.json"),
+        "bible": "A lounge performer.",
+        "key_art": key_art,
+        "scale": 2.875,
+        "motion": motion,
+        "set_name": "dance",
+        "work_dir": tmp_path / "lou",
+        "pose_workflow": tmp_path / "pose-edit.json",
+    }
+    source = tmp_path / "lou" / "source" / "dance"
+
+    # A set drawn before the stamp existed, from this motion: adopted, not redrawn.
+    for index in range(16):
+        fake_draw("old", source / f"{index:02d}.png")
+    (source / "motion.sha").write_text(animation.motion_digest(motion) + "\n")
+    graph.invoke(state)
+    assert calls == []
+    assert (source / "drawn.sha").read_text().startswith("pose-edit\t")
+
+    # The same frame count from other photographs: every frame is redrawn.
+    other = []
+    for index, photo in enumerate(motion.photos):
+        other.append(tmp_path / f"other-{index:02d}.jpg")
+        Image.new("RGB", (120, 160), (200, 40 + index, 60)).save(other[-1])
+    graph.invoke({**state, "motion": replace(motion, photos=tuple(other))})
+    assert len(calls) == 16
+    (kept,) = (source / "superseded").iterdir()
+    assert kept.name.startswith("pose-edit-")
+    assert len(list(kept.glob("[0-9][0-9].png"))) == 16
