@@ -637,7 +637,7 @@ def add_remote_flags(parser: argparse.ArgumentParser, what: str, skip: bool = Tr
         "--output-remote",
         metavar="REMOTE",
         default=os.environ.get(REMOTE_ENV) or None,
-        help=f"an rclone destination, e.g. gdrive:CharacterAssetGenerator/outputs: {what}, "
+        help=f"an rclone destination, e.g. kadrive:CharacterAssetGenerator/outputs: {what}, "
         f"at the package's path under --out. Default: ${REMOTE_ENV}; unset, nothing is published",
     )
     if not skip:

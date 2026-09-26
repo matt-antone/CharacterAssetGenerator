@@ -114,7 +114,7 @@ def test_a_remote_without_a_colon_is_refused_not_copied_into_a_local_folder(tmp_
     run = Rclone()
     assert publish.publish(package(tmp_path, "belter"), tmp_path, remote, run, installed) is False
     err = capsys.readouterr().err
-    assert run.calls == [] and "names no rclone remote" in err and "gdrive:" in err
+    assert run.calls == [] and "names no rclone remote" in err and "kadrive:" in err
 
 
 def test_an_absolute_local_path_is_still_a_destination(tmp_path):

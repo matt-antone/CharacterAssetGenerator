@@ -109,7 +109,7 @@ as an Artifact with every referenced file passed through `files`, or send the
 pictures themselves — key art, a frame sheet, a proof GIF — and leave the
 gallery on disk.
 
-When `CAG_OUTPUT_REMOTE` is set (e.g. `gdrive:CharacterAssetGenerator/outputs`),
+When `CAG_OUTPUT_REMOTE` is set (e.g. `kadrive:CharacterAssetGenerator/outputs`),
 each build copies its finished folder to that Google Drive path with rclone,
 keeping `index.html` beside its pictures; `uv run cag publish <spec>` pushes one
 already built. A publish failure only warns — report it, don't retry blindly.

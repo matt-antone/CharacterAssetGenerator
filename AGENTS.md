@@ -336,7 +336,7 @@ skipped, so it costs almost nothing and puts every set back on the page.
 ## Publishing a package to Google Drive
 
 With `CAG_OUTPUT_REMOTE` set to an rclone destination —
-`gdrive:CharacterAssetGenerator/outputs` — every `cag build` ends by
+`kadrive:CharacterAssetGenerator/outputs` — every `cag build` ends by
 publishing its package: `rclone copy outputs/<theme>/<slug>
 <remote>/<theme>/<slug> --checksum` (`cag/publish.py`). The remote mirrors the
 local layout, so `index.html` arrives with `views/` and its frame sheets beside
@@ -376,9 +376,17 @@ report success.
   fails at once and the warning says so instead of waiting on a hidden prompt.
 - **The remote uses `scope=drive.file`:** rclone sees only what it created.
   Let it create the destination folder; one made by hand in Drive is invisible
-  to it, and it makes a second of the same name beside it. Set it up once with
-  `rclone config create gdrive drive scope=drive.file`. To share, share the
+  to it, and it makes a second of the same name beside it. To share, share the
   top folder in Drive once; everything published under it inherits that.
+- **The remote is `kadrive`, the Karaoke Arcade Workspace drive
+  (matt@karaokearcade.com)**, on its own OAuth client: a Desktop-app client in
+  a Google Cloud project with an *Internal* consent screen, so sign-ins do not
+  expire weekly and there is no shared-client quota. Recreate it with
+  `rclone config create kadrive drive client_id=… client_secret=… scope=drive.file`
+  from that client's JSON. `gdrive` (the personal account) stays configured for
+  manual use only: it runs on rclone's shared client, which Google is retiring
+  and which hit `rateLimitExceeded` on 2026-09-26. MotionArtist exports to
+  `kadrive:MotionArtist` (`MOTION_ARTIST_REMOTE`).
 
 "Never hand over `index.html` on its own" still holds. The Drive folder carries
 its pictures, but Drive does not serve `index.html` as a web page: in the
@@ -514,7 +522,7 @@ A new term is named here before it is used.
 | **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
 | **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
 | **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one 64-colour palette per set, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
-| **output remote** | the rclone destination packages are published to: `CAG_OUTPUT_REMOTE` or `--output-remote`, e.g. `gdrive:CharacterAssetGenerator/outputs`. A package lands at its path under `outputs/` |
+| **output remote** | the rclone destination packages are published to: `CAG_OUTPUT_REMOTE` or `--output-remote`, e.g. `kadrive:CharacterAssetGenerator/outputs`. A package lands at its path under `outputs/` |
 | **publish** | `rclone copy` of one package folder to the output remote (`cag/publish.py`): at the end of every build, on each `cag edit` Save, or by `cag publish`. Never sync, never deletes, never fails a build. Not the same act as publishing an Artifact |
 
 `tile` (`cag/assemble.py`) is a layout verb — lay cells out in a grid. It builds

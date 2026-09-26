@@ -1,6 +1,6 @@
 """Publishing: copy a finished package to the output remote with rclone.
 
-`CAG_OUTPUT_REMOTE` names an rclone destination — `gdrive:CharacterAssetGenerator/outputs`
+`CAG_OUTPUT_REMOTE` names an rclone destination — `kadrive:CharacterAssetGenerator/outputs`
 — and every build copies its package folder there, at the same path it has under
 the output root, so `outputs/default/belter/` lands at `<remote>/default/belter/`
 and `index.html` keeps `views/` and the frame sheets beside it.
@@ -153,7 +153,7 @@ def publish(
     if not names_a_destination(remote):
         log(f"[publish] WARNING: {remote!r} names no rclone remote, so {out_dir} was not "
             "published; rclone would have copied it into a local folder of that name. "
-            "Put a colon after the remote's name, e.g. gdrive:CharacterAssetGenerator/outputs")
+            "Put a colon after the remote's name, e.g. kadrive:CharacterAssetGenerator/outputs")
         return False
     if not out_dir.is_dir():
         log(f"[publish] nothing at {out_dir} to publish")
