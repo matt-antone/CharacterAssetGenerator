@@ -174,6 +174,7 @@ def render_set(
     frames_per_sheet: int | None = None,
     machine: Machine | None = None,
     graphs: dict[str, Path] | None = None,
+    scail_only: bool = False,
 ) -> dict:
     """Draw and mask one animation set, continuing from the set drawn before it.
 
@@ -208,7 +209,7 @@ def render_set(
             "motion": motion,
             "set_name": set_name,
             "work_dir": work_dir,
-            **backend_state(backend, frames_per_sheet, machine, graphs),
+            **backend_state(backend, frames_per_sheet, machine, graphs, scail_only),
             **({"carry": carry} if carry else {}),
         }
     )
@@ -235,6 +236,7 @@ def build(
     frames_per_sheet: int | None = None,
     machine: Machine | None = None,
     graphs: dict[str, Path] | None = None,
+    scail_only: bool = False,
 ) -> Path:
     spec = load_spec(spec_path)
     work_dir = work_root / spec.slug
@@ -294,6 +296,7 @@ def build(
                     frames_per_sheet,
                     machine,
                     graphs,
+                    scail_only,
                 )
             except TextPending as pending:
                 # Not a failure: the session's AI answers it and the build goes on.
@@ -409,6 +412,13 @@ def main(argv: list[str] | None = None) -> int:
         action="store_const",
         const=None,
         help="take the pose-edit path for this build even with $CAG_MACHINE set",
+    )
+    build_parser.add_argument(
+        "--no-restyle",
+        dest="scail_only",
+        action="store_true",
+        help="with --machine: keep each traced frame's SCAIL frame as drawn and skip the "
+        "Qwen-Image-2.1 restyle (minutes a frame on a local GPU, and research-only licence)",
     )
     for stage, flag in (("video", "scail"), ("restyle", "restyle"), ("mask", "mask")):
         variable, default = STAGES[stage]
@@ -543,6 +553,10 @@ def main(argv: list[str] | None = None) -> int:
         # Every set reads it through `comfy.pose_workflow_path`, as the env var does.
         os.environ["CAG_COMFY_POSE_WORKFLOW"] = str(args.comfy_pose_workflow)
     machine, graphs = None, None
+    if args.scail_only and not args.machine:
+        # Only the video path restyles; without a machine it would be ignored
+        # silently, and a build that looks SCAIL-only would be drawn otherwise.
+        raise SystemExit("[build] --no-restyle skips the video path's restyle; it needs --machine")
     if args.machine:
         if not args.frame_sheet_mode:
             # The video path is a branch of the frame-sheet graph; per-frame
@@ -557,6 +571,7 @@ def main(argv: list[str] | None = None) -> int:
                 "restyle": args.comfy_restyle_workflow,
                 "mask": args.comfy_mask_workflow,
             },
+            restyle=not args.scail_only,
         )
     build(
         args.spec,
@@ -571,6 +586,7 @@ def main(argv: list[str] | None = None) -> int:
         frames_per_sheet=args.frames_per_sheet,
         machine=machine,
         graphs=graphs,
+        scail_only=args.scail_only,
     )
     return 0
 
@@ -591,6 +607,7 @@ def backend_state(
     frames_per_sheet: int | None = None,
     machine: Machine | None = None,
     graphs: dict[str, Path] | None = None,
+    scail_only: bool = False,
 ) -> dict:
     """How the graphs draw for this backend, where the backends differ.
 
@@ -600,7 +617,8 @@ def backend_state(
     were measured. `frames_per_sheet`, when given, overrides either default.
 
     A `machine`, with the `graphs` `machine_with` wrote for it, sends every
-    traced set down the video path instead of the pose-edit path.
+    traced set down the video path instead of the pose-edit path, and
+    `scail_only` stops that path at the SCAIL video, restyling nothing.
     """
     state = {} if backend not in WORKFLOW_BACKENDS else {
         "detail_after_key": False,
@@ -614,6 +632,8 @@ def backend_state(
         state["frames_per_sheet"] = frames_per_sheet
     if machine:
         state.update(machine=machine, machine_graphs=dict(graphs or {}), local=backend == "local")
+        if scail_only:
+            state["scail_only"] = True
     return state
 
 
@@ -623,13 +643,16 @@ def machine_with(
     work_root: Path,
     given: dict[str, Path | None] | None = None,
     client: comfy.Client | None = None,
+    restyle: bool = True,
 ) -> tuple[Machine, dict[str, Path]]:
     """The machine profile a build draws the video path on, its graphs written and checked.
 
     Checked here, once, before anything is drawn: a profile for the other
     backend, a missing ffmpeg, or — on your own ComfyUI — a node or model file
     the server lacks each stops the build by name, every missing file at once,
-    instead of failing each set in turn an hour in.
+    instead of failing each set in turn an hour in. A build with no `restyle`
+    (`--no-restyle`) needs only the video graph's files; the restyle graph's
+    missing ones are said and do not stop it.
     """
     if backend not in WORKFLOW_BACKENDS:
         raise SystemExit(
@@ -652,7 +675,8 @@ def machine_with(
         }
         if backend == "local":
             client = client or comfy.Client(local=True)
-            missing = comfy.preflight(client, [graphs["video"], graphs["restyle"]])
+            needed = [graphs["video"], graphs["restyle"]] if restyle else [graphs["video"]]
+            missing = comfy.preflight(client, needed)
             if missing:
                 raise SystemExit(
                     f"[local] machine {name!r} cannot draw; the server lacks:\n  "
@@ -663,10 +687,13 @@ def machine_with(
             # model is not a reason to refuse a build that may never load it.
             for line in comfy.preflight(client, [graphs["mask"]]):
                 log(f"[local] {line}; a set whose footage needs the mask pass will fail")
+            if not restyle:
+                for line in comfy.preflight(client, [graphs["restyle"]]):
+                    log(f"[local] {line}; not needed under --no-restyle")
     except comfy.ComfyError as error:
         raise SystemExit(f"[{backend}] {error}") from None
     log(
-        f"[{backend}] traced sets with a clip: SCAIL-2 + restyle on {name}"
+        f"[{backend}] traced sets with a clip: SCAIL-2 {'+ restyle' if restyle else 'only'} on {name}"
         + ("" if machine.verified else " (UNVERIFIED profile)")
     )
     return machine, graphs

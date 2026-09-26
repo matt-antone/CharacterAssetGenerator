@@ -372,6 +372,60 @@ def test_backend_state_carries_the_machine_to_the_animation_graph(tmp_path):
     assert "machine" not in cli.backend_state("local")
 
 
+def test_no_restyle_needs_a_machine(tmp_path, monkeypatch):
+    monkeypatch.delenv("CAG_MACHINE", raising=False)
+    with pytest.raises(SystemExit, match="--no-restyle skips the video path's restyle; it needs --machine"):
+        cli.main([*BUILD, "--draw-backend", "comfy", "--no-restyle",
+                  "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")])
+    assert not (tmp_path / "w").exists()
+
+
+def test_no_restyle_reaches_the_build_and_the_machine_check(tmp_path, monkeypatch):
+    seen, checked = {}, {}
+
+    def machine_with(backend, name, work_root, given=None, client=None, restyle=True):
+        checked["restyle"] = restyle
+        return object(), {}
+
+    monkeypatch.setattr(cli, "machine_with", machine_with)
+    monkeypatch.setattr(cli, "build", lambda *a, **kw: seen.update(kw))
+    args = [*BUILD, "--draw-backend", "comfy", "--machine", "cloud",
+            "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")]
+    assert cli.main([*args, "--no-restyle"]) == 0
+    assert seen["scail_only"] is True and checked["restyle"] is False
+    assert cli.main(args) == 0
+    assert seen["scail_only"] is False and checked["restyle"] is True
+
+
+def test_backend_state_carries_scail_only_only_with_a_machine(tmp_path):
+    from cag.machines import load_machine
+
+    machine = load_machine("smoke4")
+    assert cli.backend_state("local", None, machine, {}, scail_only=True)["scail_only"] is True
+    assert "scail_only" not in cli.backend_state("local", None, machine, {})
+    assert "scail_only" not in cli.backend_state("local", scail_only=True)
+
+
+def test_a_local_scail_only_build_does_not_need_the_restyle_models(tmp_path, monkeypatch, capsys):
+    asked = []
+
+    def preflight(client, workflows):
+        names = [Path(w).name for w in workflows]
+        asked.append(names)
+        return ["restyle.json: node TextEncodeQwenImageEdit is not installed"] if "restyle.json" in names else []
+
+    monkeypatch.setattr(cli.comfy, "preflight", preflight)
+    monkeypatch.setattr(cli.shutil, "which", lambda name: f"/usr/bin/{name}")
+    machine, _ = cli.machine_with("local", "smoke4", tmp_path, client=object(), restyle=False)
+    assert machine.name == "smoke4"
+    assert asked[0] == ["video.json"] and ["restyle.json"] in asked
+    err = capsys.readouterr().err
+    assert "TextEncodeQwenImageEdit is not installed; not needed under --no-restyle" in err
+    assert "SCAIL-2 only on smoke4" in err
+    with pytest.raises(SystemExit, match="TextEncodeQwenImageEdit"):
+        cli.machine_with("local", "smoke4", tmp_path, client=object())
+
+
 def test_a_set_whose_drive_fails_is_logged_failed_and_the_next_set_draws(tmp_path, monkeypatch, capsys):
     from cag.drive import DriveError
     from cag.motion import load_motion

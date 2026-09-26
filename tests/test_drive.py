@@ -9,7 +9,7 @@ from types import SimpleNamespace
 
 import numpy
 import pytest
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from cag import drive
 from cag.drive import (
@@ -19,6 +19,7 @@ from cag.drive import (
     MASK_FIGURE,
     REF_MASK_BACKGROUND,
     DriveError,
+    blur_faces,
     build_drive,
     check_masks,
     cut,
@@ -26,6 +27,7 @@ from cag.drive import (
     drive_box,
     figure_mask,
     fit,
+    head_box,
     unfit,
     light_backdrop,
     mask_stats,
@@ -523,3 +525,150 @@ def test_a_clip_deeper_than_8_bits_decodes_as_8(tmp_path):
     decoded = decode(clip_path)
     assert decoded.shape == (6, 64, 96, 3) and decoded.dtype == numpy.uint8
     assert [read_number(f, 0) for f in decoded] == list(range(6))
+
+
+# The face blur. SCAIL-2 copies the performer's face out of the drive, so every
+# drive frame has it blurred, in an oval over the head the drive mask shows.
+
+
+def dancer(width=576, height=864, arm=False, speck=False):
+    """A drive mask frame: head, torso, legs; a hand raised high to the right; a stray speck."""
+    s = width / 576
+    image = Image.new("1", (width, height), 0)
+    draw = ImageDraw.Draw(image)
+    draw.ellipse([248 * s, 100 * s, 328 * s, 200 * s], fill=1)
+    draw.rectangle([228 * s, 195 * s, 348 * s, 500 * s], fill=1)
+    draw.rectangle([238 * s, 500 * s, 338 * s, 800 * s], fill=1)
+    if arm:
+        draw.rectangle([348 * s, 210 * s, 420 * s, 230 * s], fill=1)
+        draw.rectangle([400 * s, 20 * s, 420 * s, 230 * s], fill=1)
+        draw.ellipse([392 * s, 10 * s, 430 * s, 50 * s], fill=1)
+    if speck:
+        draw.rectangle([20 * s, 5 * s, 60 * s, 40 * s], fill=1)
+    return numpy.array(image)
+
+
+def test_the_head_box_is_the_research_box_on_a_576_drive():
+    # The scratch test's rule: mask extent in the top 13% of the figure, +-6
+    # across, from 4 above its top to 14% of its height down.
+    x0, y0, x1, y1 = head_box(dancer())
+    assert (y0, y1) == (100 - 4, round(100 + 0.14 * 700))
+    assert abs(x0 - (248 - 6)) <= 2 and abs(x1 - (328 + 6)) <= 2
+
+
+def test_a_raised_hand_and_a_speck_do_not_move_the_head_box():
+    plain = head_box(dancer())
+    assert head_box(dancer(arm=True)) == plain, "the hand is above and beside the head"
+    assert head_box(dancer(speck=True)) == plain, "only the largest region is the figure"
+    assert head_box(dancer(arm=True, speck=True)) == plain
+
+
+def test_a_hand_at_head_height_beside_it_is_not_the_head():
+    mask = dancer()
+    mask[110:150, 360:400] = True  # a hand level with the face, joined below the band
+    mask[150:200, 380:400] = True
+    x0, _, x1, _ = head_box(mask)
+    assert x1 < 360, "the band's region nearest the torso's centre is the head"
+
+
+def test_the_head_box_scales_to_a_256_wide_drive():
+    small = head_box(dancer(256, 384, arm=True))
+    big = head_box(dancer())
+    assert all(abs(a * 256 / 576 - b) <= 2 for a, b in zip(big, small))
+
+
+def test_the_head_box_is_clamped_to_the_frame():
+    mask = numpy.zeros((96, 64), bool)
+    mask[0:90, 20:40] = True
+    x0, y0, x1, y1 = head_box(mask)
+    assert y0 == 0 and 0 <= x0 <= x1 <= 63 and y1 <= 95
+
+
+def test_an_empty_or_tiny_mask_has_no_head():
+    assert head_box(numpy.zeros((96, 64), bool)) is None
+    tiny = numpy.zeros((96, 64), bool)
+    tiny[40:45, 30:34] = True
+    assert head_box(tiny) is None
+
+
+def noisy(width, height, seed=0):
+    return Image.fromarray(numpy.random.default_rng(seed).integers(0, 256, (height, width, 3), numpy.uint8))
+
+
+@pytest.mark.parametrize("size", [(576, 864), (256, 384)])
+def test_blur_faces_blurs_the_head_and_nothing_else(size):
+    width, height = size
+    frame, mask = noisy(width, height), dancer(width, height, arm=True)
+    (out,), report = blur_faces([frame], [mask])
+    x0, y0, x1, y1 = report["boxes"][0]
+    before, after = numpy.asarray(frame).astype(int), numpy.asarray(out).astype(int)
+    changed = numpy.abs(after - before).max(axis=2) > 0
+    ys, xs = numpy.nonzero(changed)
+    # The feather reaches a few pixels past the oval, never further.
+    reach = 4 * 3 * width / 576 + 1
+    assert xs.min() >= x0 - reach and xs.max() <= x1 + reach
+    assert ys.min() >= y0 - reach and ys.max() <= y1 + reach
+    cx, cy = (x0 + x1) // 2, (y0 + y1) // 2
+    face = slice(cy - 3, cy + 3), slice(cx - 3, cx + 3)
+    assert after[face].std() < before[face].std() / 3, "the face is blurred"
+    assert report == {"blurred": 1, "skipped": [], "boxes": [[x0, y0, x1, y1]]}
+
+
+def test_blur_faces_leaves_a_frame_with_no_figure_alone_and_says_so():
+    frames = [noisy(64, 96, k) for k in range(3)]
+    masks = [dancer(64, 96), numpy.zeros((96, 64), bool), dancer(64, 96)]
+    out, report = blur_faces(frames, masks)
+    assert out[1].tobytes() == frames[1].tobytes()
+    assert out[0].tobytes() != frames[0].tobytes()
+    assert report["skipped"] == [1] and report["blurred"] == 2 and report["boxes"][1] is None
+    with pytest.raises(DriveError, match="2 drive frames but 1"):
+        blur_faces(frames[:2], masks[:1])
+
+
+def test_the_drive_version_is_part_of_the_digest(monkeypatch):
+    clip = Clip(Path("clip.mp4"), start=10.0, fps=24, frame_count=48, size=(96, 64), box=None, sha256="ab" * 32)
+    now = drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48)
+    assert drive.DRIVE_VERSION == "drive/3", "face blur: every drive before it is stale"
+    monkeypatch.setattr(drive, "DRIVE_VERSION", "drive/2")
+    assert drive.drive_digest(clip, 10.5, 16.0, 17, 32, 48) != now
+
+
+def tall_native(backdrop=(250, 250, 250), figure=(30, 20, 40), count=48):
+    """A performer with a head on a torso, tall in the drive box, and a face that is not flat."""
+    frames = numpy.empty((count, 64, 96, 3), numpy.uint8)
+    frames[:] = backdrop
+    for j in range(count):
+        x = 40 + j % 4
+        frames[j, 8:56, x + 2 : x + 14] = figure
+        frames[j, 9:15:2, x + 4 : x + 12] = (255 - figure[0], figure[1], figure[2])
+    return frames
+
+
+def test_a_light_backdrop_drive_is_cut_with_the_face_blurred(tmp_path):
+    motion = bundle(tmp_path)
+    built = build_drive(motion, SMALL, tmp_path / "drive", None, lambda p: tall_native())
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    faces = record["face_blur"]
+    assert faces["blurred"] == 17 and faces["skipped"] == [] and len(faces["boxes"]) == 17
+    x0, y0, x1, y1 = faces["boxes"][0]
+    video, masks = read_apng(built.video), read_apng(built.mask)
+    assert (masks[0][..., 2] > 128)[y0:y1 + 1, x0:x1 + 1].any(), "the box is on the figure"
+    assert built.method == "light-backdrop"
+
+
+def test_the_mask_pass_reads_the_drive_before_its_face_is_blurred(tmp_path):
+    seen = []
+
+    def mask_pass(video, into, length):
+        seen.append([frame.copy() for frame in read_apng(video)])
+        return mask_pass_writing([], figure=(10, 2, 22, 46))(video, into, length)
+
+    dark = lambda p: tall_native(backdrop=(40, 30, 30), figure=(250, 250, 250))  # noqa: E731
+    built = build_drive(bundle(tmp_path), SMALL, tmp_path / "drive", mask_pass, dark)
+    record = json.loads((built.root / DRIVE_RECORD).read_text())
+    assert built.method == "mask-pass" and record["face_blur"]["blurred"] == 17
+    x0, y0, x1, y1 = record["face_blur"]["boxes"][0]
+    as_cut, blurred = seen[0][0], read_apng(built.video)[0]
+    head = (slice(y0, y1 + 1), slice(x0, x1 + 1))
+    assert not numpy.array_equal(as_cut[head], blurred[head]), "the drive SCAIL gets is blurred"
+    assert numpy.array_equal(as_cut[40:], blurred[40:]), "below the head nothing changes"

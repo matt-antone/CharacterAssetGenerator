@@ -310,3 +310,49 @@ def test_a_scail_frame_from_a_padded_reference_is_not_stretched(world, monkeypat
         assert picked.size == (120, 160)
         top, bottom = picked.getpixel((60, 1)), picked.getpixel((60, 158))
     assert top[1] > 150 and bottom[1] > 150, "no magenta band: the padding was cut off, not squashed"
+
+
+# --no-restyle: the SCAIL frames are the set's frames.
+
+
+def test_scail_only_writes_each_picked_scail_frame_and_restyles_nothing(world, capsys):
+    result, restyle = world["build"](scail_only=True)
+    state, scail = world["state"], world["scail"]
+    assert len(scail.calls) == 1 and restyle.calls == []
+    source = state["work_dir"] / "source" / "dance"
+    folder = scail.calls[0]["out"]
+    for index in range(16):
+        with Image.open(source / f"{index:02d}.png") as frame, Image.open(folder / f"picked-{INDEX[index]:03d}.png") as picked:
+            assert frame.size == (100, 150), "at the set reference's size"
+            assert frame.tobytes() == picked.tobytes()
+    assert (source / "drawn.sha").read_text().startswith("scail\t")
+    assert result["frame_sheets"] == [[n] for n in range(16)] and sorted(result["cells"]) == list(range(16))
+    assert "SCAIL only, no restyle" in capsys.readouterr().err
+
+
+def test_scail_only_twice_draws_nothing_and_a_deleted_frame_comes_back(world):
+    world["build"](scail_only=True)
+    (world["state"]["work_dir"] / "source" / "dance" / "04.png").unlink()
+    _, restyle = world["build"](scail_only=True)
+    assert len(world["scail"].calls) == 1 and restyle.calls == []
+    assert (world["state"]["work_dir"] / "source" / "dance" / "04.png").exists()
+
+
+def test_switching_modes_supersedes_the_frames_and_keeps_the_scail_video(world, capsys):
+    source = world["state"]["work_dir"] / "source" / "dance"
+    world["build"]()
+    restyled = (source / "drawn.sha").read_text()
+    assert "then a restyle per traced frame" in capsys.readouterr().err
+
+    _, restyle = world["build"](scail_only=True)
+    scail_stamp = (source / "drawn.sha").read_text()
+    assert scail_stamp != restyled and restyle.calls == []
+    (kept,) = (source / "superseded").iterdir()
+    assert kept.name.startswith("video-")
+    assert len(list(kept.glob("[0-9][0-9].png"))) == 16
+
+    _, restyle = world["build"]()
+    assert (source / "drawn.sha").read_text() == restyled
+    assert len(restyle.calls) == 16, "back to restyles: every frame drawn again"
+    assert sorted(p.name.split("-")[0] for p in (source / "superseded").iterdir()) == ["scail", "video"]
+    assert len(world["scail"].calls) == 1, "one SCAIL video served all three builds"

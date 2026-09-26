@@ -16,6 +16,10 @@ What the research established, on club-01 only: a white studio backdrop makes a
 threshold mask (`LIGHT`) good enough, the drive rate is 16, and the SCAIL frame
 for traced frame i is `round((t_i - t_0) * rate)`. Footage without a light
 backdrop needs the mask pass, which no render has exercised yet.
+
+Every drive has the performer's face blurred (`blur_faces`): SCAIL-2 copies
+the face it is shown, and a drive with the face blurred gets the set
+reference's face instead, pose kept (one scratch roll, 2026-09-26).
 """
 
 from __future__ import annotations
@@ -31,7 +35,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Sequence
 
 import numpy
-from PIL import Image, ImageSequence
+from PIL import Image, ImageDraw, ImageFilter, ImageSequence
 
 from .mask import BORDER_PIXELS
 
@@ -50,7 +54,8 @@ SCAIL_MAX_LENGTH = 81
 
 #: Bumped whenever the way a drive is cut changes, so every cached drive goes
 #: stale at once rather than one being quietly reused under the new rules.
-DRIVE_VERSION = "drive/2"
+#: drive/3: the performer's face is blurred in every drive frame.
+DRIVE_VERSION = "drive/3"
 
 #: The record a finished drive leaves; written last, so its presence means done.
 DRIVE_RECORD = "drive.json"
@@ -99,6 +104,34 @@ REF_MASK_BACKGROUND = (0, 0, 0)
 
 #: The magenta backdrop the set reference is drawn on, see `draw.py`.
 MAGENTA = (255, 0, 255)
+
+#: The face blur, as measured on a 576x864 drive (2026-09-26): every pixel
+#: constant below is at that size and scaled to the drive's own. The head is the
+#: top `HEAD_BAND` of the figure's height, boxed `HEAD_MARGIN` wider either side
+#: than the figure is there, from `HEAD_RISE` above its top down to `HEAD_DEPTH`
+#: of the height, and an oval in that box, feathered by `FACE_FEATHER`, takes a
+#: Gaussian blur of `FACE_BLUR`.
+FACE_REFERENCE_SIZE = (576, 864)
+HEAD_BAND = 0.13
+HEAD_DEPTH = 0.14
+HEAD_MARGIN = 6
+HEAD_RISE = 4
+FACE_BLUR = 14
+FACE_FEATHER = 4
+
+#: The rows, as shares of the figure's height from its top, whose median column
+#: is the torso's centre. The head is looked for over it, so a raised hand off
+#: to one side is never taken for the head.
+TORSO_BAND = (0.30, 0.55)
+#: How far either side of the torso's centre, as a share of the figure's
+#: height, the head's top is looked for.
+HEAD_REACH = 0.06
+#: The widest the head is taken to be before the margins, as a share of the
+#: figure's height: a hand touching the head does not widen the blur past it.
+HEAD_WIDTH = 0.18
+#: A figure shorter than this share of the frame is left unblurred: too little
+#: of it to say where a head would be.
+FACE_MIN_FIGURE = 0.10
 
 #: Headroom on a frame count, so a span that fills a capped length exactly is
 #: not pushed to the next 4k+1 by rounding error.
@@ -299,14 +332,14 @@ def figure_mask(frame: numpy.ndarray, pad: numpy.ndarray | None = None) -> numpy
     return figure & ~pad if pad is not None else figure
 
 
-def _component_sizes(mask: numpy.ndarray) -> list[int]:
-    """Pixel count of each touching region of `mask`, largest first.
+def _label_runs(mask: numpy.ndarray) -> tuple[list[tuple[int, int, int]], list[int]]:
+    """Every row run of `mask` as (y, start, end), and the region each belongs to.
 
     Row runs are labelled and joined wherever two overlap between one row and
-    the next — the same walk as `mask._blobs`, counting pixels instead of boxes.
+    the next — the same walk as `mask._blobs`. The second list gives each run's
+    region as the label of one run in it.
     """
     parent: list[int] = []
-    sizes: list[int] = []
 
     def root(x: int) -> int:
         while parent[x] != x:
@@ -314,6 +347,7 @@ def _component_sizes(mask: numpy.ndarray) -> list[int]:
             x = parent[x]
         return x
 
+    runs: list[tuple[int, int, int]] = []
     previous: list[tuple[int, int, int]] = []
     padded = numpy.zeros((mask.shape[0], mask.shape[1] + 2), numpy.int8)
     padded[:, 1:-1] = mask
@@ -325,7 +359,7 @@ def _component_sizes(mask: numpy.ndarray) -> list[int]:
         for start, end in zip(starts.tolist(), ends.tolist()):
             label = len(parent)
             parent.append(label)
-            sizes.append(end - start)
+            runs.append((y, start, end))
             for was_start, was_end, was_label in previous:
                 if start < was_end and was_start < end:
                     a, b = root(was_label), root(label)
@@ -333,11 +367,141 @@ def _component_sizes(mask: numpy.ndarray) -> list[int]:
                         parent[b] = a
             current.append((start, end, label))
         previous = current
+    return runs, [root(label) for label in range(len(parent))]
+
+
+def _component_sizes(mask: numpy.ndarray) -> list[int]:
+    """Pixel count of each touching region of `mask`, largest first."""
+    runs, regions = _label_runs(mask)
     totals: dict[int, int] = {}
-    for label, size in enumerate(sizes):
-        owner = root(label)
-        totals[owner] = totals.get(owner, 0) + size
+    for (_, start, end), region in zip(runs, regions):
+        totals[region] = totals.get(region, 0) + end - start
     return sorted(totals.values(), reverse=True)
+
+
+def _largest_component(mask: numpy.ndarray) -> numpy.ndarray:
+    """The largest touching region of `mask` alone; empty when `mask` is."""
+    runs, regions = _label_runs(mask)
+    out = numpy.zeros(mask.shape, bool)
+    if not runs:
+        return out
+    totals: dict[int, int] = {}
+    for (_, start, end), region in zip(runs, regions):
+        totals[region] = totals.get(region, 0) + end - start
+    biggest = max(totals, key=totals.__getitem__)
+    for (y, start, end), region in zip(runs, regions):
+        if region == biggest:
+            out[y, start:end] = True
+    return out
+
+
+def head_box(mask: numpy.ndarray) -> tuple[int, int, int, int] | None:
+    """Where the performer's head is in one drive mask frame, as (x0, y0, x1, y1), inclusive.
+
+    The figure is the mask's largest region, so a stray speck is never it. The
+    torso's centre is the median column of the figure between `TORSO_BAND` of
+    its height, and the head's top is the highest figure pixel within
+    `HEAD_REACH` of that column, so a hand raised above the head is not taken
+    for its top. Both are found twice, the second time from the head's top, so
+    the raised hand does not stretch the height either. Across, the head is
+    the region of the top `HEAD_BAND` nearest the torso's centre: a hand at
+    head height beside it is a region of its own there.
+
+    Clamped to the frame. None for an empty mask, or a figure under
+    `FACE_MIN_FIGURE` of the frame's height.
+    """
+    mask = numpy.asarray(mask, bool)
+    height, width = mask.shape
+    figure = _largest_component(mask)
+    ys, xs = numpy.nonzero(figure)
+    if not len(ys):
+        return None
+    top, bottom = int(ys.min()), int(ys.max())
+    if bottom - top + 1 < FACE_MIN_FIGURE * height:
+        return None
+    centre = float(numpy.median(xs))
+    for _ in range(2):
+        tall = bottom - top
+        torso = (ys >= top + TORSO_BAND[0] * tall) & (ys <= top + TORSO_BAND[1] * tall)
+        if torso.any():
+            centre = float(numpy.median(xs[torso]))
+        near = numpy.abs(xs - centre) <= max(HEAD_REACH * tall, 1.0)
+        if near.any():
+            top = int(ys[near].min())
+    tall = bottom - top
+    band_rows = max(math.ceil(HEAD_BAND * tall), 1)
+    runs, regions = _label_runs(figure[top : top + band_rows])
+    spans: dict[int, list[float]] = {}
+    for (_, start, end), region in zip(runs, regions):
+        span = spans.setdefault(region, [start, end - 1, 0.0, 0.0])
+        span[0], span[1] = min(span[0], start), max(span[1], end - 1)
+        span[2] += end - start
+        span[3] += (start + end - 1) / 2 * (end - start)
+
+    def distance(region: int) -> tuple[float, float]:
+        left, right, size, _ = spans[region]
+        return max(left - centre, centre - right, 0.0), -size
+
+    left, right, size, moment = spans[min(spans, key=distance)]
+    widest = HEAD_WIDTH * tall
+    if right - left + 1 > widest:
+        middle = moment / size
+        left, right = max(left, middle - widest / 2), min(right, middle + widest / 2)
+    sx, sy = width / FACE_REFERENCE_SIZE[0], height / FACE_REFERENCE_SIZE[1]
+    box = (
+        round(left - HEAD_MARGIN * sx),
+        round(top - HEAD_RISE * sy),
+        round(right + HEAD_MARGIN * sx),
+        round(top + HEAD_DEPTH * tall),
+    )
+    return (
+        min(max(box[0], 0), width - 1),
+        min(max(box[1], 0), height - 1),
+        min(max(box[2], 0), width - 1),
+        min(max(box[3], 0), height - 1),
+    )
+
+
+def blur_faces(
+    frames: Sequence[Image.Image | numpy.ndarray], masks: Sequence[numpy.ndarray]
+) -> tuple[list[Image.Image], dict[str, Any]]:
+    """Every drive frame with the performer's face blurred, and a record of where.
+
+    SCAIL-2 draws the face it sees in the drive over the set reference's; with
+    the face blurred it draws the reference's. An oval over `head_box`,
+    feathered, takes a Gaussian blur; nothing else in the frame changes. The
+    radii are measured at 576 wide and scaled to the frame's width.
+
+    A frame with no head to find (see `head_box`) is left as it is and named in
+    the record's `skipped`. `boxes` holds each frame's head box, or None.
+    """
+    if len(frames) != len(masks):
+        raise DriveError(f"{len(frames)} drive frames but {len(masks)} drive mask frames")
+    out: list[Image.Image] = []
+    boxes: list[list[int] | None] = []
+    skipped: list[int] = []
+    for k, (frame, mask) in enumerate(zip(frames, masks)):
+        image = frame if isinstance(frame, Image.Image) else Image.fromarray(numpy.asarray(frame))
+        image = image.convert("RGB")
+        mask = numpy.asarray(mask, bool)
+        if mask.shape != (image.height, image.width):
+            raise DriveError(
+                f"drive frame {k:02d} is {image.width}x{image.height}, its mask "
+                f"{mask.shape[1]}x{mask.shape[0]}"
+            )
+        box = head_box(mask)
+        boxes.append(list(box) if box else None)
+        if box is None:
+            skipped.append(k)
+            out.append(image)
+            continue
+        scale = image.width / FACE_REFERENCE_SIZE[0]
+        oval = Image.new("L", image.size, 0)
+        ImageDraw.Draw(oval).ellipse(box, fill=255)
+        oval = oval.filter(ImageFilter.GaussianBlur(FACE_FEATHER * scale))
+        blurred = image.filter(ImageFilter.GaussianBlur(FACE_BLUR * scale))
+        out.append(Image.composite(blurred, image, oval))
+    return out, {"blurred": len(out) - len(skipped), "skipped": skipped, "boxes": boxes}
 
 
 def mask_stats(masks: Sequence[numpy.ndarray]) -> list[dict[str, float | None]]:
@@ -744,6 +908,15 @@ def _cut_drive(
                 + f"; its frames are kept in {kept}, and the next build runs it again"
             )
     write_apng([paint(mask) for mask in masks], here / DRIVE_MASK, ms)
+    # Only now, with the drive mask to find the head by: the mask pass above
+    # read the drive as cut, face and all.
+    video, faces = blur_faces(video, masks)
+    if faces["skipped"]:
+        _log(
+            f"{motion.name}: no head found in drive frames "
+            f"{', '.join(f'{k:02d}' for k in faces['skipped'])}; left unblurred"
+        )
+    write_apng(video, here / DRIVE_VIDEO, ms)
 
     record: dict[str, Any] = {
         "bundle": motion.name,
@@ -760,6 +933,7 @@ def _cut_drive(
         "method": method,
         "mask_key": mask_key if method == "mask-pass" else "",
         "masks": stats,
+        "face_blur": faces,
     }
     partial = here / f"{DRIVE_RECORD}.part"
     partial.write_text(json.dumps(record, indent=2) + "\n")

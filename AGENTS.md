@@ -83,6 +83,29 @@ the hardware and the bill.
   per frame (figure 10% of the frame, overlap 0.82-0.95 frame to frame).
 - **Qwen-Image-2.1 is licensed for research only.** Nothing the video path draws
   ships until that is cleared.
+- **The performer's face is blurred in every drive video** (the face blur,
+  always on). SCAIL-2 copies the face it is shown in the drive onto the
+  character; with the face blurred it draws the set reference's face and keeps
+  the pose (one scratch roll on `local16`, 2026-09-26). The trade-off: the
+  character's expression now comes from the key art, not the performer, so a
+  set does not mouth or grimace along with the footage. The head is found from
+  the drive mask — the figure's largest region, the top 13% of its height, the
+  part of that nearest the torso's centre column, so a raised hand is not taken
+  for the head — and the blur's sizes, measured at 576x864, scale to the
+  drive's own. A frame with no figure to find a head in is left unblurred and
+  named in `drive.json`. The mask pass reads the drive before it is blurred.
+  `drive/3` made every earlier drive, and so every earlier SCAIL video, stale.
+- **`--no-restyle` stops at the SCAIL video** (with `--machine` only; without
+  it the build refuses). Each traced frame's SCAIL frame, cut back to the set
+  reference's size, is written as `source/<set>/NN.png` and nothing is
+  restyled. Why: a restyle takes about 7.5 minutes a frame on the RX 9070,
+  no prompt wording moved the face it draws, SCAIL frames alone read as a
+  smooth illustration, and without the restyle nothing the video path draws
+  goes through Qwen-Image-2.1, so its research-only licence does not apply.
+  The two modes are stamped apart in `drawn.sha` (`scail` and `video`), so
+  switching moves the other mode's frames into `source/<set>/superseded/`, and
+  both reuse the one SCAIL video. A local `--no-restyle` build starts with the
+  restyle graph's models missing, and says which.
 
 Trial renders on a branch are scratch, as below. The video path keeps each restyle as drawn; nothing is snapped to the key art's
 grid (`cag.snap` still serves the pose-edit path), because snapping made the faces
@@ -354,6 +377,7 @@ A new term is named here before it is used.
 | **drive video** | the source clip resampled to the drive rate, cut to a 2:3 box, sized to the machine profile, as one animated PNG: `work/drive/<bundle>-<digest12>/drive.png`. Shared across characters |
 | **drive rate** | frames per second of the drive video. 16 unless the profile's length cap lowers it |
 | **drive mask** | the drive video's silhouette per frame, #0000FF on black: `drive-mask.png` beside `drive.png` |
+| **face blur** | the oval of Gaussian blur over the performer's head in every drive video frame (`blur_faces`, `cag/drive.py`), placed from the drive mask. Per-frame head boxes are recorded in `drive.json` under `face_blur` |
 | **mask pass** | the SAM3 Comfy job that makes a drive mask when the footage has no light backdrop to threshold |
 | **reference mask** | the set reference's silhouette, blue on black |
 | **SCAIL video** | every image one SCAIL-2 job returns: `work/<char>/video/<set>/<digest12>/NNN.png` |

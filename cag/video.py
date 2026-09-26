@@ -7,14 +7,15 @@ from the footage the frames were traced off, and returns one SCAIL frame per
 drive frame. The frames the set needs are the SCAIL frames at the traced times
 (the trace index), and each is then restyled — redrawn by Qwen-Image-2.1 in the
 set reference's own art — because SCAIL-2 keeps the character's shape and
-colours but softens the pixel art.
+colours but softens the pixel art. Under `scail_only` (`--no-restyle`) the
+SCAIL frames are the set's frames, with no restyle at all.
 
 Three kinds of work are cached separately, each keyed on what it is a function
 of, so a failure or a change in one never pays again for the others:
 
     work/drive/<bundle>-<d12>/          the drive video and drive mask; see `cag.drive`
     work/<char>/video/<set>/<v12>/      the SCAIL video, and the frames picked from it
-    work/<char>/source/<set>/NN.png     the restyles, stamped in `drawn.sha`
+    work/<char>/source/<set>/NN.png     the restyles, or the SCAIL frames, stamped in `drawn.sha`
 
 What is established is one roll per character on one dance, from scratch
 scripts. See AGENTS.md, "The video path".
@@ -24,6 +25,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import sys
 from pathlib import Path
 from typing import Callable, Sequence
@@ -82,6 +84,11 @@ def video_frames(
 ) -> AnimationState:
     """Draw a traced set from its source clip: one SCAIL video, then one restyle per traced frame.
 
+    Under `scail_only` each traced frame's SCAIL frame is the set's frame, at
+    the set reference's size, and nothing is restyled. The two are stamped
+    apart (`scail` and `video` in `drawn.sha`), so switching moves the other
+    mode's frames to `superseded/`; the SCAIL video is the same in both.
+
     `frames_fn` runs a Comfy job that saves many images (`comfy.render_frames`)
     and `decode` reads the source clip (`drive.decode`); both are looked up
     when called, so a test can stand in for either.
@@ -95,6 +102,7 @@ def video_frames(
     graphs = state["machine_graphs"]
     local = state.get("local", machine.backend == "local")
     reference = Path(state["key_art"])
+    scail_only = bool(state.get("scail_only"))
 
     mask_graph = Path(graphs["mask"])
     mask_extra = machine.placeholders("mask")
@@ -121,7 +129,8 @@ def video_frames(
     _log(
         state,
         f"video path: {motion.name}, {len(motion.frames)} traced -> {made.length} SCAIL frames "
-        f"at {made.rate:g} fps (mask: {made.method})",
+        f"at {made.rate:g} fps (mask: {made.method}), "
+        + ("SCAIL only, no restyle" if scail_only else "then a restyle per traced frame"),
     )
 
     # The SCAIL video: one job, keyed on everything it is drawn from.
@@ -160,45 +169,60 @@ def video_frames(
         + "\n"
     )
 
-    # The restyles: one per traced frame, of the SCAIL frame at its traced time.
-    restyle_graph = Path(graphs["restyle"])
-    restyle_extra = machine.placeholders("restyle")
-    claim_frames(
-        state,
-        "video\t"
-        + _sha(
-            VIDEO_VERSION, motion_digest(motion), video_key, json.dumps(list(made.index)),
-            restyle_graph.read_bytes(), RESTYLE, json.dumps(restyle_extra, sort_keys=True),
-            str(machine.seed),
-        ),
-    )
     with Image.open(reference) as image:
         size = image.size
-    sources, failed = {}, []
-    for frame, pick in zip(motion.frames, made.index, strict=True):
+
+    def picked(pick: int) -> Path:
         # At the reference's size and shape: the restyle's canvas is its first
         # image's. Named by the SCAIL frame, not the traced one, so a trace
         # index that moves can never pick up another frame's file.
-        traced = folder / f"picked-{pick:03d}.png"
-        if not traced.exists():
+        path = folder / f"picked-{pick:03d}.png"
+        if not path.exists():
             with Image.open(frames[pick]) as image:
-                drive.unfit(image, size).save(traced)
-        try:
-            sources[frame.index] = draw_fn(
-                RESTYLE,
-                frame_path(state, "source", frame.index),
-                references=[traced, reference],
-                workflow=restyle_graph,
-                timeout=machine.restyle_timeout,
-                seed=machine.seed,
-                extra=restyle_extra,
-            )
-        except DrawError as error:
-            failed.append(frame.index)
-            _log(state, f"restyle {frame.index:02d} failed: {error}")
-            continue
-        # Kept as drawn: snapping to the key art's grid (`cag.snap`) made the
-        # faces blocky and the set was judged better without it (2026-09-26).
+                drive.unfit(image, size).save(path)
+        return path
+
+    sources, failed = {}, []
+    if scail_only:
+        claim_frames(
+            state,
+            "scail\t" + _sha(VIDEO_VERSION, motion_digest(motion), video_key, json.dumps(list(made.index))),
+        )
+        for frame, pick in zip(motion.frames, made.index, strict=True):
+            out = frame_path(state, "source", frame.index)
+            if not out.exists():
+                shutil.copyfile(picked(pick), out)
+            sources[frame.index] = out
+    else:
+        # The restyles: one per traced frame, of the SCAIL frame at its traced time.
+        restyle_graph = Path(graphs["restyle"])
+        restyle_extra = machine.placeholders("restyle")
+        claim_frames(
+            state,
+            "video\t"
+            + _sha(
+                VIDEO_VERSION, motion_digest(motion), video_key, json.dumps(list(made.index)),
+                restyle_graph.read_bytes(), RESTYLE, json.dumps(restyle_extra, sort_keys=True),
+                str(machine.seed),
+            ),
+        )
+        for frame, pick in zip(motion.frames, made.index, strict=True):
+            try:
+                sources[frame.index] = draw_fn(
+                    RESTYLE,
+                    frame_path(state, "source", frame.index),
+                    references=[picked(pick), reference],
+                    workflow=restyle_graph,
+                    timeout=machine.restyle_timeout,
+                    seed=machine.seed,
+                    extra=restyle_extra,
+                )
+            except DrawError as error:
+                failed.append(frame.index)
+                _log(state, f"restyle {frame.index:02d} failed: {error}")
+                continue
+            # Kept as drawn: snapping to the key art's grid (`cag.snap`) made the
+            # faces blocky and the set was judged better without it (2026-09-26).
 
     stamp = motion_stamp(state)
     stamp.write_text(motion_digest(motion) + "\n")

@@ -95,6 +95,9 @@ class AnimationState(TypedDict, total=False):
     machine_graphs: dict[str, Path]
     #: Whether those graphs run on your own ComfyUI rather than Comfy Cloud.
     local: bool
+    #: Whether the video path stops at the SCAIL video: each traced frame's
+    #: SCAIL frame is the set's frame, and nothing is restyled (`--no-restyle`).
+    scail_only: bool
     #: Raw magenta-backdrop frames, by frame index.
     sources: dict[int, Path]
     #: Frame indices drawn together on one render, per render, in sheet mode.
