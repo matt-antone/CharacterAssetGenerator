@@ -1,3 +1,4 @@
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -418,6 +419,32 @@ def test_saved_images_are_every_saved_one_in_filename_order():
         comfy.first_image({})
 
 
+def test_saved_images_on_comfy_cloud_are_in_counter_order_not_hash_order():
+    # Comfy Cloud names each output by its content hash; the counter is in display_name.
+    shuffled = [7, 2, 10, 0, 5, 1, 9, 3, 8, 4, 6]
+    outputs = {"8": {"images": [
+        {"display_name": f"cag-scail_{n + 1:05d}_.png",
+         "filename": hashlib.sha256(str(n).encode()).hexdigest() + ".png", "type": "output"}
+        for n in shuffled
+    ]}}
+    assert [i["display_name"] for i in comfy.saved_images(outputs)] == [
+        f"cag-scail_{n + 1:05d}_.png" for n in range(11)
+    ]
+
+
+def test_saved_images_count_past_99999_as_a_number():
+    outputs = {"8": {"images": [{"filename": f"cag_{n}_.png", "type": "output"}
+                                for n in ("100000", "99999", "100001")]}}
+    assert [i["filename"] for i in comfy.saved_images(outputs)] == [
+        "cag_99999_.png", "cag_100000_.png", "cag_100001_.png"
+    ]
+
+
+def test_saved_images_with_no_counter_keep_the_servers_order():
+    outputs = {"8": {"images": [{"filename": name, "type": "output"} for name in ("b.png", "a.png")]}}
+    assert [i["filename"] for i in comfy.saved_images(outputs)] == ["b.png", "a.png"]
+
+
 def apng(frames: int) -> bytes:
     buffer = io.BytesIO()
     first, *rest = [Image.new("RGB", (8, 12), (n * 40, 0, 0)) for n in range(frames)]
@@ -593,6 +620,63 @@ def test_the_pending_job_is_written_before_the_wait(video, tmp_path, monkeypatch
         frames(server, tmp_path, video)
     assert seen["pending"]["job_id"] == "job-1" and seen["cancel"] is False
     assert pending.exists(), "a build stopped mid-job resumes it"
+
+
+def test_a_finished_job_whose_images_are_gone_is_forgotten_not_retried_forever(video, tmp_path):
+    server = FakeServer()
+    server.status["job-9"] = "completed"
+    pending = tmp_path / "out" / "pending.json"
+    pending.parent.mkdir()
+    pending.write_text(json.dumps({"job_id": "job-9"}))
+
+    def cleared(request):
+        if request.url.path == "/api/view" and not server.submitted:
+            return httpx.Response(404, text="not found")
+        return server(request)
+
+    client = comfy.Client(local=True, transport=httpx.MockTransport(cleared))
+    run = lambda: comfy.render_frames(  # noqa: E731
+        "a dance", tmp_path / "out", video, VIDEO, 60, raw=[False, True],
+        extra={"$length": 3}, expect=3, pending=pending, client=client,
+    )
+    with pytest.raises(comfy.ComfyError, match=r"will not download.*pending.json is cleared"):
+        run()
+    assert not pending.exists()
+    assert len(run()) == 3 and len(server.submitted) == 1, "the next build draws it again"
+
+
+def test_a_fresh_jobs_failed_download_keeps_it_to_resume(video, tmp_path):
+    server = FakeServer()
+
+    def flaky(request):
+        if request.url.path == "/api/view":
+            return httpx.Response(503, text="busy")
+        return server(request)
+
+    client = comfy.Client(local=True, transport=httpx.MockTransport(flaky))
+    pending = tmp_path / "out" / "pending.json"
+    with pytest.raises(comfy.ComfyError, match="503"):
+        comfy.render_frames("a dance", tmp_path / "out", video, VIDEO, 60, raw=[False, True],
+                            extra={"$length": 3}, expect=3, pending=pending, client=client)
+    assert pending.exists(), "a download that failed once is tried again before paying again"
+
+
+def test_time_spent_queued_does_not_count_against_the_timeout(monkeypatch):
+    server = FakeServer()
+    server.status["job-9"] = "pending"
+    monkeypatch.setattr(comfy, "POLL_SECONDS", 0)
+    polls = []
+
+    def queue(request):
+        if request.url.path == "/api/jobs/job-9":
+            polls.append(request)
+            if len(polls) == 4:
+                server.status["job-9"] = "completed"
+        return server(request)
+
+    client = comfy.Client(local=True, transport=httpx.MockTransport(queue))
+    assert client.wait("job-9", 0)["status"] == "completed"
+    assert not any(r.url.path == "/api/queue" for r in server.requests), "never cancelled"
 
 
 @pytest.mark.parametrize("cancel", [True, False])

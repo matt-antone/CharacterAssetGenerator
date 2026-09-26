@@ -113,6 +113,8 @@ POLL_SECONDS = 3
 
 #: Job states that will never change again.
 TERMINAL = {"completed", "failed", "cancelled"}
+#: A job still waiting its turn: its timeout has not started.
+QUEUED = "pending"
 
 
 class ComfyError(RuntimeError):
@@ -459,11 +461,16 @@ class Client:
     def wait(self, job_id: str, timeout: float, cancel: bool = True) -> dict:
         """Poll a job until it finishes, and return its details.
 
+        `timeout` is the job's own running time. Time spent queued behind other
+        jobs does not count: characters are built in parallel on one server,
+        and a render that times out while it waits its turn is nothing wrong
+        with the render.
+
         On timeout the job is cancelled, unless `cancel` is off: a job whose id
         was written down to be resumed is left running, so the next build can
         pick up what it has already paid for.
         """
-        deadline = time.monotonic() + timeout
+        deadline = None
         while True:
             job = self.job(job_id)
             if job is None:
@@ -473,7 +480,9 @@ class Client:
                     detail = job.get("execution_error") or job["status"]
                     raise ComfyError(f"job {job_id} {job['status']}: {detail}")
                 return job
-            if time.monotonic() > deadline:
+            if deadline is None and job.get("status") != QUEUED:
+                deadline = time.monotonic() + timeout
+            if deadline is not None and time.monotonic() > deadline:
                 if cancel:
                     self.http.post("/api/queue", json={"delete": [job_id]})
                     raise ComfyError(f"job {job_id} timed out after {timeout:.0f}s")
@@ -509,12 +518,19 @@ def _check(response: httpx.Response, what: str, where: str = "Comfy Cloud") -> N
     raise ComfyError(f"{where} {what} failed ({response.status_code}): {why}")
 
 
+#: The counter ComfyUI's SaveImage puts in each name: `<prefix>_00001_.png`.
+COUNTER = re.compile(r"^(.*)_(\d+)_\.\w+$")
+
+
 def saved_images(outputs: dict) -> list[dict]:
-    """Every saved image among a finished job's outputs, in filename order.
+    """Every saved image among a finished job's outputs, in the order they were saved.
 
     Saved means written to the output folder; previews are only used when a job
-    saved nothing. A video job saves one image per frame under one prefix, so
-    filename order is frame order.
+    saved nothing. A video job saves one image per frame under one prefix, and
+    the counter in each name is frame order. It is read off `display_name`
+    when there is one: on Comfy Cloud `filename` is a content hash, and sorting
+    by it shuffles the frames. The counter is compared as a number, so 100000
+    follows 99999. Names with no counter keep the server's order.
     """
     images = [
         image
@@ -522,7 +538,14 @@ def saved_images(outputs: dict) -> list[dict]:
         for image in (output or {}).get("images", [])
     ]
     saved = [image for image in images if image.get("type", "output") == "output"]
-    return sorted(saved or images, key=lambda image: image["filename"])
+    chosen = saved or images
+    counters = [COUNTER.match(image.get("display_name") or image["filename"]) for image in chosen]
+    if not all(counters):
+        return chosen
+    order = sorted(
+        range(len(chosen)), key=lambda k: (counters[k].group(1), int(counters[k].group(2)))
+    )
+    return [chosen[k] for k in order]
 
 
 def first_image(outputs: dict) -> dict:
@@ -619,6 +642,7 @@ def render_frames(
     out_dir.mkdir(parents=True, exist_ok=True)
     client = client or Client(local=local)
     job_id, job = _resume(client, pending, timeout)
+    resumed = job is not None
     if job is None:
         check_references(workflow, len(references))
         if len(raw) != len(references):
@@ -634,7 +658,19 @@ def render_frames(
         _write_pending(pending, job_id, client)
         job = client.wait(job_id, timeout, cancel=False)
 
-    images = [client.download(image) for image in saved_images(job.get("outputs") or {})]
+    try:
+        images = [client.download(image) for image in saved_images(job.get("outputs") or {})]
+    except ComfyError as error:
+        if not resumed:
+            raise
+        # A finished job whose images will not download twice running (the
+        # server's output folder was cleared, or the cloud's copy expired)
+        # would fail the same way every build; forget it so the next submits.
+        pending.unlink(missing_ok=True)
+        raise ComfyError(
+            f"job {job_id} finished but its images will not download ({error}); "
+            f"{pending.name} is cleared, so the next build draws it again"
+        ) from error
     if len(images) != expect:
         kept = _next_free(out_dir, "rejected-")
         _save_all(images, kept)
