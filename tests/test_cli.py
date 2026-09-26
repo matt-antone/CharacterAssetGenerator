@@ -289,6 +289,12 @@ def test_a_machine_the_backend_cannot_draw_on_stops_the_build(tmp_path, backend,
     assert not (tmp_path / "w" / "velvet-lou").exists(), "nothing is drawn"
 
 
+def test_a_machine_does_not_draw_per_frame(tmp_path):
+    with pytest.raises(SystemExit, match="drop --per-frame"):
+        cli.main([*BUILD, "--draw-backend", "comfy", "--machine", "cloud", "--per-frame",
+                  "--work", str(tmp_path / "w"), "--out", str(tmp_path / "o")])
+
+
 def test_an_unknown_machine_lists_the_profiles(tmp_path, capsys):
     with pytest.raises(SystemExit):
         cli.main([*BUILD, "--draw-backend", "comfy", "--machine", "rtx5090"])

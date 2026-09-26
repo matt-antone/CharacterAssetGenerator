@@ -531,6 +531,10 @@ def main(argv: list[str] | None = None) -> int:
         os.environ["CAG_COMFY_POSE_WORKFLOW"] = str(args.comfy_pose_workflow)
     machine, graphs = None, None
     if args.machine:
+        if not args.frame_sheet_mode:
+            # The video path is a branch of the frame-sheet graph; per-frame
+            # would skip the director's note and draw from nothing.
+            raise SystemExit("[build] --machine draws traced sets from video; drop --per-frame")
         machine, graphs = machine_with(
             args.draw_backend,
             args.machine,
