@@ -1,8 +1,8 @@
 """Pull a motion bundle from MotionArtist's Drive into `motions/`.
 
 MotionArtist syncs every bundle it exports to `$MOTION_ARTIST_REMOTE/<set>/<name>/`
-as a plain directory, where the name is `<set>-<index>` (`shuffle/shuffle-3`,
-the index not zero-padded). The bundle carries its source clip, cut from the
+as a plain directory, where the name is `<set>-<index>` (`club/club-01`: the
+tracer zero-pads the index to two digits, as the bundles installed before it did). The bundle carries its source clip, cut from the
 file the tracer traced, and may carry a bundle mask and head boxes beside it;
 their hashes are in the manifest's `clip` block.
 
@@ -51,8 +51,9 @@ REMOTE_ENV = "MOTION_ARTIST_REMOTE"
 #: its mask and a few dozen small files; this bounds a hung connection.
 TIMEOUT = 600
 
-#: `<set>/<set>-<index>`: the set's own name, then the index, not zero-padded.
-TARGET = re.compile(r"^(?P<set>[A-Za-z0-9][A-Za-z0-9_-]*)/(?P<name>(?P=set)-(?:0|[1-9][0-9]*))$")
+#: `<set>/<set>-<index>`: the set's own name, then the index. The tracer writes
+#: it zero-padded (`club-01`); the name is taken as written, never re-padded.
+TARGET = re.compile(r"^(?P<set>[A-Za-z0-9][A-Za-z0-9_-]*)/(?P<name>(?P=set)-[0-9]+)$")
 
 #: Where a pull stages its copy, beside the motion root so the move into place
 #: is a rename. Removed when the pull ends, whatever happened.
@@ -83,7 +84,7 @@ def parse_target(target: str) -> tuple[str, str]:
     if not found:
         raise PullError(
             f"{target!r} is not <set>/<set>-<index>: a bundle is named after its set and "
-            "an index with no leading zeros, e.g. shuffle/shuffle-3"
+            "an index, e.g. club/club-01"
         )
     return found["set"], found["name"]
 

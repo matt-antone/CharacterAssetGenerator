@@ -176,10 +176,15 @@ def test_a_hung_rclone_is_refused(tmp_path):
         pull.pull("shuffle/shuffle-3", tmp_path / "motions", REMOTE, hung, which)
 
 
-@pytest.mark.parametrize("target", ["shuffle", "shuffle/club-3", "shuffle/shuffle-03", "shuffle/shuffle"])
+@pytest.mark.parametrize("target", ["shuffle", "shuffle/club-3", "shuffle/shuffle", "shuffle/shuffle-x3"])
 def test_a_target_that_is_not_set_slash_set_index_is_refused(tmp_path, target):
     with pytest.raises(PullError, match="not <set>/<set>-<index>"):
         pull.pull(target, tmp_path / "motions", REMOTE, fake_rclone(tmp_path, []), which)
+
+
+def test_the_tracers_zero_padded_names_are_taken_as_written():
+    assert pull.parse_target("club/club-01") == ("club", "club-01")
+    assert pull.parse_target("shuffle/shuffle-3") == ("shuffle", "shuffle-3")
 
 
 def test_a_set_with_a_hyphen_in_its_name_is_a_set(tmp_path):

@@ -9,7 +9,7 @@
  "view": "front",
  "pingpong": true,
  "seam": "needs blend",
- "seam_ratio": 4.18,
+ "seam_ratio": 4.21,
  "stabilized": false,
  "exaggerate": 1.0,
  "performer": null,
@@ -19,54 +19,34 @@
  "missing_frames": [],
  "source": {
   "url": "https://www.youtube.com/watch?v=P4QeqpsY8v8",
-  "file": "source-P4QeqpsY8v8.mp4",
-  "title": "source-P4QeqpsY8v8.mp4",
+  "file": "sources/source-P4QeqpsY8v8.mp4",
+  "title": "Club Dancing Tips for Ladies | Sexy Dance Moves",
   "start": 77.035,
   "end": 79.454,
   "speed_factor": 0.97,
   "duration": 102.14
  },
- "clip": {
-  "file": "clip.mp4",
-  "start": 76.534792,
-  "fps": 23.976023976023978,
-  "frame_count": 83,
-  "size": [
-   1280,
-   720
-  ],
-  "box": [
-   414,
-   0,
-   540,
-   720
-  ],
-  "t_offset": 0.0,
-  "sha256": "6eeb64cc4ea7b1c7d1028dd32367c2e7d15a3bb45ea644d321f072d2ab3248db",
-  "match": 0.9993,
-  "backfilled_by": "cag"
- },
  "arc_written": true,
  "files": {
-  "motion.json": "7f008fe642856a1585ba382c6a2be9d3317bd0f087cf0ab59d6c704b78928355",
-  "club-01-motion.html": "2d72123f0f9050d49b0a4b4c80d23d853adc3c097d60f020a33546fa26b9c4ff",
-  "thumbs/f00.jpg": "5fd8ebafa13b8629b3f32d055a70f285a2994a53bf77425282d1d552dc2bf8f4",
-  "thumbs/f01.jpg": "3f3ac1d2b304e743d519c7154470ef5d36f363199c960a0d7bef95e431e35e52",
-  "thumbs/f02.jpg": "4f2463e2fd147ec68438a8da36a5a2db80cb9cd90ca73d785c9563f8ad8a2456",
-  "thumbs/f03.jpg": "6d97a69527bfd869486088ac07925bfc78ae3eac28dad89b44a9d4fa816916e9",
-  "thumbs/f04.jpg": "7b227ebcdb204fcaa0259e8a0f700dbe9f4431415d684eff47fc48fbd9cf0a1c",
-  "thumbs/f05.jpg": "d80e78167aa7de5c5ab14127dea49cc800bfb8d882ffbef9a15a3f7b0938068f",
-  "thumbs/f06.jpg": "38ca925d5dbef6e1ba7c952a6e12ec88f4082fcec63815891051f475e71d5d0b",
-  "thumbs/f07.jpg": "7aa932b45753b314b0ae58a3813d9567e53de3cbd79ec97903ee39eab748951b",
-  "thumbs/f08.jpg": "c5096572b18a42065fa85daea8ba4ec8252a87728ca3743844c82610cf35b3ec",
-  "thumbs/f09.jpg": "a61b7932642625b0a462bff4451260800372c8a0268bb26a4cd59478565099c7",
-  "thumbs/f10.jpg": "d788e9e397581c0bfb8eaadf962f1da565481894c1e520ebb270f6f5032e79df",
-  "thumbs/f11.jpg": "c3199d4fcc9bad24c90af8b12b907e2dd7363bebd2c7a41c386f861a585bdf94",
-  "thumbs/f12.jpg": "49c5a2d7859d4fc740efab559e5db9339c34fdf1c026b0812f74aff14c3f5af3",
-  "thumbs/f13.jpg": "2dce55d9e1d43c083aca61a6e8ab2976f81f11deb5fcf8c6656fbad5be94d6e8",
-  "thumbs/f14.jpg": "cf8f4a95131b4fe85f87cf40aade3ee6c6064cec7dfed182289db95e295b4961",
-  "club-01-pose-grid-00.png": "e9597f8bea20b0b57099fb6929ce4bb93f76bbcd63407ecfd582e1daac214100",
-  "club-01-pose-grid-01.png": "6167f1760fa7ea985592b41616d122f5aa20200f1908b36ffaa0a98ac377ce12"
+  "motion.json": "46cdcb2f95228b212b85c827a5cca073ab531c94265e4a53480f40f2260de52c",
+  "club-01-motion.html": "f83f7191648b0df7470026efa283f1c32cff4f7a0ad4fbbdf3f4e017d3044059",
+  "thumbs/f00.jpg": "2eb7005063d84415c306d8980c3335c89fd423647f1c78ad9152ad74143b170a",
+  "thumbs/f01.jpg": "86cdf8b954568f29fb69cb6236a1e901aed31bca5005a629879788cefd06d2be",
+  "thumbs/f02.jpg": "0908f8da34cc8e4c5a82eff8f3fcef14ac92dc4099e333cc1d501ccaaa9ec564",
+  "thumbs/f03.jpg": "edbf726b1e5003f6ce441f71fcd5a122562bf4423a20a8266b28afa11efd0350",
+  "thumbs/f04.jpg": "087b992c69db235d54736c04fbfa70b62a55cea2bf4103123c6dc1aa0c19f344",
+  "thumbs/f05.jpg": "ebe0444a42bf6615db917910c4afbc6f4e9f39ae5871a8ef553f69d1cd79f972",
+  "thumbs/f06.jpg": "33e305949f63d1e20a7e6c07af024e019648c55bcf31389fd7e7d3709128acac",
+  "thumbs/f07.jpg": "909a9b9b7bee045bbd3324a798bdfeb3327f5f8cc0626d3ee59b0de5a67a7d84",
+  "thumbs/f08.jpg": "af99720793bb4e2148b53e9cab0e07dd4b473877c4d9695d00b2ba9e4f7998c7",
+  "thumbs/f09.jpg": "801047b037f255daca9480c84151a7bc83ac99b7e4672cc585d705c097ceb11c",
+  "thumbs/f10.jpg": "f4e159091b6853d36a525bed27a2a973f7cf21459999d688b88fa092f5a81129",
+  "thumbs/f11.jpg": "6244950881ddee4fa06b761e3412bfbde79f1de89c075fa8c1e0f6d6e6797422",
+  "thumbs/f12.jpg": "f996fae7e4b0bb6a2c8ca61625437e1971d52980c353eef2885a262de8b4b193",
+  "thumbs/f13.jpg": "fe2a628403f58c6792ae0e064924d6ee1ba14455f66c19117f519881705fcb4c",
+  "thumbs/f14.jpg": "e8490050a7832e6dc8c0c74b9f9f993fe77db2f6d45a58867b9fbd1382233f29",
+  "club-01-pose-grid-00.png": "45fa085aebb7914e72a99616ca1a12d4f82bf05b5b3913c703be2f86600827f4",
+  "club-01-pose-grid-01.png": "558a792ceee2fea0679e4e3b1a2ecdacb409eb466bb5bb6abbcd4dbca986e03b"
  },
  "pose_grid": {
   "cols": 4,
@@ -85,5 +65,31 @@
   "sheet_h": 1618,
   "labeled": true,
   "source": "thumbs"
+ },
+ "clip": {
+  "file": "clip.mp4",
+  "start": 76.534792,
+  "fps": 23.976023976023978,
+  "frame_count": 83,
+  "size": [
+   1280,
+   720
+  ],
+  "box": [
+   414,
+   0,
+   540,
+   720
+  ],
+  "t_offset": 0.0,
+  "sha256": "544784f363b60643e0ba735c563268d5430f56be955917246a81a35918b36006",
+  "mask": {
+   "file": "mask.mp4",
+   "sha256": "1f8424c751ccd2ac8fa81f03f36adb96f5a611c2b69149d7bdd072f41339f74b"
+  },
+  "heads": {
+   "file": "heads.json",
+   "sha256": "30890738ed48e3eac4298371baddf4d9656f46c17802150e39b52ffe46c8faa3"
+  }
  }
 }

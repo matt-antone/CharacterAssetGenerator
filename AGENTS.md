@@ -409,13 +409,14 @@ MotionArtist syncs every bundle it exports to Drive as a plain directory,
 in `~/.bashrc`). There are no zips. Install one with
 
 ```bash
-uv run cag motions pull shuffle/shuffle-3
+uv run cag motions pull club/club-01
 uv run cag motions pull --list [<set>]   # what is on the remote, and what is installed
 ```
 
 It lands at `motions/<set>/<set>-<index>/`, **unrenamed**: the directory, the
-manifest's `name` and `motion.json`'s `name` are one name, `<set>-<index>` with
-the index not zero-padded, and a pull whose names disagree is refused. The
+manifest's `name` and `motion.json`'s `name` are one name, `<set>-<index>` as
+the tracer wrote it (zero-padded, `club-01`), and a pull whose names disagree
+is refused. The
 bundle carries its source clip (`clip.mp4`, cut by the tracer from the very
 file it traced), and may carry a bundle mask (`mask.mp4`) and head boxes
 (`heads.json`) beside it; their hashes are in the manifest's `clip` block.
@@ -512,8 +513,8 @@ hash goes in `clip.sha256` beside the clip, also ignored, and the committed
 block is left as it is. Only a cut of different frames rewrites the block. It never touches `motion.json` or
 the manifest's `files`. A bundle pulled from the tracer never needs it.
 
-A bundle is named `<set>-<index>` — `shuffle-3` from the tracer's Drive, and
-`club-01`, zero-padded, for the bundles installed before it synced there — and
+A bundle is named `<set>-<index>`, zero-padded — `club-01`, from the tracer's
+Drive and for the bundles installed before it synced there alike — and
 what it traced, the video id and start second, is in its `source` block.
 `shuffle-03` and `shuffle-3` are two names, and so two bundles. Two cuts of one video are two
 names: `club-01` and `club-04` are both from `P4QeqpsY8v8`. Names used to be

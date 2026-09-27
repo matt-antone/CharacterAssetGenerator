@@ -48,10 +48,10 @@ is no zip. From cag's repo:
 
 1. `uv run cag motions pull --list <set>` to see what the tracer has synced,
    then `uv run cag motions pull <set>/<set>-<index>` (e.g.
-   `shuffle/shuffle-3`). It copies the bundle into
+   `club/club-01`). It copies the bundle into
    `motions/<set>/<set>-<index>/` **unrenamed** and checks it before it
    installs it: the directory, the manifest's `name` and `motion.json`'s `name`
-   must be one name (index not zero-padded), every listed file and the clip,
+   must be one name (as the tracer wrote it, zero-padded), every listed file and the clip,
    bundle mask and head boxes must match their hashes, and the motion sheet
    must load. A `[pull] REFUSED:` line is a blocker, and nothing was
    installed. A re-pull of a bundle already there replaces it in place and
@@ -97,11 +97,10 @@ Leave it installed.
 
 ## Naming
 
-A bundle is named `<set>-<index>`, the index not zero-padded (`shuffle-3`), in
+A bundle is named `<set>-<index>`, zero-padded (`club-01`), in
 three places that must agree: the directory, the manifest's `name` and
 `motion.json`'s `name`. What it traced — the video id and start second — is in
-its `source` block. Older bundles are zero-padded (`club-01`); `shuffle-03` and
-`shuffle-3` are two different bundles.
+its `source` block. `shuffle-03` and `shuffle-3` would be two different bundles.
 
 ## Vocabulary
 
