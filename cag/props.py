@@ -55,6 +55,19 @@ class Prop:
         ]
         return " ".join(part.strip() for part in parts if part and part.strip())
 
+    def turned_clause(self, rest: str = "") -> str:
+        """The prop for a render that turns a picture already showing it.
+
+        Only what it is and which hand holds it: the picture carries the look.
+        The whole clause pinned Belter to her key art's singing pose, and her
+        front view came back three-quarter on every seed tried (2026-09-28).
+        `rest` says where the hand is, if the stance is not the picture's.
+        """
+        sides = list(self.hold["hands"])
+        held = f"Held in the {' and '.join(sides)} hand{'s' if len(sides) > 1 else ''}"
+        where = ", ".join(filter(None, [held, rest, "upright, never upside down"]))
+        return f"{self.name.capitalize()}: {self.summary} {where}."
+
 
 def _palette(palette: dict | None) -> str:
     if not palette:
@@ -103,3 +116,8 @@ def load_prop(name: str, root: Path | str = PROP_ROOT) -> Prop:
 def clauses(names: tuple[str, ...], set_name: str | None, root: Path | str = PROP_ROOT) -> str:
     """Every prop this character holds here, as one block, or "" for empty hands."""
     return "\n\n".join(load_prop(name, root).clause(set_name) for name in names)
+
+
+def turned_clauses(names: tuple[str, ...], rest: str = "", root: Path | str = PROP_ROOT) -> str:
+    """`Prop.turned_clause` for every prop held, or "" for empty hands."""
+    return "\n\n".join(load_prop(name, root).turned_clause(rest) for name in names)

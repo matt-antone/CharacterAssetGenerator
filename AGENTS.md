@@ -205,8 +205,12 @@ request. The view graph's first scratch rolls turned Belter correctly — a true
 back view, profiles facing the way `profile` means (the LoRA's "right side
 view" sees the character's right, so they face screen-left) — at about 32 s a
 view. The front needed the square-on sentence in `FACINGS`: without it the
-figure stayed at the key art's three-quarter angle. One character, one seed,
-judged by eye; the back view's arm still came back a little raised.
+figure stayed at the key art's three-quarter angle. So did a prop's whole
+clause: Belter's 2000-character microphone text held her front at three-quarter
+on every seed tried, where one line (`Prop.turned_clause`: what it is, which
+hand, "lowered at the side, upright") squared it on both. A set reference keeps
+its own stance and gets the line without "lowered". One character, judged by
+eye; the back view's arm still came back a little raised.
 
 Views are cached like any render: a source drawn before this is kept until it
 is deleted (`work/<slug>/source/{front,back,profile}.png`, and a set's

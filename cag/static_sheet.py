@@ -34,7 +34,7 @@ from .prompts import (
     location_prompt,
     view_prompt,
 )
-from .props import clauses
+from .props import clauses, turned_clauses
 from .sets import REQUIRED_VIEWS, wanted
 from .style import detail_frame
 from .spec import CharacterSpec
@@ -186,9 +186,10 @@ def set_key_art(
     if held == spec.props and view == KEY_FRAME_VIEW:
         return key_art
     dst = work_dir / "source" / f"{set_name}-key-{view.replace('/', '-')}.png"
-    hands = clauses(held, set_name) if held else EMPTY_HANDS
     if view_draw_fn is not None:
+        hands = turned_clauses(held) if held else EMPTY_HANDS
         return view_draw_fn(angle_prompt(view, hands, TURNED_STANCE), dst, references=[key_art])
+    hands = clauses(held, set_name) if held else EMPTY_HANDS
     detail = detail_frame(spec.detail_level) if detail_after_key else None
     return (draw_fn or draw)(
         view_prompt(
@@ -225,6 +226,12 @@ def measure_scale(state: StaticState) -> StaticState:
     return {"scale": key_art_scale(key_art, state["spec"].height_inches)}
 
 
+#: Where a projection view's prop hand goes: down, with the arms PROJECTION_STANCE
+#: hangs. At the mouth, as the key art holds it, the front view stayed at the
+#: key art's three-quarter angle.
+PROP_LOWERED = "lowered at the side"
+
+
 def draw_projection(
     state: StaticState,
     draw_fn: Callable[..., Path],
@@ -242,7 +249,7 @@ def draw_projection(
     for view in projection_views():
         if view_draw_fn is not None:
             sources[view] = view_draw_fn(
-                angle_prompt(view, clauses(spec.props, None)),
+                angle_prompt(view, turned_clauses(spec.props, PROP_LOWERED)),
                 source_path(state["work_dir"], view),
                 references=[key_art],
             )

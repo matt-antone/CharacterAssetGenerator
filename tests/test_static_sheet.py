@@ -319,7 +319,9 @@ def test_a_view_draw_turns_the_key_art_rather_than_drawing_from_words(tmp_path, 
     monkeypatch.setattr(mask, "cutout", flat_cutout)
     model = FakeMessagesListChatModel(responses=[AIMessage(BIBLE)])
     graph = static_sheet.build_static_graph(model, draw_fn=fake_draw, view_draw_fn=fake_view_draw)
-    state = {"spec": load_spec("tests/fixtures/velvet-lou.json"), "work_dir": tmp_path / "lou"}
+    from dataclasses import replace
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), props=("mic",))
+    state = {"spec": spec, "work_dir": tmp_path / "lou"}
     with pytest.raises(static_sheet.ApprovalRequired):
         graph.invoke(state)
     static_sheet.approve(tmp_path / "lou")
@@ -336,6 +338,11 @@ def test_a_view_draw_turns_the_key_art_rather_than_drawing_from_words(tmp_path, 
     # "right side view" sees the character's right: they face screen-left, as profile asks.
     assert by_view["profile"]["prompt"].startswith("<sks> right side view")
     assert "square-on" in by_view["front"]["prompt"]
+    # The prop's whole clause pinned Belter to her key art's singing pose: the
+    # front came back three-quarter on every seed. The picture carries its look.
+    for call in turned:
+        assert "Never " not in call["prompt"], "the prop is named, not redrawn from words"
+        assert "lowered at the side, upright" in call["prompt"]
 
 
 def test_a_set_reference_is_turned_too_under_a_view_draw(tmp_path):
