@@ -129,6 +129,17 @@ visible, never behind the back, in a pocket, or hidden by hair, a sleeve or the
 other arm. The brief's stance overrides that, so a stance that breaks it is
 drawn broken and copied into every frame.
 
+- **A prop goes on the key art only when the character carries it through
+  most sets.** The top-level `props` is what the key art and every turned view
+  hold. A prop used in one set — the mic in `sing`, for nearly the whole cast —
+  is listed on that set alone, and the key art stands empty-handed: a held
+  prop's pose carries into every view (Qwen-Image-Edit-2511 kept Belter's
+  raised mic arm in the back view on every seed tried, and put the mic in the
+  wrong hand). Then `performance_style` names both hands with nothing in them,
+  never "the free hand". Chops' knife, Deb's pigeon and Mort's arm stay on
+  their key art.
+- **An empty hand raised to the mouth is still the mic pose.** It carries into
+  the back view the same way. Prefer a stance whose arms read from any side.
 - **Read the prop's `hold.hands` before writing a hand.** `mic` and `arm` are
   held **character-right**; `knife` and `pigeon` **character-left**. The free
   hand is the other one. Luma's "free character-right hand" beside a mic, and
