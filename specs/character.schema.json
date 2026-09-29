@@ -58,7 +58,7 @@
       "type": "integer",
       "minimum": 1,
       "maximum": 10,
-      "default": 4,
+      "default": 8,
       "description": "Requested visual detail level. Each integer from 1 (least possible detail) through 10 (Illustrative Realism) selects one pinned single-frame detail reference."
     },
     "animations": {

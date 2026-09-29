@@ -238,13 +238,36 @@ Belter's approved key art, and Qwen-Image-2.1 copied it: both of Belter's local
 key arts on 2026-09-28 were that picture again, mic and missing belt included,
 after her brief had dropped the mic, and every other character would have come
 back as Belter. A `local` build's key art is shown swatches instead
-(`LOCAL_DETAIL_FRAMES`, `cag/references/detail-level-10-tiles.png`: squares of
-hair, leather, denim and boot cut from that key art) and told they are not a
-character. Belter and Frank, two seeds each, came back as their own briefs,
-Frank in his own colours; a barrel drawn in the same style gave flatter,
-smoother rendering. A level with no swatch sample gets words only. Without the
+(`LOCAL_DETAIL_FRAMES`, `cag/references/detail-level-NN-tiles.png`: squares of
+material, never a head) and told they are not a character. Belter and Frank,
+two seeds each, came back as their own briefs, Frank in his own colours; a
+barrel drawn in the same style gave flatter, smoother rendering. Without the
 copy, Belter's hair came back flatter than her brief asks: that is the brief's
 and the model's own, and the approval gate is where it is caught.
+
+## The detail ladder
+
+The detail samples, every backend's, are the detail ladder (`cag/ladder.py`),
+made from one render of the sample brief, **Ellis**, who is in no cast:
+`cag/references/detail-level-NN.png` (the figure on magenta) and
+`-tiles.png` (its materials, for `local`), levels 1-10. Nothing in a cast is a
+sample any more; they were Belter's key art, and she came back in other
+characters' renders.
+
+They are made, not asked for. Qwen-Image-2.1 drew Ellis at levels 1-10 on one
+seed as ten copies of one picture — level 1 as rich as level 10, differing by
+2-7 in 255 (2026-09-29). The ladder shrinks one high-detail render to each
+level's figure height and colour count, quantizes it with no dither, outlines
+it inside its silhouette and enlarges it with hard pixels: 173 px and 32
+colours at level 1 to 1380 px and 256 at level 10, one ratio (1.26x) a level,
+so each step is as noticeable as the last. The user chose the floor and the
+step (2026-09-29). Rebuild them with
+`uv run python -m cag.ladder cag/references/ladder-source-ellis.png`.
+
+**The project's detail level is 8** (`DEFAULT_DETAIL_LEVEL`, 870 px and 161
+colours), set by the user on 2026-09-29; no brief sets its own. The ladder is
+so far only the samples: a build still asks the model for its level in words
+and shows it the level's sample, and on `local` the words do nothing.
 
 Views are cached like any render: a source drawn before this is kept until it
 is deleted (`work/<slug>/source/{front,back,profile}.png`, and a set's

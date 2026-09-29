@@ -137,13 +137,16 @@ DETAIL_LEVELS = {
     10: "Illustrative realism: maximum anatomy, texture, lighting and dimensional material rendering, still readable as arcade construction.",
 }
 
-DEFAULT_DETAIL_LEVEL = 10
+#: The project's detail level, set by the user on 2026-09-29: 870 px tall and 161
+#: colours on the detail ladder (`cag.ladder`).
+DEFAULT_DETAIL_LEVEL = 8
 
-#: The approved detail samples. Levels without a frame of their own still get
-#: their written description — but the words alone do not hold: crooner, drawn
-#: at level 10 on the description alone, came back at the same rendering density
-#: as his old level-4 renders. Level 10 is the house default, so it gets the
-#: picture: Belter's approved key art, the render the look was signed off on.
+#: The detail samples, one per level: the detail ladder (`cag.ladder`), made
+#: from one render of the sample brief, Ellis, who is in no cast. The words alone
+#: do not hold: crooner, drawn at level 10 on the description alone, came back at
+#: the same rendering density as his old level-4 renders, and Qwen-Image-2.1
+#: drew Ellis at levels 1-10 as ten copies of one picture. These used to be
+#: Belter's approved key art, which put Belter into renders of other characters.
 #:
 #: Being a picture of a character is also its hazard. Nano Banana (the Comfy
 #: backend) copies the person out of it despite the prompt saying take nothing
@@ -152,20 +155,21 @@ DEFAULT_DETAIL_LEVEL = 10
 #: the approved one. So under Comfy only the key art gets it — the one render a
 #: human signs off — and everything after takes its detail from that key art.
 DETAIL_FRAMES = {
-    4: Path(__file__).parent / "references" / "detail-level-04.png",
-    10: Path(__file__).parent / "references" / "detail-level-10.png",
+    level: Path(__file__).parent / "references" / f"detail-level-{level:02d}.png"
+    for level in range(1, 11)
 }
 
 
 #: A `local` build's samples, and none of them a character. Qwen-Image-2.1
 #: copies its reference outright: with Belter's key art as the sample, every
 #: local key art came back as that Belter, mic and all, whatever its brief said
-#: (2026-09-28). So its sample is swatches of material — squares of hair,
-#: leather, denim and boot cut from that key art — which carry the density and
-#: construction and have no figure to copy. Frank drawn against it stayed Frank,
-#: in his own colours, on two seeds. A level with no sample here gets words only.
+#: (2026-09-28). So its sample is swatches of material — squares of knit,
+#: leather and buckle, wool and boot cut from each rung of the ladder, never
+#: the head — which carry the density and construction and have no figure to
+#: copy. Frank drawn against Belter's swatches stayed Frank, in his own colours.
 LOCAL_DETAIL_FRAMES = {
-    10: Path(__file__).parent / "references" / "detail-level-10-tiles.png",
+    level: Path(__file__).parent / "references" / f"detail-level-{level:02d}-tiles.png"
+    for level in range(1, 11)
 }
 
 

@@ -45,10 +45,22 @@ def test_detail_clause_rejects_an_off_scale_level():
         detail_clause(0)
 
 
-def test_only_the_level_with_a_shipped_frame_returns_one():
-    assert detail_frame(4).name == "detail-level-04.png"
-    assert detail_frame(4).exists()
-    assert detail_frame(7) is None
+def test_every_level_ships_a_frame_and_a_local_swatch_sheet():
+    """The detail ladder: one sample per level, none of them a cast member."""
+    for level in range(1, 11):
+        assert detail_frame(level).name == f"detail-level-{level:02d}.png"
+        assert detail_frame(level).exists()
+        assert detail_frame(level, local=True).name == f"detail-level-{level:02d}-tiles.png"
+        assert detail_frame(level, local=True).exists()
+    assert DEFAULT_DETAIL_LEVEL == 8, "the project's level, set by the user on 2026-09-29"
+
+
+def test_the_ladder_rises_by_one_ratio_a_level():
+    from cag.ladder import BOTTOM_HEIGHT, TOP_HEIGHT, ramp
+    heights = [ramp(level, BOTTOM_HEIGHT, TOP_HEIGHT) for level in range(1, 11)]
+    assert heights[0] == BOTTOM_HEIGHT and heights[-1] == TOP_HEIGHT
+    ratios = [b / a for a, b in zip(heights, heights[1:])]
+    assert max(ratios) - min(ratios) < 0.01
 
 
 def test_side_language_is_the_clause_the_old_profile_required():
