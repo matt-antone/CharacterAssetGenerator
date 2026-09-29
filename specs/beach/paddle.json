@@ -1,0 +1,53 @@
+{
+  "id": "paddle",
+  "name": "Paddle",
+  "height": "5' 8\"",
+  "description": "A serene, athletic paddleboarder, a woman in her thirties, who sings breezy acoustic island pop.",
+  "build": "A lean athletic adult woman: toned square shoulders, a straight strong torso, long muscular arms and legs, standing upright with straight knees.",
+  "face": "Warm golden-brown skin, calm dark-brown almond eyes under straight dark brows, a small straight nose, high cheekbones, and full lips.",
+  "hair": "A long thick black braid over the character-right shoulder, reaching the chest, under the hat.",
+  "outfit": "A very wide-brimmed natural-straw sunhat with a bold coral band; a long-sleeved fitted seafoam-green rash-guard top to the waist, the cuffs at the wrists so both hands are bare; high-waisted mid-thigh navy board shorts with a wide bold white stripe down each side; barefoot. A chunky wooden bead bracelet on the character-left wrist.",
+  "performance_style": "Balanced and serene: feet parallel hip-width, knees soft, weight centred as if on a board. Both arms relaxed and slightly out from the sides, the character-right and character-left hands open and empty, fingers visible. Head level, a calm closed-mouth smile.",
+  "location": "A glassy calm lagoon at sunrise beside a beach: smooth pale sand running to the bottom of the frame, a bright yellow paddleboard resting on the sand, flat turquoise water behind, a few leaning palms, and a soft peach sky.",
+  "recognition_cues": [
+    "a very wide-brimmed straw sunhat with a coral band",
+    "a seafoam long-sleeved rash guard",
+    "a long thick black braid over the shoulder",
+    "navy board shorts with a white side stripe"
+  ],
+  "palette": [
+    "sunhat straw #D8BC7C / #9E8450 / #F0DAA2",
+    "hat band coral #EE6A5A / #A8403A / #FF9C8E",
+    "rash guard seafoam-green #6CC8A8 / #3E8C72 / #A0E6CE",
+    "board shorts navy #1E2C54 / #0E1630 / #3A4C80",
+    "shorts stripe white #F2F0EA",
+    "bracelet wood #8A5A34 / #5A3A20",
+    "skin #B8845A / #7C5436 / #D8A67E",
+    "hair black #16120F / #070605 / #3A302A",
+    "eye dark-brown #2E1C12",
+    "eye white #F0E8DC",
+    "lip #9A5448",
+    "teeth #F2EADA"
+  ],
+  "avoid": [
+    "a paddle on the key art",
+    "a bikini",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "breakin-01"
+    },
+    "sing": {
+      "intent": "Island-pop vocal loop: a slow balanced sway at the knees, raise the mic in the character-right hand to the mouth, float the open character-left hand out low and level like skimming water, then return to the serene stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a splash: the knees dip, both open hands lift out for balance at hip height, then she settles to the serene stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: sink into a wide balanced stance, raise both open palms in front of the chest, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: walk in barefoot with a light easy stride, turn square to the front, and settle into the serene stance with both hands open.",
+    "victory": "One-shot celebration: stretch both open hands high overhead, tip the head back under the big hat brim into a bright open-mouthed laugh, then hold a balanced pose.",
+    "ko": "Non-contact performance defeat: her calm drains — the shoulders drop, both open hands hang at her sides, and her head bows so the hat brim tips down, holding a deflated standing finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

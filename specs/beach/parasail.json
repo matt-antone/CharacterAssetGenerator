@@ -1,0 +1,51 @@
+{
+  "id": "parasail",
+  "name": "Parasail",
+  "height": "5' 6\"",
+  "description": "A fearless woman in her mid twenties, a parasailing instructor who sings fierce K-pop girl-crush anthems.",
+  "build": "An athletic adult build: square shoulders, a strong straight torso, toned arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Light warm-beige skin, dark brown almond eyes under straight dark brows, a small straight nose, defined cheekbones and full lips.",
+  "hair": "Jet-black hair in one high sleek ponytail swinging to the shoulder blades, with a wide bold bright-orange streak down its length.",
+  "outfit": "A fitted long-sleeved rash guard in bright safety orange with wide bold white panels down the sides and sleeves, cuffs at the wrists with both hands fully bare; black knee-length athletic board shorts; a chunky black webbing harness with wide straps over both shoulders, round both thighs and a big silver metal buckle at the waist; black water shoes.",
+  "performance_style": "Fierce and grounded: feet shoulder-width, weight even, chin up. The character-right hand open on the harness buckle at the waist; the character-left hand in a fist raised at shoulder height, all fingers visible curled. Head level, a cool confident stare.",
+  "location": "A sunny parasailing dock: wet blue-grey boards running to the bottom of the frame, a speedboat moored at one side, a bright orange-and-white parachute canopy aloft over a vivid blue sea and sky.",
+  "recognition_cues": [
+    "a safety-orange rash guard with white side panels",
+    "a chunky black harness with a big silver buckle",
+    "a high black ponytail with a bright-orange streak"
+  ],
+  "palette": [
+    "rash guard orange #F06A1E / #A8440D / #FF9651",
+    "rash guard panels white #F2F0EA / #C4C0B5",
+    "shorts black #1E1E22 / #0E0E10 / #3C3C44",
+    "harness webbing black #2A2A2E / #141416 / #4A4A52",
+    "buckle silver #B8BCC2 / #7A7E86 / #E6E9EE",
+    "water shoes black #18181B",
+    "skin #D6A984 / #9C7458 / #EDC8A6",
+    "hair black #141214 / #060506 / #3A363C",
+    "hair streak orange #F07A28",
+    "eye brown #2E1C12",
+    "eye white #F2EADC",
+    "lip #A85A50"
+  ],
+  "avoid": [
+    "a parachute or ropes attached to the character",
+    "a helmet"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-01"
+    },
+    "sing": {
+      "intent": "Girl-crush vocal loop: the mic in the character-right hand at the mouth, she hits sharp point-and-snap arm moves with the character-left hand on the beat, a hair flip of the ponytail, then returns to the grounded stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: she strides in fast, tugs both shoulder straps of the harness tight with both hands, and lands in the grounded stance.",
+    "victory": "One-shot finish: she snaps into a power pose, the character-left fist punched straight up overhead, the character-right hand on the buckle, a fierce open-mouthed shout, and holds.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out: the shoulders drop, both open hands hang limp at her sides, and her head hangs low with the chin toward the chest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

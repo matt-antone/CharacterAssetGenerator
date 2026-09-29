@@ -1,0 +1,49 @@
+{
+  "id": "sandcastle",
+  "name": "Sandcastle",
+  "height": "5' 9\"",
+  "description": "A man in his mid fifties, a meticulous sandcastle architect who sings baroque pop, precise and faintly fussy.",
+  "build": "A slight, narrow build with a small rounded belly, thin arms and legs, standing very upright with straight knees.",
+  "face": "Fair pinkish skin, pale green eyes under bushy grey brows, a long thin nose, a neat grey moustache and thin lips.",
+  "hair": "Short grey hair visible only at the sides and back below the hat.",
+  "outfit": "A wide-brimmed khaki cotton bucket hat; a short-sleeved pale-yellow button-up shirt tucked in; khaki cargo shorts to the knee; both forearms and hands caked in pale sand to the elbows; tan leather sandals.",
+  "performance_style": "Precise and upright: heels together, weight even. Both forearms held bent at the elbow before the waist, the character-right and character-left hands open, palms up, sandy fingers spread and visible. Head tipped slightly, an appraising pursed look.",
+  "location": "A quiet stretch of damp sand at low tide, sand running to the bottom of the frame, a towering many-turreted sandcastle behind at one side, a red plastic bucket and spade beside it, and a soft blue sea and sky beyond.",
+  "recognition_cues": [
+    "a khaki bucket hat",
+    "sand-caked forearms to the elbows",
+    "a pale-yellow tucked shirt and khaki cargo shorts"
+  ],
+  "palette": [
+    "hat and shorts khaki #B9A57A / #7D6E4E / #DCCDA3",
+    "shirt pale yellow #F1DC86 / #BFA955 / #FFF1BB",
+    "sand caking #D8BE8A / #A08A5E / #F0DDB3",
+    "sandals tan #9A6B3F / #624225 / #C49466",
+    "skin #E3AE96 / #A97460 / #F5CDB8",
+    "hair and moustache grey #9C9C9A / #686866 / #C9C9C6",
+    "eye pale green #86A88A",
+    "lip #B87468",
+    "teeth #EFE6D4",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a spade in hand",
+    "sunglasses"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-03"
+    },
+    "sing": {
+      "intent": "Baroque-pop vocal loop: the mic in the character-right hand held precisely at the mouth, the character-left hand conducts small exact circles at chest height, then back to the upright stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A wave hisses in: he starts, hands flying up to chest height, then smooths himself back down. No opponent or contact.",
+    "guard": "One-shot: steps the feet apart and spreads both open sandy hands low as if shielding a castle; hold. Not combat.",
+    "entrance": "One-shot: steps in carefully on tiptoe, brushes sand from his palms, sets heels together.",
+    "victory": "One-shot: clasps both sandy hands at the chest, rises on his toes, head back beaming, holds.",
+    "ko": "Non-contact defeat: the shoulders cave, both open sandy hands droop, and his head bows under the hat brim. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

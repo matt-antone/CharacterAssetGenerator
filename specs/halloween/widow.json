@@ -1,0 +1,52 @@
+{
+  "id": "widow",
+  "name": "Widow",
+  "height": "5' 7\"",
+  "description": "A gothic widow, a woman in her fifties, dignified and melancholy, who sings Portuguese fado with quiet grief and great restraint.",
+  "build": "A slender, straight-backed adult woman of ordinary proportions, long neck, level shoulders, standing upright with straight knees.",
+  "face": "Very pale ivory skin, large dark brown eyes under fine arched black brows, high cheekbones, a long straight nose and full lips painted deep burgundy.",
+  "hair": "Glossy jet-black hair in a high smooth bun at the crown, one broad silver-white streak swept back from the forehead into it.",
+  "outfit": "A fitted long-sleeved black dress with a high collar, a fitted bodice and a straight skirt ending at mid-calf, the sleeves ending at the wrists so both hands are bare; a large charcoal-grey fringed shawl draped over both shoulders and fastened at the breast with a big oval red garnet brooch; a small opaque black crepe veil pinned to the back of the bun and falling to the shoulders behind her, the face fully uncovered; black low-heeled shoes.",
+  "performance_style": "Still and dignified: feet together, weight even. The character-left hand holds the shawl's edge at the breast beside the brooch, the character-right hand open at her side, all fingers visible. Head high, eyes lowered, a composed closed mouth.",
+  "location": "A narrow Lisbon street at night: worn cobbles running to the bottom of the frame, blue-and-white tiled walls, a wrought-iron balcony with a hanging lantern glowing amber, and a tavern doorway spilling warm light.",
+  "recognition_cues": [
+    "a fitted high-collared black dress to mid-calf",
+    "a large charcoal-grey fringed shawl with a big red garnet brooch",
+    "a black bun with a broad silver-white streak",
+    "an opaque black crepe veil falling behind the head"
+  ],
+  "palette": [
+    "skin ivory #EADCD0 / #B8A698 / #FAF0E8",
+    "eye dark brown #2E1C14",
+    "eye white #F2EDE6",
+    "lips burgundy #6E1A2A / #420E18 / #963448",
+    "hair black #141216 / #060608 / #34303A",
+    "hair streak silver #C8C8CC / #8E8E94 / #ECECF0",
+    "dress black #1A181C / #0A090B / #3A363E",
+    "shawl charcoal #56545A / #34333A / #7C7A82",
+    "veil black crepe #0E0D10",
+    "brooch garnet red #A01E24 / #5E1014 / #D24A4E",
+    "shoes black #1E1C1E"
+  ],
+  "avoid": [
+    "a veil over the face",
+    "sheer or see-through lace",
+    "a floor-length trailing gown"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "butterfly-01"
+    },
+    "sing": {
+      "intent": "Fado vocal loop: stand still, bring the mic in the character-right hand to the mouth, press the character-left hand to the brooch, close the eyes and tip the head back on the long mournful phrase, then lower the mic and return to the dignified stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: she draws the shawl tighter with the character-left hand, the character-right hand rising open to the collar, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: draw the shawl across the chest with both hands, fingers visible, turn the chin aside and hold. Not combat.",
+    "entrance": "One-shot entrance: walk in slowly and evenly, turn square to the front, and settle with the character-left hand at the brooch.",
+    "victory": "One-shot celebration: lift both open hands slowly to shoulder height, palms up, lift the chin with a small proud smile, and hold.",
+    "ko": "Non-contact defeat: the shoulders sink, both open hands fall to her sides, the head bows low. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

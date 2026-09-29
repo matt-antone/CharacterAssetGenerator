@@ -1,0 +1,53 @@
+{
+  "id": "horseshoe",
+  "name": "Horseshoe",
+  "height": "5' 9\"",
+  "description": "A wiry, sun-weathered retired man in his mid seventies who sings western swing at the horseshoe pit, dry-humoured and steady.",
+  "build": "A lean, slightly stooped older man's frame: narrow shoulders, a small rounded belly, long thin arms and legs, standing upright with the knees soft.",
+  "face": "Tanned, deeply weathered light skin, pale blue eyes under bushy white brows, a long straight nose, a thick white horseshoe moustache that frames the mouth, thin lips.",
+  "hair": "Short white hair, neatly combed back, fully covered on top by the hat.",
+  "outfit": "A pearl-snap western shirt in bold red-and-cream wide check with large white snaps, sleeves rolled to the elbow; a black leather bolo tie with a big round turquoise slide at the collar; stiff dark indigo jeans, straight-legged; a wide tan leather belt with a large oval silver buckle; tan pointed cowboy boots; a cream straw cowboy hat with a brown band.",
+  "performance_style": "Relaxed and planted: feet hip-width apart, weight on the heels. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head level under the hat brim, a dry closed-mouth half smile under the moustache.",
+  "location": "A suburban backyard horseshoe pit at golden hour: a strip of sand with an iron stake, a cut-grass lawn running to the bottom of the frame, a weathered cedar fence behind, folding lawn chairs and a red cooler to one side, and string lights sagging overhead.",
+  "recognition_cues": [
+    "a cream straw cowboy hat",
+    "a thick white horseshoe moustache",
+    "a red-and-cream check pearl-snap shirt",
+    "a round turquoise bolo slide"
+  ],
+  "palette": [
+    "shirt red check #B8322A / #7A1E19 / #D95A4C",
+    "shirt cream check and snaps #EDE3CC / #BFB294 / #FFF8E6",
+    "hat straw cream #E3D2A0 / #AE9C6B / #F5E9C4",
+    "hat band brown #5A3A22",
+    "bolo cord leather black #1E1A18",
+    "bolo slide turquoise #2FA8A0 / #1B6E68 / #6FD3CB",
+    "jeans indigo #2A3552 / #171E33 / #465782",
+    "belt and boots tan leather #A8703C / #6B4423 / #CF9862",
+    "buckle silver #B9BCC0 / #7C7F84 / #E6E8EA",
+    "skin #C48A62 / #8A5A3C / #DDA982",
+    "moustache and brows white #EAE6DF / #B8B3AA",
+    "eye blue #6E9CC4",
+    "lip #9A5B48"
+  ],
+  "avoid": [
+    "a gun holster or rope: he is a retiree at a barbecue, empty belt and hands",
+    "a young face"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-02"
+    },
+    "sing": {
+      "intent": "Western-swing vocal loop: sway on the heels, bring the mic in the character-right hand to the mouth under the moustache, tip the hat brim with the character-left fingertips on the swell, then lower the mic to the chest and return to the planted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: amble in with a slow bow-legged step, stop square to the front and settle into the planted stance, both hands empty at the sides.",
+    "victory": "One-shot win: plant the boots, raise the character-left hand high and lift the hat off the head in a wide wave with the character-right hand, laugh with the mouth open, then hold.",
+    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "id": "dusty",
+  "name": "Dusty",
+  "height": "5' 11\"",
+  "description": "A man in his mid thirties, a week into a desert arts festival and coated head to toe in pale alkali dust, who sings slow gritty desert blues rock, cheerful and unbothered.",
+  "build": "A lean, rangy adult man of ordinary proportions: narrow shoulders, long arms and legs, a flat torso, standing loose and upright with straight knees.",
+  "face": "Medium tan skin dusted chalky grey-white across the cheeks, nose and forehead, with a clean tan band around the eyes where goggles sat; blue eyes under sandy brows, a long straight nose, a short sandy stubble beard greyed with dust, thin lips.",
+  "hair": "Shaggy sandy-blond hair to the jaw, stiff and matted into clumps and powdered pale grey-white with dust.",
+  "outfit": "A loose sleeveless tan linen tunic shirt to the hip, powdered chalky white with dust; a long faded red cotton bandana tied loosely around the neck; baggy khaki cargo shorts to the knee; tall scuffed brown leather work boots; big round black-rimmed goggles with amber lenses pushed up on the forehead. Both arms bare and dusty from shoulder to fingertips.",
+  "performance_style": "Loose and slouchy: feet hip-width, weight sunk on the character-left leg. Both arms hang easy at his sides, the character-right and character-left hands open and empty, fingers visible. Head tilted, a lazy easy smile.",
+  "location": "Midday deep playa: flat white cracked clay running to the bottom of the frame, a drifting wall of pale dust storm at the back, a lone rusted bicycle lying on its side, faint far mountains through the haze.",
+  "recognition_cues": [
+    "pale chalky white dust coating the clothes, hair and skin",
+    "a clean tan goggle-band around the eyes",
+    "big round black goggles with amber lenses up on the forehead",
+    "a faded red bandana at the neck"
+  ],
+  "palette": [
+    "dusted linen tunic #D8D2C4 / #A8A092 / #F0EBDF",
+    "bandana faded red #B0443A / #702620 / #D2685C",
+    "cargo shorts khaki #9C8A62 / #66593E / #C4B288",
+    "boots brown leather #6A4428 / #3E2615 / #946440",
+    "goggles black rim #1E1C1C / #0E0D0D / #3E3A3A",
+    "goggle lenses amber #D08A28",
+    "skin dusted tan #C49A78 / #8A6848 / #E0C0A2",
+    "hair dusty sandy-blond #B8A47A / #7E6E4E / #DDCCA6",
+    "eye blue #4A7AA8",
+    "eye white #EFE6D8",
+    "lip #9A6A5A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "clean unpowdered skin or clothes",
+    "goggles down over the eyes",
+    "a hat",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-02"
+    },
+    "sing": {
+      "intent": "Desert blues vocal loop: sway slowly from boot to boot, lift the mic in the character-right hand to the mouth for a long gravelly phrase, the open character-left hand patting a slow beat on the thigh, a small puff of dust shaking off the shoulders, then lower the mic. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a sudden gust: he squints hard, the shoulders hunch and both open hands rise to shield the face, then he shrugs and settles back to his slouch. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn a shoulder forward, pull the goggles down over the eyes with the character-left hand and hold a braced, feet-apart finish. Not combat.",
+    "entrance": "One-shot entrance: trudge in with long easy strides, beat a cloud of dust off the tunic with both open hands, then settle into the slouched hip-width stance.",
+    "victory": "One-shot song-finish celebration: throw both open hands up above the shoulders, tip the head back into a big open-mouthed laugh as dust shakes loose, then hold a loose wide-armed pose.",
+    "ko": "Non-contact performance defeat: the easy slouch caves in — the shoulders droop, both open hands hang limp at his sides, and his dusty head hangs with the chin toward the bandana. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

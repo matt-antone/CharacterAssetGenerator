@@ -1,0 +1,51 @@
+{
+  "id": "frisbee",
+  "name": "Frisbee",
+  "height": "6' 3\"",
+  "description": "A lanky, laid-back man in his mid thirties who plays disc golf across the lawn and sings indie rock, mellow and a little awkward.",
+  "build": "A tall, very lean man's build: narrow shoulders, a thin chest, long thin arms and long legs, standing upright with a slight slouch.",
+  "face": "Fair lightly freckled skin, hazel eyes under light brown brows, a long straight nose, a scruffy light brown short beard, a wide mouth.",
+  "hair": "Shaggy light brown hair to the jaw, sticking out beneath the hat.",
+  "outfit": "A loose tie-dye T-shirt in big bold swirls of orange, yellow and teal; a floppy olive-green bucket hat; baggy tan cargo shorts to the knee; grey trail shoes with white soles.",
+  "performance_style": "Loose and easy: feet hip-width apart, weight on one leg, a slight slouch. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head tipped to one side, a mellow closed-mouth smile.",
+  "location": "A long backyard lawn at late afternoon with a metal disc-golf basket at one side, trees beyond, grass running to the bottom of the frame, a grill smoking by the fence and string lights between the trees.",
+  "recognition_cues": [
+    "a floppy olive bucket hat",
+    "an orange, yellow and teal tie-dye T-shirt",
+    "a very tall lanky frame",
+    "shaggy jaw-length hair"
+  ],
+  "palette": [
+    "tie-dye orange #EE7C2A / #A85418",
+    "tie-dye yellow #F3D140 / #B5961E",
+    "tie-dye teal #2A9C9A / #196664 / #5CC8C4",
+    "bucket hat olive #6E7A3A / #464E22 / #97A45C",
+    "shorts tan #B9A57A / #85754F / #D8C79E",
+    "trail shoes grey #6E7278 / #45484C",
+    "shoe soles white #EDEBE4",
+    "skin #E4B696 / #AE8266 / #F4D2B8",
+    "hair and beard light brown #8A6A44 / #5C4529 / #B0906A",
+    "eye hazel #7A6A3A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a disc in the hands in the key art: his hands are empty",
+    "pink or purple in the tie-dye"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-02"
+    },
+    "sing": {
+      "intent": "Indie-rock vocal loop: nod the head and sway the long body, bring the mic in the character-right hand to the mouth, let the character-left hand strum the air at the hip, then return to the loose stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: lope in on long legs, stop square to the front and settle into the loose slouched stance.",
+    "victory": "One-shot win: sweep the character-right arm across in a big flat disc-throw follow-through, then raise both hands overhead with a delighted open-mouthed cheer and hold.",
+    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "spinner",
+  "name": "Ember",
+  "height": "5' 5\"",
+  "description": "A woman in her mid twenties, a fire spinner at a desert arts festival, who sings pounding tribal house, fierce, focused and joyful.",
+  "build": "A lithe, athletic adult woman of ordinary proportions: toned shoulders and arms, a straight strong torso, a natural waist, long legs, standing upright with straight knees.",
+  "face": "Deep brown skin, dark brown eyes under arched black brows, a broad nose, sculpted cheekbones, full lips.",
+  "hair": "Long black box braids to the middle of the back, gathered at the crown into one thick high ponytail with a wide copper cuff, the braids falling behind the shoulders.",
+  "outfit": "A fitted sleeveless tan suede leather vest laced at the front with thick cord, high at the neck; fitted dark brown leather trousers with wide tan suede knee panels; a wide burnt-orange cloth sash knotted at the hip; flat brown leather ankle boots; wide copper cuffs on both forearms, ending above the wrists so both hands are bare.",
+  "performance_style": "Poised and ready: feet shoulder-width, knees soft, weight forward. Both arms hang at her sides, the character-right and character-left hands open and empty, fingers visible. Head high, a calm focused look.",
+  "location": "Night on the open playa: flat dark clay running to the bottom of the frame lit orange from a big bonfire burning in a steel ring behind, a ring of dim figures in silhouette beyond it, and a black starry sky.",
+  "recognition_cues": [
+    "long black box braids in one thick high ponytail with a copper cuff",
+    "a tan suede leather vest and dark brown leather trousers",
+    "a burnt-orange sash at the hip",
+    "wide copper forearm cuffs"
+  ],
+  "palette": [
+    "vest and knee panels tan suede #B08050 / #74522F / #D4A878",
+    "trousers and boots brown leather #4A2E1E / #2A1A10 / #704A32",
+    "sash burnt orange #D0601E / #8A3C10 / #F08A48",
+    "cuffs copper #B86A34 / #74401C / #E49A60",
+    "vest cord #3A2618",
+    "skin #6B4330 / #432818 / #92634A",
+    "hair black braids #1A1614 / #0C0A09 / #3A322C",
+    "eye brown #2A1A12",
+    "eye white #EFE6D8",
+    "lip #5A3228",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "fire poi, staffs or flames in her hands",
+    "bare midriff or skimpy costume",
+    "a hat",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-01"
+    },
+    "sing": {
+      "intent": "Tribal-house vocal loop: pulse the knees on a four-on-the-floor beat, raise the mic in the character-right hand to the mouth for a chanted phrase, trace a slow wide circle with the open character-left hand like a spinning poi, then lower the mic. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief reaction to a sudden spark: the chin pulls in, the torso leans back and both open hands rise to chest height, then she steadies into her ready stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step into a low wide base, both forearms crossed in front of the chest with open hands, holding a steady finish. Not combat.",
+    "entrance": "One-shot entrance: stride in with a springy step, spin once in place with both arms out, and land in the shoulder-width ready stance with both hands open.",
+    "victory": "One-shot song-finish celebration: sweep both open hands up in a wide circle over the head, throw the head back in an open-mouthed shout, and hold both arms high in a V.",
+    "ko": "Non-contact performance defeat: the focus drains out — the shoulders slump, both open hands hang limp at her sides, and her head drops with the chin toward the vest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

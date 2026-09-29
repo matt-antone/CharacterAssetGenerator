@@ -1,0 +1,48 @@
+{
+  "id": "croquet",
+  "name": "Croquet",
+  "height": "5' 7\"",
+  "description": "A genteel, impeccably mannered woman in her mid sixties who plays lawn croquet and sings English music-hall numbers, prim with a wicked streak.",
+  "build": "A slim, upright older woman's frame: straight narrow shoulders, a trim waist, legs of ordinary length, standing very erect.",
+  "face": "Fair rosy-cheeked skin with fine lines at the eyes, bright blue eyes under silver brows, a neat straight nose, thin lips in coral lipstick, large round pearl earrings.",
+  "hair": "Short silver-white hair in soft curls, set close to the head under the hat.",
+  "outfit": "A crisp white collared tennis dress with short sleeves and a pleated knee-length skirt, a wide navy trim band at the hem and collar; a wide-brimmed straw sun hat with a broad navy ribbon band; white tennis shoes; navy short socks.",
+  "performance_style": "Prim and erect: heels together, toes turned out, weight even. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Chin slightly lifted, a polite closed-mouth smile.",
+  "location": "A manicured backyard croquet lawn in soft afternoon light: bright striped mown grass running to the bottom of the frame with hoops and coloured balls, a hedge and a white garden trellis behind, a table with a lemonade jug, and string lights along the hedge.",
+  "recognition_cues": [
+    "a wide-brimmed straw sun hat with a navy ribbon",
+    "a white tennis dress with wide navy trim",
+    "short silver curls and pearl earrings"
+  ],
+  "palette": [
+    "dress white #F4F3EE / #C7C4BA / #FFFFFF",
+    "trim and ribbon navy #1E2F5C / #111B38 / #3A4F88",
+    "hat straw #D9C08A / #A38B5C / #F0DEB2",
+    "tennis shoes white #EDEBE4 / #B9B5AA",
+    "socks navy #1E2F5C",
+    "earrings pearl #EDE6D6 / #BDB4A0",
+    "skin #EBC4AA / #B8927A / #F8DCC8",
+    "hair silver #CFCFD2 / #9A9AA0",
+    "eye blue #4E86C4",
+    "lipstick coral #D86A56"
+  ],
+  "avoid": [
+    "a mallet in the hands in the key art: her hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-01"
+    },
+    "sing": {
+      "intent": "Music-hall vocal loop: bob on the toes with a jaunty knee lift, bring the mic in the character-right hand to the mouth, wag the character-left index finger in cheeky time, then return to the prim stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in with a stately walk, stop square to the front and set the heels together into the prim stance.",
+    "victory": "One-shot win: a deep theatrical curtsy, then rise and raise the character-left hand high in a gracious wave with an open-mouthed laugh, and hold.",
+    "ko": "Non-contact performance defeat. She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at her sides and the head hangs low. She remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

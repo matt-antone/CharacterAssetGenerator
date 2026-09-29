@@ -1,0 +1,50 @@
+{
+  "id": "pitmaster",
+  "name": "Pitmaster",
+  "height": "6' 1\"",
+  "description": "A slow, proud barbecue pitmaster in his mid forties who sings Southern rock, unhurried and sure of his craft.",
+  "build": "A big, heavy man's build: broad shoulders, a thick chest and a solid belly, heavy forearms, sturdy legs of ordinary length, standing tall and upright.",
+  "face": "Ruddy light skin, deep-set brown eyes under heavy brown brows, a broad nose, a full thick auburn beard to the collarbone, a wide mouth.",
+  "hair": "Short auburn hair under the cap, the beard its match.",
+  "outfit": "A charcoal-grey short-sleeved work shirt; a heavy tan canvas bib apron from chest to knee, with big dark soot smudges; bold black tattoo sleeves of flames on both forearms; faded blue jeans; brown leather work boots; a backwards black trucker cap.",
+  "performance_style": "Slow and proud: feet planted wide, weight back on the heels, chest out. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Chin raised, a satisfied closed-mouth smile in the beard.",
+  "location": "A backyard barbecue at late afternoon: a big black barrel smoker trailing grey smoke at one side, a picnic table with a checked cloth, a trimmed lawn running to the bottom of the frame, a wooden fence and string lights behind.",
+  "recognition_cues": [
+    "a full thick auburn beard",
+    "a tan canvas bib apron with soot smudges",
+    "bold black flame tattoos on both forearms",
+    "a backwards black cap"
+  ],
+  "palette": [
+    "shirt charcoal #3E4046 / #25272B / #5E6168",
+    "apron tan canvas #C2A170 / #8C7048 / #DEC196",
+    "soot #3A3530",
+    "tattoo black #1A1A1C",
+    "jeans blue #4E6A93 / #30445F / #7892B8",
+    "boots brown leather #5E3B22 / #3A2313 / #86593A",
+    "cap black #1C1C1E / #0B0B0C / #38383C",
+    "skin #CF8E6C / #95604A / #E8AE8E",
+    "hair and beard auburn #8A3F1E / #5A2711 / #B6612F",
+    "eye brown #3A2415",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "tongs, a spatula or meat in the hands: his hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-03"
+    },
+    "sing": {
+      "intent": "Southern-rock vocal loop: stomp one boot slowly, bring the mic in the character-right hand to the beard, clench the character-left fist at the chest on the long note, then return to the planted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: walk in slow and heavy, stop square to the front and plant the boots wide, chest out.",
+    "victory": "One-shot win: raise the character-right fist slowly overhead, tip the head back and roar with the mouth wide open, then hold the pose tall.",
+    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

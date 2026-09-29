@@ -1,0 +1,47 @@
+{
+  "id": "longboard",
+  "name": "Longboard",
+  "height": "5' 5\"",
+  "description": "A woman in her mid seventies, a lifelong surfer who sings sixties garage-surf rock, unhurried and cooler than everyone on the beach.",
+  "build": "A lean, wiry adult build with strong shoulders, a straight back, sinewy arms and long legs of ordinary proportion, standing upright with straight knees.",
+  "face": "Deeply tanned weathered bronze skin with fine laugh lines, pale grey-green eyes under straight silver brows, a narrow nose, high cheekbones and thin lips.",
+  "hair": "Thick silver-white hair in one long heavy braid falling over the character-right shoulder to mid-chest, full and wavy at the crown.",
+  "outfit": "A vintage long-sleeved spring-suit wetsuit in deep teal neoprene with one wide bold mustard-yellow band across the chest and down each sleeve, legs cut at mid-thigh, sleeves ending at the wrists with both hands fully bare; a chunky round black dive watch on the character-left wrist; bare feet. Her head is bare.",
+  "performance_style": "Relaxed and loose: feet wide apart as if on a board, knees soft, weight settled low on the back foot. Both arms hang easy, the character-right and character-left hands open and empty beside the thighs, fingers visible. Head tilted slightly, a knowing half-smile.",
+  "location": "An early-morning surf beach: wet packed sand running to the bottom of the frame, rolling blue-green waves breaking behind, a rack of old wooden longboards against a dune fence, and a pale gold sunrise sky.",
+  "recognition_cues": [
+    "a long heavy silver-white braid",
+    "a deep teal wetsuit with a wide mustard-yellow band",
+    "deeply tanned weathered skin"
+  ],
+  "palette": [
+    "wetsuit teal neoprene #1E5E66 / #0F363B / #3A8A93",
+    "wetsuit band mustard #D9A42A / #946E16 / #F2C95A",
+    "watch black #1E1E20 / #0C0C0D / #3C3C40",
+    "skin #9A6440 / #613C24 / #C08A62",
+    "hair silver-white #D9D6CF / #9E9A92 / #F5F3EE",
+    "eye grey-green #6E8A7A",
+    "eye white #F0E8DA",
+    "lip #8A5040"
+  ],
+  "avoid": [
+    "a young face",
+    "a surfboard held in the key art"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-02"
+    },
+    "sing": {
+      "intent": "Garage-surf vocal loop: she brings the mic in the character-right hand to her mouth, rocks her hips and knees low as if riding a wave, the character-left hand trailing out at hip height, then returns to the relaxed stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: she paddles-walks in barefoot with a loose rolling gait, flicks the braid back over the shoulder and settles into the relaxed stance.",
+    "victory": "One-shot finish: she throws the character-left hand up in a shaka with thumb and little finger out, laughs with her head back, and holds the pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out: the shoulders drop, both open hands hang limp at her sides, and her head hangs low with the chin toward the chest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

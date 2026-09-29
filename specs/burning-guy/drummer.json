@@ -1,0 +1,49 @@
+{
+  "id": "drummer",
+  "name": "Drummer",
+  "height": "5' 9\"",
+  "description": "A warm, grounded man in his mid fifties who leads the drum circle at a desert arts festival and sings Afrobeat-inspired grooves, his hands always tapping a rhythm.",
+  "build": "A solid, relaxed adult build of ordinary proportions: broad rounded shoulders, a soft thick torso, strong forearms, and sturdy legs of ordinary length, standing upright with straight knees.",
+  "face": "Dark brown skin, warm deep-brown eyes under thick greying brows, a broad nose, full cheeks, a short neat grey-and-black beard, and full lips.",
+  "hair": "Long grey-and-black locs gathered into one thick bundle at the back of the head and hanging to the shoulder blades, clear of the face.",
+  "outfit": "A hip-length woven wool poncho with wide bold horizontal stripes of rust-orange, cream and deep teal, cut short enough to clear the elbows so both arms and hands are fully bare; loose sand-beige linen drawstring trousers to the ankle; bare feet dusted pale with playa dust; a single big wooden bead necklace on a cord over the poncho.",
+  "performance_style": "Grounded and swaying: bare feet planted wide, knees soft. Both forearms raised in front of the belly, the character-right and character-left hands open with palms down, fingers spread and fully visible, as if tapping an invisible drum. Head nodding slightly, a warm easy smile.",
+  "location": "A drum circle on the playa at sunrise: pale cracked desert floor running to the bottom of the frame, a ring of tall wooden hand drums standing on the ground, colourful fabric shade flags on poles behind, and a peach-and-gold sunrise sky over distant mountains.",
+  "recognition_cues": [
+    "a hip-length poncho with wide bold rust, cream and teal stripes",
+    "bare dusty feet",
+    "long grey-and-black locs in one thick bundle",
+    "both hands raised tapping"
+  ],
+  "palette": [
+    "poncho rust-orange wool #C25A26 / #7C3616 / #E6844E",
+    "poncho cream wool #E6D8B8 / #B4A688 / #FAF0D8",
+    "poncho deep-teal wool #1E6A6A / #103E3E / #3E9494",
+    "trousers sand-beige linen #C8B48E / #8E7C5C / #E4D4B2",
+    "necklace beads wood #7A4E2C / #4A2E18 / #A87448",
+    "skin #5E3A26 / #3A2216 / #845A40",
+    "hair and beard grey-and-black #3A3836 / #1A1918 / #8A8884",
+    "eye white #EFE6D8",
+    "eye brown #2A1A12",
+    "lip #4E2C22",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a drum on the key art (no prop exists yet)",
+    "a floor-length robe"
+  ],
+  "animations": {
+    "dance": "Afrobeat groove loop from the swaying stance: step side to side on bare feet with the knees bouncing, the shoulders rolling in time, both open hands patting the air in front of the belly as if playing a drum, the head nodding on every beat, then settle back to the swaying stance.",
+    "sing": {
+      "intent": "Afrobeat vocal loop: sway the hips on the groove, bring the mic in the character-right hand to the mouth, tap the character-left open hand against the thigh in quick rhythm, then lower the mic and return to the swaying stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then he settles back to his stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in barefoot with a relaxed rolling step, hands tapping the air, turn square to the front, then land in his opening stance with both open hands in full view.",
+    "victory": "One-shot finish: stamp both bare feet, raise both open hands high with fingers spread, laugh with the mouth wide open, then hold a joyful wide pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the rhythm stops — the shoulders drop, both open hands fall still and hang at his sides, and his head hangs forward. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

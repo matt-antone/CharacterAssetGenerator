@@ -1,0 +1,53 @@
+{
+  "id": "igor",
+  "name": "Igor",
+  "height": "5' 4\"",
+  "description": "A hunchbacked laboratory assistant, a man in his thirties, eager to please and secretly a Broadway dreamer who sings big musical-theatre ballads.",
+  "build": "A short wiry adult man with a rounded hump high on the character-left shoulder blade, the character-left shoulder sitting higher than the right, ordinary arm and leg lengths, standing upright on straight legs with weight even.",
+  "face": "Pale olive skin, large bulging pale-green eyes of slightly different sizes, heavy shaggy black brows, a big bulbous nose, a wide mouth with a gap between the front teeth, and big jug ears.",
+  "hair": "A thick shaggy black bowl cut hanging to the brows, clear of the eyes.",
+  "outfit": "A long brown canvas lab smock to mid-thigh, patched with three big square patches in mustard, green and rust, the sleeves rolled to the elbows so both forearms and hands are bare; a thick rope belt tied at the waist; dark olive trousers tucked into big clunky black boots.",
+  "performance_style": "Eager and upright: feet apart, weight leaning slightly forward. Both arms hang forward of the hips, the character-right and character-left hands open and empty with fingers visible. Head level, a hopeful gap-toothed grin.",
+  "location": "A cluttered castle laboratory: a stone floor running to the bottom of the frame, tall arched windows with a stormy sky, a bench of bubbling glass flasks at one side, and a big brass lever switchboard on the back wall under a hanging chandelier.",
+  "recognition_cues": [
+    "a rounded hump high on the character-left shoulder",
+    "a brown lab smock with big mustard, green and rust square patches",
+    "a shaggy black bowl cut",
+    "big bulging pale-green eyes and a big bulbous nose"
+  ],
+  "palette": [
+    "skin olive #C8B690 / #8C7C5E / #E4D4B0",
+    "eye pale-green #A8D090",
+    "eye white #F0ECDE",
+    "brows and hair black #1C1A18 / #0C0B0A / #3C3834",
+    "teeth #EDE6D2",
+    "smock brown canvas #7A5A38 / #4A361F / #A07E58",
+    "patch mustard #C9A030 / #8A6C1A / #E4C45C",
+    "patch green #4E7A3A / #2E4A22 / #72A05C",
+    "patch rust #A04A26 / #642C14 / #C8704C",
+    "rope belt #BCA070 / #806A44 / #DCC494",
+    "trousers olive #4A4C36 / #2A2C1E / #6C6E54",
+    "boots black #1A1918 / #0A0A09 / #3C3A38"
+  ],
+  "avoid": [
+    "a lab coat of white",
+    "glowing chemicals held in the hands",
+    "a sinister leer"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
+    "sing": {
+      "intent": "Musical-theatre ballad loop: plant the feet, bring the mic in the character-right hand to the mouth for a soaring held note, sweep the character-left hand open up and out toward the sky, lift the chin, then lower the mic and return to the eager stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: he flinches down, both open hands rising beside the ears, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: turn the hump slightly forward, raise both open hands at chest height, and hold. Not combat.",
+    "entrance": "One-shot entrance: scuttle in eagerly, turn square to the front and stop with both hands open, beaming.",
+    "victory": "One-shot celebration: fling both open arms wide and high in a Broadway finale pose, chin up, mouth open, and hold.",
+    "ko": "Non-contact defeat: the shoulders slump, both open hands hang limp, the head hangs low under the bowl cut. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "lifeguard",
+  "name": "Lifeguard",
+  "height": "5' 8\"",
+  "description": "A woman in her mid thirties, a beach lifeguard who sings eighties power pop, alert and commanding, always scanning the water.",
+  "build": "An athletic swimmer's build: broad square shoulders, a strong straight back, a trim waist and long muscular legs, standing tall with straight knees.",
+  "face": "Sun-warmed light-tan skin, sharp grey-blue eyes under straight dark-brown brows, a straight nose, high cheekbones and medium lips.",
+  "hair": "Thick dark-brown hair pulled into a high ponytail that falls to the shoulder blades, a short bang-free hairline off the forehead.",
+  "outfit": "A bright red one-piece athletic swimsuit with a modest scoop neck and wide shoulder straps; bright red board shorts over it reaching mid-thigh; a large chunky silver-grey whistle on a thick white cord hanging at the sternum; white wristband-free bare forearms; plain red flip-flops. Her head is bare.",
+  "performance_style": "Tall and watchful: feet shoulder-width apart, weight square. Both arms hang at her sides, the character-right and character-left hands open, empty, fingers fully visible beside the thighs. Head level, eyes narrowed toward the horizon, a firm closed mouth.",
+  "location": "A wide sunny beach seen from the sand in front of a tall white wooden lifeguard tower with a red rescue float hung on its rail, flat pale sand running to the bottom of the frame, a bright turquoise sea with small white breakers behind, and a clear blue sky.",
+  "recognition_cues": [
+    "a bright red swimsuit and red board shorts",
+    "a large whistle on a thick white cord",
+    "a high dark-brown ponytail"
+  ],
+  "palette": [
+    "swimsuit and board shorts red #D2232A / #8A1419 / #F05A5A",
+    "whistle silver-grey #A8AEB6 / #6A7078 / #DDE2E8",
+    "whistle cord white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "flip-flops red #B81E24 / #7A1216 / #E24A4A",
+    "skin #C99270 / #8E5F44 / #E6B593",
+    "hair dark brown #3A2618 / #1E130B / #5E4230",
+    "eye grey-blue #5C7A92",
+    "lip #A8645A",
+    "teeth #F2EADB",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a bikini",
+    "a sun visor or cap",
+    "a rescue float in hand"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-02"
+    },
+    "sing": {
+      "intent": "Power-pop vocal loop: the mic in the character-right hand rises to the mouth, the character-left hand punches open-palmed up to shoulder height on the chorus, the ponytail swings, then back to the watchful stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sudden splash sound: shoulders snap up and the head jerks toward it, then she resettles. No opponent or contact.",
+    "guard": "One-shot: feet widen, the character-left forearm comes across the chest, the character-right hand open at the hip; hold a steady ready stance. Not combat.",
+    "entrance": "One-shot: jogs in along the sand, stops square to the front and plants into the watchful stance.",
+    "victory": "One-shot: plants both feet, raises both open hands high overhead, head back in an open-mouthed shout, holds a proud pose.",
+    "ko": "Non-contact defeat: her shoulders fall, both open hands hang limp, the ponytail droops and her head hangs low. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "dadrock",
+  "name": "Dadrock",
+  "height": "5' 11\"",
+  "description": "A suburban dad in his mid fifties who air-guitars every solo of eighties arena rock, sincere and slightly out of breath.",
+  "build": "A soft, thickset adult build of ordinary height: rounded shoulders, a solid barrel chest over a round belly, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Ruddy fair skin, blue eyes under bushy grey-brown brows, a broad nose, full cheeks, and a short grey-brown moustache over thin lips.",
+  "hair": "Short thinning grey-brown hair, receding at the temples, neatly combed back.",
+  "outfit": "A faded black band T-shirt, snug over the belly, with a big bold orange lightning-bolt graphic across the chest and short sleeves; khaki cargo shorts to the knee with two big flat side pockets; a brown woven belt; white crew socks pulled halfway up the calf; chunky grey-and-white running shoes. His head is bare.",
+  "performance_style": "Proud and planted: feet shoulder-width apart, weight back on the heels. Both arms hang at his sides, the character-right and character-left hands open, empty and fully visible beside the thighs. Chin up, a hopeful eager look.",
+  "location": "A suburban garage turned stage: an oil-stained grey concrete floor running to the bottom of the frame, the raised garage door showing a lawn at dusk, a pegboard of tools on the back wall, and a string of warm bulbs overhead.",
+  "recognition_cues": [
+    "a faded black tee with a big orange lightning bolt",
+    "khaki cargo shorts and half-pulled white socks",
+    "a grey-brown moustache"
+  ],
+  "palette": [
+    "T-shirt black cotton #2A2A2E / #151518 / #47474E",
+    "lightning bolt orange print #E8792A / #A14F16 / #F7A560",
+    "cargo shorts khaki #B5A27A / #7C6D4D / #D6C7A0",
+    "belt brown weave #6A4A2C",
+    "socks white #EEEDE8 / #BDBBB3",
+    "running shoes grey #8C8F95 / #5A5C61 / #B3B6BB",
+    "skin #D8997C / #9B6450 / #F0B89C",
+    "hair and moustache grey-brown #7A6A5A / #4C4136 / #A39483",
+    "eye white #F2EADF",
+    "eye blue #4A78A8",
+    "lip #A66A5E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a real guitar",
+    "a baseball cap",
+    "logos, text or real band names"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-03"
+    },
+    "sing": {
+      "intent": "Arena-rock vocal loop: the mic in the character-right hand held at the mouth, the character-left fist pumping up to shoulder height on the chorus, the head thrown back on the long note, then back to the planted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud room sound: the shoulders hunch, both open hands jump up to chest height, then he laughs it off and returns to the planted stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step back onto the heels and raise both open palms in front of the chest, then hold a sheepish steady finish. Not combat.",
+    "entrance": "One-shot entrance: jog in with a slightly winded bounce, stop square to the front, hitch up the cargo shorts with both hands, then settle into the planted stance.",
+    "victory": "One-shot finish: a big air-guitar windmill: the character-left hand fingers an invisible neck out to the side while the character-right arm swings a full circle, both hands empty, then freeze with the character-right arm high and mouth open in a shout.",
+    "ko": "Non-contact performance defeat: the eager look collapses, the shoulders round, both open hands hang and the head drops with a winded sigh. He holds a standing, deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

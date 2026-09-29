@@ -1,0 +1,56 @@
+{
+  "id": "snorkel",
+  "name": "Snorkel",
+  "height": "5' 9\"",
+  "description": "A cheerful man in his mid forties who sings bouncy calypso, a snorkeler forever amazed by the fish he has just seen.",
+  "build": "A soft, rounded everyday adult build: medium shoulders, a gentle round belly, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Light tan skin with pink sunburnt cheeks and nose, large round light-blue eyes under thick sandy brows, a round nose, a short sandy moustache, and full lips.",
+  "hair": "Short wavy sandy-blond hair, damp and pushed back from the forehead, clear of the ears.",
+  "outfit": "A bright yellow short-sleeved rash-guard shirt, loose at the belly; knee-length turquoise board shorts with big white hibiscus blooms; big bright orange swim flippers on bare feet. A large oval snorkel mask with a thick black rubber frame and solid pale-blue tinted lens, opaque, pushed up onto his forehead, a thick orange snorkel tube standing up beside the character-left ear. Both hands bare.",
+  "performance_style": "Bouncy and open: flippered feet wide apart, toes turned out, weight even. Both arms bent, the character-right and character-left hands open and empty at chest height, fingers spread and visible. Head level, eyes wide, a delighted open-mouthed grin.",
+  "location": "A sunlit rocky cove at the edge of a beach: pale wet sand running to the bottom of the frame, clear turquoise shallows behind with dark rocks poking out, a striped beach towel spread on the sand, and a bright blue sky with a few puffy clouds.",
+  "recognition_cues": [
+    "a big black-framed snorkel mask pushed up on the forehead with an orange tube",
+    "big bright orange flippers",
+    "turquoise board shorts with big white hibiscus blooms",
+    "a yellow rash-guard shirt"
+  ],
+  "palette": [
+    "rash guard yellow #F2C62E / #B38E14 / #FFE26E",
+    "board shorts turquoise #1FA9B0 / #0F6E73 / #5CD3D8",
+    "hibiscus white #F4F1EA / #C8C2B6 / #FFFFFF",
+    "flippers orange #F0741E / #A8470C / #FFA25A",
+    "snorkel tube orange #E8651A / #9E400A / #FF9A52",
+    "mask frame black rubber #1E2024 / #0D0E10 / #3C4048",
+    "mask lens pale-blue tint #9CC8DC / #6D9AAE / #CFEAF5",
+    "skin #D9A37F / #A06E4E / #F2C4A3",
+    "sunburn pink #E07C6E",
+    "hair and moustache sandy-blond #C9A460 / #8E7038 / #E8CB8A",
+    "eye blue #6EA8D8",
+    "eye white #F2ECE2",
+    "lip #B5655A",
+    "teeth #F3ECDD"
+  ],
+  "avoid": [
+    "a clear see-through mask lens",
+    "a full wetsuit",
+    "a spear gun or any weapon",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "party-01"
+    },
+    "sing": {
+      "intent": "Calypso vocal loop: sway the hips side to side, raise the mic in the character-right hand to the mouth, wave the open character-left hand in a slow fish-swimming ripple at chest height, then return to the bouncy open stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a splash: the shoulders jump, both open hands fly up to chest height, eyes wide, then he settles back to the bouncy stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: widen the flippers, raise both open palms in front of the chest, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: waddle in on the big flippers with high comic steps, turn square to the front, and land in the bouncy open stance with both hands open.",
+    "victory": "One-shot celebration: plant both flippers wide, throw both open hands high above the head, tip the head back into a huge open-mouthed laugh, then hold the pose.",
+    "ko": "Non-contact performance defeat: the delight drains away — the shoulders drop, both open hands hang limp at his sides, the mask slides a little lower on the forehead and his head hangs with the chin toward the chest, then he holds a deflated standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

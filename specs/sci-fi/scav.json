@@ -1,0 +1,49 @@
+{
+  "id": "scav",
+  "name": "Scav",
+  "height": "5' 8\"",
+  "description": "A desert-planet scavenger, a man in his thirties, weathered and quiet, who sings dusty spaghetti-western ballads.",
+  "build": "A lean, rangy adult build of ordinary proportions: medium shoulders, a straight torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Sun-darkened brown skin, narrow grey eyes, straight dark brows, a hooked nose, a short dark-brown beard, and thin lips.",
+  "hair": "Covered by a wide sand-coloured scarf wrapped round the head and neck, the face left open, a loose tail falling behind the character-right shoulder; round goggles with thick bronze rims and a bold rust-orange cloth patch on one strap pushed up on the forehead over the scarf.",
+  "outfit": "Layers of wrapped rust-orange and sand cloth over the torso; a single big curved scrap-metal shoulder plate on the character-left shoulder, dull teal with bold rivets, strapped across the chest; a scrap-metal chest plate of the same teal; a wide brown leather belt with empty pouches; loose sand-coloured trousers wrapped at the shins; tall scuffed brown boots. Forearms wrapped in sand cloth ending at the wrist, both hands bare.",
+  "performance_style": "Weight on the character-right leg, the character-left knee loose. Both arms hang at his sides, the character-right and character-left hands open, empty, fingers fully visible. Head level, a steady squint.",
+  "location": "A wide desert of orange dunes under a hazy pale sky with two suns, seen from packed sand running to the bottom of the frame, a half-buried rusted starship hull on the horizon.",
+  "recognition_cues": [
+    "a sand-coloured head scarf with round bronze-rimmed goggles on the forehead",
+    "a big dull-teal scrap-metal shoulder plate on the character-left shoulder",
+    "wrapped rust-orange and sand cloth layers"
+  ],
+  "palette": [
+    "scarf, trousers and arm wraps sand #C8AC80 / #8A7250 / #E6D2AC",
+    "cloth wraps and goggle patch rust-orange #B0542A / #6E3216 / #D87C4A",
+    "shoulder and chest plates dull-teal #4A7A76 / #2C4A48 / #74A6A0",
+    "rivets and goggle rims bronze #9A7030 / #5E4218 / #C89A50",
+    "goggle lenses dark-amber #5A3A10",
+    "belt, pouches and boots brown leather #5A3A22 / #341F10 / #825A3A",
+    "skin #8A5A38 / #5A3820 / #B07E58",
+    "beard dark-brown #2A1C12",
+    "eye grey #8A9096"
+  ],
+  "avoid": [
+    "a rifle, pistol or blade",
+    "the scarf drawn over the face",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-02"
+    },
+    "sing": {
+      "intent": "Western-ballad vocal loop: slow, the mic in the character-right hand rises to the mouth, the character-left hand opens out low at hip height, the head tips back on a long held note, then he returns to the easy stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a gust of sand: the head turns aside, the character-left forearm lifts before the face, then he lowers it. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn the plated shoulder forward and raise both open forearms, then hold. Not combat.",
+    "entrance": "One-shot entrance: trudge in with slow heavy steps, touch the goggles with the character-right hand, then settle into the stance with both hands open.",
+    "victory": "One-shot finish: raise the character-right fist high, head tipped back, then hold a quiet proud pose.",
+    "ko": "Non-contact performance defeat: the shoulders slump, both open hands hang limp and his head bows with the scarf tail sliding forward. He holds a standing, weary finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "soulman",
+  "name": "Soulman",
+  "height": "5' 10\"",
+  "description": "A sixties Southern-soul shouter, a man in his mid thirties, pouring every ounce into the song until his suit is soaked through.",
+  "build": "A compact, muscular adult man of ordinary proportions: square shoulders, a strong chest, a trim waist, arms and legs of ordinary length, standing upright with springy bent knees.",
+  "face": "Rich dark-brown skin with a sheen of sweat on the forehead and cheeks, dark brown eyes under thick black brows, a broad nose, strong cheekbones, a thin black moustache, full lips, and white teeth.",
+  "hair": "Short black hair pressed into a smooth glossy conk, combed straight back from the forehead.",
+  "outfit": "A slim three-button sharkskin suit in shimmering bronze-copper: narrow lapels, a short fitted jacket, slim straight trousers ending at the ankle; the jacket hangs open over a white shirt soaked dark in patches, its collar open and a thin black tie pulled loose; black patent leather shoes. Both hands bare, the cuffs at the wrists. His head is bare.",
+  "performance_style": "Coiled to erupt: feet shoulder-width apart, knees bent and springy. Both arms reach forward at waist height, the character-right and character-left hands open, empty, palms up and fully visible. Head forward, brows pinched, mouth closed.",
+  "location": "A packed sixties soul revue theatre: a glossy wooden stage running to the bottom of the frame, a gold-fringed red curtain behind, a row of footlights along the stage edge, and warm spotlights cutting through haze.",
+  "recognition_cues": [
+    "a shimmering bronze-copper sharkskin suit",
+    "a sweat-soaked white shirt with a loose black tie",
+    "a glossy slicked-back conk"
+  ],
+  "palette": [
+    "suit bronze-copper sharkskin #B06A34 / #6E401C / #E09A5E",
+    "shirt white #EDEAE2 / #B0ABA0 / #FFFFFF",
+    "sweat patches damp grey #9E9A92",
+    "tie and shoes black #1C1B1E / #0B0A0C / #3E3C42",
+    "skin #5C3A26 / #372218 / #86583C",
+    "hair black #151315 / #070607 / #4A4448",
+    "eye white #ECE2D2",
+    "eye brown #25160E",
+    "lip #4E2C24",
+    "teeth #F1E9D8"
+  ],
+  "avoid": [
+    "a grey or silver suit that merges with the mic",
+    "a cape",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-01"
+    },
+    "sing": {
+      "intent": "Soul-shout vocal loop: squeeze the eyes shut and throw the head back on a raw held note, the mic in the character-right hand at the mouth, the open character-left hand clawing the air at chest height, then drop to one knee on the chorus hit, spring back up and return to the coiled stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sharp startle at a loud room sound: the whole body jolts, both open hands fly to chest height, then he shakes it off and drops back into the coiled stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn the character-left shoulder forward, forearm across the chest, character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: burst in with quick shuffling steps, spin to face front with a slide of the feet, and land in the coiled stance with both palms up.",
+    "victory": "One-shot celebration: drop onto both knees, fling both open arms up and wide, throw the head back with an open-mouthed shout, and hold the pose.",
+    "ko": "Non-contact performance defeat: all the fire drains out — the shoulders sag, both open hands hang limp and the head drops to the chest. He holds a standing, spent finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

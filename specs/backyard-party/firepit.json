@@ -1,0 +1,51 @@
+{
+  "id": "firepit",
+  "name": "Firepit",
+  "height": "5' 6\"",
+  "description": "A woman in her fifties who holds court by the backyard fire pit telling stories, warm and unhurried, with a voice like smoke; she sings folk ballads.",
+  "build": "A sturdy average adult woman's build of ordinary proportions: soft rounded shoulders, a solid torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Fair weathered skin with rosy cheeks, grey-blue eyes under soft grey-brown brows, a strong straight nose, laugh lines at the eye corners, and thin lips.",
+  "hair": "Thick silver-grey hair in one heavy loose braid hanging forward over the character-left shoulder to the chest, a few strands loose at the temples.",
+  "outfit": "A heavy rust-orange wool shawl wrapped over both shoulders and knotted at the chest, its edges ending at the elbows so both forearms and hands are bare; under it a forest-green long-sleeved knit top with the sleeves pushed up to the elbows; straight dark-denim jeans; brown leather ankle boots. Her head is bare.",
+  "performance_style": "Grounded and calm: feet hip-width apart, weight even. The character-left hand holds a big solid cream enamel camp mug at waist height, the character-right hand open and empty at her side, fingers visible. Head level, a warm knowing half-smile.",
+  "location": "A backyard fire pit at night: a ring of stones with a low orange fire in the centre foreground, trimmed lawn running to the bottom of the frame, a half-circle of lawn chairs, dark trees behind and a strand of warm string lights over the fence.",
+  "recognition_cues": [
+    "a heavy rust-orange wool shawl knotted at the chest",
+    "one heavy silver-grey braid over the character-left shoulder",
+    "a big cream enamel camp mug"
+  ],
+  "palette": [
+    "shawl rust wool #B5501E / #733010 / #DB7A44",
+    "top forest-green knit #2F5A36 / #1A3620 / #4E8558",
+    "jeans dark denim #2A3A5A / #172238 / #45608A",
+    "boots brown leather #6A4024 / #3E2412 / #946040",
+    "mug cream enamel #EDE3C8 / #B5A988 / #FFF8E4",
+    "skin #E4B89A / #B0856A / #F6D5BE",
+    "hair silver-grey #B8B6B2 / #807E7A / #E0DEDA",
+    "cheeks rose #D98078",
+    "eye white #F2EADD",
+    "eye grey-blue #5E7488",
+    "lips #B06A5E",
+    "teeth #EFE8DA"
+  ],
+  "avoid": [
+    "steam or smoke rising from the mug",
+    "the shawl covering the hands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-05"
+    },
+    "sing": {
+      "intent": "Folk-ballad vocal loop: sway slowly side to side, raise the mic in the character-right hand to the mouth for a long phrase, lift the mug in the character-left hand a little at chest height on the swell, then return to the calm stance. The mouth visibly opens wide and changes shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A log cracks in the fire: her shoulders lift and she draws the mug to her chest, then settles back into the calm stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: draw the shawl-covered shoulders in, hold the mug close at the chest in the character-left hand and raise the character-right open hand, holding a steady stance. Not combat.",
+    "entrance": "One-shot entrance: amble in, lift the mug in a small toast, then settle into the calm stance.",
+    "victory": "One-shot celebration: raise the mug high in the character-left hand in a toast and the character-right open hand wide, head tipped back in an open-mouthed laugh, then hold with both feet planted.",
+    "ko": "Non-contact defeat: the storyteller's warmth drains out — the shoulders sag under the shawl, the mug hangs low in the character-left hand, and her head bows. She holds a standing, weary finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

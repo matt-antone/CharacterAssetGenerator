@@ -1,0 +1,51 @@
+{
+  "id": "firefly",
+  "name": "Firefly",
+  "height": "5' 5\"",
+  "description": "A dreamy nineteen-year-old young woman who wanders the backyard at dusk catching fireflies, and sings soft bedroom pop.",
+  "build": "A slender young adult build: narrow shoulders, a slim waist, long thin arms and legs of ordinary proportion, standing upright with straight knees.",
+  "face": "Light warm-beige skin, large grey-green eyes under soft light-brown brows, a small nose, round cheeks, and soft full lips.",
+  "hair": "Long wavy strawberry-blonde hair falling to the mid back, loose and full, behind the shoulders, with a big daisy tucked above the character-left ear.",
+  "outfit": "A knee-length sleeveless sundress in pale butter-yellow with large bold white daisies, fitted at the bodice with wide shoulder straps and a softly gathered skirt that ends at the knee; bare feet. A big round jar-shaped glowing warm-yellow firefly light hangs as a pendant on a thick cord at her chest. Both arms and hands are bare.",
+  "performance_style": "Dreamy: feet close together, weight on one foot, the other toe resting. Both arms held low and slightly out, the character-right and character-left hands open and empty, palms up, fingers visible. Head tilted, a soft faraway smile.",
+  "location": "A suburban backyard at dusk: dark green lawn running to the bottom of the frame, tall grass and a lilac bush along a wooden fence, a deep blue twilight sky, and dozens of warm yellow firefly glows floating in the air.",
+  "recognition_cues": [
+    "long wavy strawberry-blonde hair with a big daisy",
+    "a butter-yellow sundress with large white daisies",
+    "bare feet and a glowing jar pendant"
+  ],
+  "palette": [
+    "sundress butter-yellow #F2DE8A / #BFA95A / #FFF2BC",
+    "daisies white #F6F4EE",
+    "daisy centre gold #E0A82A",
+    "pendant glow warm-yellow #F7D34A / #C49A20 / #FFF09A",
+    "pendant cord brown #5A3E28",
+    "skin #EACBAE / #B8977C / #F8E2CC",
+    "hair strawberry-blonde #D08A55 / #9A5E34 / #EDB280",
+    "eye grey-green #7A8C78",
+    "eye white #F2ECE2",
+    "lip #C98078",
+    "teeth #F2EBDD"
+  ],
+  "avoid": [
+    "a clear glass jar in hand",
+    "shoes or sandals",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shakira-01"
+    },
+    "sing": {
+      "intent": "Bedroom-pop vocal loop: a slow sleepy sway, the mic in the character-right hand held close at the mouth, the character-left hand drifting up as if reaching for a firefly, then return to the dreamy stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A small startle at a buzzing bug: shoulders lift, both open hands rise to the chin, then she drifts back to the dreamy stance. No opponent or contact.",
+    "guard": "One-shot: fold both open hands over the pendant at her chest, shoulders turned in, then hold. Not combat.",
+    "entrance": "One-shot: wander in barefoot on tiptoe, stop square to the front and settle into the dreamy stance.",
+    "victory": "One-shot: both open hands raised high and spread, head tipped back, mouth open in a delighted laugh, then hold.",
+    "ko": "The dreaminess fades: shoulders drop, both open hands hang limp and the head bows, the hair falling forward. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "watermelon",
+  "name": "Watermelon",
+  "height": "5' 10\"",
+  "description": "A cheerful, sunburnt man in his mid forties who is the neighbourhood watermelon-seed-spitting champion and sings zydeco.",
+  "build": "A sturdy, barrel-chested man's build: broad shoulders, a round belly, strong arms, legs of ordinary length, standing upright.",
+  "face": "Fair skin burned bright red on the face, nose, neck and arms, with a pale strip across the forehead, blue eyes under sandy brows, a round nose, puffed full cheeks, a wide mouth with a gap between the front teeth.",
+  "hair": "Short sandy-blond hair in a buzz cut, a pale strip of forehead beneath the hairline.",
+  "outfit": "Faded denim bib overalls with one strap hanging unbuttoned, over a bright white tank top; a large bold watermelon-slice patch in red and green on the bib; the overall legs rolled to mid-calf; bare feet in green rubber flip-flops.",
+  "performance_style": "Cheery and square: feet shoulder-width apart, weight even. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head level, cheeks puffed, lips pursed as if ready to spit a seed.",
+  "location": "A backyard picnic in hot midday sun: a long picnic table heaped with watermelon slices, a chalk line and a tape measure on the lawn running to the bottom of the frame, a cooler, a fence and string lights behind.",
+  "recognition_cues": [
+    "denim bib overalls with one strap hanging",
+    "a bright red sunburn on face and arms",
+    "a big watermelon-slice patch on the bib",
+    "a sandy buzz cut"
+  ],
+  "palette": [
+    "overalls denim #5B7FAE / #3A5478 / #86A6CE",
+    "tank top white #F2F0EA / #C1BDB3",
+    "patch watermelon red #E0373C / #9A2226",
+    "patch rind green #3A9A48 / #22612C",
+    "flip-flops green #3A9A48 / #22612C",
+    "sunburnt skin #E0806A / #A85446 / #F2A48E",
+    "pale skin strip #F0D2BC",
+    "hair sandy blond #C9A66A / #967A45",
+    "eye blue #4E86C4",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a watermelon slice in the hands in the key art: his hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-03"
+    },
+    "sing": {
+      "intent": "Zydeco vocal loop: two-step side to side, bring the mic in the character-right hand to the mouth, rub the character-left knuckles up and down the bib like a washboard, then return to the square stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: waddle in cheerfully in the flip-flops, stop square to the front and settle into the stance.",
+    "victory": "One-shot win: lean back and spit a long arc upward, then raise both fists overhead in a champion's cheer with the mouth wide open, and hold.",
+    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

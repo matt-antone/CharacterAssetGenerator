@@ -1,0 +1,50 @@
+{
+  "id": "tiki",
+  "name": "Tiki",
+  "height": "5' 11\"",
+  "description": "A loud, jovial man in his mid forties who hosts the patio tiki bar and sings exotica and surf-lounge numbers, the life of the party.",
+  "build": "A stocky, round-bellied man's build: broad shoulders, a big rounded belly, thick arms and sturdy legs of ordinary length, standing upright.",
+  "face": "Warm tan skin, dark brown eyes under thick black brows, a broad nose, full cheeks, a short dark goatee, a wide mouth.",
+  "hair": "Thick wavy black hair swept back from the forehead, collar length at the back, clear of the ears.",
+  "outfit": "A loose short-sleeved aloha shirt in bright turquoise with big bold yellow hibiscus blooms and large white leaves, open at the collar and untucked; a thick lei of large orange and yellow flowers around the neck, resting on the chest; khaki cargo shorts to the knee; tan leather sandals. His head is bare.",
+  "performance_style": "Broad and welcoming: feet shoulder-width apart, weight settled on both sandals. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head level, a wide open-mouthed host's laugh.",
+  "location": "A backyard patio tiki bar at dusk: a bamboo counter with a thatched roof, glowing tiki torches, a flagstone patio running to the bottom of the frame, a plastic kiddie pool and a lawn beyond, and string lights with paper lanterns overhead.",
+  "recognition_cues": [
+    "a turquoise aloha shirt with big yellow hibiscus blooms",
+    "a thick orange-and-yellow flower lei",
+    "a round belly and swept-back black hair"
+  ],
+  "palette": [
+    "shirt turquoise #1F9FA8 / #136670 / #56CDD3",
+    "hibiscus yellow #F2C230 / #B48A18 / #FFE27A",
+    "shirt leaves white #EFEDE4 / #BDB9AE",
+    "lei orange #EE7A22 / #A84F12 / #FFA85A",
+    "lei yellow #F6D23A / #B7961B",
+    "shorts khaki #B9A57A / #85754F / #D8C79E",
+    "sandals tan leather #9A6A3E / #624222",
+    "skin #B98458 / #7C5434 / #D6A277",
+    "hair and goatee black #1B1714 / #0B0907 / #3A302A",
+    "eye brown #2E1C12",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a drink or tray in the hands: his hands are empty",
+    "a grass skirt"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-02"
+    },
+    "sing": {
+      "intent": "Exotica lounge vocal loop: rock the hips side to side, bring the mic in the character-right hand to the mouth, sweep the character-left hand in a slow wave out at chest height, then return to the broad stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: shimmy in with a hip-swinging step, spread both open hands in welcome and settle into the broad stance.",
+    "victory": "One-shot win: throw both open hands up and wide above the shoulders, head back in a big open-mouthed laugh, lei bouncing, then hold.",
+    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

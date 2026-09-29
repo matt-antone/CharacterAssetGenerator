@@ -1,0 +1,49 @@
+{
+  "id": "imp",
+  "name": "Imp",
+  "height": "3' 6\"",
+  "description": "A small male imp in his early twenties, a hot-club swing singer, mischievous and delighted with everything; a fiend played for laughs, never menacing.",
+  "build": "Small and compact, about the proportions of a short wiry adult man: a slightly large head, narrow shoulders, a neat round belly under the waistcoat, thin arms and legs, standing upright with straight knees. A long thin tail with a bold arrowhead tip curls out from behind the character-left hip and up to hip height.",
+  "face": "Bright scarlet skin, large round amber-yellow eyes with black pupils, thick black arched brows, a small upturned nose, pointed ears swept back, a wide thin-lipped mouth with small even white teeth, and a pointed chin with a short black goatee. Two short curved black horns rise from the forehead just above the brows.",
+  "hair": "Short slicked-back black hair, flat to the skull between the horns.",
+  "outfit": "A bright mustard-yellow single-breasted waistcoat with four big round black buttons, worn over a white collarless shirt with the sleeves rolled to the elbows so the forearms and both hands are bare; charcoal-grey narrow trousers ending at the ankle; bare scarlet feet with small black toenails. His head is bare apart from the horns.",
+  "performance_style": "Springy and upright: feet hip-width apart, weight up on the balls of the bare feet. Both arms relaxed at his sides, the character-right and character-left hands open and empty, fingers spread and visible beside the hips. Head level, a wide delighted grin.",
+  "location": "A tiny candlelit Paris jazz cellar: a stage of scuffed dark floorboards running to the bottom of the frame, a curved brick vault overhead, a battered upright bass and an empty guitar chair at one side, and strings of warm orange bulbs looping along the brick.",
+  "recognition_cues": [
+    "bright scarlet skin with two short curved black horns",
+    "a long thin tail with a bold arrowhead tip",
+    "a bright mustard-yellow waistcoat with big black buttons",
+    "large round amber-yellow eyes"
+  ],
+  "palette": [
+    "skin scarlet #C62A22 / #7E1712 / #E8584A",
+    "horns, brows, goatee and toenails black #1B1414 / #0B0808 / #3A2E2E",
+    "hair black #1F1818 / #0E0A0A / #403434",
+    "eye amber #F0B42A",
+    "eye pupil #140E0A",
+    "teeth #F4EEE0",
+    "waistcoat mustard #D9A520 / #8E6A10 / #F4CD5A",
+    "waistcoat buttons black #151515",
+    "shirt white #EFEBE2 / #B8B2A6 / #FFFFFF",
+    "trousers charcoal #4A4A52 / #2A2A30 / #6E6E78"
+  ],
+  "avoid": [
+    "a pitchfork or trident",
+    "wings",
+    "fire or flames around him"
+  ],
+  "animations": {
+    "dance": "Prose dance for a small tailed body: a bouncy hot-club swing loop. Bounce on the balls of the feet in time, kick the character-right heel out and back, then the character-left, snapping the fingers of both open hands at shoulder height; the tail swings side to side with the hips. Return to the springy opening stance.",
+    "sing": {
+      "intent": "Swing vocal loop: bounce on the toes, bring the mic in the character-right hand up to the mouth for a quick scat phrase, flick the character-left hand open beside the shoulder, tip the head side to side with the beat, then lower the mic to the chest and return to the springy stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: he hops back a step, the tail goes stiff and upright, both open hands fly up beside the face, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot playful self-protection: crouch a touch lower, cross both forearms in front of the chest with the hands open, the tail curled round the character-left leg, then hold. Not combat.",
+    "entrance": "One-shot entrance: skip in with small springy hops, turn square to the front and land on both bare feet, hands open at the hips, tail curling up.",
+    "victory": "One-shot celebration: jump straight up with both open hands flung above the head and the tail whipping up, land square on both feet and hold with both arms raised, mouth wide open in a cackle.",
+    "ko": "Non-contact defeat: the bounce drains out, the shoulders drop, both open hands hang limp, the head droops and the tail sags to the floor behind him. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

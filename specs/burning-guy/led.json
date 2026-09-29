@@ -1,0 +1,52 @@
+{
+  "id": "led",
+  "name": "Lumen",
+  "height": "5' 10\"",
+  "description": "A man in his mid twenties at a desert arts festival wearing a suit covered in glowing light strips, who sings soaring euphoric trance, earnest and wide-eyed.",
+  "build": "A slim, wiry adult man of ordinary proportions: narrow shoulders, a straight torso, long arms and legs, standing upright with straight knees.",
+  "face": "Light warm beige skin, brown eyes under straight dark brows, a snub nose, smooth cheeks, a small dark soul patch under the lower lip, and a mouth of ordinary width.",
+  "hair": "Short black hair buzzed at the sides, a short spiky crop on top that rises above the visor band.",
+  "outfit": "A fitted matte black zip-up bodysuit with long sleeves ending at the wrists so both hands are bare, crossed by wide bold glowing light bands about two inches wide: cyan bands running down the outside of each arm and leg and a big glowing lime-green X across the chest; a solid opaque wraparound visor across the eyes, glowing cyan, with the eyes visible as dark shapes behind it; chunky white high-top sneakers with glowing cyan soles.",
+  "performance_style": "Bright and bouncy: feet hip-width, knees loose, weight on the balls of the feet. Both arms hang at his sides, the character-right and character-left hands open and empty, fingers visible. Head level, an open eager smile.",
+  "location": "Pre-dawn on the playa: flat dark clay running to the bottom of the frame, a giant dome of glowing blue-and-green light strips behind, lasers fanning into a deep navy sky with the first pale band of dawn on the horizon.",
+  "recognition_cues": [
+    "a matte black bodysuit crossed by wide glowing cyan bands down the limbs",
+    "a big glowing lime-green X across the chest",
+    "a solid glowing cyan wraparound visor",
+    "white high-tops with glowing cyan soles"
+  ],
+  "palette": [
+    "bodysuit matte black #1C1E24 / #0C0D10 / #383C46",
+    "light bands and visor glowing cyan #2AD4E8 / #1488A0 / #A8F4FF",
+    "chest X glowing lime #8AE83A / #4E9A1C / #D2FF9A",
+    "sneakers white #EEEEEA / #BCBCB6 / #FFFFFF",
+    "skin #D8AE8C / #A07A5C / #F0CCAE",
+    "hair and soul patch black #1A1818 / #0C0B0B / #3A3636",
+    "eye brown #3A2618",
+    "eye white #EFE6D8",
+    "lip #A06A5A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "thin wire-like light strips",
+    "pink or magenta lights",
+    "a clear or see-through visor",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-01"
+    },
+    "sing": {
+      "intent": "Trance vocal loop: bounce gently on the balls of the feet, raise the mic in the character-right hand to the mouth for a long soaring phrase, lift the open character-left hand slowly overhead with the fingers spread toward the sky, then bring both down together. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a sudden bass drop: the shoulders jerk up, both open hands rise to chest height and the head pulls back, then he bounces back into his ready stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet wider and raise both open hands in front of the glowing chest X, palms out, holding a steady finish. Not combat.",
+    "entrance": "One-shot entrance: bounce in with quick light steps, tap the visor with the character-left hand, then settle into the hip-width stance with both hands open at his sides.",
+    "victory": "One-shot song-finish celebration: jump the knees up once, throw both open hands overhead in a wide V, mouth open in a joyous shout, and hold the pose with the arms high.",
+    "ko": "Non-contact performance defeat: the bounce dies out — the shoulders sag, both open hands hang limp at his sides, and his visored head hangs with the chin toward the chest X. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

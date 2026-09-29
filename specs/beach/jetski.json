@@ -1,0 +1,55 @@
+{
+  "id": "jetski",
+  "name": "Jetski",
+  "height": "5' 10\"",
+  "description": "A hyperactive jet-ski rental guy, a man in his mid twenties, all adrenaline, who sings pounding big-room EDM.",
+  "build": "A wiry, energetic young man: medium shoulders, a lean torso, long arms and legs, standing upright with straight knees.",
+  "face": "Tanned light-brown skin, bright green eyes, straight dark brows, a sharp nose, a pointed chin, a short dark goatee, and wide lips.",
+  "hair": "Spiky bleached-blond hair gelled straight up into bold points, dark at the roots.",
+  "outfit": "A bulky bright neon-lime life vest zipped over the torso, with two wide black buckle straps across the front; a short-sleeved black rash guard showing at the arms; knee-length hot-orange board shorts with a wide bold black lightning bolt down each side; black water shoes. Wraparound mirrored sunglasses with a black frame and opaque silver-blue lenses over the eyes. Both hands bare.",
+  "performance_style": "Wired and bouncing: feet wide, knees springy, weight on the balls of the feet. Both arms bent and pumped up, the character-right and character-left hands open and empty at shoulder height, fingers spread. Head up, a wide open-mouthed whooping grin.",
+  "location": "A busy jet-ski rental dock on a sunny beach: bright wet sand and a short wooden jetty running to the bottom of the frame, a row of colourful jet skis bobbing at the jetty, a hand-painted rental hut with a flag, and choppy blue sea with white spray under a blazing sky.",
+  "recognition_cues": [
+    "a bulky neon-lime life vest with black straps",
+    "wraparound mirrored sunglasses",
+    "spiky bleached-blond hair",
+    "hot-orange board shorts with a black lightning bolt"
+  ],
+  "palette": [
+    "life vest neon-lime #A8E02A / #6E9A12 / #D2F870",
+    "vest straps and buckles black #1C1D20 / #0C0C0E",
+    "rash guard black #22232A / #101115 / #3E4048",
+    "board shorts hot-orange #F4661E / #AA400C / #FF9458",
+    "lightning bolt black #18191C",
+    "water shoes black #202126 / #0E0E11",
+    "sunglass lenses silver-blue #8AA8C8 / #5C7896 / #C8DCF0",
+    "sunglass frame black #141518",
+    "skin #C08A60 / #84593A / #DEAC82",
+    "hair bleached-blond #F0DC8A / #B8A052 / #FFF2C0",
+    "hair roots dark-brown #4A3422",
+    "goatee dark-brown #3A2A1C",
+    "lip #A05E4A",
+    "teeth #F4ECDC"
+  ],
+  "avoid": [
+    "a helmet",
+    "a whistle or lanyard",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-03"
+    },
+    "sing": {
+      "intent": "Big-room EDM vocal loop: bounce hard on the knees, raise the mic in the character-right hand to the mouth, pump the open character-left hand up above the head on the drop, then return to the wired stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at spray: the whole body jolts, both open hands fly up at chest height, then he bounces back to the wired stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: drop into a wide springy stance, raise both open palms at chest height, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: sprint in with big bounding steps, skid square to the front, and land in the wired stance with both hands pumped up.",
+    "victory": "One-shot celebration: jump the feet wide, throw both open hands straight up overhead, tip the head back into a huge open-mouthed whoop, then hold the pose.",
+    "ko": "Non-contact performance defeat: the adrenaline crashes — the shoulders sag inside the life vest, both open hands hang at his sides, and his head drops, chin on the vest, holding a drained standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

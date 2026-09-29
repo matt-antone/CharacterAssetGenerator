@@ -1,0 +1,52 @@
+{
+  "id": "spacecowboy",
+  "name": "Space Cowboy",
+  "height": "6' 0\"",
+  "description": "A laconic man in his mid forties, a space cowboy at a desert arts festival who sings wide-open cosmic country.",
+  "build": "A tall, lean, long-legged adult man of ordinary proportions: medium shoulders, narrow hips, standing upright with a loose easy knee.",
+  "face": "Tanned light skin, narrowed pale-blue eyes under straight sandy brows, a long straight nose, deep crow's feet, and a thick sandy horseshoe moustache.",
+  "hair": "Shaggy sandy-blond hair to the collar, under the hat.",
+  "outfit": "A chrome-silver cowboy hat with a wide curled brim and a deep crease; a waist-length silver lamé western jacket with long thick silver fringe hanging from both arms and across the back yoke, the cuffs at the wrists so both hands are bare; a deep navy snap-front western shirt underneath; a wide black leather belt with a big round turquoise buckle; faded mid-blue jeans; tall black cowboy boots.",
+  "performance_style": "Easy and loose: feet apart, weight on the character-right leg, the character-left knee bent. Both arms hang loose at his sides, the character-right and character-left hands open, empty, fingers visible. Head level, a slow squint.",
+  "location": "A desert playa under a starry night: flat pale cracked alkali ground to the bottom of the frame, a chrome rocket-ship art car on wheels at one side lit with cool blue lights, a lone wooden hitching post, and a deep blue sky full of stars.",
+  "recognition_cues": [
+    "a chrome-silver cowboy hat",
+    "a silver lamé jacket with long thick fringe",
+    "a big turquoise belt buckle",
+    "a thick sandy horseshoe moustache"
+  ],
+  "palette": [
+    "hat chrome silver #B8BEC6 / #767C84 / #EEF2F6",
+    "jacket silver lamé #C4C8CE / #84888E / #F0F2F4",
+    "shirt deep navy #1E2A4E / #0E1630 / #3A4A78",
+    "belt and boots black leather #1B1A1E / #0B0A0C / #3C3A42",
+    "buckle turquoise #2EB0A8 / #1A7068 / #6ED8D0",
+    "jeans mid-blue denim #4A6FA0 / #2D4566 / #7396C4",
+    "skin #D4A07C / #9A6A4C / #F0C29E",
+    "hair and moustache sandy #B8904E / #7A5E30 / #DDB878",
+    "eye pale blue #8AB0D0",
+    "eye white #EFE6D8",
+    "lip #A86858",
+    "teeth #EDE3D0"
+  ],
+  "avoid": [
+    "a gun or holster",
+    "a sheriff's star"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-01"
+    },
+    "sing": {
+      "intent": "Cosmic-country vocal loop: lean back on the character-right leg, bring the mic in the character-right hand to the moustache in front of the navy shirt, sweep the character-left open hand slowly out across the sky, then return to the easy stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sudden bang: he ducks the hat brim and both hands rise, then he straightens slowly. No opponent, strike or physical contact.",
+    "guard": "One-shot: turn the character-left shoulder forward with the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: amble in with long bow-legged steps, touch the hat brim with the character-right hand, then settle into the easy stance.",
+    "victory": "One-shot finish: sweep the hat off with the character-right hand and hold it high, head tipped back in an open-mouthed whoop, then hold.",
+    "ko": "Non-contact performance defeat: the swagger leaks out — the shoulders drop, both open hands hang limp at his sides, and his head hangs low, the hat brim hiding the eyes. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

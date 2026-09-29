@@ -1,0 +1,50 @@
+{
+  "id": "tutu",
+  "name": "Tutu",
+  "height": "6' 1\"",
+  "description": "A burly bearded man in his mid forties who belts power-pop anthems at a desert arts festival, completely unbothered in a pink tutu.",
+  "build": "A big heavy adult build: broad shoulders, a thick barrel chest and round belly, thick arms and sturdy legs of ordinary human proportion, standing upright with straight knees.",
+  "face": "Ruddy light-tan skin, pale blue eyes under heavy sandy-brown brows, a broad straight nose, full cheeks, and a full bushy sandy-brown beard to the collarbone.",
+  "hair": "Short sandy-brown hair cropped close at the sides, a little longer and tousled on top, clear of the ears.",
+  "outfit": "A sleeveless olive-drab cotton tank top; a short stiff hot-pink net tutu standing out level from the waist to mid-thigh in a wide bold ruffled disc; bare legs below; knee-high black leather combat boots, laced up the front, with thick black soles. Opaque black goggles with round dark lenses pushed up onto his forehead. Both hands bare.",
+  "performance_style": "Planted wide and square: feet shoulder-width apart, weight even on both boots. Both arms hang loose at his sides, the character-right and character-left hands open, empty and fully visible beside the tutu. Head level, a relaxed contented half-smile.",
+  "location": "Open alkali playa at midday: flat pale cracked desert floor running to the bottom of the frame, a distant ring of low tents and shade structures, a tall rusted-steel sculpture of a flower far off at one side, and a hazy bright sky over faint brown mountains.",
+  "recognition_cues": [
+    "a short stiff hot-pink tutu standing out from the waist",
+    "a full bushy sandy-brown beard",
+    "knee-high black combat boots",
+    "black goggles pushed up on the forehead"
+  ],
+  "palette": [
+    "tutu hot-pink net #E0408A / #A02660 / #F77BB0",
+    "tank top olive-drab #5E6433 / #3A3E1E / #858C51",
+    "combat boots black leather #1E1C1B / #0D0C0C / #3E3A37",
+    "goggle lenses and strap black #141619 / #07080A / #2E3238",
+    "skin #D49A74 / #9C6A4C / #EDBC98",
+    "hair and beard sandy-brown #8A6438 / #5A3F20 / #B48A58",
+    "eye white #EFE8DC",
+    "eye blue #6A94B8",
+    "lip #A0604E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a shirtless or bare-chested torso",
+    "goggles worn over the eyes"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "party-01"
+    },
+    "sing": {
+      "intent": "Power-pop belt loop: plant the boots, bring the mic in the character-right hand up to the mouth, punch the character-left fist up to shoulder height on the big line, then lower the mic to the chest and return to the planted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then he settles back to his stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: stomp in with a heavy cheerful stride, tutu bouncing, turn square to the front, then land in his opening stance with both open hands in full view.",
+    "victory": "One-shot finish: plant both boots, raise both fists high overhead, throw the head back in a huge open-mouthed laugh, then hold a proud wide pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the big frame sags — the shoulders drop, both open hands hang limp beside the tutu, and his head hangs with the beard on his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

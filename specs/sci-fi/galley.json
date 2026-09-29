@@ -1,0 +1,46 @@
+{
+  "id": "galley",
+  "name": "Galley",
+  "height": "6' 6\"",
+  "description": "A big warm male alien in his fifties, the ship's cook, with four arms, who sings Neapolitan canzone with his whole heart.",
+  "build": "Tall, broad and round-bellied, with a thick neck and sturdy legs of human length. Four arms: an upper pair at the shoulders and a lower pair at the waist, all of ordinary length, each ending in a five-fingered hand.",
+  "face": "Warm plum-brown skin, small dark eyes under bushy white brows, a big round nose, full cheeks, a thick white handlebar moustache, and wide lips.",
+  "hair": "Bald under a tall pleated white chef's toque with a plain band.",
+  "outfit": "A double-breasted white chef's jacket with big round black buttons, sleeves rolled to the elbows on all four arms so every forearm and hand is bare; a long bold tomato-red apron tied at the waist over it, reaching the knees; trousers of wide bold black-and-white checks; black clogs.",
+  "performance_style": "Feet hip-width apart, weight even. The upper pair of arms spread open at shoulder height, the lower pair open out at the hips, all four hands open, empty, every finger visible and clear of the body. Head level, a warm broad smile.",
+  "location": "A starship kitchen seen from its black-and-white tiled floor running to the bottom of the frame: steel counters, hanging copper pans, a round porthole with stars and a big pot on a stove.",
+  "recognition_cues": [
+    "four arms, upper and lower pairs",
+    "a tall white chef's toque",
+    "a long bold tomato-red apron over a white chef's jacket",
+    "a thick white handlebar moustache"
+  ],
+  "palette": [
+    "jacket and toque white #F2F0EA / #BCB8AE / #FFFFFF",
+    "apron tomato-red #D2362A / #862018 / #F06A56",
+    "buttons and clogs black #1A1A1C / #0A0A0B / #44444A",
+    "trouser checks black #1E1E20 / white #EEEEEE",
+    "skin plum-brown #7A4A5A / #4A2A36 / #A2707E",
+    "moustache and brows white #ECE8E0 / #B2ACA2 / #FFFFFF",
+    "eye dark #221418",
+    "lip #5A2E3A"
+  ],
+  "avoid": [
+    "knives, pans or food in the hands",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Canzone loop: a warm swaying tarantella step side to side, the upper arms rising open overhead and back on each beat while the lower hands clap at the waist, the apron swinging, then back to the opening four-armed stance.",
+    "sing": {
+      "intent": "Canzone vocal loop: the mic in the upper character-right hand comes to the mouth, the upper character-left hand sweeps wide and open, the two lower hands press open to the chest on the swell, then he returns to the stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a pot boiling over: all four open hands fly up and the belly jumps, then he settles with a laugh. No opponent or contact.",
+    "guard": "One-shot stage self-protection: cross the upper forearms before the chest and hold the lower hands open at the belly, then hold. Not combat.",
+    "entrance": "One-shot entrance: stride in with a rolling gait, spread all four open arms in welcome, then settle into the stance.",
+    "victory": "One-shot finish: all four open hands thrown up high, head tipped back in a big open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: all four arms hang limp, the shoulders round and his head bows so the toque tips forward. He holds a standing, sorrowful finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "skipper",
+  "name": "Skipper",
+  "height": "6' 0\"",
+  "description": "A tall, silver-haired yacht captain in his sixties, old money through and through, who sings silky smooth yacht soul.",
+  "build": "A tall, trim older man: square straight shoulders, a lean upright torso, long arms and legs, standing very upright with straight knees.",
+  "face": "Deeply tanned smooth skin, pale blue eyes under neat silver brows, a long straight aristocratic nose, a strong square jaw, and a neatly trimmed silver moustache.",
+  "hair": "Thick wavy silver-white hair combed back, showing at the sides below the cap.",
+  "outfit": "A white yachting captain's cap with a black peak and a plain gold braid band; a navy-blue double-breasted blazer with large gold buttons, the sleeves ending at the wrists so both hands are bare; a pale-blue open-collared shirt; a bold red silk ascot at the throat; crisp white trousers, straight-legged; tan leather boat shoes.",
+  "performance_style": "Effortlessly upright: feet together, weight on one leg, the other knee relaxed. Both arms hang easy, the character-right and character-left hands open and empty at the sides, fingers visible. Chin slightly raised, a smooth closed-mouth smile.",
+  "location": "A sunlit marina at a smart yacht club: pale teak dock boards running to the bottom of the frame, a gleaming white sailing yacht moored behind, masts of other boats, bright blue water, and a clear sky strung with little signal flags.",
+  "recognition_cues": [
+    "a white captain's cap with a black peak and gold braid",
+    "a navy double-breasted blazer with big gold buttons",
+    "a bold red ascot",
+    "crisp white trousers"
+  ],
+  "palette": [
+    "cap white #F2F0EA / #C4C0B8 / #FFFFFF",
+    "cap peak black #1C1D22",
+    "cap braid and buttons gold #D6AA3C / #946E1E / #F4D680",
+    "blazer navy #1E2A4A / #10172A / #384A74",
+    "shirt pale-blue #B8D0E6 / #8AA4BC / #DCEAF6",
+    "ascot red silk #C0242C / #7C1218 / #E8585E",
+    "trousers white cotton #EEEBE2 / #BEB9AC / #FFFFFF",
+    "boat shoes tan leather #A8743E / #6C4A24 / #D09A62",
+    "skin #C08A62 / #845A3C / #DEAC84",
+    "hair and moustache silver-white #D8D8DA / #A0A0A4 / #F6F6F8",
+    "eye pale-blue #8AB4D8",
+    "eye white #F0E8DC",
+    "lip #A0604E",
+    "teeth #F0E8D6"
+  ],
+  "avoid": [
+    "a pipe or drink on the key art",
+    "naval insignia or medals",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-01"
+    },
+    "sing": {
+      "intent": "Yacht-soul vocal loop: a slow cool sway from the hips, bring the mic in the character-right hand to the mouth, glide the open character-left hand out level at chest height, then return to the upright stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle: the brows lift, the shoulders stiffen and both open hands rise to the lapels, then he smooths back into the upright stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: step the feet apart, raise both open palms at chest height, then hold a composed finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in with an unhurried upright gait, turn square to the front, and settle into the upright stance with both hands open.",
+    "victory": "One-shot celebration: raise the open character-right hand in a crisp salute-like wave at head height, spread the open character-left hand wide, tip the chin up in an open-mouthed laugh, then hold the pose.",
+    "ko": "Non-contact performance defeat: his composure deflates — the square shoulders drop, both open hands hang at his sides, and his head bows so the cap peak points down, holding a crestfallen standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

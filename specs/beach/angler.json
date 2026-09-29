@@ -1,0 +1,54 @@
+{
+  "id": "angler",
+  "name": "Angler",
+  "height": "5' 11\"",
+  "description": "A lean, laconic pier fisherman, a man in his fifties, who sings gravel-voiced outlaw country.",
+  "build": "A lean, wiry adult man: narrow sloping shoulders, a flat torso, long sinewy arms and legs, standing upright with straight knees.",
+  "face": "Deeply tanned leathery skin, narrow grey-green eyes under heavy dark brows, a long crooked nose, hollow cheeks, a salt-and-pepper stubble beard, and thin lips.",
+  "hair": "Shaggy salt-and-pepper hair to the collar, poking out below the hat.",
+  "outfit": "A faded olive-green bucket hat with a floppy brim; a khaki-tan fishing vest covered in big square pockets, with five or six large bright fishing lures in red, yellow and orange hooked along the chest pockets; a faded sky-blue short-sleeved work shirt under the vest; worn dark-brown canvas cargo trousers; tan rubber-soled deck boots. Both hands bare.",
+  "performance_style": "Loose and laconic: feet shoulder-width, weight slung onto one hip. Both arms hang easy, the character-right and character-left hands open and empty beside the thighs, fingers visible. Head level, an unhurried squint and a flat half-smile.",
+  "location": "The end of a long wooden fishing pier: grey weathered planks running to the bottom of the frame, a rail lined with a few upright fishing rods and a white bait bucket, gulls on the posts, and a hazy bright sea and sky beyond.",
+  "recognition_cues": [
+    "a floppy olive bucket hat",
+    "a khaki fishing vest studded with big bright lures",
+    "shaggy salt-and-pepper hair and stubble"
+  ],
+  "palette": [
+    "bucket hat olive #6E7040 / #444628 / #9A9C62",
+    "vest khaki-tan #B89E6E / #7C6844 / #D8C298",
+    "lures red #D0302A",
+    "lures yellow #F0C828",
+    "lures orange #EE7A22",
+    "shirt sky-blue #8CB4CE / #5E82A0 / #B8D6EA",
+    "trousers dark-brown canvas #4E3A2A / #2E2218 / #72583E",
+    "boots tan #A07A4E / #6A4E30 / #C8A070",
+    "skin #B07A52 / #744C30 / #D09C74",
+    "hair and stubble salt-and-pepper #6E6A66 / #3E3A38 / #A8A4A0",
+    "eye grey-green #6E8A74",
+    "eye white #EDE4D6",
+    "lip #8E5A48",
+    "teeth #E8DCC4"
+  ],
+  "avoid": [
+    "a fishing rod on the key art",
+    "a knife",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-01"
+    },
+    "sing": {
+      "intent": "Outlaw-country vocal loop: shift the weight lazily hip to hip, raise the mic in the character-right hand to the mouth, hook the open character-left hand at the vest's edge at chest height with every finger visible, then return to the loose stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a splash: the shoulders jerk, both open hands lift to chest height, then he slouches back to the loose stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: turn the shoulders slightly, raise the open character-left forearm across the chest, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: amble in with long slow strides, turn square to the front, and land in the loose stance with both hands open.",
+    "victory": "One-shot celebration: plant the boots, raise the open character-right hand high and slap the open character-left hand against the thigh, tip the head back into a gravelly open-mouthed laugh, then hold the pose.",
+    "ko": "Non-contact performance defeat: he gives it up like a fish that got away — the shoulders slump, both open hands hang at his sides, and his head drops under the hat brim, holding a resigned standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

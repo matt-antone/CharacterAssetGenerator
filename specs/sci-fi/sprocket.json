@@ -1,0 +1,50 @@
+{
+  "id": "sprocket",
+  "name": "Sprocket",
+  "height": "5' 6\"",
+  "description": "A woman in her mid forties, a starship engineer who sings loud blue-collar pub punk, blunt, tireless and good with her hands.",
+  "build": "A sturdy, broad-shouldered adult woman's build of human proportions: strong arms, a solid thick waist and strong legs, standing upright and square.",
+  "face": "Ruddy fair skin with bold dark grease smudges on the character-left cheek and across the forehead, sharp blue eyes under thick straight ginger brows, a short broad nose, laugh lines and a wide mouth.",
+  "hair": "Thick copper-ginger hair tied back in a short bushy ponytail, with a messy fringe pushed up under the goggle strap.",
+  "outfit": "Welding goggles pushed up on the forehead: two large round black-rimmed lenses of opaque dark-green glass on a wide black strap; baggy burnt-orange canvas coveralls with the sleeves rolled to the elbows so both forearms and hands are bare, the top unzipped to the sternum over a charcoal tank, bold dark grease smears on both thighs; a wide black leather tool belt with empty loops and pouches; scuffed black steel-toe work boots.",
+  "performance_style": "Square and blunt: feet planted shoulder-width, weight even, knees straight. The character-right hand is open and empty on the character-right hip with fingers visible, the character-left arm hangs at her side with the hand open and empty. Head level, a wry closed-mouth smirk.",
+  "location": "A starship engine room, seen from the front of a grated steel deck running to the bottom of the frame: a big round glowing blue reactor core behind, thick pipes and valves along the walls, and hazard-striped yellow and black bulkheads.",
+  "recognition_cues": [
+    "round dark-green welding goggles pushed up on the forehead",
+    "baggy burnt-orange coveralls rolled to the elbows",
+    "a bushy copper-ginger ponytail and grease smudges on the face"
+  ],
+  "palette": [
+    "coveralls burnt-orange canvas #C8561C / #86360E / #EA8244",
+    "tank charcoal #3A3C40 / #222326",
+    "tool belt, goggle strap and boots black #1C1C1E / #0C0C0D / #3C3C40",
+    "goggle lenses dark-green glass #1E4A32 / #0E2A1C / #4A8A64",
+    "grease dark #2E2A26",
+    "skin ruddy fair #E8B698 / #B88468 / #FAD4BC",
+    "hair and brows copper-ginger #B85A24 / #7A3812 / #E08A4A",
+    "eyes blue #3A78B8",
+    "eye white #F0EADF",
+    "teeth #EEE8DC"
+  ],
+  "avoid": [
+    "a wrench, welding torch or tool in a hand",
+    "goggles pulled down over the eyes",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-02"
+    },
+    "sing": {
+      "intent": "Pub-punk vocal loop: plant the boots wide, bring the mic in the character-right hand up to the mouth, pump the character-left fist at shoulder height on the beat, then lower the mic and return to the square stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: stomp in with heavy steps, turn square to the front, plant the boots and set the character-right hand on the hip.",
+    "victory": "One-shot song-finish: plant both boots, thrust the character-left fist straight overhead, the character-right hand low with the mic, a wide open-mouthed shout, then hold a triumphant square pose.",
+    "ko": "She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. She holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

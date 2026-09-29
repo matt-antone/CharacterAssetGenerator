@@ -1,0 +1,51 @@
+{
+  "id": "cosmo",
+  "name": "Cosmo",
+  "height": "5' 10\"",
+  "description": "A man in his late twenties, a retro nineteen-sixties cosmonaut who sings sparkling Italo space-disco, sunny, earnest and wholehearted.",
+  "build": "A sturdy, average adult man's build of human proportions, made boxy by the suit: broad squared shoulders, a straight thick torso and straight legs, standing upright with straight knees.",
+  "face": "Fair pink-toned skin, round bright blue eyes under straight sandy brows, round cheeks, a snub nose, a square dimpled chin and a wide mouth.",
+  "hair": "Short sandy-blond hair in a neat side-parted crew cut, flat and tidy.",
+  "outfit": "A boxy one-piece space suit in bright tangerine-orange with thick ribbed accordion rings at the elbows and knees; a wide round white collar ring at the neck for a helmet; a big square white chest control box with three large round red, yellow and blue buttons; wide white cuff rings at the wrists, both hands in white rubber gloves fitted to every finger; a wide white belt; chunky white moon boots. His round bubble helmet, a solid white shell with an opaque faintly tinted pale-blue glass dome, hangs clipped by a short strap at the character-left hip. His head is bare.",
+  "performance_style": "Sunny and upright: feet hip-width apart, weight even on both boots. Both arms hang relaxed at his sides, the character-right and character-left gloved hands open and empty beside the thighs, every finger visible. Head level, a bright closed-mouth smile.",
+  "location": "A retro sixties space-station disco, seen from the front of a lit-up dance floor of big square orange, yellow and white tiles running to the bottom of the frame, a round porthole window onto Earth and stars, and a large mirror ball overhead.",
+  "recognition_cues": [
+    "a boxy bright tangerine-orange space suit with ribbed rings at elbows and knees",
+    "a round white helmet with a pale-blue glass dome clipped at the hip",
+    "a square white chest box with big red, yellow and blue buttons"
+  ],
+  "palette": [
+    "suit tangerine-orange #F07A1C / #A84E0C / #FFA85A",
+    "collar ring, chest box, gloves, belt, boots and helmet shell white #F2F0EA / #BEBAB0 / #FFFFFF",
+    "helmet dome pale-blue glass #A8CCE4 / #6E96B4 / #E0F2FF",
+    "button red #D82828",
+    "button yellow #F4CC1C",
+    "button blue #2258C8",
+    "skin fair pink #F0C8B0 / #C4987E / #FFE2D2",
+    "hair and brows sandy-blond #C8A060 / #8E6E38 / #E6C48A",
+    "eyes blue #3A7AC8",
+    "eye white #F2ECE2",
+    "teeth #F4F0E8"
+  ],
+  "avoid": [
+    "the helmet worn on the head",
+    "the helmet held under the arm",
+    "logos, flags, CCCP or text"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-02"
+    },
+    "sing": {
+      "intent": "Space-disco vocal loop: bring the mic in the gloved character-right hand up to the mouth, point the gloved character-left index finger up and across on the beat in a disco point, then lower the mic and return to the sunny stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: walk in with bouncy slow-motion moon steps, turn square to the front, then land in the sunny stance with both gloved hands open at his sides.",
+    "victory": "One-shot song-finish: plant both boots, raise both gloved hands high in a wide V, tip the head back into a beaming open-mouthed laugh, then hold a proud upright pose.",
+    "ko": "He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. He holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

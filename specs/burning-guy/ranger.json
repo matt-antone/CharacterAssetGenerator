@@ -1,0 +1,54 @@
+{
+  "id": "ranger",
+  "name": "Ranger Walt",
+  "height": "6' 0\"",
+  "description": "A man in his mid sixties, a volunteer ranger at a desert arts festival who calms every dispute, and sings easygoing Americana with a slow steady warmth.",
+  "build": "A tall, lean, weathered adult man of ordinary proportions: medium shoulders, a straight torso with a slight belly, long arms and legs, standing upright with straight knees.",
+  "face": "Deeply tanned light skin, pale blue eyes under bushy white brows, a long straight nose, deep crow's feet, a full thick white moustache and thin lips.",
+  "hair": "Short white hair at the sides and nape below a wide-brim hat.",
+  "outfit": "A wide-brim khaki canvas bush hat with a flat crown and a brown leather band; a long-sleeved khaki cotton work shirt with two chest pockets, sleeves rolled to the forearms so both hands are bare; a wide bright orange cloth armband on the character-left upper arm; olive-drab canvas work trousers, straight-legged; a wide brown leather belt with a plain steel buckle; brown leather hiking boots; a small black handheld radio clipped at the belt's character-right hip.",
+  "performance_style": "Calm and patient: feet hip-width, weight even. Both hands open and empty, palms turned slightly out at hip height in a settle-down gesture, fingers visible. Head level, a slow kind smile.",
+  "location": "Early morning on the open playa: flat pale clay running to the bottom of the frame, a lone white pickup truck parked far back, a long low line of tents and flags on the horizon and a soft peach dawn sky.",
+  "recognition_cues": [
+    "a wide-brim khaki bush hat with a brown band",
+    "a khaki shirt and olive work trousers",
+    "a bright orange armband on the character-left upper arm",
+    "a full thick white moustache"
+  ],
+  "palette": [
+    "hat and shirt khaki #B8A478 / #7E6E4C / #DCCCA2",
+    "hat band, belt and boots brown leather #6A4428 / #3E2615 / #946440",
+    "armband bright orange #E8781E / #A04E0E / #FFA050",
+    "trousers olive drab #5E6238 / #3A3E22 / #868C58",
+    "belt buckle steel #9AA0A8",
+    "radio black plastic #222224",
+    "skin #C8906A / #8A5E42 / #E4B08A",
+    "hair and moustache white #E8E4DC / #B0ACA2 / #FFFFFF",
+    "eye pale blue #7EA0C0",
+    "eye white #EFE6D8",
+    "lip #9A5E50",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a badge, star or police insignia",
+    "a gun or holster",
+    "a cowboy hat",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "butterfly-01"
+    },
+    "sing": {
+      "intent": "Americana vocal loop: shift the weight slowly from boot to boot, raise the mic in the character-right hand to the mouth for a long easy phrase, lift the open character-left hand in a slow calming wave at chest height, then lower the mic. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a sudden bang: the shoulders tighten and both open hands rise to chest height, then he breathes out and settles back to his calm stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet wider and raise both open hands in front of the chest, palms out in a steady calm-down gesture, holding the finish. Not combat.",
+    "entrance": "One-shot entrance: amble in with slow long strides, touch the hat brim with the character-right hand, then settle into the calm stance with both palms open at the hips.",
+    "victory": "One-shot song-finish celebration: lift the hat off with the character-right hand and raise it high, the character-left hand open wide, with a warm open-mouthed laugh, and hold the pose.",
+    "ko": "Non-contact performance defeat: the calm drains into weariness — the shoulders droop, both open hands hang limp at his sides, and his head hangs so the hat brim tips toward his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

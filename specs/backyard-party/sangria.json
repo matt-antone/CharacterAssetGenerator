@@ -1,0 +1,50 @@
+{
+  "id": "sangria",
+  "name": "Sangria",
+  "height": "5' 5\"",
+  "description": "A glamorous aunt in her mid sixties, a woman who arrives at every backyard party dressed for a yacht and sings sultry cumbia and Latin pop.",
+  "build": "A full, curvy adult build of ordinary height: rounded shoulders, full bust and hips, a defined waist, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm olive-brown skin, dark brown eyes under arched dark brows, a straight nose, high cheekbones, full lips in deep coral lipstick, and a gold-brown complexion with soft laugh lines.",
+  "hair": "A big voluminous shoulder-length blow-out of dark auburn hair, full and rounded, swept back from the face.",
+  "outfit": "Huge round black sunglasses with thick glossy black frames and solid black lenses worn over the eyes; large chunky gold hoop earrings; a knee-length kaftan dress of opaque turquoise silk printed with big bold orange hibiscus blooms, a deep V neck, wide elbow-length sleeves, cinched at the waist with a wide gold sash, the hem ending at the knee; stacked chunky gold bangles on both wrists; gold flat sandals. Both forearms and hands are bare.",
+  "performance_style": "Hip cocked: feet together, weight on the character-left leg, hip pushed out. The character-right hand rests open on the hip, fingers spread; the character-left hand is raised open beside the shoulder, palm up, fingers visible. Head tilted, a knowing smile.",
+  "location": "A sunny backyard patio: terracotta pavers running to the bottom of the frame, a white wrought-iron table with a big glass pitcher of red sangria and sliced oranges, potted bougainvillea against a stucco wall behind, and paper lanterns in orange and turquoise strung overhead.",
+  "recognition_cues": [
+    "huge round black sunglasses",
+    "a turquoise kaftan dress with big orange hibiscus blooms",
+    "a big auburn blow-out and chunky gold hoops"
+  ],
+  "palette": [
+    "kaftan turquoise silk #1FA3A6 / #127073 / #52C9C9",
+    "hibiscus orange #F07A2A / #B0521A / #FFA35E",
+    "sash, hoops, bangles and sandals gold #D4A93A / #8F6F1F / #F5D77A",
+    "sunglasses black #151515 / #050505 / #3C3C3C",
+    "skin #B07A55 / #7A4F33 / #D09A72",
+    "hair dark auburn #6E2E1F / #431A10 / #9A4A34",
+    "lipstick deep coral #C24A3C",
+    "eye brown #3A2216",
+    "teeth #F1E8D6"
+  ],
+  "avoid": [
+    "a floor-length kaftan or train",
+    "a sangria pitcher in hand",
+    "translucent or sheer fabric",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "butterfly-01"
+    },
+    "sing": {
+      "intent": "Cumbia vocal loop: step side to side on a lazy cumbia beat with the hips rolling, the mic in the character-right hand at the mouth, the character-left hand waving slowly overhead, then return to the hip-cocked stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief shock at a splash from the kiddie pool: shoulders lift, both open hands fly up by the face, then she smooths back into the hip-cocked stance. No contact or opponent.",
+    "guard": "One-shot: turn a shoulder forward and raise the character-left open hand, palm out, like refusing gossip, then hold. Not combat.",
+    "entrance": "One-shot: sashay in with swinging hips, stop square to the front, and settle into the hip-cocked stance.",
+    "victory": "One-shot: throw both open hands high overhead, bangles sliding, head back in a big open laugh, then hold a glamorous pose.",
+    "ko": "The glamour deflates: shoulders droop, both open hands hang at her sides, the head drops and the hip straightens. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

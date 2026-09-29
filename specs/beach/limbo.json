@@ -1,0 +1,53 @@
+{
+  "id": "limbo",
+  "name": "Limbo",
+  "height": "5' 7\"",
+  "description": "A woman in her mid thirties, a blazing limbo-contest MC who sings high-energy soca.",
+  "build": "A curvy, strong adult build: rounded shoulders, a defined waist, full hips, and strong arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Deep brown skin, dark brown eyes under arched black brows, a broad nose, high round cheekbones and full lips.",
+  "hair": "Big voluminous black curls piled high on the head, with one large bold orange-and-yellow hibiscus flower tucked above the character-left ear.",
+  "outfit": "A bright tropical wrap top in sunflower yellow tied at the midriff with short puffed sleeves; a high-waisted knee-length skirt in bold turquoise with wide horizontal bands of orange and green; a wide gold waist chain; big gold hoop earrings; gold flat sandals.",
+  "performance_style": "Hype MC stance: feet wide, hips cocked to one side, weight on the character-left leg. The character-right hand open and raised high overhead calling the crowd; the character-left hand open on the hip, fingers visible. Head up, a huge bright open smile.",
+  "location": "A beach bar limbo contest in late afternoon: warm sand running to the bottom of the frame, a bamboo limbo bar on two poles, a thatched tiki bar with strings of lanterns behind, palm trees and a gold-orange sky.",
+  "recognition_cues": [
+    "a big orange-and-yellow hibiscus above one ear",
+    "big voluminous black curls",
+    "a sunflower-yellow wrap top",
+    "a turquoise skirt banded orange and green"
+  ],
+  "palette": [
+    "wrap top yellow #F2C21E / #B08A0E / #FFE066",
+    "skirt turquoise #1FA3A8 / #126669 / #52CCD0",
+    "skirt bands orange #E8742A / #A64B15 / #F79A5A",
+    "skirt bands green #2E9A3E / #1A6024 / #58C468",
+    "hibiscus orange #E8742A / #A64B15",
+    "hibiscus yellow #F2C63A",
+    "gold waist chain, hoops and sandals #D4A83A / #8E6E1E / #F2D278",
+    "skin #6B4330 / #432818 / #92634A",
+    "hair black #161214 / #080608 / #3A3236",
+    "eye brown #2A1A12",
+    "eye white #EFE6D8",
+    "lip #6A3028",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a pink or magenta flower",
+    "a bikini or bare midriff beyond the tie"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-03"
+    },
+    "sing": {
+      "intent": "Soca vocal loop: the mic in the character-right hand at the mouth, she wines her hips side to side and waves the character-left hand open overhead on the chorus, then returns to the MC stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: she dances in wining her hips, the character-right hand waving overhead, and lands in the MC stance.",
+    "victory": "One-shot finish: she jumps and lands with both open hands waving overhead, a joyful open-mouthed shout, and holds the pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out: the shoulders drop, both open hands hang limp at her sides, and her head hangs low with the chin toward the chest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

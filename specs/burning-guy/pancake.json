@@ -1,0 +1,51 @@
+{
+  "id": "pancake",
+  "name": "Pancake",
+  "height": "5' 9\"",
+  "description": "A round, jolly man in his mid sixties, a camp chef who serves free pancakes to everyone at a desert arts festival and sings warm country-gospel.",
+  "build": "A short, round, soft-bellied adult man: rounded shoulders, a big round belly, sturdy legs, standing upright with straight knees.",
+  "face": "Rosy light skin with full pink cheeks, twinkling blue eyes under bushy white brows, a round nose, and a big bushy white moustache.",
+  "hair": "Short fluffy white hair showing at the sides under the hat.",
+  "outfit": "A tall pleated white chef's hat; big round amber-lensed aviator goggles with a brown leather strap worn over the eyes; a double-breasted white chef's jacket with sleeves rolled to the elbows; a bold red-and-white gingham bib apron, big checks, over the jacket; a blue bandana knotted at the neck; khaki cargo shorts; brown leather sandals over thick white socks. Both hands bare.",
+  "performance_style": "Jolly and settled: feet hip-width, weight even. Both arms at his sides with the elbows bent a little, the character-right and character-left hands open, empty, fingers visible. Head level, a warm beaming smile.",
+  "location": "A desert playa at morning: flat pale cracked alkali ground to the bottom of the frame, a gifting camp kitchen under a patched canvas shade at one side, a big flat griddle with steam and a stack of pancakes, mismatched plates on a folding table, and a pale blue sky.",
+  "recognition_cues": [
+    "a tall white chef's hat",
+    "big amber-lensed aviator goggles over the eyes",
+    "a bold red-and-white gingham apron",
+    "a bushy white moustache"
+  ],
+  "palette": [
+    "chef's hat and jacket white cotton #F1EEE5 / #BDB9AE / #FFFFFF",
+    "apron red gingham #C8322C / #82201C / #E8625A",
+    "goggle lenses amber #D08A2A / #8A5A18 / #F2B45A",
+    "goggle strap and sandals brown leather #6A4428 / #402814 / #946440",
+    "bandana blue #2E5CA8 / #1B386A / #5A86D0",
+    "shorts khaki #B0A06E / #756A48 / #D6C896",
+    "socks white #E6E2D8",
+    "skin #E8AE94 / #B07A64 / #FFD0B8",
+    "hair and moustache white #E4E2DC / #A8A6A0 / #FFFFFF",
+    "eye blue #4A7EC0",
+    "lip #B86A5E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a spatula or plate in hand"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-03"
+    },
+    "sing": {
+      "intent": "Country-gospel vocal loop: sway warmly from side to side, bring the mic in the character-right hand to the moustache, lift the character-left open palm up high on the chorus, then lower and return to the settled stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A pan clatters nearby: he starts, both hands up by the belly, then chuckles and settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: turn the character-left shoulder forward with the character-left forearm across the belly, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: waddle in cheerfully, straighten the chef's hat with both hands, then take the settled stance.",
+    "victory": "One-shot finish: both open arms spread wide for a hug, head tipped back in a big open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: the cheer goes out of him — the round shoulders slump, both open hands hang limp at his sides, and his head hangs low, the chef's hat tipping forward. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

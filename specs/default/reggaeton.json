@@ -1,0 +1,51 @@
+{
+  "id": "reggaeton",
+  "name": "Reggaeton",
+  "height": "5' 5\"",
+  "description": "A reggaeton singer, a woman in her late twenties with effortless swagger, cool and unhurried, owning the stage without trying.",
+  "build": "A slim, athletic adult woman of ordinary proportions: medium shoulders, a defined waist, curvy hips, arms and legs of ordinary length, standing upright with relaxed knees.",
+  "face": "Warm golden-tan skin, dark brown almond eyes under bold arched black brows, high cheekbones, a small straight nose, full lips with deep berry-red lipstick, and white teeth.",
+  "hair": "Long sleek jet-black hair pulled up into a high ponytail that falls in a thick glossy mass to the shoulder blades, with smooth edges at the hairline.",
+  "outfit": "An oversized cropped bright lemon-yellow hoodie, sleeves pushed to the elbows so both forearms and hands are bare, over a black sports bra top; loose black track pants with one wide bold white stripe down each outer leg; chunky white sneakers. Large bold gold hoop earrings as wide as her palm, and a thick gold chain necklace. Her head is bare.",
+  "performance_style": "Hip cocked: weight on the character-left leg, the character-right foot turned out. The character-right hand rests open on the character-right hip, the character-left arm hangs loose, hand open and empty. Head tipped slightly, cool half-lidded look.",
+  "location": "A night-time rooftop party in a warm Caribbean city: a concrete roof running to the bottom of the frame, a low parapet with strings of warm bulbs, palm silhouettes and lit apartment blocks beyond under a deep blue sky.",
+  "recognition_cues": [
+    "large bold gold hoop earrings",
+    "an oversized cropped lemon-yellow hoodie",
+    "a high sleek black ponytail",
+    "black track pants with a wide white stripe"
+  ],
+  "palette": [
+    "hoodie lemon-yellow #F2D22E / #B89A12 / #FFF08A",
+    "sports bra and track pants black #1D1C21 / #0C0B0E / #3A3842",
+    "stripe and sneakers white #EEEDE8 / #B8B6AE / #FFFFFF",
+    "hoops and chain gold #D9A92E / #8C6A16 / #FFE07A",
+    "skin #C48A5E / #87593A / #E2AC80",
+    "hair black #141214 / #060506 / #3A3538",
+    "lipstick berry-red #8E1E32",
+    "eye white #F0E8DC",
+    "eye brown #2B1B12",
+    "teeth #F3ECDE"
+  ],
+  "avoid": [
+    "a hand in the hoodie pocket",
+    "hoops drawn small",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-02"
+    },
+    "sing": {
+      "intent": "Reggaeton vocal loop: rock the hips side to side on the beat, hold the mic in the character-right hand at the mouth, roll the open character-left hand in a lazy circle at shoulder height, then drop the mic to the chest and settle back into the cocked-hip stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A quick startle at a loud room sound: the shoulders tighten and the head pulls back, both open hands lift a little, then she shrugs it off and returns to the cocked-hip stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: square the feet, bring the character-left forearm up across the chest, character-right hand open at the hip, and hold a cool steady finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in with a slow rolling walk, tug the ponytail with the character-left hand, then land in the cocked-hip stance with the character-right hand on the hip.",
+    "victory": "One-shot celebration: raise the open character-left hand high, pop the hip, tip the chin up with an open-mouthed smile, and hold the pose.",
+    "ko": "Non-contact performance defeat: the swagger drains out — the hip straightens, both open hands hang at her sides and the head drops, the ponytail falling forward over one shoulder. She holds a standing, deflated finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

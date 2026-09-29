@@ -1,0 +1,45 @@
+{
+  "id": "lamplighter",
+  "name": "Lamplighter",
+  "height": "5' 8\"",
+  "description": "A calm woman in her mid forties, a ceremonial lamplighter at a desert arts festival who lights the lanterns at dusk and sings warm choral hymns.",
+  "build": "A tall, straight-backed adult woman of ordinary proportions: level shoulders, long arms, standing upright and still with straight knees.",
+  "face": "Olive skin, warm brown eyes under straight dark brows, a long straight nose, and a calm wide mouth.",
+  "hair": "Long thick dark-brown hair in one heavy plait falling over the character-right shoulder to the waist.",
+  "outfit": "A long plain cream linen hooded robe falling to the ankles, the hood down on the shoulders, the sleeves cut at the wrists so both hands are bare; a wide deep-orange sash knotted at the waist, the ends hanging to the knees; a short deep-orange shoulder mantle over the robe; tan leather sandals.",
+  "performance_style": "Still and ceremonial: feet together, weight even. Both arms hang at her sides, the character-right and character-left hands open, empty, fingers visible against the robe. Head level, a calm warm half-smile.",
+  "location": "A desert playa at dusk: flat pale cracked alkali ground to the bottom of the frame, a long line of tall wooden lantern posts with warm glowing lanterns receding to the horizon, and a deep blue-to-amber sky.",
+  "recognition_cues": [
+    "a long plain cream hooded robe",
+    "a wide deep-orange sash and shoulder mantle",
+    "one heavy dark plait over the shoulder"
+  ],
+  "palette": [
+    "robe cream linen #E6D9BC / #B9A98B / #FFF4D9",
+    "sash and mantle deep orange #D0621E / #8A3E10 / #F28E4E",
+    "sandals tan leather #A8743F / #6A4623 / #D49C62",
+    "skin #B98A62 / #7E5A3C / #D8AA84",
+    "hair dark brown #3A2618 / #1E130B / #5E4230",
+    "eye brown #4A2E1A",
+    "eye white #EFE6D8",
+    "lip #9A5A48",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "the hood up over the head"
+  ],
+  "animations": {
+    "dance": "Ceremonial sway, looping: rock slowly from foot to foot, raise both open hands together to chest height palms up as if offering light, lift them to shoulder height, lower them, and let the robe settle before returning to the still stance. Feet stay close; square to the front throughout.",
+    "sing": {
+      "intent": "Hymn vocal loop: stand tall, bring the mic in the character-right hand to the mouth, raise the character-left open palm slowly to shoulder height on the long note, then lower both and return to the still stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A gust of dust: she turns the face a little aside and lifts the character-left hand before her eyes, then settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the side, and hold still. Not combat.",
+    "entrance": "One-shot entrance: walk in slowly with measured ceremonial steps, the robe swaying, then stop in the still stance.",
+    "victory": "One-shot finish: raise both open hands high and wide, head tipped back with a joyful open-mouthed smile, then hold.",
+    "ko": "Non-contact performance defeat: the calm drains away — the shoulders drop, both open hands hang limp at her sides, and her head hangs low, chin toward her chest. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

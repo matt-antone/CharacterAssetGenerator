@@ -1,0 +1,49 @@
+{
+  "id": "bounce",
+  "name": "Bounce",
+  "height": "5' 10\"",
+  "description": "A hyper young man in his mid twenties who rents out bounce houses and sings trap, never able to stand still.",
+  "build": "A lean, springy young man's build: medium shoulders, a narrow waist, long legs, standing upright on his toes.",
+  "face": "Medium brown skin, wide dark eyes under straight black brows, a broad nose, a thin moustache, full lips.",
+  "hair": "Tall black high-top fade, flat on top, about three inches high.",
+  "outfit": "A bright red short-sleeved company polo shirt with a big white bold oval logo shape on the chest, tucked in; a wide yellow lanyard around the neck holding a big white plastic ID card on the chest; black athletic shorts to the knee; white high-top sneakers.",
+  "performance_style": "Bouncy and restless: feet hip-width apart, up on the balls of the feet, knees loose. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head up, eyes wide, a quick open-mouthed grin.",
+  "location": "A backyard with a big inflatable bounce castle in red, yellow and blue behind, its blower humming, a lawn running to the bottom of the frame, a fence, a picnic table and string lights.",
+  "recognition_cues": [
+    "a bright red polo shirt",
+    "a wide yellow lanyard with a big white ID card",
+    "a tall flat-top fade",
+    "white high-top sneakers"
+  ],
+  "palette": [
+    "polo red #D42A2A / #8E1A1A / #F0605A",
+    "logo and ID card white #F2F0EA / #C1BDB3",
+    "lanyard yellow #F4CE2A / #B39414",
+    "shorts black #1C1C20 / #0C0C0E / #3A3A40",
+    "sneakers white #EDEBE4 / #B9B5AA",
+    "skin #9A6440 / #663F26 / #BE8660",
+    "hair and moustache black #151312 / #070606 / #34302C",
+    "eye brown #2A1A12",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "text or real brand names on the polo",
+    "a clipboard in the hands: his hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-01"
+    },
+    "sing": {
+      "intent": "Trap vocal loop: bounce steadily on the knees, bring the mic in the character-right hand to the mouth, chop the character-left hand down on the beat, then return to the bouncy stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: bound in with springy hops, land square to the front and keep bouncing into the stance.",
+    "victory": "One-shot win: spring straight up with both fists raised overhead, land with knees loose and a shout, then hold.",
+    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

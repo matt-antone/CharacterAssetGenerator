@@ -1,0 +1,51 @@
+{
+  "id": "gladius",
+  "name": "Gladius",
+  "height": "6' 8\"",
+  "description": "A male alien arena gladiator in his forties, scarred and huge-hearted, who sings stadium rock and plays every crowd like a packed coliseum.",
+  "build": "Tall and heavily muscled: broad shoulders, a deep chest, thick arms and legs of human length, a solid waist, standing upright with straight knees. Each hand has four thick digits: a thumb and three fingers.",
+  "face": "Slate-blue pebbled alien skin, a heavy bony brow ridge, deep-set amber eyes, a broad flat nose, a wide jaw, two short blunt ivory tusks rising from the lower lip, and one bold pale scar running diagonally across the character-left cheek.",
+  "hair": "A tall stiff crest of rust-orange hair running front to back along the top of the skull, the sides of the head bare slate-blue skin.",
+  "outfit": "Heavy segmented bronze pauldrons, three wide overlapping plates on each shoulder, strapped over a bare chest by a wide dark-brown leather harness crossing in an X; a wide dark-brown leather belt with a plain round bronze boss and empty loops; a knee-length skirt of wide rust-red leather strips; bronze greaves over the shins and plain dark-brown sandals. Both forearms and both four-fingered hands are bare.",
+  "performance_style": "Wide and planted: feet shoulder-width apart, weight even. Both arms spread out and down from the sides, the character-right and character-left four-fingered hands open, empty, fingers spread and fully visible. Head level, a broad tusked grin.",
+  "location": "A sunlit alien arena seen from its sand floor running to the bottom of the frame: curved tiers of stone seating packed with an abstract blur of crowd, tall bronze pillars and a pale orange sky with two moons.",
+  "recognition_cues": [
+    "slate-blue skin with two short ivory tusks",
+    "three-plate bronze pauldrons on both shoulders over an X harness",
+    "a tall rust-orange crest of hair",
+    "four-fingered hands"
+  ],
+  "palette": [
+    "skin slate-blue #4F6A8A / #2F4259 / #7892B0",
+    "pauldrons, belt boss and greaves bronze #B07A34 / #6E4A1C / #DDAA5E",
+    "harness, belt and sandals dark-brown leather #4A2E1C / #2A190E / #6E4A30",
+    "skirt strips rust-red leather #9A3A22 / #5E2212 / #C4583A",
+    "crest rust-orange #C8561E / #7E3310 / #EE8445",
+    "tusks ivory #EDE3C8 / #B8AC8E",
+    "scar pale #9FB4CC",
+    "eye amber #E0A020",
+    "teeth #EDE3C8"
+  ],
+  "avoid": [
+    "a sword, shield, spear or net",
+    "a helmet",
+    "blood or open wounds",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-04"
+    },
+    "sing": {
+      "intent": "Stadium-rock vocal loop: the mic in the character-right hand comes up to the mouth, the character-left fist pumps high above the head twice, then he leans back on a held note and returns to the wide stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a crashing gong: the shoulders hunch, the head pulls back and both open hands lift to chest height, then he rolls the shoulders and settles. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn a pauldron forward and raise both open forearms before the chest, then hold a planted finish. Not combat.",
+    "entrance": "One-shot entrance: stride in with heavy steps, raise both open hands to the crowd, then plant into the wide open-armed stance.",
+    "victory": "One-shot finish: thrust both fists high overhead, head tipped back in a roaring open-mouthed shout, then hold the pose.",
+    "ko": "Non-contact performance defeat: the big frame sags — the pauldrons drop, both open hands hang heavy and his head bows with the crest drooping forward. He holds a standing, beaten finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

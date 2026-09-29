@@ -1,0 +1,49 @@
+{
+  "id": "surfer",
+  "name": "Surfer",
+  "height": "6' 0\"",
+  "description": "A man in his mid twenties, a sun-bleached surfer who sings sixties surf rock, unhurried and easygoing.",
+  "build": "A long lean paddler's build: wide shoulders tapering to a narrow waist, long ropy arms, long legs, loose and upright with softly straight knees.",
+  "face": "Deep golden-tanned skin, pale blue eyes under sun-bleached brows, a slightly peeling sunburnt nose, a wide mouth and a light blond stubble.",
+  "hair": "Shaggy shoulder-length sun-bleached blond hair in big salty clumps, parted in the middle and tucked behind the ears.",
+  "outfit": "A short-sleeved, short-legged spring wetsuit, black with a wide bold turquoise panel across the chest and down both sides, the legs ending above the knee and the sleeves above the elbow; bare forearms, bare hands and bare feet. His head is bare.",
+  "performance_style": "Loose and easy: feet hip-width apart, weight sunk on the character-left leg. Both arms hang loose at his sides, the character-right and character-left hands open, empty, fingers visible. Head tilted slightly, a lazy half-lidded look.",
+  "location": "A surf break at golden hour seen from wet sand at the waterline running to the bottom of the frame, a tall green-blue wave curling behind, a longboard stuck upright in the sand at one side, and a warm orange sky.",
+  "recognition_cues": [
+    "a black spring wetsuit with a wide turquoise chest panel",
+    "shaggy sun-bleached blond hair",
+    "bare feet and a deep tan"
+  ],
+  "palette": [
+    "wetsuit neoprene black #1E2126 / #0E1013 / #3C414A",
+    "wetsuit panel turquoise #1FB3B0 / #127371 / #5FDCD8",
+    "skin #B97A4E / #7A4C2E / #D99E72",
+    "nose sunburn #C9705A",
+    "hair blond #E3C77C / #B0954E / #FAEBB8",
+    "stubble blond #C9A860",
+    "eye pale blue #7FB0D0",
+    "lip #9E5E48",
+    "teeth #F2EADB",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a surfboard in hand",
+    "a hat or sunglasses"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-01"
+    },
+    "sing": {
+      "intent": "Surf-rock vocal loop: the mic in the character-right hand comes to the mouth, the character-left hand sways low and open like riding a wave, knees bob gently, then back to the loose stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A gull squawks close: he ducks his head and hunches, then shakes it off and relaxes. No opponent or contact.",
+    "guard": "One-shot: knees bend into a low surfer's stance, the character-left arm out forward and the character-right arm back, hands open; hold balanced. Not combat.",
+    "entrance": "One-shot: ambles in barefoot, shakes the water from his hair, settles into the loose stance.",
+    "victory": "One-shot: throws both hands up with thumbs and little fingers out in a shaka, head back laughing, holds.",
+    "ko": "Non-contact defeat: his shoulders slump, both open hands dangle, and his head sags with the hair falling forward. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

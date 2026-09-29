@@ -1,0 +1,49 @@
+{
+  "id": "sparkle",
+  "name": "Sparkle",
+  "height": "5' 5\"",
+  "description": "A glamorous woman in her mid twenties who sings bubbly electro-pop at a desert arts festival, arriving with no supplies at all and getting by entirely on charm.",
+  "build": "A slim, lightly built adult of ordinary proportions: narrow shoulders, a small waist, slender arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm light-brown skin, large dark-brown eyes with bold gold glitter eyeshadow in a wide block over each lid, arched dark brows, a small straight nose, high round cheekbones, and full lips.",
+  "hair": "Long glossy black hair in two big high puffball buns on top of the head, each the size of a fist, with the rest hanging straight to the shoulder blades; a chunky gold glitter crown of five tall solid points sits between the buns.",
+  "outfit": "A long-sleeved turquoise sequin bodysuit covering her from neck to wrist to hip, the sleeves ending at the wrists so both hands are bare; matching opaque turquoise sequin leggings to the ankle; wide gold sequin bands at each wrist; chunky gold glitter platform sneakers with thick white soles.",
+  "performance_style": "Posed and bright: feet together, one knee bent inward, weight on the straight leg. The character-right hand rests open on the hip, the character-left hand raised open beside the shoulder in a little wave, fingers spread and fully visible. Head tilted, a sunny wide smile.",
+  "location": "A glowing art car parked on the night playa: pale flat desert floor running to the bottom of the frame, a huge wheeled vehicle shaped like a turquoise-and-gold fish lit with strings of warm lights behind, a few glowing bikes lying on the ground, and a deep indigo starry sky.",
+  "recognition_cues": [
+    "a turquoise sequin bodysuit and leggings",
+    "two big black puffball buns with a gold glitter crown between them",
+    "gold glitter platform sneakers"
+  ],
+  "palette": [
+    "bodysuit and leggings turquoise sequins #1FB5B0 / #0F7470 / #7FE8E0",
+    "crown, wrist bands and sneakers gold glitter #D8A93A / #8E6A1E / #FFE58A",
+    "sneaker soles white #EEEAE2",
+    "eyeshadow gold #E0B64A",
+    "skin #B07A55 / #7A5034 / #D29C75",
+    "hair black #16110F / #070504 / #3A2E28",
+    "eye white #F2EAE0",
+    "eye brown #2A1810",
+    "lip #8A4A3C",
+    "teeth #F4EDE2"
+  ],
+  "avoid": [
+    "feathers or a feathered headdress",
+    "bare midriff or cut-outs"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-02"
+    },
+    "sing": {
+      "intent": "Electro-pop vocal loop: bounce on the toes, bring the mic in the character-right hand to the mouth, twirl the character-left index finger in the air above the shoulder on the hook, then lower the mic and return to the posed stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: skip in with little bouncing steps, waving, turn square to the front, then land in her opening stance with both open hands in full view.",
+    "victory": "One-shot finish: hop once with both feet, throw both open hands up in a wide V above the head, grin with the mouth wide open, then hold a sparkling star pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the sparkle drains out — the shoulders drop, both open hands hang limp at her sides, and her head droops with the crown tipping forward. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "mower",
+  "name": "Mower",
+  "height": "6' 1\"",
+  "description": "A man in his forties, a hardworking landscaper who just knocked off for the party, dependable and plain-spoken, who sings heartland rock.",
+  "build": "A broad, solid adult man's build of ordinary proportions: wide shoulders, a thick torso, strong forearms, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Deeply sun-tanned skin, pale blue eyes under heavy sandy brows, a broad nose, a short sandy moustache, sun-creases at the eyes, and thin lips.",
+  "hair": "Short sandy-blond hair in a neat crew cut, clear of the ears and forehead.",
+  "outfit": "A khaki-green short-sleeved work shirt, buttoned, tucked in, a large white oval name patch sewn over the left chest; bulky bright-orange ear-protector muffs hanging round his neck, the cups resting on the collarbones; faded blue work jeans with a wide brown leather belt and a square steel buckle; tan leather work boots flecked with grass. Forearms and hands bare.",
+  "performance_style": "Square and steady: feet shoulder-width apart, weight even. Both arms hang at his sides, the character-right and character-left hands open and empty, fingers visible beside the thighs. Head level, a steady plain look.",
+  "location": "A freshly mowed suburban backyard at sunset: striped green lawn running to the bottom of the frame, a red push mower parked at one side, a wooden fence with string lights and a grill smoking gently behind.",
+  "recognition_cues": [
+    "bulky bright-orange ear-protector muffs round his neck",
+    "a khaki-green work shirt with a large white oval name patch",
+    "a sandy crew cut and moustache"
+  ],
+  "palette": [
+    "shirt khaki green #6E7A4A / #454E2C / #939E6C",
+    "name patch white #EEEAE0",
+    "ear protectors orange #EC7418 / #A04C0A / #FFA04E",
+    "ear protector band black #222022",
+    "jeans faded blue denim #5E7AA2 / #3A5070 / #88A2C6",
+    "belt brown leather #5E3A1E / #3A2210 / #845A36",
+    "buckle steel #9A9EA4",
+    "boots tan leather #A87A48 / #6A4A28 / #CCA06C",
+    "skin #B87A50 / #7E5030 / #D89C74",
+    "hair and moustache sandy blond #C8A866 / #8A7040 / #E8CC8E",
+    "eye white #F0E8DA",
+    "eye pale blue #7AA2C8",
+    "lips #9A5E48",
+    "teeth #F0EADC"
+  ],
+  "avoid": [
+    "lettering on the name patch",
+    "ear protectors worn over the ears"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-03"
+    },
+    "sing": {
+      "intent": "Heartland-rock vocal loop: plant the feet, hold the mic in the character-right hand at the mouth, pump the character-left fist at shoulder height on the chorus, then return to the steady stance. The mouth visibly opens wide and changes shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A mower backfire startles him: shoulders jump, both open hands lift, then he settles back to the steady stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: square up and raise both open hands in front of the chest, holding a solid stance. Not combat.",
+    "entrance": "One-shot entrance: walk in steadily, tug the ear protectors straight with both hands, then settle into the steady stance.",
+    "victory": "One-shot celebration: raise the character-right fist high, head back in an open-mouthed shout, then hold with both feet planted.",
+    "ko": "Non-contact defeat: exhaustion takes him — shoulders sag, both open hands hang at his sides, head bows. He holds a standing, worn-out finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

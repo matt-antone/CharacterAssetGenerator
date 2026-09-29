@@ -1,0 +1,50 @@
+{
+  "id": "potluck",
+  "name": "Potluck",
+  "height": "5' 4\"",
+  "description": "A formidable church-potluck lady in her mid sixties, a woman who organizes the whole buffet table and sings rousing bluegrass gospel.",
+  "build": "A sturdy, full adult build of ordinary height: broad shoulders, a full bust and hips, strong forearms, legs of ordinary length, standing upright with straight knees.",
+  "face": "Deep brown skin, dark brown eyes under neat arched brows, a broad nose, round full cheeks, and full lips in berry lipstick.",
+  "hair": "A short rounded silver-grey set of tight curls, full and neat, clear of the forehead.",
+  "outfit": "Big quilted oven mitts in bright red gingham check with bold large squares on both hands, the thumbs and mitt shapes clearly visible; a short-sleeved knee-length shirtwaist dress in sunflower yellow with a white collar; a white half-apron with a big frilled edge tied at the waist; a chunky pearl necklace; white orthopedic shoes.",
+  "performance_style": "Commanding: feet planted apart, weight even, chest up. Both arms held out at waist height, the character-right and character-left mitted hands open, palms up, thumbs out. Head high, a firm confident smile.",
+  "location": "A backyard potluck under a white pop-up canopy: green lawn running to the bottom of the frame, a long folding table covered in a red gingham cloth and crowded with casserole dishes, a pitcher of iced tea, a white church-style clapboard fence behind, and strings of bulb lights.",
+  "recognition_cues": [
+    "big red gingham oven mitts on both hands",
+    "a sunflower-yellow shirtwaist dress with a white frilled half-apron",
+    "short silver-grey curls"
+  ],
+  "palette": [
+    "oven mitts red gingham #D0302E / #8C1C1A / #F06060",
+    "oven mitt check white #F4EFE6",
+    "dress sunflower-yellow #F2C230 / #B08A18 / #FFDE72",
+    "collar, apron and shoes white #F4F2EC / #C0BCB2 / #FFFFFF",
+    "pearl necklace cream #EDE4CF",
+    "skin #6E432C / #45291A / #93634A",
+    "hair silver-grey #B8B6B2 / #85837F / #DAD8D4",
+    "lipstick berry #8A2A40",
+    "eye brown #2A1810",
+    "teeth #F1E8D6"
+  ],
+  "avoid": [
+    "a casserole dish on the key art",
+    "bare hands without mitts",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-04"
+    },
+    "sing": {
+      "intent": "Gospel vocal loop: clap the mitts once, sway side to side, the mic held in the character-right mitt at the mouth, the character-left mitt raised high and open, then return to the commanding stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sharp gasp at a dropped dish: both mitts fly to the chest, shoulders lift, then she recovers her commanding stance. No opponent or contact.",
+    "guard": "One-shot: plant the feet and hold both mitts forward palm-out at chest height, like guarding the buffet, then hold. Not combat.",
+    "entrance": "One-shot: march in, stop square to the front and spread both mitted hands into the commanding stance.",
+    "victory": "One-shot: raise both mitts high overhead in praise, head back, mouth open in a joyful shout, then hold.",
+    "ko": "The commanding stance sags: shoulders drop, both mitts hang limp at her sides, and her head shakes and bows. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

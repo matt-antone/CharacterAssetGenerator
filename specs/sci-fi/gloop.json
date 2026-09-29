@@ -1,0 +1,49 @@
+{
+  "id": "gloop",
+  "name": "Gloop",
+  "height": "3' 10\"",
+  "description": "A cheerful adult gelatinous alien, a round lime-green blob with stubby arms, who sings bubbly funk and wobbles with every beat.",
+  "build": "A single rounded dome of opaque jelly, wider than it is tall, resting on a flat base with no legs; two short thick rounded arms grow from the sides at mid-height, each ending in a mitten hand with three thick fingers and a thumb.",
+  "face": "Two large round glossy black eyes set high in the front of the dome, and a wide mouth below them with a dark-green interior and a pale green tongue.",
+  "hair": "The top of the dome is smooth bare lime-green jelly.",
+  "outfit": "Opaque lime-green jelly with a soft inner glow, solid all through, with four large bold objects suspended inside and shown as solid shapes in the jelly: a big red bolt, a yellow rubber duck, a blue cog and a white spiral shell. A bold orange bow tie sits at the front of the dome below the mouth.",
+  "performance_style": "Sitting square on the flat base, dome upright. Both stubby arms held out to the sides at mid-height, the character-right and character-left hands open, empty, all fingers fully visible. Eyes forward, a wide open grin.",
+  "location": "A cosy starship lounge seen from its dark-teal floor running to the bottom of the frame: round orange booth seats, a curved window full of stars, and a glowing jukebox against the back wall.",
+  "recognition_cues": [
+    "an opaque lime-green blob body",
+    "four bold objects floating inside: a red bolt, a yellow duck, a blue cog and a white shell",
+    "two big round black eyes",
+    "an orange bow tie"
+  ],
+  "palette": [
+    "jelly lime-green #7ED321 / #4C8A12 / #B8F26A",
+    "eyes black #121418 / #050608 / #4A5058",
+    "mouth dark-green #1F4A10",
+    "tongue pale green #C9F090",
+    "bolt red #D8332A / #8A1E18",
+    "duck yellow #F2C62A / #A8861A",
+    "cog blue #2E6ED8 / #1C4388",
+    "shell white #F2EEE4 / #BDB6A8",
+    "bow tie orange #F07A1A / #A04E0C / #FFA85A"
+  ],
+  "avoid": [
+    "legs or feet",
+    "a see-through body showing the backdrop",
+    "slime drips or puddles",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Bubbly funk loop: the whole dome squashes down and stretches up on each beat, the stubby arms swinging alternately up and down at the sides, the objects inside bobbing, a wobble side to side on the flat base, then back to the opening upright dome.",
+    "sing": {
+      "intent": "Funk vocal loop: the mic in the character-right hand comes up to the wide mouth, the dome stretches taller on the high note, the character-left hand waves open, then the dome settles back. The mouth must visibly open and change shape across the loop so it unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud pop: the whole dome jiggles and flattens, both hands fly up, then it firms back to shape. No contact or opponent.",
+    "guard": "One-shot stage self-protection: the dome squashes lower and both stubby arms fold across the front, then holds. Not combat.",
+    "entrance": "One-shot entrance: slides in with bouncy hops on the flat base, lands with a wobble, and settles into the open-armed pose.",
+    "victory": "One-shot finish: the dome stretches tall, both hands thrown up, eyes wide and mouth open in delight, then holds.",
+    "ko": "Non-contact performance defeat: the dome slumps wider and lower, both arms droop to the base and the eyes half-close. It holds a sagging but upright finish on its base — no melting, puddling or spreading across the floor. Do not imply impact, injury, or an opponent."
+  }
+}

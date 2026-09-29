@@ -1,0 +1,53 @@
+{
+  "id": "mariachi",
+  "name": "Mariachi",
+  "height": "5' 9\"",
+  "description": "A grand, generous mariachi singer, a man in his mid forties who sings rancheras with his whole chest and treats every audience as family.",
+  "build": "A solid, barrel-chested adult man of ordinary height: broad shoulders, a full round chest and a comfortable belly, thick forearms, sturdy legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm medium-brown skin, dark brown eyes under thick black brows, a broad strong nose, full cheeks, a thick black horseshoe moustache over full lips, and white teeth.",
+  "hair": "Short black hair combed back, mostly hidden under the hat, with neat black sideburns to mid-ear.",
+  "outfit": "A black charro suit: a short fitted black wool bolero jacket ending at the waist, with a row of large round silver conchos down each front edge and along each sleeve; matching high-waisted black trousers with a row of large round silver conchos down the outer seam of each leg; a crisp white shirt; a big bold red silk moño bow tied wide at the collar; a wide red sash belt; black leather boots. A wide-brimmed black felt charro sombrero with a tall round crown and a bold silver band around the crown. Both hands bare.",
+  "performance_style": "Broad and welcoming: feet shoulder-width apart, weight even, chest lifted. Both arms open a little from his sides, the character-right and character-left hands empty, palms forward, fingers spread and fully visible at hip height. Head level, a warm closed-mouth smile.",
+  "location": "A sunlit town plaza at dusk: warm terracotta paving running to the bottom of the frame, a whitewashed arcade of round arches behind, strings of colourful papel picado banners overhead, and a stone fountain at one side.",
+  "recognition_cues": [
+    "a black charro suit with rows of large silver conchos",
+    "a wide black charro sombrero with a silver band",
+    "a big red moño bow at the collar",
+    "a thick black horseshoe moustache"
+  ],
+  "palette": [
+    "jacket and trousers black wool #1E1C22 / #0E0D10 / #3C3942",
+    "conchos and hat band silver #C4C8CE / #7D828A / #F2F4F7",
+    "sombrero black felt #2A2528 / #151214 / #4A4247",
+    "shirt white #EFEBE2 / #BDB7AA / #FFFFFF",
+    "moño bow and sash red silk #C0182A / #7A0E1A / #E8475A",
+    "boots black leather #232024 / #0F0D10 / #46404A",
+    "skin #A0674A / #66402C / #C88A68",
+    "hair and moustache black #1A1614 / #0B0908 / #383030",
+    "eye white #EFE6D8",
+    "eye brown #2A1A12",
+    "lip #6E3A30",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a guitar or trumpet in hand — his hands stay empty in the key art",
+    "conchos drawn as tiny dots",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-02"
+    },
+    "sing": {
+      "intent": "Ranchera vocal loop: plant the boots wide, bring the mic in the character-right hand to the mouth, swing the open character-left hand wide out to the side at shoulder height on the long held grito, tip the head back a little, then lower the mic to the chest and return to the open welcoming stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A startled beat at a loud room sound: the shoulders jump, both open hands lift to chest height, then he laughs it off and settles back into the open welcoming stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet wider, raise the character-left forearm across the chest, the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: stride in with a proud chest, sweep the character-right hand to the hat brim in greeting, then land square to the front with both open hands spread at hip height.",
+    "victory": "One-shot celebration: plant the boots, fling both open arms wide above the shoulders, throw the head back in a huge open-mouthed laugh, and hold the grand pose.",
+    "ko": "Non-contact performance defeat: the barrel chest sags, both open hands drop limp at his sides and the head hangs so the sombrero brim tips forward. He holds a standing, deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

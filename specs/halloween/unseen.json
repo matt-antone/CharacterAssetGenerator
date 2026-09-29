@@ -1,0 +1,49 @@
+{
+  "id": "unseen",
+  "name": "Unseen",
+  "height": "5' 11\"",
+  "description": "An invisible man in his forties, smooth, relaxed and a little vain, who sings breezy yacht rock; everything visible of him is bandage, glasses, gloves and clothes.",
+  "build": "An average lean adult man of ordinary proportions, relaxed level shoulders, standing upright with straight knees.",
+  "face": "A head fully wrapped in wide cream bandages, every strip overlapping, the wrapping solid and opaque with no skin showing; big round black sunglasses with thick black frames over the eyes; the bandage parts slightly over a mouth opening shown as a dark gap.",
+  "hair": "No hair shows: the bandage wraps over the crown.",
+  "outfit": "A belted camel trench coat with wide lapels, double-breasted, ending just above the knee, the sleeves ending at the wrists; a pale sky-blue open-collar shirt; wide cream bandages wrapped round the neck up into the collar; fitted white leather gloves on both hands covering the fingers; tan chinos and brown leather loafers. The body is fully covered, clothes and bandages everywhere.",
+  "performance_style": "Relaxed and upright: feet hip-width apart, weight on the character-right leg. Both arms hang easy at his sides, the character-right and character-left gloved hands open and empty, every finger visible. Head level, chin a touch raised.",
+  "location": "A marina at sunset: a wooden dock running to the bottom of the frame, white sailboats moored behind with tall masts, calm golden water, palm trees at one side, and a peach-and-orange sky.",
+  "recognition_cues": [
+    "a head fully wrapped in wide cream bandages",
+    "big round black sunglasses",
+    "a belted camel trench coat",
+    "white leather gloves"
+  ],
+  "palette": [
+    "bandages cream #E8DCC0 / #B4A688 / #FAF2DC",
+    "sunglasses black #121214 / #060607 / #3A3A40",
+    "mouth gap #2A2220",
+    "trench coat camel #B08A52 / #74582E / #D4AE78",
+    "shirt sky-blue #9CC4E0 / #6A90AC / #C4E0F4",
+    "gloves white leather #F2F0EA / #BEBAB0 / #FFFFFF",
+    "chinos tan #C4AA7C / #8C7652 / #E0C8A0",
+    "loafers brown #5C3A22 / #361F10 / #845A3A"
+  ],
+  "avoid": [
+    "visible skin or face",
+    "a translucent or empty-outline body",
+    "a fedora"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-04"
+    },
+    "sing": {
+      "intent": "Yacht-rock vocal loop: sway easy, bring the mic in the character-right gloved hand up to the bandaged mouth for a breezy phrase, point the character-left gloved hand out lazily at chest height, bob the head, then lower the mic and return to the relaxed stance. With the face wrapped, the dark mouth gap in the bandage visibly opens and changes shape and the head and shoulders carry the phrasing. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders jump, both gloved hands rise open, the head jerks back, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: raise the character-left gloved forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: stroll in easy, turn square to the front, adjust the sunglasses with the character-right gloved hand, then drop both hands open at the sides.",
+    "victory": "One-shot celebration: raise both gloved hands open above the shoulders, tip the head back and hold a cool pose.",
+    "ko": "Non-contact defeat: the shoulders slump, both gloved hands hang limp, the head droops. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "fortune",
+  "name": "Fortune",
+  "height": "5' 6\"",
+  "description": "A theatrical boardwalk fortune teller, a woman in her fifties, who sings smoky torch-song cabaret with a knowing wink.",
+  "build": "A full-figured, curvy adult woman of ordinary height: rounded shoulders, a full bust and hips, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm olive skin, large dark-brown eyes lined heavily in black, bold arched dark brows, a strong straight nose, deep plum-painted full lips, and a small dark beauty mark on the cheek.",
+  "hair": "Thick wavy black hair with a broad silver streak at the front, falling to the shoulders from under the headscarf.",
+  "outfit": "A deep emerald-green satin headscarf tied at the nape, its knotted ends resting on the character-left shoulder; a long-sleeved burgundy velvet blouse fitted at the waist, the cuffs ending at the wrists so both hands are bare; a large gold-fringed deep-purple shawl draped over both shoulders and knotted at the chest; a knee-length black tiered skirt; black low-heeled ankle boots. Six or seven wide chunky gold bangles on each wrist and large gold hoop earrings.",
+  "performance_style": "Poised and mysterious: feet together, one knee softly bent, weight on the back foot. Both arms forward, the character-right and character-left hands open and empty at waist height, palms down and fingers spread as if over a crystal ball. Head level, a sly knowing half-smile.",
+  "location": "A boardwalk fortune-telling booth at dusk: weathered grey boardwalk planks running to the bottom of the frame, a small striped canvas booth with the curtain tied back, a little round table draped in dark cloth, strings of warm bulb lights overhead, and the purple-orange sky over the sea beyond the railing.",
+  "recognition_cues": [
+    "an emerald satin headscarf with knotted ends",
+    "a big gold-fringed deep-purple shawl",
+    "stacks of chunky gold bangles and big gold hoops",
+    "wavy black hair with a broad silver streak"
+  ],
+  "palette": [
+    "headscarf emerald satin #0F7A4E / #074A2F / #3FB07F",
+    "blouse burgundy velvet #7A1830 / #4A0C1C / #A8384F",
+    "shawl deep-purple #4B2470 / #2C1244 / #7446A0",
+    "shawl fringe gold #D6A83A / #8E6C1E / #F4D47A",
+    "bangles and hoops gold #D9AE3E / #93721F / #F7DC84",
+    "skirt black #1C1A1E / #0C0B0D / #38343C",
+    "boots black leather #221E20 / #0E0C0D / #443C40",
+    "skin #B98A62 / #7E5A3C / #D8AC84",
+    "eye liner black #151214",
+    "eye dark-brown #3A2418",
+    "eye white #F0E8DC",
+    "lip plum #6E2340",
+    "beauty mark #3A2418",
+    "hair black #1A1418 / #0B080A / #3A3038",
+    "hair streak silver #C8C6CA"
+  ],
+  "avoid": [
+    "a crystal ball held on the key art",
+    "tarot cards or costume-shop caricature",
+    "a bare midriff",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shakira-01"
+    },
+    "sing": {
+      "intent": "Torch-song vocal loop: lean in slowly, lift the mic in the character-right hand to the mouth, circle the open character-left hand slowly at chest height so the bangles slide, then draw back to the poised stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle: the shoulders tighten, both open hands rise to the collarbone with a jangle of bangles, then she recovers her poise. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: draw the shawl across the chest with the character-left hand, raise the open character-right hand palm-out, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: glide in with slow deliberate steps, turn square to the front, and settle into the poised stance with both hands hovering palm-down.",
+    "victory": "One-shot celebration: sweep both open hands out wide at shoulder height so the shawl spreads, tip the head back into a throaty open-mouthed laugh, then hold a grand pose.",
+    "ko": "Non-contact performance defeat: the mystique fades — the shoulders slump under the shawl, both open hands hang limp at her sides, and her head bows, chin toward the chest, holding a deflated standing finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

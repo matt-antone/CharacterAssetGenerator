@@ -1,0 +1,52 @@
+{
+  "id": "carny",
+  "name": "Carny",
+  "height": "5' 9\"",
+  "description": "A man in his mid fifties, a boardwalk carnival barker who sings ragtime and barbershop showtunes, booming and theatrical.",
+  "build": "A stocky, barrel-chested adult build: broad shoulders, a round firm belly, a thick neck and sturdy arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Ruddy light-tan skin, bright blue eyes under bushy grey brows, a big rounded nose, full cheeks, and a large grey handlebar moustache with upturned ends.",
+  "hair": "Short grey hair neatly trimmed at the sides, mostly hidden under the hat.",
+  "outfit": "A flat-crowned straw boater hat with a wide bold red band; a crisp white long-sleeved shirt, sleeves rolled to the elbow, both hands fully bare; a fitted waistcoat with wide bold vertical stripes of red and cream, four large brass buttons; a black bow tie; navy trousers, straight-legged; brown leather lace-up shoes.",
+  "performance_style": "Showman's stance: feet shoulder-width, weight forward on the balls of the feet, chest out. The character-right hand open and raised to shoulder height palm up as if presenting; the character-left hand open on the belly of the waistcoat, fingers spread and visible. Head level, a broad toothy grin.",
+  "location": "A boardwalk carnival midway at dusk: weathered grey planks running to the bottom of the frame, a striped red-and-cream game booth with rows of stuffed prizes behind, strings of round bulb lights overhead, and a lit Ferris wheel against an orange sky.",
+  "recognition_cues": [
+    "a straw boater with a wide red band",
+    "a waistcoat with wide red and cream stripes",
+    "a big grey handlebar moustache"
+  ],
+  "palette": [
+    "boater straw #D9B96A / #9E8140 / #F2DC9A",
+    "hat band and waistcoat red #B8242A / #751418 / #E04A4E",
+    "waistcoat cream #EDE0C0 / #BBAA85 / #FFF6DE",
+    "shirt white #F2F0EA / #C4C0B5 / #FFFFFF",
+    "buttons brass #C9A13B / #7F6120 / #F0D77A",
+    "bow tie black #1C1A1A",
+    "trousers navy #26304F / #151B30 / #3E4A73",
+    "shoes brown leather #6B4226 / #3F2614 / #95633F",
+    "skin #D49A78 / #9A6448 / #EDBB9B",
+    "hair and moustache grey #9C9A96 / #66645F / #CFCDC8",
+    "eye blue #3A6FB0",
+    "eye white #F3ECE0",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "pinstripes instead of wide stripes",
+    "a top hat or cane"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
+    "sing": {
+      "intent": "Barker vocal loop: the mic in the character-right hand comes to the mouth, the character-left hand sweeps open wide at shoulder height on the big note, then the mic lowers to the chest and he returns to the showman's stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: strut in with a bouncing step, tip the boater brim with the character-left hand, then land in the showman's stance.",
+    "victory": "One-shot finish: he sweeps the boater off with the character-left hand, bows deeply, rises and holds the hat high in the air with a wide open-mouthed laugh.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the energy drains out: the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

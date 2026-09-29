@@ -1,0 +1,51 @@
+{
+  "id": "beachbum",
+  "name": "Beach Bum",
+  "height": "5' 11\"",
+  "description": "A man in his mid fifties, a sun-leathered beach bum who sings trop rock, mellow and permanently on vacation.",
+  "build": "A lanky build with a soft paunch: long thin arms and legs, a slightly sagging belly, standing loosely upright on straight knees.",
+  "face": "Deeply sun-leathered bronze skin, crinkly pale blue eyes under shaggy grey brows, a big crooked nose and a long grey-streaked beard.",
+  "hair": "Long straggly grey-blond hair to the shoulders below the hat brim.",
+  "outfit": "A frayed wide-brimmed natural straw hat; an unbuttoned short-sleeved Hawaiian shirt in turquoise with big bold white hibiscus blooms; a white tank top underneath; faded orange board shorts to the knee; brown leather flip-flops.",
+  "performance_style": "Loose and mellow: feet apart, weight on one hip. Both arms relaxed at his sides, the character-right and character-left hands open and empty, fingers visible. Head tilted back a touch, a sleepy content look.",
+  "location": "A beach shack bar at sunset: sand running to the bottom of the frame, a hammock strung between two palms at one side, a thatched tiki bar behind, and a glowing orange-pink sky over the water.",
+  "recognition_cues": [
+    "a frayed straw hat",
+    "an open turquoise shirt with big white hibiscus",
+    "a long grey-streaked beard"
+  ],
+  "palette": [
+    "straw hat #D8BC78 / #9C844C / #F2DEA6",
+    "shirt turquoise #1FA3B0 / #126B74 / #5ED4DE",
+    "hibiscus white #F4F1EA / #C2BDB1 / #FFFFFF",
+    "tank top white #EDEAE2 / #B8B4AA / #FFFFFF",
+    "board shorts orange #E08A3C / #9C5A22 / #F6B374",
+    "flip-flops brown #6A4428 / #402814 / #926442",
+    "skin #A86A42 / #6C4226 / #CC8E64",
+    "hair and beard grey-blond #BEB294 / #847A62 / #E0D6BC",
+    "eye pale blue #8AB4D0",
+    "lip #8E5040",
+    "teeth #E8DCC4",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a drink in hand",
+    "a closed buttoned shirt"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-05"
+    },
+    "sing": {
+      "intent": "Trop-rock vocal loop: the mic in the character-right hand at the mouth, the character-left hand waves lazily overhead, hips swaying, then back to the mellow stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A coconut thuds on the sand: he blinks and hunches, then shrugs it off. No opponent or contact.",
+    "guard": "One-shot: raises both open palms at chest height, leaning back; hold. Not combat.",
+    "entrance": "One-shot: shuffles in slowly in his flip-flops, stretches, settles into the mellow stance.",
+    "victory": "One-shot: raises both hands in a big shaka overhead, laughing with mouth open, holds.",
+    "ko": "Non-contact defeat: he sags, both open hands hang, the hat brim tips down over the eyes. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

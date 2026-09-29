@@ -1,0 +1,51 @@
+{
+  "id": "sprinkler",
+  "name": "Sprinkler",
+  "height": "5' 10\"",
+  "description": "A goofy, gangly twenty-year-old guy, dripping wet from running through the lawn sprinkler, who sings loud pop-punk.",
+  "build": "A lanky, skinny young adult build: narrow bony shoulders, a thin chest, long thin arms and legs, standing upright with straight knees.",
+  "face": "Fair skin flushed pink at the cheeks, wide hazel eyes under straight brown brows, a snub nose, big ears and a wide mouth.",
+  "hair": "Shaggy chin-length brown hair soaked flat and hanging in thick wet clumps round the face and ears.",
+  "outfit": "A lime-green tank top soaked dark and clinging; knee-length board shorts in bright orange with big bold white hibiscus blooms; bright blue foam slide sandals. Arms and hands bare, large bold drops of water on the skin.",
+  "performance_style": "Loose and bouncy: feet apart, knees loose, weight on the balls of the feet. Both arms flung out at shoulder height, the character-right and character-left hands open and empty, fingers spread and visible. Head up, a goofy open-mouthed laugh.",
+  "location": "A sunny backyard lawn: bright green grass running to the bottom of the frame, a yellow oscillating sprinkler throwing an arc of white spray at one side, a blue inflatable kiddie pool behind, a wooden fence and a bright blue sky.",
+  "recognition_cues": [
+    "a soaked lime-green tank top",
+    "bright orange board shorts with big white hibiscus",
+    "shaggy wet brown hair in clumps"
+  ],
+  "palette": [
+    "tank top lime-green #7BC82A / #4E8A16 / #A6E860",
+    "board shorts orange #F2701E / #B04D10 / #FF9A52",
+    "hibiscus white #F4F2EC",
+    "slides blue #1E7AD8 / #115094 / #55A2F0",
+    "skin #E8B79C / #B4846A / #F6D4BE",
+    "cheek flush #E08A7A",
+    "hair brown wet #5A3E28 / #36241A / #80603F",
+    "water drops pale blue #CDE6F2",
+    "eye hazel #7A6A3A",
+    "eye white #F2ECE2",
+    "teeth #F2EBDD"
+  ],
+  "avoid": [
+    "a water gun",
+    "a shirtless torso",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-01"
+    },
+    "sing": {
+      "intent": "Pop-punk vocal loop: bounce on both feet, the mic in the character-right hand at the mouth, the character-left hand thrashing an open palm up and down, then return to the bouncy stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A shiver-jump at cold water: shoulders hunch, both open hands clutch at the arms, then he shakes it off to the bouncy stance. No opponent or contact.",
+    "guard": "One-shot: turn the head aside and hold both open hands out in front, palms forward, as if blocking spray, then hold. Not combat.",
+    "entrance": "One-shot: run in, skid to a stop square to the front, and fling both arms out into the bouncy stance.",
+    "victory": "One-shot: both open hands up over the head, mouth wide in a yell, knees bent in a happy bounce, then hold.",
+    "ko": "The bounce drains: shoulders sag, both open hands hang dripping, and the head drops so the wet hair falls forward. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

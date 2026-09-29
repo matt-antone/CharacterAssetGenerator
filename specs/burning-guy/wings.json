@@ -1,0 +1,48 @@
+{
+  "id": "wings",
+  "name": "Wings",
+  "height": "5' 6\"",
+  "description": "A dreamy woman in her mid twenties dressed as a playa angel at a desert arts festival, singing airy, ethereal art-pop.",
+  "build": "A slender adult woman of ordinary proportions: narrow shoulders, long slim arms and legs, standing upright and light with straight knees.",
+  "face": "Warm brown skin, large dark eyes under soft straight brows, a small nose, and full lips.",
+  "hair": "A big soft cloud of dark-brown curls to the shoulders.",
+  "outfit": "Huge white feathered wings, opaque and solid, rising from the shoulder blades above the head and spreading to arm's length each side, the feathers in large bold overlapping rows; a halo, a thick bold ring of gold wire held above the head on a short gold stem; a knee-length pale sky-blue slip dress with thin straps; tall white lace-up boots; both arms and hands bare.",
+  "performance_style": "Light and poised: feet together, weight even. Both arms held a little out from the sides, the character-right and character-left hands open, empty, fingers visible. Head level, a dreamy soft smile.",
+  "location": "A desert playa at twilight: flat pale cracked alkali ground to the bottom of the frame, a tall wooden art tower wrapped in warm fairy lights at one side, drifting fine dust, and a pale gold-to-lavender sky.",
+  "recognition_cues": [
+    "huge opaque white feathered wings",
+    "a thick gold ring halo above the head",
+    "a pale sky-blue slip dress",
+    "a soft cloud of dark curls"
+  ],
+  "palette": [
+    "wings white feathers #F0EDE6 / #BAB6AC / #FFFFFF",
+    "halo gold wire #D4A53A / #8C6B1E / #F6D882",
+    "dress sky blue #9CC6E6 / #6690B0 / #C8E4F8",
+    "boots white leather #E6E2D8 / #B0ACA2 / #FFFFFF",
+    "skin #8A5A3C / #5A3822 / #B07E5C",
+    "hair dark brown #2E1E14 / #160E08 / #4E3626",
+    "eye white #EFE6D8",
+    "eye brown #2A1A12",
+    "lip #7A4238",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "see-through or translucent wings",
+    "a thin wire halo that vanishes at small size"
+  ],
+  "animations": {
+    "dance": "Ethereal sway, looping: rise gently onto the toes and down, float both open arms up and out to shoulder height and back down in slow waves, tip the head softly from side to side, and settle back into the poised stance. The wings stay spread and still behind her; square to the front throughout.",
+    "sing": {
+      "intent": "Art-pop vocal loop: sway softly, bring the mic in the character-right hand to the mouth, float the character-left open hand up to shoulder height and down, then return to the poised stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sudden noise: her shoulders lift and both hands come to her chest, then she settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the side, and hold. Not combat.",
+    "entrance": "One-shot entrance: step in lightly on the toes, both arms floating out, then settle into the poised stance.",
+    "victory": "One-shot finish: both open arms lifted high, head tipped back in a joyful open-mouthed smile, then hold.",
+    "ko": "Non-contact performance defeat: the lightness leaves her — the shoulders droop, both open hands hang limp at her sides, and her head hangs low, curls falling forward. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "roots",
+  "name": "Roots",
+  "height": "5' 10\"",
+  "description": "A man in his mid fifties, a Jamaican roots-reggae singer, calm as a Sunday morning and warm with everyone.",
+  "build": "A lean, easy adult build of ordinary proportions: relaxed shoulders, a straight torso, arms and legs of ordinary length, standing upright with loose straight knees.",
+  "face": "Deep brown skin, warm dark-brown eyes under thick black brows flecked with grey, a broad nose, rounded cheekbones, a full salt-and-pepper beard, and full lips.",
+  "hair": "Thick black locs flecked with grey, gathered up into a large knitted tam and hanging out of its back to the middle of the back, behind the shoulders, clear of the arms.",
+  "outfit": "A large slouchy knitted tam in wide bold bands of red, gold and green, sitting high on the head over the locs; a loose short-sleeved off-white linen shirt, buttoned, untucked; loose olive cotton trousers ending at the ankle; brown leather sandals. Both arms and hands are bare.",
+  "performance_style": "Easy and rooted: feet hip-width apart, weight even, knees soft. Both arms hang relaxed, the character-right and character-left hands open and empty beside the thighs. Head level, eyes gently narrowed, a calm closed-mouth smile.",
+  "location": "A yard stage in Kingston on a bright morning: sun-bleached wooden boards running to the bottom of the frame, a painted zinc fence behind, a big old sound-system speaker at one side and a mango tree's shade overhead.",
+  "recognition_cues": [
+    "a big knitted tam in bold red, gold and green bands",
+    "long grey-flecked locs down the back",
+    "a salt-and-pepper beard"
+  ],
+  "palette": [
+    "tam red knit #B8322A / #761E18 / #DC5A4E",
+    "tam gold knit #E0B232 / #9B7A1D / #F4D469",
+    "tam green knit #1F7A3A / #124A23 / #45A460",
+    "shirt off-white linen #EAE4D4 / #BAB3A1 / #FAF6EA",
+    "trousers olive cotton #5E6B3A / #3A4323 / #86935E",
+    "sandals brown leather #6B4529 / #412A18 / #936445",
+    "skin #5E3A28 / #3A2216 / #845641",
+    "locs black #1E1814 / #0E0B09 / #3E332C",
+    "grey flecks and beard grey #8E8A84 / #5C5954 / #B6B2AB",
+    "eye white #EFE6D8",
+    "eye brown #2A1A12",
+    "lip #52302A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a flag or printed slogans",
+    "a cigarette or smoke",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-04"
+    },
+    "sing": {
+      "intent": "Roots vocal loop: the mic in the character-right hand at the mouth, the character-left hand raised open at shoulder height palm out in a slow blessing, the body rocking gently on the offbeat, then back to the rooted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a room sound: the brows lift and the shoulders rise, both open hands lift a little, then he chuckles and settles back. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left open palm in front of the chest, then hold an unbothered steady finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in slow with a rocking step, stop square to the front and settle into the rooted stance, both hands open.",
+    "victory": "One-shot finish: raise both open hands high with the palms up, tip the head back with a wide open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: the calm goes heavy, the shoulders drop, both open hands hang and the head bows with a slow shake. He holds a standing, weary finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

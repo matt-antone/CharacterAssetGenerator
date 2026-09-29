@@ -1,0 +1,50 @@
+{
+  "id": "birthday",
+  "name": "Birthday",
+  "height": "5' 5\"",
+  "description": "A woman turning thirty tonight, the birthday girl at her own backyard party, who sings big pop anthems and is determined to have the best night ever.",
+  "build": "A slim, average adult woman's build of ordinary proportions: narrow shoulders, a defined waist, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Light olive skin, large dark brown eyes under arched dark brows, a small straight nose, round cheeks with a bold coral blush, and full lips in glossy coral.",
+  "hair": "Long glossy dark-brown hair in big loose curls falling past the shoulders, parted in the centre, kept behind the shoulders clear of both arms. On top sits a large chunky gold plastic tiara with three big rounded points.",
+  "outfit": "A knee-length sleeveless teal cocktail dress with a fitted bodice and a short flared skirt; across the body from the character-right shoulder to the character-left hip a wide bold satin sash in bright gold; bare arms and hands; flat gold sandals with ankle straps.",
+  "performance_style": "Bouncy and upright: feet hip-width apart, weight on the balls of the feet. Both arms bent, the character-right and character-left hands open and empty at shoulder height, palms out, every finger spread. Head level, a wide excited open smile.",
+  "location": "A suburban backyard at dusk: trimmed green lawn running to the bottom of the frame, a wooden fence at the back strung with warm globe string lights, a folding table with a big frosted sheet cake and a cluster of balloons tied to a lawn chair, and a gift pile on the grass.",
+  "recognition_cues": [
+    "a wide bright-gold satin sash across a teal cocktail dress",
+    "a large chunky gold plastic tiara",
+    "long dark-brown curls"
+  ],
+  "palette": [
+    "dress teal satin #139A9A / #0A5E5E / #4FCBC8",
+    "sash and tiara gold #E0B32C / #9A7514 / #FFE07A",
+    "sandals gold leather #C9982A / #7F5E16 / #EBC45C",
+    "skin #D9A57E / #A8744F / #F0C7A3",
+    "hair dark brown #3A2418 / #1E120B / #6A4630",
+    "blush coral #E0705A",
+    "lips coral #C94C3C",
+    "eye white #F3E8D8",
+    "eye brown #2E1C12",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a party hat instead of the tiara",
+    "printed text on the sash",
+    "a pink or magenta dress"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-01"
+    },
+    "sing": {
+      "intent": "Pop-anthem vocal loop: bounce on the balls of the feet, lift the mic in the character-right hand to the mouth for the chorus, fling the character-left hand up above the tiara on the high note, then bring it down and return to the bouncy stance. The mouth visibly opens wide and changes shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A popping balloon startles her: the shoulders jump, both open hands fly to chest height, then she laughs it off and settles back to the bouncy stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step back, raise both open hands in front of the chest to shield the tiara, and hold a braced upright stance. Not combat.",
+    "entrance": "One-shot entrance: skip in, straighten the tiara with the character-left hand, then land in the bouncy stance with both open hands up at shoulder height.",
+    "victory": "One-shot celebration: jump on the spot, throw both open hands high above the head, head tipped back in an open-mouthed cheer, then hold that pose with both feet planted.",
+    "ko": "Non-contact defeat: the birthday cheer drains out — the shoulders drop, both open hands hang limp at her sides, and her head droops forward so the tiara tilts. She holds a standing, deflated finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

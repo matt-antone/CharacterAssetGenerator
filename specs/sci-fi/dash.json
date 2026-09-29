@@ -1,0 +1,50 @@
+{
+  "id": "dash",
+  "name": "Dash",
+  "height": "5' 11\"",
+  "description": "A man in his mid thirties, a charming starship smuggler who sings rockabilly with a crooked grin, loose, cocky and always one step ahead.",
+  "build": "A lean, rangy adult man's build of human proportions: easy shoulders, a narrow waist and long legs, standing upright with a relaxed hip.",
+  "face": "Light olive skin with a faint tan, bright hazel eyes under expressive dark brows, a straight nose, a short dark stubble over a squared jaw, a small bold scar on the chin and an easy mouth.",
+  "hair": "Thick dark-brown hair swept up and back into a loose rockabilly pompadour, full on top and short at the sides, one lock falling onto the forehead.",
+  "outfit": "A cream cotton shirt with the sleeves rolled to the elbow and the collar open; a fitted dark-chocolate leather waistcoat, unbuttoned; a wide tan leather belt with a hip holster slung on the character-right thigh, the holster empty and flapped shut; slim dark-navy trousers tucked into scuffed tan knee-high flight boots.",
+  "performance_style": "Cocky and loose: weight on the character-left leg, hip cocked, the character-right foot a step forward. Both arms hang easy, the character-right hand open resting on the belt buckle with fingers visible, the character-left hand open and empty at his side. Head tipped, a crooked closed-mouth grin.",
+  "location": "The cargo bay of a battered freighter, seen from the front of a scuffed steel deck running to the bottom of the frame: stacked crates behind, an open ramp showing a desert moon and stars, and warm amber work lights overhead.",
+  "recognition_cues": [
+    "a loose dark-brown pompadour",
+    "an open dark-chocolate leather waistcoat over a cream shirt",
+    "a tan belt with an empty flapped-shut thigh holster"
+  ],
+  "palette": [
+    "shirt cream cotton #EDE2C8 / #BFB092 / #FFF8E8",
+    "waistcoat dark-chocolate leather #4A2C1C / #2A180E / #74492F",
+    "belt, holster and flight boots tan leather #A87040 / #6E4422 / #D09A62",
+    "trousers dark-navy #22304A / #131C2E / #3C4E70",
+    "skin light olive #C69A74 / #936C4E / #E2BC98",
+    "hair and stubble dark-brown #3A2418 / #1E120A / #5C3C28",
+    "scar #E0BCA0",
+    "eyes hazel #7A6A30",
+    "eye white #F0EADF",
+    "teeth #F2EDE2"
+  ],
+  "avoid": [
+    "a gun or blaster in the holster or a hand",
+    "a space-captain uniform or insignia",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-02"
+    },
+    "sing": {
+      "intent": "Rockabilly vocal loop: bring the mic in the character-right hand up to the mouth, snap the fingers of the open character-left hand at shoulder height on the beat, bounce a knee, then lower the mic and return to the cocky stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: saunter in with a loose swagger, turn square to the front, then drop into the cocky stance with the character-right hand on the belt buckle.",
+    "victory": "One-shot song-finish: plant both boots, throw a two-finger salute off the brow with the character-left hand, the character-right hand low with the mic, a wide open-mouthed laugh, then hold the cocky hip-shot pose.",
+    "ko": "He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. He holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

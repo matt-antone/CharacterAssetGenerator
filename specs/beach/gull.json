@@ -1,0 +1,49 @@
+{
+  "id": "gull",
+  "name": "Gull",
+  "height": "5' 8\"",
+  "description": "A loud, greedy, human-sized herring gull who sings snarling garage punk, a shameless boardwalk fry thief. Male, adult.",
+  "build": "An upright human-sized seagull: a plump rounded white chest and belly on a bird's body standing straight on two thin orange legs with webbed feet, a round head on a short thick neck, and two broad feathered wings used like arms, each ending in three thick grey primary feathers spread like stubby fingers.",
+  "face": "A round white feathered head, small fierce pale-yellow eyes with black pupils and a red eye-ring, a heavy flat forehead brow of feathers, and a big hooked bright yellow beak with a bold red spot near the tip.",
+  "hair": "A scruffy tuft of white head feathers sticking up at the crown.",
+  "outfit": "White chest and head feathers; slate-grey back and wings with bold black wingtips spotted with white; bright orange legs and webbed feet. A small black sleeveless denim vest open on the white chest, and a few golden fries sticking out of the vest's single front pocket.",
+  "performance_style": "Cocky and puffed-up: webbed feet planted wide, chest pushed out, weight forward. Both wings held half-open at the sides, wingtip feathers spread, empty. Head cocked, beak open in a loud squawk.",
+  "location": "A sunny boardwalk by a fry stand: sun-bleached planks running to the bottom of the frame, a red-and-white striped snack kiosk behind, a spilled paper cone of fries on the boards, a wooden railing and bright blue sea and sky beyond.",
+  "recognition_cues": [
+    "a big hooked yellow beak with a red spot",
+    "slate-grey wings with black white-spotted tips",
+    "bright orange webbed feet",
+    "a small black denim vest with fries in the pocket"
+  ],
+  "palette": [
+    "feathers white #F2F0EA / #C4C0B6 / #FFFFFF",
+    "wings slate-grey #7C8590 / #4E555E / #A6AEB8",
+    "wingtips black #1C1D20 / #0C0C0E / #36383C",
+    "legs and feet orange #F08A2A / #A85A12 / #FFB060",
+    "beak yellow #F2C624 / #B08A0E / #FFE468",
+    "beak spot and eye-ring red #D22A22",
+    "eye pale-yellow #EFE08A",
+    "pupil black #101010",
+    "vest black denim #26272C / #121316 / #44464E",
+    "fries golden #E8B848 / #A67E24 / #F8D880"
+  ],
+  "avoid": [
+    "human hands or fingers",
+    "a fry held in the beak on the key art",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Garage-punk bird loop: bob the head forward and back on every beat, stamp the webbed feet one after the other, flap both half-open wings up and down at the sides, then return to the puffed-up stance. The beak snaps open and shut on the beat.",
+    "sing": {
+      "intent": "Garage-punk vocal loop: clamp the mic in the character-right wingtip feathers up near the beak, flap the character-left wing out on each shout, pump the head forward, then return to the puffed-up stance. The beak must visibly open wide and snap shut across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle: every feather puffs out, both wings jerk half-open, then he smooths down to the cocky stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: fold both wings across the white chest, pull the head low, then hold a steady hunched-shoulder finish. Not combat.",
+    "entrance": "One-shot entrance: strut in with jerky pigeon-toed steps and a head bob, turn square to the front, and land in the puffed-up stance with both wings half-open.",
+    "victory": "One-shot celebration: throw both wings wide open above the shoulders, puff the white chest, tip the head back with the beak wide open in a triumphant squawk, then hold the pose.",
+    "ko": "Non-contact performance defeat: the swagger collapses — the wings droop limp at the sides, the chest deflates and the head hangs, beak pointing at the ground, holding a sulking standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

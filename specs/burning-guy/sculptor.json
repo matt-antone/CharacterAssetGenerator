@@ -1,0 +1,54 @@
+{
+  "id": "sculptor",
+  "name": "Sculptor",
+  "height": "6' 0\"",
+  "description": "A heavyset man in his late fifties, a metal sculptor at a desert arts festival who sings slow, fuzzy stoner rock; gruff on the surface, gentle underneath.",
+  "build": "A broad, heavy, barrel-chested adult man: wide shoulders, a thick torso and belly, strong forearms, sturdy legs, standing upright with straight knees.",
+  "face": "Ruddy weathered light skin, small pale-blue eyes under heavy grey brows, a big broad nose, deep smile creases at the eyes, and a thick full grey beard to the collarbone.",
+  "hair": "Short thick salt-and-pepper grey hair, cropped close at the sides, a heavy mass on top swept back.",
+  "outfit": "A heavy full-length welding apron of tan leather from chest to knees, a leather neck strap and ties at the waist; underneath, a charcoal henley with sleeves pushed to the elbows; olive-drab work trousers; brown leather work boots; thick black leather welding gauntlets on both hands, cuffs to mid-forearm, fingers fully separated and visible, with large pale scorch patches across the backs; a pair of round dark-green welding goggles with a thick black strap pushed up on the forehead.",
+  "performance_style": "Planted and solid: feet shoulder-width, weight even. Both arms hang at his sides, the character-right and character-left gloved hands open, empty, fingers visible. Head level, a gruff, patient look under heavy brows.",
+  "location": "A desert playa late afternoon: flat pale cracked alkali ground to the bottom of the frame, a towering half-finished steel sculpture of a leaping fish on a wooden base at one side, a workbench with an anvil, drifting fine dust, and a pale hazy sky.",
+  "recognition_cues": [
+    "a heavy tan leather welding apron",
+    "thick black welding gauntlets with pale scorch patches",
+    "a thick full grey beard",
+    "round green goggles pushed up on the forehead"
+  ],
+  "palette": [
+    "apron tan leather #A0703E / #634321 / #C99560",
+    "gauntlets black leather #26221F / #121010 / #4A433D",
+    "scorch patches pale ash #C9B89C / #968670 / #E6DAC4",
+    "henley charcoal #3C4046 / #22252A / #60656C",
+    "trousers olive-drab #5E6440 / #3A3E26 / #858B61",
+    "boots brown leather #5C3A22 / #36210F / #86593A",
+    "goggle lenses dark green #1F4A32 / #0F2A1C / #3F7A58",
+    "goggle strap black #1A1A1A",
+    "skin #D19378 / #955E48 / #EDB49A",
+    "hair and beard grey #9C9A96 / #66645F / #CFCDC8",
+    "eye pale blue #7FA8C4",
+    "eye white #EFE6D8",
+    "lip #A4604E",
+    "teeth #EDE3D0"
+  ],
+  "avoid": [
+    "goggles worn over the eyes",
+    "a welding torch or tool in hand"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-04"
+    },
+    "sing": {
+      "intent": "Stoner-rock vocal loop: sway slowly from boot to boot, bring the mic in the character-right gloved hand up to the beard, curl the character-left gloved hand into a loose raised fist on the long note, then lower both and return to the planted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A loud clang nearby: the heavy shoulders hunch and both gloved hands rise to chest height, then he settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: turn the character-left shoulder forward, character-left forearm across the apron, and hold a solid stance. Not combat.",
+    "entrance": "One-shot entrance: lumber in with heavy unhurried steps, tug the apron straight with both gloved hands, then plant the feet.",
+    "victory": "One-shot finish: raise both gloved fists to shoulder height, head tipped back in a big open-mouthed laugh through the beard, then hold.",
+    "ko": "Non-contact performance defeat: the big shoulders sag, both gloved hands hang limp at his sides, and his head hangs low, the beard on his chest. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

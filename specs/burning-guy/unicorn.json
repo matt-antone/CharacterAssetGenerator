@@ -1,0 +1,52 @@
+{
+  "id": "unicorn",
+  "name": "Unicorn",
+  "height": "5' 10\"",
+  "description": "A sincere, sweet-natured man in his mid fifties who wears a full plush unicorn onesie at a desert arts festival without a trace of irony and sings bright eighties synth-pop.",
+  "build": "A soft, slightly round adult man of ordinary proportions: medium shoulders, a gentle belly, standing upright with straight knees.",
+  "face": "Fair pinkish skin, earnest round blue eyes under bushy grey brows, a round nose, and a neat short grey beard.",
+  "hair": "Short grey hair, mostly hidden under the hood, a little showing at the forehead.",
+  "outfit": "A full-body plush onesie in soft sky-blue fleece, zipped from crotch to chin, the hood up framing the face, with a big stiff gold unicorn horn on the hood's crown, two large plush sky-blue ears, and a thick mane of bold wide yarn locks in yellow, orange and turquoise running down the back of the hood; the cuffs end at the wrists so both hands are bare; the legs end in plush white hoof-shaped slippers.",
+  "performance_style": "Earnest and open: feet hip-width, weight even. Both arms hang at his sides, the character-right and character-left hands open, empty, fingers visible. Head level, a sincere hopeful smile.",
+  "location": "A desert playa at sunrise: flat pale cracked alkali ground to the bottom of the frame, a glowing art car shaped like a giant rainbow at one side, a row of faded rugs, fine dust in the air, and a soft yellow-to-blue dawn sky.",
+  "recognition_cues": [
+    "a full sky-blue plush unicorn onesie with the hood up",
+    "a big gold horn on the hood",
+    "a thick mane of yellow, orange and turquoise yarn",
+    "a neat short grey beard"
+  ],
+  "palette": [
+    "onesie sky-blue fleece #8CC4E8 / #5A8EB4 / #BCE2FA",
+    "horn gold #D4A53A / #8C6B1E / #F6D882",
+    "mane yellow yarn #F2CC34 / #B0921C / #FFE67A",
+    "mane orange yarn #E8822A / #A45816 / #FFAA5A",
+    "mane turquoise yarn #2EB0A8 / #1A7068 / #6ED8D0",
+    "hoof slippers white plush #F1EEE5 / #BDB9AE / #FFFFFF",
+    "skin #F0BCA6 / #BC8A74 / #FFDCCC",
+    "hair and beard grey #A4A29E / #6C6A66 / #D2D0CC",
+    "eye blue #4A7EC0",
+    "eye white #EFE6D8",
+    "lip #C07A6E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a pink or purple onesie or mane",
+    "the hood down"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-04"
+    },
+    "sing": {
+      "intent": "Synth-pop vocal loop: bounce on the knees, bring the mic in the character-right hand to the mouth, point the character-left finger up at the sky on the chorus, then return to the open stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sudden horn blast: he jumps, both hands clutching the onesie zip, then settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: skip in on the hoof slippers, straighten the horn with both hands, then settle into the open stance.",
+    "victory": "One-shot finish: both open arms thrown high in a wide V, head tipped back in a joyful open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: the hope drains away — the shoulders sag, both open hands hang limp at his sides, and his head hangs low, the horn tipping forward. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

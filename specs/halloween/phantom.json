@@ -1,0 +1,53 @@
+{
+  "id": "phantom",
+  "name": "Phantom",
+  "height": "6' 2\"",
+  "description": "A grandiose male opera phantom in his forties who sings seventies rock opera, a brooding romantic showman who plays every note to the back of the balcony.",
+  "build": "Tall and broad-shouldered with a straight proud posture, a lean torso and long legs of ordinary human proportion.",
+  "face": "Pale warm skin, a solid opaque white porcelain half-mask covering the character-right side of the face from the brow to the cheekbone with a single eye hole, the uncovered side showing a strong jaw, a dark grey-blue eye under a heavy black brow, and a firm mouth.",
+  "hair": "Thick black hair slicked back from the brow in smooth glossy waves, ending at the collar.",
+  "outfit": "A black white-tie tailcoat, cut away at the waist, tails to the backs of the knees; a white wing-collar shirt and white waistcoat; a white bow tie; black straight-leg trousers; polished black shoes. A black opera cape with a deep crimson lining hangs from the shoulders, its hem at mid-calf, fastened at the throat. The sleeves end at the wrists and both hands wear white gloves with all fingers visible. His head is bare.",
+  "performance_style": "Grand and upright: feet apart, weight on the character-left foot, chest out. The character-left arm raised to the side at shoulder height, gloved hand open and empty; the character-right gloved hand open and empty at his side. Head raised, a brooding intense look.",
+  "location": "An opulent opera house stage: red velvet curtains swagged at the sides, gilded boxes rising behind, a glittering unlit crystal chandelier overhead, candelabras at the footlights, and polished dark wooden boards running to the bottom of the frame.",
+  "recognition_cues": [
+    "a white porcelain half-mask over the character-right side of the face",
+    "a black opera cape with deep crimson lining",
+    "a black white-tie tailcoat with white waistcoat and bow tie",
+    "slicked-back black hair",
+    "white gloves"
+  ],
+  "palette": [
+    "half-mask white porcelain #F1EEE8 / #BDB8AE / #FFFFFF",
+    "tailcoat and trousers black #1C1B20 / #0D0C10 / #3A3842",
+    "cape black #232128 / #111014 / #454250",
+    "cape lining crimson #9E1426 / #5E0B16 / #CC3446",
+    "shirt waistcoat and bow tie white #E9E6DF / #B0ACA2 / #FFFFFF",
+    "gloves white #E2DFD7 / #A9A59C / #F8F6F0",
+    "shoes black #151417 / #08080A / #37353C",
+    "skin #E0C1A8 / #A8866C / #F2DCC8",
+    "hair black #151318 / #07060A / #3A3640",
+    "eye grey-blue #3E5266",
+    "lip #9A6660",
+    "teeth #F2EDE2"
+  ],
+  "avoid": [
+    "a full-face mask",
+    "a hat or headwear",
+    "a disfigured or gory face",
+    "the mask on the other side"
+  ],
+  "animations": {
+    "dance": "Grand rock-opera sway loop, danced in the cape: feet planted wide, the body rocking through big slow swells, the character-left arm sweeping up high and down in a wide arc, the character-right hand pressed open to the chest, the cape swinging with each swell. Returns to the grand stance.",
+    "sing": {
+      "intent": "Rock-opera vocal loop: hold the mic in the character-right hand at the mouth, fling the character-left arm up and out on a soaring high note, head raised, then bring it to the chest on the fall and return to the grand stance. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the head snaps toward the sound, the character-left hand flies to the mask, then he recovers proudly. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: sweep the cape across the body with the character-left arm, crimson lining showing, and hold behind it. Not combat.",
+    "entrance": "One-shot entrance: stride in with the cape billowing, stop square to the front and fling the character-left arm out wide, then hold the grand stance.",
+    "victory": "One-shot celebration: swirl the cape open with both arms raised high, gloved hands open, head back, a triumphant open-mouthed roar, and hold.",
+    "ko": "Non-contact performance defeat: he stays on his feet as the grandeur collapses — the cape hangs limp, the shoulders fall, the character-left hand drops, and his head bows low. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

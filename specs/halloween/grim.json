@@ -1,0 +1,45 @@
+{
+  "id": "grim",
+  "name": "Grim",
+  "height": "6' 4\"",
+  "description": "The Grim Reaper, a tall ageless skeleton man with a deep tender voice, who turns out to be a quiet-storm slow-jam soul singer; gentle, romantic and a little shy, never menacing.",
+  "build": "Tall and slender, the proportions of a lean adult man, upright with level shoulders. Under the robe he is a skeleton: the head is a bare skull and the hands are bone, long-fingered and clearly jointed.",
+  "face": "A smooth ivory skull with rounded cheekbones, two large round dark eye sockets each holding a small warm gold glowing point, a short triangular nasal opening, and a hinged lower jaw with a full row of large square ivory teeth.",
+  "hair": "No hair: the ivory skull sits inside the deep hood.",
+  "outfit": "A heavy opaque black hooded robe falling straight to the ankles, the deep hood drawn up and framing the whole skull with the face fully in view, wide sleeves ending at the wrists so both bony hands are completely bare; a wide deep-wine-red satin sash tied at the waist; bony ivory feet showing below the hem.",
+  "performance_style": "Still and gentle: feet together under the robe hem, weight even. Both arms hang loosely at his sides, the character-right and character-left bony hands open and empty, every finger bone visible beside the thighs. Head tipped slightly, jaw closed.",
+  "location": "A moonlit old churchyard at midnight: a stone path running to the bottom of the frame, soft mist low among leaning mossy headstones, a gnarled bare tree at one side, a wrought-iron gate behind, and a big pale full moon in a deep blue sky.",
+  "recognition_cues": [
+    "a smooth ivory skull with warm gold points in the eye sockets",
+    "a deep black hood framing the skull",
+    "long jointed ivory bone hands",
+    "a wide wine-red satin sash on the black robe"
+  ],
+  "palette": [
+    "robe and hood black #1E1C22 / #0C0B0E / #3E3B46",
+    "sash wine-red satin #7A1E32 / #48101D / #B04058",
+    "skull, hands and feet bone ivory #E4DCC6 / #A89E86 / #FAF5E6",
+    "teeth ivory #EEE6D0",
+    "eye sockets #120F12",
+    "eye glow gold #F2C04A"
+  ],
+  "avoid": [
+    "a scythe or hourglass",
+    "a face hidden in shadow",
+    "a trailing, pooling robe"
+  ],
+  "animations": {
+    "dance": "Prose dance, since the long robe cannot follow a traced performer: a slow quiet-storm sway. Step the weight side to side in a gentle two-step, rolling the shoulders, the character-right bony hand rising open to the chest on each step while the character-left hand drifts outward low, the skull tilting with the groove. Return to the still opening stance.",
+    "sing": {
+      "intent": "Slow-jam vocal loop: close the eye sockets' glow half-dim, bring the mic in the character-right bony hand to the jaw for a long tender phrase, press the character-left bony hand flat to the chest, sway gently, then lower the mic and return to stillness. The jaw drops open and closes in visible shapes. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders jump, the jaw drops, both bony hands rise open to the chest, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: draw the character-left sleeve across the chest with the bony hand open, the character-right hand low at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: glide in with slow even steps, turn square to the front and settle with both bony hands open at the sides.",
+    "victory": "One-shot celebration: spread both bony arms wide at shoulder height, tip the skull back, jaw open in a joyful laugh, and hold.",
+    "ko": "Non-contact defeat: the shoulders sag, the hood falls forward, both bony hands hang limp and the eye glows dim. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

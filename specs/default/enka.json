@@ -1,0 +1,49 @@
+{
+  "id": "enka",
+  "name": "Enka",
+  "height": "5' 1\"",
+  "description": "A Japanese woman in her mid sixties, an enka singer of total poise with a slow trembling vibrato.",
+  "build": "A petite, slender adult build of ordinary proportions: narrow sloping shoulders, a straight upright torso, arms of ordinary length, standing very upright with the knees together.",
+  "face": "Fair warm skin, dark brown eyes under fine arched brows, a small straight nose, soft rounded cheeks, gentle lines at the eyes, and small lips painted soft coral.",
+  "hair": "Silver-grey hair swept up smoothly into a full rounded chignon on the back of the crown, held by one plain dark-lacquered comb.",
+  "outfit": "A formal floor-length kimono in deep indigo with large bold white camellia blooms scattered across the lower skirt and sleeves, the long sleeves hanging to the hips and ending at the wrists so both hands are fully bare; a wide gold brocade obi tied in a flat drum knot at the back; a plain white collar at the neckline; white tabi socks and flat lacquered zori sandals.",
+  "performance_style": "Serene and still: feet together, knees together, back straight. Both hands held open and empty in front of the obi, the character-left hand resting lightly on the back of the character-right, every finger visible. Head level, eyes soft, a composed closed mouth.",
+  "location": "A television music-hall stage: glossy dark-wood floor running to the bottom of the frame, a painted backdrop of a misty harbour at night with a full moon, and a single soft white spotlight.",
+  "recognition_cues": [
+    "a deep-indigo kimono with big white camellia blooms",
+    "a wide gold obi",
+    "silver-grey hair in a full chignon"
+  ],
+  "palette": [
+    "kimono indigo silk #1E2A5C / #111836 / #3A4A8A",
+    "camellia blooms and collar white #F1EFEA / #C4C1B9",
+    "obi gold brocade #C9A036 / #84681F / #EDD27A",
+    "tabi white #EDEBE6",
+    "zori and comb lacquer black #1C1A1C / #0D0C0D",
+    "skin #E7C2A2 / #B08A6C / #F7DDC4",
+    "hair silver-grey #B4B2AE / #7C7A76 / #D8D6D2",
+    "eye white #F1ECE4",
+    "eye brown #2E211A",
+    "lip coral #C06A5C",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a fan or parasol",
+    "a young face",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Prose enka sway, looping: from the still stance she shifts her weight in small steps inside the kimono, turns the character-left open hand slowly outward at waist height and draws it back to the obi, lifts the chin, then dips gently at the knees with a small bow of the head and returns to the still stance.",
+    "sing": {
+      "intent": "Enka vocal loop: the mic in the character-right hand held just below the lips, the character-left open hand trembling softly at chest height with the vibrato, the eyes closing on the long held note, then settle back. Her poise never breaks. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a room sound: the eyes widen and the character-left open hand rises to the collar, then she composes herself. No opponent or contact.",
+    "guard": "One-shot stage self-protection: draw the long sleeves in and fold both open hands before the chest, then hold a calm dignified finish. Not combat.",
+    "entrance": "One-shot entrance: glide in with small even steps, stop square to the front, give a slow bow and settle into the still stance.",
+    "victory": "One-shot finish: a deep gracious bow, then rise and open both hands low and wide, palms up, with a gentle open smile, then hold.",
+    "ko": "Non-contact performance defeat: the composure dims, the shoulders sink a little, both open hands fall to her sides and the head bows. She holds a standing, sorrowful finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

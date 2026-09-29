@@ -1,0 +1,52 @@
+{
+  "id": "nana",
+  "name": "Nana",
+  "height": "5' 1\"",
+  "description": "A tiny, surprisingly spry grandmother in her mid eighties who shows everyone the family photo album and sings Motown with real soul.",
+  "build": "A small, slight elderly woman's frame: narrow rounded shoulders, a soft round middle, thin arms and short legs, standing upright and lively.",
+  "face": "Deep brown skin with soft wrinkles around the eyes and mouth, warm dark eyes under thin white brows, a broad nose, full lips, big round gold-rimmed glasses with thick frames.",
+  "hair": "Short snow-white hair in tight soft curls, set in a rounded shape close to the head.",
+  "outfit": "A loose knee-length housedress in bold sky blue with big bright yellow and orange flower blooms, short sleeves, a wide white collar; a string of large white beads at the neck; sturdy white orthopedic shoes; tan knee-high stockings.",
+  "performance_style": "Lively and upright: feet hip-width apart, a little bounce in the knees. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head up, warm eyes, a proud closed-mouth smile.",
+  "location": "A shady backyard patio in the afternoon: a padded lawn chair under a striped umbrella, a side table with a pitcher of iced tea, a lawn running to the bottom of the frame, a kiddie pool with inflatable toys, a fence and string lights.",
+  "recognition_cues": [
+    "a sky-blue housedress with big yellow and orange flowers",
+    "big round gold-rimmed glasses",
+    "short snow-white curls",
+    "a string of large white beads"
+  ],
+  "palette": [
+    "housedress sky blue #5AA7DE / #3670A0 / #8CC8F0",
+    "flowers yellow #F4D13A / #B5961E",
+    "flowers orange #EE7A2A / #A84F12",
+    "collar and beads white #F2F0EA / #C1BDB3",
+    "orthopedic shoes white #EDEBE4 / #B9B5AA",
+    "stockings tan #C79A72 / #946E4E",
+    "glasses gold #C9A13B / #7F6120",
+    "skin #6A4330 / #432818 / #8E634A",
+    "hair white #F0EEEA / #C4C0B8",
+    "eye brown #2A1A12",
+    "lip #5A3228",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a cane or walker: she is spry",
+    "a photo album in the key art: her hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-01"
+    },
+    "sing": {
+      "intent": "Motown vocal loop: step-touch side to side with a snap, bring the mic in the character-right hand to the mouth, raise the character-left open palm high on the big note, then return to the lively stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: shuffle in quickly with a spring in the step, stop square to the front and settle into the lively stance.",
+    "victory": "One-shot win: a spry little hop with both hands thrown up and wide, head back in a joyful open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat. She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at her sides and the head hangs low. She remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

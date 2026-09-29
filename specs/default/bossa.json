@@ -1,0 +1,50 @@
+{
+  "id": "bossa",
+  "name": "Bossa",
+  "height": "5' 6\"",
+  "description": "A woman in her mid forties, a Brazilian bossa nova singer who sings barely above a whisper, warm and unhurried.",
+  "build": "A slender, softly curved adult build of ordinary proportions: relaxed sloping shoulders, a natural waist, arms and legs of ordinary length, standing upright with easy straight knees.",
+  "face": "Golden-tan skin, dark brown almond eyes under softly arched dark brows, a straight nose, high cheekbones, full lips, faint laugh lines at the eyes, and large round gold hoop earrings.",
+  "hair": "Thick wavy dark-brown hair to the shoulders, parted at the centre and tucked behind both ears, falling behind the shoulders clear of the arms.",
+  "outfit": "A sleeveless off-the-shoulder linen top in warm ivory with a wide straight neckline across both bare shoulders, loosely tucked in; high-waisted wide-leg linen trousers in deep terracotta ending at the ankle; a slim tan leather belt; flat tan leather sandals with wide straps. Both arms and hands are bare. Her head is bare.",
+  "performance_style": "Soft and still: feet close together, weight on the character-left leg with the character-right knee eased. Both arms hang loosely, the character-right and character-left hands open and empty beside the hips, fingers visible. Head tilted slightly, eyes half-lidded, a faint calm smile.",
+  "location": "A small open-air terrace in Rio at dusk: pale stone floor tiles running to the bottom of the frame, a low white wall with potted palms, a wooden bar stool with no one on it, and a lilac-orange evening sky over a dark hill.",
+  "recognition_cues": [
+    "an ivory off-the-shoulder linen top",
+    "wide-leg terracotta linen trousers",
+    "shoulder-length wavy dark hair and big gold hoops"
+  ],
+  "palette": [
+    "top ivory linen #EDE3CE / #BFB299 / #FBF5E6",
+    "trousers terracotta linen #B4552F / #73331B / #D97D55",
+    "belt and sandals tan leather #9C6A3E / #5F3F22 / #C69364",
+    "earrings gold #D1A43A / #86681F / #F2D683",
+    "skin #C08A5E / #7E5638 / #DDAC80",
+    "hair dark brown #33211A / #18100C / #58402F",
+    "eye white #F1E8DA",
+    "eye brown #30201A",
+    "lip #8C4F42",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a wide open-mouthed belt",
+    "a hat or flower in the hair",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
+    "sing": {
+      "intent": "Hushed bossa vocal loop: the mic in the character-right hand held close under the lips, the character-left hand drawing a slow small wave at waist height, the hips swaying gently side to side, eyes half-closed, then settle back to the soft stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a room sound: the eyes widen, the shoulders rise a little and the character-left hand touches the collarbone, then she softens back into the relaxed stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: draw the feet together and fold both forearms loosely across the waist, hands open, then hold a calm poised finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in with a slow swaying step, stop square to the front and settle into the soft stance, both hands open at her hips.",
+    "victory": "One-shot finish: place the character-right open hand on the heart, open the character-left hand out low to the side, tip the head and give a warm closed-mouth smile, then hold.",
+    "ko": "Non-contact performance defeat: the sway stops, the shoulders sag, both open hands hang still and the head bows with the eyes closed. She holds a standing, quietly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "scoops",
+  "name": "Scoops",
+  "height": "5' 7\"",
+  "description": "A man in his mid sixties, a cheerful Italian-American ice-cream-cart vendor who sings doo-wop, warm and theatrical.",
+  "build": "A short, round, sturdy build: a big round belly, broad soft shoulders, thick arms and short legs, standing upright on straight knees.",
+  "face": "Olive skin with ruddy cheeks, warm brown eyes under thick grey brows, a big rounded nose, a thick white handlebar moustache and full lips.",
+  "hair": "Short white hair at the sides below the hat.",
+  "outfit": "A tall white folded paper soda-jerk hat; a short-sleeved white shirt; a long apron from chest to knee in wide bold vertical stripes of pink and white; a mint-green bow tie; brown trousers; brown shoes.",
+  "performance_style": "Warm and upright: feet planted hip-width, belly forward. The character-right and character-left hands open and empty, spread at waist height palms up in welcome, fingers visible. Head level, a cheery open look.",
+  "location": "A sunny boardwalk of weathered planks running to the bottom of the frame, a white ice-cream cart with a striped umbrella behind at one side, the railing and a bright beach and sea beyond.",
+  "recognition_cues": [
+    "a tall white paper hat",
+    "a pink-and-white wide-striped apron",
+    "a thick white handlebar moustache"
+  ],
+  "palette": [
+    "paper hat and shirt white #F4F1EA / #C2BDB1 / #FFFFFF",
+    "apron stripe pink #EE7FA6 / #B24E73 / #FFB3CC",
+    "bow tie mint green #8FD9B6 / #5A9C7D / #C0F2DA",
+    "trousers brown #5C4430 / #372819 / #836449",
+    "shoes brown #3A2618 / #1E130B / #5E4230",
+    "skin #C49070 / #8A5E44 / #E0B294",
+    "cheeks ruddy #D07A66",
+    "hair and moustache white #E8E6E0 / #B5B2AA / #FFFFFF",
+    "eye brown #3A2416",
+    "lip #A05848",
+    "teeth #F2EADB",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "an ice-cream scoop or cone in hand",
+    "thin pinstripes on the apron"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-02"
+    },
+    "sing": {
+      "intent": "Doo-wop vocal loop: the mic in the character-right hand at the mouth, the character-left hand sweeps open to the side on the high note, a gentle sway, then back to the welcoming stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A car horn from the road: he jumps, hands to the chest, then chuckles and settles. No opponent or contact.",
+    "guard": "One-shot: turns a shoulder forward and raises both open palms at chest height; hold. Not combat.",
+    "entrance": "One-shot: strolls in with a jaunty waddle, tips the paper hat, spreads both hands in welcome.",
+    "victory": "One-shot: kisses the fingertips of the character-right hand and flings it wide, then both arms wide, head back laughing, holds.",
+    "ko": "Non-contact defeat: the belly sags, both open hands hang, the moustache droops with the head bowed. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

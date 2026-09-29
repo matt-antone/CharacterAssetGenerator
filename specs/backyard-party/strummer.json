@@ -1,0 +1,53 @@
+{
+  "id": "strummer",
+  "name": "Strummer",
+  "height": "5' 10\"",
+  "description": "A man in his twenties, the cousin who always brings the acoustic guitar to the party, earnest and a bit moody, who sings nineties Britpop.",
+  "build": "A lean, slightly lanky adult man's build of ordinary proportions: narrow shoulders, a slim torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Pale skin with pink-flushed cheeks, blue eyes under heavy straight brown brows, a long straight nose, light brown stubble on the jaw, and thin lips.",
+  "hair": "Shaggy mid-brown hair in a heavy fringe to the brows and thick sides over the ears, mostly covered by a slouchy mustard-yellow knit beanie pulled low.",
+  "outfit": "A chunky oatmeal cable-knit crew-neck sweater with bold wide cables, cuffs ending at the wrists so both hands are fully bare; slim dark-indigo jeans; dark-green canvas high-top sneakers with white rubber soles. Across the back hangs a big wooden acoustic guitar on a wide brown strap over the character-right shoulder, the guitar body behind the back.",
+  "performance_style": "Slouched and easy: feet hip-width apart, weight on the character-right leg. Both arms hang loose at his sides, the character-right and character-left hands open and empty, fingers visible beside the thighs. Head tilted down a little, a moody closed-mouth look.",
+  "location": "A corner of a suburban backyard in the late afternoon: a patchy green lawn running to the bottom of the frame, an old wooden picnic bench, a kiddie pool half full at one side, a garden shed behind and a line of string lights not yet lit.",
+  "recognition_cues": [
+    "a slouchy mustard-yellow knit beanie",
+    "a chunky oatmeal cable-knit sweater",
+    "an acoustic guitar slung on his back"
+  ],
+  "palette": [
+    "beanie mustard knit #C99A22 / #82620F / #E8C052",
+    "sweater oatmeal knit #D9CBAE / #A69878 / #F0E6D0",
+    "jeans dark indigo #22304E / #121A2E / #3C4E78",
+    "sneakers dark-green canvas #2E5A3A / #1A3622 / #4C8458",
+    "soles white rubber #ECE8DE",
+    "guitar honey wood #C47E3A / #7E4E1E / #E6A560",
+    "guitar strap brown #5A3620",
+    "skin #EBC6AE / #BC937A / #F8DFCC",
+    "cheeks pink #E0948A",
+    "hair mid brown #6A4A30 / #3E2A1A / #8E6C4C",
+    "eye white #F2EADE",
+    "eye blue #4A6E9A",
+    "lips #B87A6E",
+    "teeth #F2ECE0"
+  ],
+  "avoid": [
+    "holding the guitar in playing position in the key art",
+    "hands inside the sweater cuffs"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-04"
+    },
+    "sing": {
+      "intent": "Britpop vocal loop: lean back with swagger, hold the mic in the character-right hand at the mouth, the character-left hand behind the mic hand's wrist as in a classic stance, then lean forward on the chorus and return to the slouched stance. The mouth visibly opens wide and changes shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A shriek from the kiddie pool startles him: the shoulders hunch, both open hands lift to chest height, then he slouches back. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: hunch the shoulders, raise both open hands in front of the chest, and hold a wary stance. Not combat.",
+    "entrance": "One-shot entrance: slouch in with loose steps, tug the beanie down with the character-left hand, then settle into the slouched stance.",
+    "victory": "One-shot celebration: both open arms spread wide, head tipped back in an open-mouthed shout, then hold with both feet planted.",
+    "ko": "Non-contact defeat: he sags — the shoulders roll forward, both open hands hang limp at his sides, and his head hangs low under the beanie. He holds a standing, glum finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "shells",
+  "name": "Shells",
+  "height": "5' 6\"",
+  "description": "A woman in her early thirties, a gentle, wonderstruck shell collector who sings soft Laurel Canyon folk.",
+  "build": "A slender adult build of ordinary proportions: narrow shoulders, a soft waist, and slim arms and legs, standing upright with straight knees.",
+  "face": "Light olive skin with a sun-warmed nose, large hazel eyes under soft brown brows, a small nose, round cheeks and full lips.",
+  "hair": "Long wavy chestnut-brown hair past the shoulders, parted in the middle, with a band of big white and coral shells tied across the crown.",
+  "outfit": "An open-weave cream crochet cover-up dress to the knees with large bold diamond holes, opaque with a solid sand-coloured slip dress underneath, short flutter sleeves; a long necklace of big turquoise and white shells; a woven straw bag on a strap across the body at the character-left hip; bare feet.",
+  "performance_style": "Soft and open: feet close together, weight on one hip, knees soft. The character-right hand open at chest height, palm up as if offering a shell to the light; the character-left hand resting open on the strap of the bag, fingers visible. Head tipped a little, eyes wide and lips parted.",
+  "location": "A quiet tidepool cove at golden hour: glistening sand and rock pools running to the bottom of the frame, dark rocks scattered with starfish, gentle waves behind, and a warm peach sky.",
+  "recognition_cues": [
+    "a cream crochet cover-up with big diamond holes",
+    "a band of big shells across the crown",
+    "a necklace of big turquoise shells"
+  ],
+  "palette": [
+    "cover-up cream crochet #EDE3CB / #BFB195 / #FFF8E6",
+    "slip dress sand #C9A77C / #8F734F / #E3C7A0",
+    "shells coral #E0875A / #A45733 / #F5AE87",
+    "shells white #F2EEE6",
+    "necklace turquoise #3AA8A0 / #1F6E68 / #6FD0C8",
+    "bag straw #C49A55 / #87672F / #E3C184",
+    "skin #C99A74 / #8E6647 / #E3BB98",
+    "hair chestnut #6A3E22 / #3F2412 / #93603A",
+    "eye hazel #7A6230",
+    "eye white #F2EADC",
+    "lip #A0574A"
+  ],
+  "avoid": [
+    "sheer or see-through fabric",
+    "tiny shell details"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "butterfly-01"
+    },
+    "sing": {
+      "intent": "Folk vocal loop: she brings the mic in the character-right hand up to the mouth, sways gently side to side with the eyes half closed, the character-left hand drifting open at shoulder height, then returns to the soft stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: she wanders in slowly, looking down at the sand, straightens with a wondering look and settles into the soft stance.",
+    "victory": "One-shot finish: she clasps both open hands together at the chest, rises onto her toes with a delighted open-mouthed gasp, and holds the pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out: the shoulders drop, both open hands hang limp at her sides, and her head hangs low with the chin toward the chest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

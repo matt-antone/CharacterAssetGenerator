@@ -1,0 +1,52 @@
+{
+  "id": "psi",
+  "name": "Psi",
+  "height": "5' 4\"",
+  "description": "A woman of twenty, a telepath who sings hazy dream-pop, dreamy, distracted and a little elsewhere.",
+  "build": "A slight, slim young woman's build of human proportions: narrow shoulders, thin arms and slim legs, standing upright and light on her feet with both feet on the floor.",
+  "face": "Fair skin with a cool undertone, large pale-grey eyes under light straight brows, a small nose, soft round cheeks and a small full mouth in soft coral.",
+  "hair": "Long deep-teal hair lifting weightlessly upward and outward from the head in a big soft rounded cloud of thick wavy locks, the mass floating above and around the crown, clear of the face and the hands.",
+  "outfit": "A bold glowing circlet around the brow, a wide band of bright gold with one large glowing cyan disc at the centre of the forehead; an oversized soft lilac knit sweater, the cuffs rolled back at the wrists so both hands are bare, over a pleated navy skirt to the knee; pale-grey opaque tights; chunky white-soled navy trainers.",
+  "performance_style": "Dreamy and drifting: feet together, weight on the character-left foot, the character-right knee softly bent. Both arms lowered and floating slightly out from the sides, the character-right and character-left hands open and empty, fingers loosely spread and visible. Head tilted, eyes half-lidded, a faint closed-mouth smile.",
+  "location": "A starlit observation deck, seen from the front of a dark-blue deck floor running to the bottom of the frame: a vast round window behind onto a pale teal nebula and scattered stars, and soft floating globes of cyan light.",
+  "recognition_cues": [
+    "a big cloud of deep-teal hair floating upward",
+    "a gold circlet with a large glowing cyan disc on the forehead",
+    "an oversized lilac sweater over a navy pleated skirt"
+  ],
+  "palette": [
+    "hair deep-teal #1C6A74 / #0E3E46 / #3A9AA4",
+    "circlet gold #D8AE3A / #8E6E1C / #FFE08A",
+    "circlet disc glowing cyan #5CF0F4 / #1AA6B0 / #D8FFFF",
+    "sweater lilac knit #B8A2D8 / #7E68A4 / #DCCCF0",
+    "skirt and trainers navy #242E58 / #141A36 / #3E4A80",
+    "tights pale-grey #BCC0C8 / #8A8E98",
+    "trainer soles white #F2F2F0",
+    "skin fair #F0D6C6 / #C8A898 / #FFF0E6",
+    "eyes pale-grey #A8B4BE",
+    "lips coral #D07C6C",
+    "teeth #F4F0EA"
+  ],
+  "avoid": [
+    "floating or hovering off the floor",
+    "hair covering the face or hands",
+    "sleeves pulled over the hands",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "butterfly-01"
+    },
+    "sing": {
+      "intent": "Dream-pop vocal loop: bring the mic in the character-right hand up to the mouth, drift the open character-left hand up beside the circlet with fingers spread, close the eyes on a long hazy note while the floating hair lifts higher, then lower the mic and return to the drifting stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: wander in with slow absent steps, notice the front and turn square to it, then settle into the drifting stance with both hands open.",
+    "victory": "One-shot song-finish: plant both feet, float both open hands up and out above shoulder height, tip the head back with an open-mouthed smile as the hair billows, then hold a light, dreamy pose.",
+    "ko": "She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. She holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "flex",
+  "name": "Flex",
+  "height": "6' 1\"",
+  "description": "A man in his mid thirties, a Muscle Beach bodybuilder who sings eighties hair-metal power ballads, sunny and vain.",
+  "build": "A huge bodybuilder's build: very broad shoulders, a deep chest, a narrow waist, massive arms and thick legs, standing upright on straight knees.",
+  "face": "Glossy bronze tanned skin, bright blue eyes under straight blond brows, a square jaw, a cleft chin, very white teeth and wide lips.",
+  "hair": "A big feathered blond eighties mullet, voluminous on top and flowing to the shoulders at the back.",
+  "outfit": "Short royal-blue posing trunks cut like athletic swim shorts; a wide bright yellow terry headband across the forehead; bright yellow terry wristbands; bare feet. Bare chest.",
+  "performance_style": "Proud and posed: feet apart, weight square. Both arms bent at the sides in a relaxed front flex, the character-right and character-left hands open and empty, fingers visible at shoulder height. Head up, a big bright toothy smile.",
+  "location": "An outdoor beach weight pen at noon: sand running to the bottom of the frame, a chrome pull-up bar and stacked weights behind at one side, palm trees and a bright blue sea and sky beyond.",
+  "recognition_cues": [
+    "a big feathered blond mullet",
+    "a yellow headband and yellow wristbands",
+    "royal-blue trunks on a huge build"
+  ],
+  "palette": [
+    "trunks royal blue #1F4FC4 / #12307A / #5A86F0",
+    "headband and wristbands yellow #F6D22E / #B09414 / #FFEB82",
+    "skin #B8733E / #784724 / #E0A06A",
+    "hair blond #E8C868 / #B0943C / #FFE9A8",
+    "eye blue #3C7CD0",
+    "lip #9A5A44",
+    "teeth #FFFFFF",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a dumbbell in hand",
+    "a tank top or shirt"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-04"
+    },
+    "sing": {
+      "intent": "Power-ballad vocal loop: the mic in the character-right hand at the mouth, the character-left arm flexes up high on the soaring note, head thrown back so the mullet flies, then back to the posed stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A loud clank of weights: he flinches, shoulders up, then flexes to recover. No opponent or contact.",
+    "guard": "One-shot: crosses both forearms before the chest, fists closed; hold. Not combat.",
+    "entrance": "One-shot: strides in pumping both arms, stops and hits the front flex.",
+    "victory": "One-shot: double-biceps pose, both arms high, head back roaring with mouth open, holds.",
+    "ko": "Non-contact defeat: the flex deflates, both open hands hang, the mullet falls forward with his head bowed. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

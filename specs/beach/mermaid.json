@@ -1,0 +1,47 @@
+{
+  "id": "mermaid",
+  "name": "Mermaid",
+  "height": "5' 6\"",
+  "description": "A mermaid woman in her twenties who sings ethereal pop, dreamy and otherworldly; from the hips down a long fish tail.",
+  "build": "A slender human upper body with narrow shoulders and slim arms; from the hips a long, thick, opaque teal fish tail ending in a wide fan fluke. She is propped upright on a rock, the tail curling down its front to the ground.",
+  "face": "Pale sea-green-tinted fair skin, large dark teal eyes under fine dark brows, a small nose and full lips.",
+  "hair": "Very long, thick, wavy deep-navy hair falling over the back to the waist, kept behind the shoulders.",
+  "outfit": "A solid pale-gold scalloped seashell bikini-style top with wide bands, modest coverage; a teal fish tail with large bold scales, one dominant deep teal with a pale aqua highlight, and a wide opaque aqua fluke; she sits on a large rounded grey rock. Her head is bare.",
+  "performance_style": "Seated upright on the rock, tail curled forward. The character-right hand rests open on the rock beside the hip, the character-left hand open and relaxed on the tail, fingers visible. Head level, a serene faraway look.",
+  "location": "A secluded rocky cove at twilight: wet dark sand and tide pools running to the bottom of the frame, a calm silvery-blue sea behind, and a soft lavender-and-gold sky.",
+  "recognition_cues": [
+    "a long teal fish tail with large bold scales",
+    "very long wavy deep-navy hair",
+    "a pale-gold shell top"
+  ],
+  "palette": [
+    "tail scales deep teal #0F7C7A / #07504E / #6FD2C8",
+    "fluke aqua #4FC4C0 / #2E8A86 / #9AE6E0",
+    "shell top pale gold #E4C77A / #A68C4C / #F8E4AC",
+    "rock grey #7A7C80 / #4C4E52 / #A2A4A8",
+    "skin #D6C6B4 / #9C8A78 / #EDE0D0",
+    "hair deep navy #1C2A52 / #0E1630 / #34467A",
+    "eye teal #1E6A70",
+    "lip #B06A74",
+    "teeth #F2EADB",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "legs or feet",
+    "a translucent or see-through fin"
+  ],
+  "animations": {
+    "dance": "Prose seated dance: on the rock, she sways the upper body side to side, both open hands flowing in slow waves at shoulder height, the hair swinging, the fluke flicking up and down in time, then back to the seated stance. The tail never becomes legs; she never stands.",
+    "sing": {
+      "intent": "Ethereal vocal loop, seated on the rock: the mic in the character-right hand at the mouth, the character-left hand rises slowly open to the side, the fluke lifts on the long note, then back. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A splash nearby: she shrinks back on the rock, both open hands up, then settles. Stays seated. No opponent or contact.",
+    "guard": "One-shot, seated: curls the tail up before her and raises the character-left forearm; hold. Not combat.",
+    "entrance": "One-shot: she rises from behind the rock, settles onto it and curls her tail forward into the seated stance.",
+    "victory": "One-shot, seated: flings both open hands high, head back singing out, the fluke raised high, holds.",
+    "ko": "Non-contact defeat, seated: she slumps against the rock, both open hands limp in her lap, head bowed, the fluke drooping to the sand. No ground contact beyond her seat; no impact, injury or opponent. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

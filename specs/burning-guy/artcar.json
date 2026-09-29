@@ -1,0 +1,54 @@
+{
+  "id": "artcar",
+  "name": "Admiral Scrap",
+  "height": "5' 7\"",
+  "description": "A woman in her mid forties who drives a welded fish-shaped art car across a desert festival playa and sings fuzzed-out surf-psych rock, loud, commanding and delighted.",
+  "build": "A sturdy, strong-shouldered adult woman of ordinary proportions: solid arms, a straight torso, a natural waist, legs of ordinary length, standing upright with straight knees.",
+  "face": "Sun-browned light olive skin, hazel eyes under strong dark brows, a straight nose, high cheekbones, fine sun lines at the eye corners and wide lips.",
+  "hair": "Thick wavy auburn-red hair to the shoulders, pushed back from the face by a band of round brass welding goggles worn up on the forehead.",
+  "outfit": "A hip-length double-breasted captain's coat built of riveted copper-and-brass sheet plates, a stand-up collar, two rows of six large round brass buttons, sleeves ending at the wrists so both hands are bare; a plain teal cotton vest under it; dark oxblood canvas work trousers, straight-legged; knee-high dusty black lace-up boots; a wide black leather belt with a big square brass buckle. Round brass welding goggles with dark green lenses sit up on her forehead.",
+  "performance_style": "Captain at the helm: feet shoulder-width, weight even. Both arms hang at her sides, the character-right and character-left hands open and empty, fingers visible by the thighs. Head level, a wide confident grin.",
+  "location": "Open alkali playa at dusk: flat cracked pale clay running to the bottom of the frame, a huge welded copper fish-shaped art car parked behind with a jet of orange flame rising from its mouth, far purple mountains and a deep orange sky.",
+  "recognition_cues": [
+    "a hip-length riveted copper-and-brass plate captain's coat with two rows of big brass buttons",
+    "round brass welding goggles up on the forehead",
+    "wavy shoulder-length auburn-red hair"
+  ],
+  "palette": [
+    "coat copper plate #B26A38 / #6E3E1E / #E09A62",
+    "buttons and goggle frames brass #C9A13B / #7F6120 / #F0D77A",
+    "goggle lenses green #2C4A36",
+    "vest teal cotton #1F7A78 / #11494A / #3FA8A4",
+    "trousers oxblood canvas #6B2426 / #401416 / #954044",
+    "boots and belt black leather #222024 / #111013 / #45424A",
+    "belt buckle brass #C9A13B",
+    "skin #B8875E / #7A5538 / #D9AA80",
+    "hair auburn-red #8A3A1C / #57220F / #B8603A",
+    "eye hazel #6B5A2A",
+    "eye white #EFE6D8",
+    "lip #8A4A3C",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a long flaring or knee-length coat",
+    "goggles down over the eyes",
+    "a hat or captain's cap",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-02"
+    },
+    "sing": {
+      "intent": "Surf-psych vocal loop: rock the shoulders in a driving eighth-note bob, raise the mic in the character-right hand to the mouth for a howled phrase, sweep the open character-left hand out low like steering a wheel, then lower the mic to the chest. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A startled jolt at a sudden flame roar: the shoulders jump up, both open hands rise to chest height, then she laughs it off and settles back into her helm stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: plant the boots wider and raise the character-left forearm across the brass coat front, the character-right hand open at the hip, holding a sturdy grounded finish. Not combat.",
+    "entrance": "One-shot entrance: march in with a rolling captain's stride, snap a crisp two-finger salute with the character-right hand, then drop into the feet-apart helm stance with both hands open at her sides.",
+    "victory": "One-shot song-finish celebration: pull the goggles down to her eyes with both hands, throw both fists above her head and roar with the mouth wide, then hold a triumphant wide-legged pose.",
+    "ko": "Non-contact performance defeat: the captain's command drains away — the shoulders drop inside the brass coat, both open hands hang limp at her sides, and her head hangs with the chin toward the collar. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

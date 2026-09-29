@@ -1,0 +1,54 @@
+{
+  "id": "tourist",
+  "name": "Tourist",
+  "height": "5' 10\"",
+  "description": "A sunburned man in his mid fifties, an overexcited beach tourist who sings bouncy polka-pop novelty songs.",
+  "build": "A soft, round adult build: rounded shoulders, a big round belly, thick arms and short sturdy legs of ordinary human proportion, standing upright with straight knees.",
+  "face": "Pale skin burned bright pink-red across the nose, cheeks and forehead, small blue eyes under sandy brows, a round nose, a double chin and a wide mouth; a thick white stripe of sunscreen down the nose.",
+  "hair": "Thin sandy-blond hair, balding on top, short at the sides.",
+  "outfit": "A loud short-sleeved button shirt in bright turquoise printed with big bold yellow and orange hibiscus blooms, untucked; khaki cargo shorts to the knee; white crew socks pulled to mid-calf; brown sport sandals with thick straps; a big black box camera hanging on a wide red strap at the centre of the chest.",
+  "performance_style": "Eager and bouncy: feet apart with toes turned out, weight rocking on the heels. The character-right hand open, waving at shoulder height; the character-left hand open on the camera at the chest, fingers visible around its side. Head up, eyebrows raised, a wide open grin.",
+  "location": "A busy boardwalk on a hot noon: sun-bleached planks running to the bottom of the frame, a souvenir stand hung with bright beach towels and inflatable rings, a striped umbrella, and a blazing blue sky over the sea.",
+  "recognition_cues": [
+    "a turquoise shirt with big yellow and orange hibiscus blooms",
+    "white socks with brown sandals",
+    "a big black camera on a red strap",
+    "a sunburned face with a white stripe of sunscreen"
+  ],
+  "palette": [
+    "shirt turquoise #1FA3A8 / #126669 / #52CCD0",
+    "hibiscus yellow #F2C63A / #B38A1C / #FFE27A",
+    "hibiscus orange #E8742A / #A64B15 / #F79A5A",
+    "shorts khaki #B59C6E / #7D6A45 / #D6C096",
+    "socks white #F2F0EA / #C2BFB5",
+    "sandals brown #5E3A22 / #3A2213 / #86573A",
+    "camera black #222224 / #0E0E10 / #45454A",
+    "camera strap red #B8242A / #751418",
+    "skin sunburn #E08A74 / #A85A48 / #F2AE9A",
+    "sunscreen white #FAFAF6",
+    "hair sandy #C2A36A / #8A7042 / #DEC593",
+    "eye blue #4A7AB0",
+    "eye white #F3ECE0",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "small or tight floral print",
+    "the camera held up to the face"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-02"
+    },
+    "sing": {
+      "intent": "Polka-pop vocal loop: the mic in the character-right hand comes up to the mouth, he bounces on his heels with the character-left hand pumping open at shoulder height on the beat, then returns to the bouncy stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: he waddles in fanning his face with the character-right hand, spots the crowd, and lands in the bouncy stance.",
+    "victory": "One-shot finish: he lifts the camera with both hands to snap a photo of the crowd, then lowers it and throws both open hands wide with a huge open-mouthed grin, holding the pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the energy drains out: the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

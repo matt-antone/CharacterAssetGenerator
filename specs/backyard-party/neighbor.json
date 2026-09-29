@@ -1,0 +1,50 @@
+{
+  "id": "neighbor",
+  "name": "Neighbor",
+  "height": "5' 2\"",
+  "description": "A nosy, theatrical woman in her mid seventies from next door who sings Weimar cabaret, all raised eyebrows and gossip.",
+  "build": "A small, thin older woman's frame: narrow sloping shoulders, a slight bust, thin arms and legs, standing upright with a slightly forward neck.",
+  "face": "Pale pinkish-beige skin with soft wrinkles at the eyes and mouth, sharp grey eyes under thin pencilled dark brows, a pointed nose, thin lips in bright red lipstick, big round black cat-eye glasses with thick frames.",
+  "hair": "Short grey hair set in rows of large bright blue plastic curlers covering the whole head.",
+  "outfit": "A knee-length quilted housecoat in bold mint green with big white polka dots, buttoned down the front, short sleeves ending above the elbow; a light blue scarf knotted at the throat; fluffy yellow slippers.",
+  "performance_style": "Suspicious and theatrical: feet together, weight forward. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head craned forward, one brow raised, lips pursed.",
+  "location": "A backyard seen over the neighbour's side: a tall weathered plank fence across the back, the next yard's grill smoke and string lights peeking over it, a patch of lawn and a flowerbed running to the bottom of the frame, and a garden gnome by the fence.",
+  "recognition_cues": [
+    "rows of large bright blue curlers",
+    "big thick black cat-eye glasses",
+    "a mint-green housecoat with big white polka dots",
+    "fluffy yellow slippers"
+  ],
+  "palette": [
+    "housecoat mint green #7FCBA4 / #4E8F6E / #AEE6C8",
+    "polka dots white #F4F2EC / #C4C0B5",
+    "curlers blue #3A8FE0 / #22599A / #7AB9F2",
+    "scarf light blue #9CC3E6 / #6A90B3",
+    "slippers yellow #F2D24A / #B69A22",
+    "glasses frames black #1A1A1C",
+    "skin #E6BFA8 / #B38E78 / #F6DAC6",
+    "hair grey #A8A6A2 / #76746F",
+    "eye grey #6F7A82",
+    "lipstick red #C2262E"
+  ],
+  "avoid": [
+    "pink or purple curlers",
+    "a phone or binoculars in the hands: her hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-01"
+    },
+    "sing": {
+      "intent": "Cabaret vocal loop: lean forward conspiratorially, bring the mic in the character-right hand to the red lips, raise the character-left hand beside the cheek as if sharing a secret, then straighten with a dramatic flourish and return to the stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: creep in on tiptoe in the slippers, peering side to side, then straighten square to the front into the stance.",
+    "victory": "One-shot win: fling both open hands up and out in a grand cabaret finish, chin high, mouth open in a triumphant note, then hold.",
+    "ko": "Non-contact performance defeat. She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at her sides and the head hangs low. She remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

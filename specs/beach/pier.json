@@ -1,0 +1,53 @@
+{
+  "id": "pier",
+  "name": "Pier",
+  "height": "5' 8\"",
+  "description": "A man in his mid sixties, a weathered pier busker who plays for tips and sings steel-guitar Hawaiian swing.",
+  "build": "A thin, slightly stooped adult build: narrow shoulders, a lean torso, wiry arms and long thin legs of ordinary proportion, standing upright with straight knees.",
+  "face": "Leathery sun-darkened tan skin, pale blue eyes under shaggy white brows, a long nose, hollow cheeks and a short white stubble beard.",
+  "hair": "Wispy white hair to the collar showing below the hat.",
+  "outfit": "A battered wide-brimmed straw fedora with a faded navy band; a faded short-sleeved aloha shirt in deep navy with big bold white plumeria blooms, open over a white tank undershirt; black fingerless knit gloves leaving every fingertip bare; rolled tan chino trousers to mid-calf; worn brown leather sandals. Both hands are otherwise bare.",
+  "performance_style": "Laid-back busker stance: feet together, weight on one hip, a slight forward stoop. Both arms relaxed, the character-right hand open at chest height as if on strings; the character-left hand open beside the thigh, fingertips visible. Head tipped, a gentle crooked smile.",
+  "location": "An old wooden fishing pier at sunset: grey weathered planks running to the bottom of the frame, a wooden railing with a hanging life ring, gulls on the posts, and a coral-orange sun sinking into the sea.",
+  "recognition_cues": [
+    "a battered wide-brimmed straw fedora",
+    "a navy aloha shirt with big white plumeria",
+    "black fingerless gloves",
+    "a white stubble beard"
+  ],
+  "palette": [
+    "fedora straw #C9A866 / #8E743E / #E6CC92",
+    "hat band navy #28324E",
+    "aloha shirt navy #1E2A52 / #101830 / #36467A",
+    "plumeria white #F4F0E6",
+    "undershirt white #ECE8DE / #BEB9AE",
+    "gloves black knit #1E1C1E / #0C0B0C / #3C383C",
+    "chinos tan #B8A07A / #7E6C50 / #D6C29E",
+    "sandals brown #5E3A22 / #3A2213",
+    "skin #A8704A / #6C4630 / #C8926A",
+    "hair and beard white #E6E4DE / #B0ADA6",
+    "eye blue #7AA0C0",
+    "eye white #EDE4D6",
+    "teeth #E8DEC8"
+  ],
+  "avoid": [
+    "a guitar or ukulele in the key art",
+    "a tip jar or hat at his feet"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-01"
+    },
+    "sing": {
+      "intent": "Hawaiian-swing vocal loop: the mic in the character-right hand at the mouth, he sways slowly on a swing beat and strums the air gently with the character-left hand at the belly, then returns to the busker stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: he shuffles in along the planks with an easy stroll, touches the hat brim with the character-left hand and settles into the busker stance.",
+    "victory": "One-shot finish: he sweeps the fedora off with the character-left hand in a slow gracious bow, straightens holding it to the chest with a warm open-mouthed laugh, and holds.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the energy drains out: the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "citronella",
+  "name": "Citronella",
+  "height": "5' 7\"",
+  "description": "A woman in her forties, a veteran camper covered in mosquito bites and far too much bug spray, twitchy and scrappy, who sings garage rock.",
+  "build": "A lean, wiry adult woman's build of ordinary proportions: narrow shoulders, a flat torso, long-ish arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Fair freckled skin with several big bold red bite welts on the cheeks and forehead, green eyes under thin light-brown brows, a narrow straight nose, and thin lips.",
+  "hair": "Straight dishwater-blonde hair to the shoulders, mostly hidden under a wide khaki canvas bucket hat pulled low.",
+  "outfit": "A khaki canvas bucket hat; a long-sleeved sage-green fishing shirt with two big chest pockets, sleeves rolled to the forearm; cargo shorts in olive with big side pockets; wool hiking socks in grey folded at the ankle; chunky brown hiking boots. Bold red bite welts on the bare forearms and shins. Both hands bare.",
+  "performance_style": "Twitchy and alert: feet hip-width apart, knees loose, weight shifting. The character-right hand scratching the outer character-right thigh with fingers visible, the character-left hand open and empty at her side. Head cocked to one side, a wary squint.",
+  "location": "The edge of a suburban backyard at dusk: lawn running to the bottom of the frame, three tall bamboo tiki torches and a yellow citronella candle bucket burning, a camping tent pitched by the fence, string lights and a lawn chair behind.",
+  "recognition_cues": [
+    "a wide khaki canvas bucket hat pulled low",
+    "big bold red bite welts on face, forearms and shins",
+    "a sage-green fishing shirt with big chest pockets"
+  ],
+  "palette": [
+    "bucket hat khaki canvas #B5A274 / #786A48 / #D6C69A",
+    "shirt sage green #8AA07A / #5A6C4E / #AEC49E",
+    "cargo shorts olive #5E6230 / #3A3C1C / #84884E",
+    "socks grey wool #8E8C88 / #5E5C58 / #B4B2AE",
+    "boots brown leather #6A4424 / #3E2614 / #926644",
+    "skin #F0CDB4 / #C29E86 / #FCE4D2",
+    "bite welts red #D84A40",
+    "hair dishwater blonde #B89E6E / #7E6A44 / #D8C294",
+    "eye white #F2EADC",
+    "eye green #4E7A4A",
+    "lips #C08074",
+    "teeth #F2ECE0"
+  ],
+  "avoid": [
+    "a spray can in the key art",
+    "a green mist of bug spray"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-03"
+    },
+    "sing": {
+      "intent": "Garage-rock vocal loop: hunch and stomp, hold the mic in the character-right hand at the mouth, slap the character-left open hand at a bite on the neck, then shake out and return to the alert stance. The mouth visibly opens wide and changes shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A mosquito whine by the ear: she jerks the head aside and swats the air with the character-left open hand, then settles back. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: pull the bucket hat brim down with both hands and hunch, holding a wary stance. Not combat.",
+    "entrance": "One-shot entrance: stomp in swatting the air with both open hands, then settle into the alert stance.",
+    "victory": "One-shot celebration: both open hands thrown up high, head back in an open-mouthed yell, then hold with both feet planted.",
+    "ko": "Non-contact defeat: the itch wins — shoulders slump, both open hands hang limp, head drops under the hat brim. She holds a standing, beaten finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

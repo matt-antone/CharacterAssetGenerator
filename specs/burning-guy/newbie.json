@@ -1,0 +1,55 @@
+{
+  "id": "newbie",
+  "name": "Newbie Nate",
+  "height": "5' 9\"",
+  "description": "A man in his late twenties, a software worker at his first desert arts festival in brand-new gear, wide-eyed and overwhelmed, who sings breathy indie electropop.",
+  "build": "A slim, slightly soft adult man of ordinary proportions: narrow shoulders, a straight torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Pale peach skin, dark brown eyes under straight dark brows, a straight nose, smooth cheeks with a pink sunburn across the nose, thin lips.",
+  "hair": "Short neat dark brown hair in a tidy side part, still clean and combed.",
+  "outfit": "A clean hip-length fluffy faux-fur coat in bright aqua blue, open at the front, sleeves ending at the wrists so both hands are bare; a plain crisp white cotton T-shirt; slim khaki chino trousers, straight-legged; clean white canvas sneakers; shiny new chrome-rimmed goggles with orange lenses pulled down around the neck on a bright aqua strap.",
+  "performance_style": "Stiff and nervous: feet close together, weight back on the heels. Both arms held a little out from the body, the character-right and character-left hands open and empty, fingers splayed. Head level, eyes wide, a hesitant smile.",
+  "location": "Night on the open playa: flat dark clay running to the bottom of the frame, a busy blur of glowing art cars and bikes crossing behind, strings of coloured lights, a tall glowing sculpture far off and a black starry sky.",
+  "recognition_cues": [
+    "a clean fluffy bright aqua-blue faux-fur coat",
+    "shiny chrome goggles with orange lenses around the neck",
+    "a crisp white T-shirt and clean white sneakers",
+    "a tidy side-parted haircut"
+  ],
+  "palette": [
+    "fur coat and goggle strap aqua blue #2AA8D8 / #16709A / #7AD4F4",
+    "T-shirt white cotton #F2F0EA / #C0BCB2 / #FFFFFF",
+    "chinos khaki #B8A478 / #7E6E4C / #DCCCA2",
+    "sneakers white canvas #E8E6DE / #B4B0A6 / #FAFAF6",
+    "goggle frames chrome #B8BEC6 / #7A8088 / #EEF2F6",
+    "goggle lenses orange #E8801E",
+    "skin #F0C8B0 / #C09078 / #FFE0CC",
+    "sunburn pink #E8908A",
+    "hair dark brown #3A2618 / #1E130C / #5E4230",
+    "eye brown #3A2618",
+    "eye white #EFE6D8",
+    "lip #C08070",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a laptop, phone or lanyard",
+    "a dirty or matted coat",
+    "a long floor-length coat",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-01"
+    },
+    "sing": {
+      "intent": "Indie electropop vocal loop: bob the head stiffly on the beat, hold the mic in the character-right hand close to the mouth for a soft breathy phrase, the open character-left hand fluttering nervously at chest height, then loosen up with a small shoulder shimmy. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A big startle at a passing flame jet: he jumps, both open hands shoot up beside the head, eyes wide, then he recovers into the stiff nervous stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: hunch the shoulders and raise both open hands in front of the face, palms out, holding a timid finish. Not combat.",
+    "entrance": "One-shot entrance: shuffle in hesitantly, looking all around, tug the fur coat closed with both hands, then let go into the stiff stance with both hands open.",
+    "victory": "One-shot song-finish celebration: throw both open hands overhead in surprised delight, mouth wide open in a whoop, and hold a loose wide-armed pose, finally relaxed.",
+    "ko": "Non-contact performance defeat: the overwhelm wins — the shoulders sag inside the fur coat, both open hands hang limp at his sides, and his head hangs with the chin toward the T-shirt. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

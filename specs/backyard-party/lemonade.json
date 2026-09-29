@@ -1,0 +1,49 @@
+{
+  "id": "lemonade",
+  "name": "Lemonade",
+  "height": "5' 5\"",
+  "description": "A sharp, fast-talking twenty-two-year-old woman who runs a gourmet lemonade stand like a startup and sings synth-pop.",
+  "build": "A slim, energetic young woman's build: narrow shoulders, a light frame, legs of ordinary length, standing upright.",
+  "face": "Warm brown skin, big dark brown eyes under arched brows, a small rounded nose, full lips, large bold round gold hoop earrings.",
+  "hair": "Big dark curly hair gathered in two large round puffs high on each side of the head.",
+  "outfit": "A bright yellow-and-white gingham sundress with large bold checks, knee length, straight skirt; a wide green canvas money belt at the waist with two big zipped pouches; white canvas sneakers.",
+  "performance_style": "Salesy and poised: feet hip-width apart, weight on one hip. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head tilted slightly, a confident closed-mouth smile.",
+  "location": "A front-lawn-meets-backyard lemonade stand in bright afternoon sun: a hand-built plywood stand painted yellow with a striped awning, a pitcher and paper cups on its counter, a lawn running to the bottom of the frame, a picket fence and string lights behind.",
+  "recognition_cues": [
+    "a yellow-and-white large-check gingham sundress",
+    "two big round hair puffs",
+    "a wide green money belt",
+    "big gold hoop earrings"
+  ],
+  "palette": [
+    "dress yellow gingham #F4D13A / #B8981C / #FFE784",
+    "dress white gingham #F5F3EC / #C4C0B5",
+    "money belt green canvas #3E8A4A / #25582D / #62B06E",
+    "sneakers white canvas #EDEBE4 / #B9B5AA",
+    "earrings gold #D4A52E / #8E6C18 / #F3D57A",
+    "skin #8A5A3C / #5A3822 / #AE7A58",
+    "hair black-brown #221712 / #100A07 / #43302A",
+    "eye brown #2A1A12",
+    "lip #6B3A2E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a pitcher or cup in the hands: her hands are empty"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "party-01"
+    },
+    "sing": {
+      "intent": "Synth-pop vocal loop: step side to side on the beat, bring the mic in the character-right hand to the mouth, point the character-left index finger out at the crowd like closing a sale, then return to the poised stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: stride in brisk and upright, stop square to the front, one hand on the money belt, then settle into the poised stance.",
+    "victory": "One-shot win: fan the character-left hand as if counting cash, then throw it up high with a wink and an open-mouthed laugh, and hold.",
+    "ko": "Non-contact performance defeat. She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at her sides and the head hangs low. She remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

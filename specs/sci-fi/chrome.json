@@ -1,0 +1,50 @@
+{
+  "id": "chrome",
+  "name": "Chrome",
+  "height": "6' 0\"",
+  "description": "A man in his late thirties, a cyber-samurai who sings driving industrial rock, stoic, disciplined and few of words.",
+  "build": "A lean, athletic adult man's build of human proportions: squared shoulders, a flat hard torso and long straight legs, both arms replaced from the shoulder down by smooth human-shaped chrome prosthetics with five jointed fingers each; standing upright and grounded.",
+  "face": "Warm tan skin, narrow dark-brown eyes under straight heavy black brows, high cheekbones, a straight nose, a short black stubble along the jaw and a firm mouth; one bold pale scar across the character-left eyebrow.",
+  "hair": "Black hair shaved short at the sides, the top gathered into a short tight topknot at the crown.",
+  "outfit": "A black cotton haori jacket to mid-thigh, open at the front with wide square sleeves cut short at the elbow so the chrome forearms and hands are fully bare, a bold wide electric-cyan neon band running down both front edges and around each sleeve hem; under it a plain charcoal fitted tank; wide charcoal hakama trousers gathered into black shin wraps above black split-toe boots; a plain black cloth sash at the waist, empty.",
+  "performance_style": "Grounded and still: feet shoulder-width apart, weight even. Both chrome arms hang straight at his sides, the character-right and character-left metal hands open and empty beside the thighs, all fingers visible. Head level, eyes forward, a stern closed mouth.",
+  "location": "A rain-dark rooftop stage in a neon megacity, a wet black concrete floor running to the bottom of the frame, tall towers behind hung with big blank cyan and amber light panels, a low steel railing and drifting light rain.",
+  "recognition_cues": [
+    "two bright chrome prosthetic arms from the shoulder",
+    "a black haori edged in wide electric-cyan neon bands",
+    "a black topknot with shaved sides"
+  ],
+  "palette": [
+    "chrome arms polished steel #C4CCD6 / #4C5866 / #F4F8FC",
+    "haori black cotton #1C1E24 / #0C0D10 / #3A3E48",
+    "neon band electric-cyan #2EE6F0 / #0F9AA6 / #C8FCFF",
+    "tank and hakama charcoal #3C3E44 / #232428 / #5E6068",
+    "sash, shin wraps and boots black #141416 / #08080A / #34363C",
+    "skin warm tan #B07A52 / #7A4E30 / #D29C74",
+    "hair and stubble black #121214 / #060607 / #2E2E34",
+    "scar pale #D8B8A0",
+    "eyes dark-brown #2A1A10",
+    "eye white #EEE8DE"
+  ],
+  "avoid": [
+    "a sword, katana or sheath",
+    "a samurai helmet or armour plates",
+    "logos, kanji or text"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-01"
+    },
+    "sing": {
+      "intent": "Industrial-rock vocal loop: plant the feet wide, bring the mic in the chrome character-right hand to the mouth, close the chrome character-left hand into a fist at chest height and drive it down on the beat, then lower the mic and return to the still stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: walk in with slow measured steps, stop square to the front, give a short bow from the waist, then rise into the still stance with both chrome hands open at his sides.",
+    "victory": "One-shot song-finish: plant both boots, raise the chrome character-left fist straight overhead, the character-right hand low with the mic, tip the head back into an open-mouthed shout, then hold a hard still pose.",
+    "ko": "He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. He holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}
