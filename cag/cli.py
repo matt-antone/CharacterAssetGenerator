@@ -275,7 +275,12 @@ def build(
         static = build_static_graph(
             text_model(work_dir), draw_fn=draw_fn, view_draw_fn=view_draw_fn
         ).invoke(
-            {"spec": spec, "work_dir": work_dir, "detail_after_key": backend == "codex"}
+            {
+                "spec": spec,
+                "work_dir": work_dir,
+                "detail_after_key": backend == "codex",
+                "local": backend == "local",
+            }
         )
     except ApprovalRequired as gate:
         raise SystemExit(

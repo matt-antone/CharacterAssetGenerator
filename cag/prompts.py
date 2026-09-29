@@ -17,6 +17,7 @@ from .style import (
     BACKDROP,
     DEFAULT_DETAIL_LEVEL,
     DETAIL_REFERENCE,
+    DETAIL_SWATCHES_REFERENCE,
     SCENE_EMPTY,
     SCENE_SAFE_AREA,
     SCENE_STYLE,
@@ -240,6 +241,7 @@ def view_prompt(
     detail_level: int = DEFAULT_DETAIL_LEVEL,
     detail_reference: bool = False,
     props: str = "",
+    detail_swatches: bool = False,
 ) -> str:
     """Prompt for one static view of the character.
 
@@ -267,7 +269,9 @@ def view_prompt(
             f"{STYLE} {STANDING}",
             BACKDROP,
             detail_clause(detail_level),
-            DETAIL_REFERENCE.format(level=detail_level) if detail_reference else "",
+            (DETAIL_SWATCHES_REFERENCE if detail_swatches else DETAIL_REFERENCE).format(
+                level=detail_level
+            ) if detail_reference else "",
             SIDE_LANGUAGE,
             "Keep every detail of the description above exactly as written, including which of "
             "the character's own hands holds any prop. Do not mirror the figure.",

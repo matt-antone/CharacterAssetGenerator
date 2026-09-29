@@ -157,8 +157,20 @@ DETAIL_FRAMES = {
 }
 
 
-def detail_frame(level: int) -> Path | None:
-    frame = DETAIL_FRAMES.get(level)
+#: A `local` build's samples, and none of them a character. Qwen-Image-2.1
+#: copies its reference outright: with Belter's key art as the sample, every
+#: local key art came back as that Belter, mic and all, whatever its brief said
+#: (2026-09-28). So its sample is swatches of material — squares of hair,
+#: leather, denim and boot cut from that key art — which carry the density and
+#: construction and have no figure to copy. Frank drawn against it stayed Frank,
+#: in his own colours, on two seeds. A level with no sample here gets words only.
+LOCAL_DETAIL_FRAMES = {
+    10: Path(__file__).parent / "references" / "detail-level-10-tiles.png",
+}
+
+
+def detail_frame(level: int, local: bool = False) -> Path | None:
+    frame = (LOCAL_DETAIL_FRAMES if local else DETAIL_FRAMES).get(level)
     return frame if frame and frame.exists() else None
 
 #: Ships with the repo: the approved level-4 frame from the old project.
@@ -167,6 +179,14 @@ DETAIL_REFERENCE = (
     "it and only two: its rendering density and pixel-art construction, and its flat magenta "
     "backdrop with the figure alone on it. Take nothing else — not identity, face, costume, "
     "palette, pose, anatomy, scale or prop hand."
+)
+
+#: `DETAIL_REFERENCE` for a sample of swatches (`LOCAL_DETAIL_FRAMES`).
+DETAIL_SWATCHES_REFERENCE = (
+    "One reference image is a detail-level sample at detail level {level}: squares of material, "
+    "not a character. Match two things from it and only two: its rendering density and pixel-art "
+    "construction, and its flat magenta backdrop. Never draw the squares, or anything in them, "
+    "into this picture, and take none of their colours."
 )
 
 

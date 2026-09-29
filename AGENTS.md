@@ -212,6 +212,19 @@ hand, "lowered at the side, upright") squared it on both. A set reference keeps
 its own stance and gets the line without "lowered". One character, judged by
 eye; the back view's arm still came back a little raised.
 
+The local key art is not shown a character either. Its detail sample was
+Belter's approved key art, and Qwen-Image-2.1 copied it: both of Belter's local
+key arts on 2026-09-28 were that picture again, mic and missing belt included,
+after her brief had dropped the mic, and every other character would have come
+back as Belter. A `local` build's key art is shown swatches instead
+(`LOCAL_DETAIL_FRAMES`, `cag/references/detail-level-10-tiles.png`: squares of
+hair, leather, denim and boot cut from that key art) and told they are not a
+character. Belter and Frank, two seeds each, came back as their own briefs,
+Frank in his own colours; a barrel drawn in the same style gave flatter,
+smoother rendering. A level with no swatch sample gets words only. Without the
+copy, Belter's hair came back flatter than her brief asks: that is the brief's
+and the model's own, and the approval gate is where it is caught.
+
 Views are cached like any render: a source drawn before this is kept until it
 is deleted (`work/<slug>/source/{front,back,profile}.png`, and a set's
 `<set>-key-<view>.png`). A new set reference draws a new SCAIL video.

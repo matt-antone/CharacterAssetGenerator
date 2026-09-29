@@ -61,6 +61,9 @@ class StaticState(TypedDict, total=False):
     #: Whether renders after the key art get the detail sample too, or only the
     #: approved key art. Missing means true. See `DETAIL_FRAMES`.
     detail_after_key: bool
+    #: A `local` build: its key art model copies its references, so the key art
+    #: gets the swatch sample (`LOCAL_DETAIL_FRAMES`), never a character.
+    local: bool
 
 
 def source_path(work_dir: Path, view: str) -> Path:
@@ -130,7 +133,8 @@ def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
 
 def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
     spec = state["spec"]
-    detail = detail_frame(spec.detail_level)
+    local = state.get("local", False)
+    detail = detail_frame(spec.detail_level, local=local)
     path = draw_fn(
         view_prompt(
             spec,
@@ -139,6 +143,7 @@ def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticStat
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
             props=clauses(spec.props, None),
+            detail_swatches=local,
         ),
         source_path(state["work_dir"], KEY_VIEW),
         references=[detail] if detail else [],

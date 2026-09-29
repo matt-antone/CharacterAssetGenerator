@@ -373,3 +373,28 @@ def test_a_set_reference_is_turned_too_under_a_view_draw(tmp_path):
     assert prompt.startswith("<sks> front view")
     assert "Both of their hands are empty" in prompt, "the set's own hands, not the key art's"
     assert "arms hanging" not in prompt, "a set reference keeps its stance, turned"
+
+
+def test_a_local_key_art_is_shown_swatches_never_a_character(tmp_path):
+    """Qwen-Image-2.1 copies its reference: with Belter's key art as the detail
+    sample, every local key art came back as that Belter, mic and all."""
+    from cag.style import DETAIL_FRAMES, LOCAL_DETAIL_FRAMES
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    calls = []
+
+    def fake(prompt, out_path, references=(), **kwargs):
+        calls.append((prompt, list(references)))
+        return Path(out_path)
+
+    for local in (True, False):
+        static_sheet.draw_key_art(
+            {"spec": spec, "work_dir": tmp_path, "bible": BIBLE, "local": local}, fake
+        )
+    (local_prompt, local_refs), (other_prompt, other_refs) = calls
+    level = spec.detail_level
+    assert local_refs == ([LOCAL_DETAIL_FRAMES[level]] if level in LOCAL_DETAIL_FRAMES else [])
+    assert DETAIL_FRAMES.get(level) not in local_refs, "never the approved character"
+    if local_refs:
+        assert "squares of material, not a character" in local_prompt
+    assert "squares of material" not in other_prompt
+    assert other_refs == ([DETAIL_FRAMES[level]] if level in DETAIL_FRAMES else [])
