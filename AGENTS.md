@@ -2,6 +2,42 @@
 
 Instructions for agents working in this repo.
 
+## The canonical local method
+
+Approved by the user on 2026-09-29 as the standard way a character is drawn
+locally, each step on Belter and chosen by eye. Every other section keeps the
+evidence; this is the method in one place.
+
+```bash
+uv run cag build specs/<theme>/<slug>.json --draw-backend local --machine local16
+```
+
+(`CAG_LOCAL_COMFY_WORKFLOW=comfy/qwen-image-2.1-fp8.json` on the RX 9070.) The
+backend and the machine are still the user's call; this is what they called.
+
+1. **Brief:** a prop on the key art only when it is carried through most sets
+   (Iris's rules, `.claude/agents/character-creator.md`).
+2. **Key art:** Qwen-Image-2.1, shown the detail ladder's material swatches,
+   never a character (see "Local views"). Stops for the user's approval.
+3. **Turnaround:** the key art turned by Qwen-Image-Edit 2511 and fal's
+   Multiple-Angles LoRA; the front by way of the profile (`FRONT_FROM`), with
+   the brief's recognition cues. Cut to the character's height.
+4. **Dance and every traced set:** the video path. SCAIL-2 from the source
+   clip, then a Qwen-Image-Edit 2511 restyle per frame on a 1.5x canvas against
+   the approved key art, seed 1234 (see "The video path").
+5. **Cells:** drawn at the brief's detail level, level 8 by default: 1342 px
+   cells, the finish on a 161-colour palette with a 1 px inner outline, for the
+   sets and the turnaround alike (see "The detail ladder").
+6. **Copies for review** in the folder the user named; approval is `cag
+   approve` alone.
+
+About 2 minutes of key art, 2 of turnaround and 23 of dance a character on
+the RX 9070. **Sets with no footage are not part of it yet:** they still take
+the whole-set Qwen-Image-2.1 path, which copies its reference rather than
+re-posing it. Per-frame 2511 edits of the set reference moved Belter through a
+written victory plan (13 of 16 frames right, the motion jumpy) but are not
+built into `cag`.
+
 ## The photo pose path, and what its one real render showed
 
 A bundle that ships one thumbnail per frame uses those photographs as the pose
