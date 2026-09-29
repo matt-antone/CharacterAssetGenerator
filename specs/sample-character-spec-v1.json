@@ -1,36 +1,36 @@
 {
   "id": "sample-character-spec-v1",
-  "name": "Belter",
-  "height": "5' 7\"",
-  "description": "A woman in her forties who sings power ballads, with commanding performance energy.",
-  "build": "A trim, athletic, braced build: a firm torso, a defined waist, trim hips and thighs, lean and fit, with the weight carried low over slightly flexed knees.",
-  "face": "Warm tan skin, dark brown eyes under straight auburn brows, a straight nose, defined cheekbones, faint lines at the outer eye corners, and full lips in deep berry red.",
-  "hair": "A large mass of thick wavy auburn hair worn completely loose and down, every strand falling free from the scalp: a high crown, wide side volume and ends past the shoulders, the whole mass visibly wider than her shoulders.",
-  "outfit": "A structured crimson performance jacket with angular lapels, worn open over a fitted charcoal top; high-waisted blue mom jeans with a crimson sash at the waist; chunky ankle boots in near-black dark brown leather, laced with thick warm mid-brown laces. No hat or headwear.",
-  "performance_style": "Planted: feet shoulder-width apart, knees soft, torso braced over a low centre. Both hands open and empty, the character-right hand at the collarbone and the character-left hand at hip height, clear of the jacket. Chin level, a confident closed-mouth smile.",
-  "location": "A mid-size rock club, seen from the front of a low black stage: a scuffed matte-black deck running to the bottom of the frame, a bare red-brick back wall with a half-furled black drape at one side, a stack of road cases and a silent cabinet amp pushed against it, and a truss of warm PAR cans overhead throwing crossed pools of red and amber onto the brick.",
+  "name": "Ellis",
+  "height": "5' 10\"",
+  "description": "A man in his mid thirties who sings warm seventies soul ballads, easygoing and quietly confident on stage.",
+  "build": "An average, balanced adult build of ordinary proportions: medium shoulders, a relaxed straight torso, a natural waist, and arms and legs of ordinary length and thickness, standing upright with straight knees.",
+  "face": "Deep brown skin, dark brown eyes under thick straight black brows, a broad nose, rounded cheekbones, a short neat black beard along the jaw, and full lips.",
+  "hair": "Short tightly coiled black hair in a rounded natural shape about two inches deep, evenly textured over the whole head and clear of the ears and forehead.",
+  "outfit": "A chunky forest-green rib-knit roll-neck sweater with wide bold vertical ribs, fitted at the body, the cuffs ending at the wrists so both hands are fully bare; slate-grey heavy wool trousers, straight-legged, ending at the ankle; a wide cognac-tan leather belt with a large square polished brass buckle at the centre of the waist; cognac-tan leather Chelsea boots with plain rounded toes and elastic side panels in slate grey. His head is bare.",
+  "performance_style": "Easy and upright: feet hip-width apart, weight even on both boots. Both arms hang relaxed at his sides, the character-right and character-left hands open, empty, fingers loose and fully visible beside the thighs. Head level, a calm closed-mouth smile.",
+  "location": "A small late-night listening room, seen from the front of a low stage of warm honey-coloured floorboards running to the bottom of the frame: a back wall of dark walnut panelling, a tall potted fern at one side, a bare wooden stool pushed against the wall, and a row of round amber pendant lamps overhead casting soft warm pools onto the panelling.",
   "recognition_cues": [
-    "a wavy auburn hair mass visibly wider than her shoulders",
-    "a crimson jacket open over blue jeans"
+    "a chunky forest-green rib-knit roll-neck sweater",
+    "a wide cognac leather belt with a large square brass buckle",
+    "short tightly coiled black hair and a short black beard"
   ],
   "palette": [
-    "jacket and sash crimson #C01723 / #7A0D17 / #F0444E",
-    "top charcoal #2B2A30 / #17161A / #45434B",
-    "jeans denim #4B576F / #2F374A / #8B98B1",
-    "skin #B96B4F / #794333 / #DB9372",
-    "hair auburn #593029 / #2D1815 / #8A4A3F",
-    "boot leather #3A2A23 / #1C1310 / #5E463A",
-    "boot lace #B98A55 / #6E4E2E / #E0B57F",
-    "eye white #F3E8D8",
-    "eye brown #251713",
-    "lip #8E2633",
-    "teeth #F4E9D7"
+    "sweater forest-green knit #2F5D3A / #1A3822 / #4E8A5C",
+    "trousers slate-grey wool #5A6068 / #383C42 / #858C95",
+    "belt and boot leather cognac #9A5A2B / #5E3417 / #C98548",
+    "buckle brass #C9A13B / #7F6120 / #F0D77A",
+    "boot elastic slate #4A4E55",
+    "skin #6B4330 / #432818 / #92634A",
+    "hair and beard black #1C1714 / #0D0A08 / #3A302A",
+    "eye white #EFE6D8",
+    "eye brown #2A1A12",
+    "lip #5A3228",
+    "teeth #F2EADB"
   ],
   "avoid": [
-    "hair gathered back into a ponytail, bun, twist or clip",
-    "a heavy, thickset or broad-hipped build",
-    "laces in the same brown as the boot leather",
-    "a gown or skirt silhouette",
+    "a cardigan, jacket or coat over the sweater",
+    "sleeves pulled over the hands",
+    "a hat, cap or headwear",
     "logos, text or real brands"
   ],
   "animations": {
@@ -38,15 +38,15 @@
       "motion": "club-01"
     },
     "sing": {
-      "intent": "Power-ballad vocal loop: brace through the legs, bring the mic in the character-right hand to the mouth for a sustained phrase, make one compact emphasis with the open character-left hand, then settle back to planted with the mic at the collarbone. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "intent": "Soul-ballad vocal loop: settle the weight, bring the mic in the character-right hand up to the mouth for a long held phrase, open the character-left hand outward at chest height on the swell, then lower the mic to the chest and return to the easy upright stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": [
         "mic"
       ]
     },
-    "flinch": "Brief room-sound surprise: the shoulders and hair lift, the torso draws back slightly and both open hands rise to chest height, then she settles back to planted with the knees soft. No opponent, strike or physical contact.",
-    "guard": "One-shot stage self-protection: lower into a compact braced stance, bring the character-left forearm across the torso with the character-right hand closed at the hip, then hold a stable grounded finish. Not combat.",
-    "entrance": "One-shot entrance: step in with low confident weight, square the crimson jacket to the front, then land planted with the feet shoulder-width apart and both hands open at the hips.",
-    "victory": "One-shot song-finish celebration: plant both boots, raise the open character-left hand high and lift the chin into a wide open-mouthed smile, let the hair settle, then hold a proud balanced pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the braced stance goes slack — the shoulders drop, both hands open and fall to her sides, and her head hangs low with the chin toward her chest. She holds a standing, visibly crushed finish. The wavy auburn hair mass stays wider than her shoulders as it falls forward. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then he settles back to the easy upright stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in with an unhurried step, turn square to the front, then land upright with the feet hip-width apart and both open hands relaxed at his sides.",
+    "victory": "One-shot song-finish celebration: plant both boots, raise both open hands wide above shoulder height, tip the head back into a broad open-mouthed laugh, then hold a warm balanced pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the easy stance goes slack — the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the roll-neck. He holds a standing, visibly deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
   }
 }
