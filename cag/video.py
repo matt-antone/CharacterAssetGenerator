@@ -140,6 +140,10 @@ def video_frames(
     video_key = _sha(
         made.digest, reference.read_bytes(), video_graph.read_bytes(), prompt,
         json.dumps(extra, sort_keys=True),
+        # The drive's shared folder survives a changed mask pass, but its
+        # mask and face blur do not. Carry that dependency into SCAIL too.
+        # No extra part for threshold/bundle masks: their existing keys hold.
+        *((made.mask_key,) if made.mask_key else ()),
     )
     folder = state["work_dir"] / "video" / state["set_name"] / video_key[:12]
     frames = scail_frames(folder, made.length)

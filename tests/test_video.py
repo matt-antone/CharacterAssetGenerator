@@ -19,7 +19,7 @@ from cag import animation, comfy, drive, mask, video
 from cag.draw import DrawError
 from cag.machines import load_machine, materialise
 from cag.motion import Clip, MotionError, load_motion
-from cag.prompts import MASK_PASS_PROMPT, RESTYLE
+from cag.prompts import RESTYLE
 from cag.spec import load_spec
 from tests.test_animation import SAMPLE, posed
 from tests.test_static_sheet import flat_cutout
@@ -237,13 +237,14 @@ def test_a_stale_clip_fails_the_set_saying_so(world):
     assert world["scail"].calls == []
 
 
-def test_footage_with_no_light_backdrop_runs_the_mask_pass(world, monkeypatch):
+@pytest.fixture
+def dark_footage(world, monkeypatch):
     monkeypatch.setattr(drive, "decode", footage(light=False))
     scail = world["scail"]
     real = scail.__call__
 
     def masks_too(prompt, out_dir, references, workflow, timeout, **kwargs):
-        if prompt != MASK_PASS_PROMPT:
+        if "trk" not in workflow:
             return real(prompt, out_dir, references, workflow, timeout, **kwargs)
         scail.calls.append({"prompt": prompt, "refs": list(references), "workflow": workflow, **kwargs})
         Path(out_dir).mkdir(parents=True, exist_ok=True)
@@ -256,12 +257,52 @@ def test_footage_with_no_light_backdrop_runs_the_mask_pass(world, monkeypatch):
         return paths
 
     monkeypatch.setattr(comfy, "render_frames", masks_too)
+    return scail
+
+
+def test_footage_with_no_light_backdrop_runs_the_mask_pass(world, dark_footage):
     world["build"]()
-    masking, _ = scail.calls
+    masking, _ = dark_footage.calls
     assert masking["refs"][0].name == "drive.png" and masking["raw"] == [True]
     assert masking["expect"] == 25 and masking["workflow"]["trk"]["class_type"] == "SAM3_VideoTrack"
     (made,) = (world["tmp"] / "work" / "drive").iterdir()
     assert json.loads((made / "drive.json").read_text())["method"] == "mask-pass"
+
+
+@pytest.mark.parametrize("scail_only", [False, True])
+@pytest.mark.parametrize("change", ["graph", "prompt"])
+def test_changed_mask_pass_redraws_video_and_supersedes_frames(
+    world, dark_footage, monkeypatch, scail_only, change
+):
+    world["build"](scail_only=scail_only)
+    source = world["state"]["work_dir"] / "source" / "dance"
+    old_stamp = (source / "drawn.sha").read_text()
+    old_video = dark_footage.calls[1]["out"]
+    if change == "graph":
+        path = world["state"]["machine_graphs"]["mask"]
+        graph = json.loads(path.read_text())
+        graph["trk"]["inputs"]["detection_threshold"] = 0.6
+        path.write_text(json.dumps(graph))
+    else:
+        monkeypatch.setattr(video, "MASK_PASS_PROMPT", "the dancing performer")
+
+    _, restyle = world["build"](scail_only=scail_only)
+    assert len(dark_footage.calls) == 4, "both the mask pass and SCAIL must run again"
+    assert dark_footage.calls[3]["out"] != old_video
+    assert (source / "drawn.sha").read_text() != old_stamp
+    (kept,) = (source / "superseded").iterdir()
+    assert len(list(kept.glob("[0-9][0-9].png"))) == 16
+    assert len(restyle.calls) == (0 if scail_only else 16)
+
+    _, restyle = world["build"](scail_only=scail_only)
+    assert len(dark_footage.calls) == 4 and restyle.calls == [], "unchanged rebuild is cached"
+
+
+def test_unused_mask_pass_change_keeps_threshold_video_cached(world, monkeypatch):
+    world["build"]()
+    monkeypatch.setattr(video, "MASK_PASS_PROMPT", "the dancing performer")
+    _, restyle = world["build"]()
+    assert len(world["scail"].calls) == 1 and restyle.calls == []
 
 
 def test_without_a_machine_a_traced_set_still_takes_the_pose_edit_path(world):
