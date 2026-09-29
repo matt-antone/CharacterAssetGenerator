@@ -128,3 +128,18 @@ def test_a_profile_the_graphs_cannot_take_is_refused(tmp_path):
     (tmp_path / "short.json").write_text(json.dumps(profile))
     with pytest.raises(MachineError, match="no 'restyle'"):
         load_machine("short", root=tmp_path)
+
+
+def test_a_profile_can_name_a_stages_graph_and_the_environment_still_wins(tmp_path, monkeypatch):
+    """local16 restyles with Qwen-Image-Edit 2511 (six times faster, the look the
+    user chose); cloud keeps the shared Qwen-Image-2.1 restyle."""
+    local = machines.load_machine("local16")
+    assert local.graphs == {"restyle": "comfy/restyle-2511.json"}
+    assert machines.load_machine("cloud").graphs == {}
+    made = machines.materialise(local, "restyle", tmp_path)
+    classes = {node["class_type"] for node in json.loads(made.read_text()).values()}
+    assert "TextEncodeQwenImageEditPlus" in classes and "TextEncodeQwenImage21" not in classes
+    monkeypatch.setenv("CAG_COMFY_RESTYLE_WORKFLOW", "comfy/qwen21-restyle.json")
+    made = machines.materialise(local, "restyle", tmp_path)
+    classes = {node["class_type"] for node in json.loads(made.read_text()).values()}
+    assert "TextEncodeQwenImage21" in classes, "the environment beats the profile"

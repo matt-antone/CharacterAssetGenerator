@@ -1,0 +1,188 @@
+{
+  "unet": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_edit_2511_fp8mixed.safetensors",
+      "weight_dtype": "default"
+    },
+    "_meta": {
+      "title": "Qwen-Image-Edit 2511 (Apache-2.0)"
+    }
+  },
+  "clip": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "vae": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    }
+  },
+  "fast": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": [
+        "unet",
+        0
+      ],
+      "lora_name": "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors",
+      "strength_model": 1.0
+    },
+    "_meta": {
+      "title": "Lightning: four steps"
+    }
+  },
+  "shift": {
+    "class_type": "ModelSamplingAuraFlow",
+    "inputs": {
+      "model": [
+        "fast",
+        0
+      ],
+      "shift": 3.1
+    }
+  },
+  "norm": {
+    "class_type": "CFGNorm",
+    "inputs": {
+      "model": [
+        "shift",
+        0
+      ],
+      "strength": 1.0
+    }
+  },
+  "in1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "$image1"
+    },
+    "_meta": {
+      "title": "image 1: the SCAIL frame"
+    }
+  },
+  "in2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "$image2"
+    },
+    "_meta": {
+      "title": "image 2: the set reference"
+    }
+  },
+  "pos": {
+    "class_type": "TextEncodeQwenImageEditPlus",
+    "inputs": {
+      "clip": [
+        "clip",
+        0
+      ],
+      "vae": [
+        "vae",
+        0
+      ],
+      "prompt": "$prompt",
+      "image1": [
+        "in1",
+        0
+      ],
+      "image2": [
+        "in2",
+        0
+      ]
+    }
+  },
+  "neg": {
+    "class_type": "TextEncodeQwenImageEditPlus",
+    "inputs": {
+      "clip": [
+        "clip",
+        0
+      ],
+      "vae": [
+        "vae",
+        0
+      ],
+      "prompt": "",
+      "image1": [
+        "in1",
+        0
+      ],
+      "image2": [
+        "in2",
+        0
+      ]
+    }
+  },
+  "size": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "in1",
+        0
+      ],
+      "vae": [
+        "vae",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "the SCAIL frame's size; denoise 1 replaces its content"
+    }
+  },
+  "K": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "norm",
+        0
+      ],
+      "seed": "$seed",
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "pos",
+        0
+      ],
+      "negative": [
+        "neg",
+        0
+      ],
+      "latent_image": [
+        "size",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "V": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "K",
+        0
+      ],
+      "vae": [
+        "vae",
+        0
+      ]
+    }
+  },
+  "O": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "V",
+        0
+      ],
+      "filename_prefix": "cag-restyle"
+    }
+  }
+}

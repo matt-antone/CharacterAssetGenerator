@@ -35,7 +35,7 @@ from __future__ import annotations
 
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -97,6 +97,8 @@ class Machine:
     mask_timeout: float
     seed: int = 1234
     about: str = ""
+    #: A stage's own graph, by stage, where the profile names one (`"workflow"`).
+    graphs: Mapping[str, str] = field(default_factory=dict)
 
     def patch(self, stage: str) -> Mapping[str, Any]:
         """The patch this machine applies to one stage's graph."""
@@ -158,6 +160,8 @@ def load_machine(name: str, root: Path = MACHINES) -> Machine:
             mask_timeout=float(mask["timeout"]),
             seed=int(os.environ.get(SEED_VARIABLE) or data.get("seed", 1234)),
             about=data.get("about", ""),
+            graphs={stage: section["workflow"] for stage, section in
+                    (("video", video), ("restyle", restyle), ("mask", mask)) if "workflow" in section},
         )
     except KeyError as missing:
         raise MachineError(f"{path} has no {missing.args[0]!r}") from None
@@ -179,10 +183,11 @@ def load_machine(name: str, root: Path = MACHINES) -> Machine:
     return machine
 
 
-def workflow_path(stage: str, given: Path | str | None = None) -> Path:
-    """The graph one stage draws with: `given`, else its environment variable, else the shipped file."""
+def workflow_path(stage: str, given: Path | str | None = None, profile: str | None = None) -> Path:
+    """The graph one stage draws with: `given`, else its environment variable,
+    else the one the machine profile names, else the shipped file."""
     variable, default = STAGES[_stage(stage)]
-    return Path(given or os.environ.get(variable) or default)
+    return Path(given or os.environ.get(variable) or profile or default)
 
 
 def patch_workflow(workflow: dict, patch: Mapping[str, Any]) -> dict:
@@ -233,7 +238,7 @@ def materialise(machine: Machine, stage: str, into: Path, source: Path | str | N
     `source` is the graph to patch, `workflow_path(stage)` when not given. The
     file written is checked the way any workflow is before it is returned.
     """
-    source = workflow_path(stage, source)
+    source = workflow_path(stage, source, machine.graphs.get(_stage(stage)))
     workflow = comfy.load_workflow(source)
     try:
         patched = patch_workflow(workflow, machine.patch(stage))

@@ -127,6 +127,17 @@ the hardware and the bill.
   switching moves the other mode's frames into `source/<set>/superseded/`, and
   both reuse the one SCAIL video. A local `--no-restyle` build starts with the
   restyle graph's models missing, and says which.
+- **The restyle is the target look, and on `local16` it is Qwen-Image-Edit
+  2511.** Shown one level-8 dance frame SCAIL-only, restyled by Qwen-Image-2.1
+  and restyled by 2511, the user chose the restyled look over SCAIL's smooth
+  illustration, and 2511 at seed 1234 (2026-09-29). 2511 with the Lightning
+  4-step LoRA (`comfy/restyle-2511.json`) draws it in about 50 s a frame on the
+  RX 9070, where Qwen-Image-2.1 took 308 s: about 13 minutes of restyle for a
+  15-frame set rather than 77. It reads the same `RESTYLE` prompt (with the
+  prompt's `<image1>` spelled "image 1" instead, the frame differed by 3 in
+  255). A profile names a stage's own graph with `"workflow"`; `cloud` keeps
+  the shared Qwen-Image-2.1 restyle, which is what its verified runs used. The
+  environment variable and the CLI flag still beat the profile.
 - **Every set's cells get the cell finish** (`cag/finish.py`), restyled or
   `--no-restyle`, unless the build says `--no-finish` (with `--machine` only;
   without it the build refuses). It runs on the cells, after the shrink: the
