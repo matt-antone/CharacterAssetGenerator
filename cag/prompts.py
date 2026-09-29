@@ -327,12 +327,33 @@ ANGLE_KEEP = (
 ANGLE_BACKDROP = "Flat solid magenta #FF00FF background, no floor and no shadow."
 
 
-def angle_prompt(view: str, props: str = "", stance: str = PROJECTION_STANCE) -> str:
-    """Prompt for turning the approved key art to `view` (`comfy.VIEW_WORKFLOW`).
+#: The view the front is turned from, never the key art itself. The angle LoRA
+#: reads a three-quarter key art as a front view already and hands it back
+#: unturned: Belter's front came back three-quarter on every seed and wording
+#: tried, and so did Frank's. Turned from the profile instead, Belter, Frank and
+#: Trooper each came back square-on on both seeds tried, face and skin tone
+#: kept (2026-09-29). From the back view it squared up too, but invented a face
+#: it had never been shown: Trooper came back a different, lighter-skinned man.
+FRONT_FROM = "profile"
+
+
+def recognition_clause(cues: tuple[str, ...]) -> str:
+    """The brief's recognition cues, for a turn that must not lose them.
+
+    A turn from the profile is shown half the character; the cues are what makes
+    them them. Belter's hair came back fuller with hers than without.
+    """
+    return "Unmistakably the same character: " + "; ".join(cues) + "." if cues else ""
+
+
+def angle_prompt(
+    view: str, props: str = "", stance: str = PROJECTION_STANCE, cues: str = ""
+) -> str:
+    """Prompt for turning a picture of the character to `view` (`comfy.VIEW_WORKFLOW`).
 
     `view` names a static view or a MotionArtist frame facing, as in
     `view_prompt`. `props` says what the hands hold, which may not be what the
-    key art's hold.
+    key art's hold. `cues` is a `recognition_clause`.
     """
     if view not in ANGLES:
         raise KeyError(f"unknown view {view!r}")
@@ -342,6 +363,7 @@ def angle_prompt(view: str, props: str = "", stance: str = PROJECTION_STANCE) ->
             FACINGS[view],
             stance,
             props,
+            cues,
             ANGLE_KEEP,
             ANGLE_BACKDROP,
         ] if part

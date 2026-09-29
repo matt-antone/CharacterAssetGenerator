@@ -26,9 +26,11 @@ from .prompts import (
     KEY_FRAME_VIEW,
     KEY_VIEW,
     READY_STANCE,
+    FRONT_FROM,
     TURNED_STANCE,
     VIEWS,
     angle_prompt,
+    recognition_clause,
     assemble_bible,
     bible_request,
     location_prompt,
@@ -193,7 +195,16 @@ def set_key_art(
     dst = work_dir / "source" / f"{set_name}-key-{view.replace('/', '-')}.png"
     if view_draw_fn is not None:
         hands = turned_clauses(held) if held else EMPTY_HANDS
-        return view_draw_fn(angle_prompt(view, hands, TURNED_STANCE), dst, references=[key_art])
+        if view != "front":
+            return view_draw_fn(angle_prompt(view, hands, TURNED_STANCE), dst, references=[key_art])
+        # See FRONT_FROM: the key art will not turn to face front directly.
+        via = view_draw_fn(
+            angle_prompt(FRONT_FROM, hands, TURNED_STANCE),
+            dst.with_name(f"{set_name}-key-{FRONT_FROM}-for-front.png"),
+            references=[key_art],
+        )
+        cues = recognition_clause(spec.recognition_cues)
+        return view_draw_fn(angle_prompt(view, hands, TURNED_STANCE, cues), dst, references=[via])
     hands = clauses(held, set_name) if held else EMPTY_HANDS
     detail = detail_frame(spec.detail_level) if detail_after_key else None
     return (draw_fn or draw)(
@@ -249,16 +260,11 @@ def draw_projection(
     """
     spec = state["spec"]
     key_art = state["sources"][KEY_VIEW]
-    detail = detail_frame(spec.detail_level) if state.get("detail_after_key", True) else None
     sources = dict(state["sources"])
+    if view_draw_fn is not None:
+        return {"sources": {**sources, **turn_projection(state, view_draw_fn)}}
+    detail = detail_frame(spec.detail_level) if state.get("detail_after_key", True) else None
     for view in projection_views():
-        if view_draw_fn is not None:
-            sources[view] = view_draw_fn(
-                angle_prompt(view, turned_clauses(spec.props, PROP_LOWERED)),
-                source_path(state["work_dir"], view),
-                references=[key_art],
-            )
-            continue
         sources[view] = draw_fn(
             view_prompt(
                 spec,
@@ -272,6 +278,39 @@ def draw_projection(
             references=[key_art, detail] if detail else [key_art],
         )
     return {"sources": sources}
+
+
+def turn_projection(state: StaticState, view_draw_fn: Callable[..., Path]) -> dict[str, Path]:
+    """Every projection view as the key art turned, the front by way of the profile.
+
+    The profile is drawn first, and drawn even when it is switched off, since
+    the front is turned from it (`FRONT_FROM`). The front also carries the
+    brief's recognition cues.
+    """
+    spec = state["spec"]
+    work_dir = state["work_dir"]
+    key_art = state["sources"][KEY_VIEW]
+    hands = turned_clauses(spec.props, PROP_LOWERED)
+    views = projection_views()
+    turned: dict[str, Path] = {}
+    via = None
+    if "front" in views or FRONT_FROM in views:
+        via = view_draw_fn(
+            angle_prompt(FRONT_FROM, hands), source_path(work_dir, FRONT_FROM), references=[key_art]
+        )
+    for view in views:
+        if view == FRONT_FROM:
+            turned[view] = via
+        elif view == "front":
+            cues = recognition_clause(spec.recognition_cues)
+            turned[view] = view_draw_fn(
+                angle_prompt(view, hands, cues=cues), source_path(work_dir, view), references=[via]
+            )
+        else:
+            turned[view] = view_draw_fn(
+                angle_prompt(view, hands), source_path(work_dir, view), references=[key_art]
+            )
+    return turned
 
 
 def draw_location(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
@@ -293,12 +332,20 @@ def draw_location(state: StaticState, draw_fn: Callable[..., Path]) -> StaticSta
 
 
 def mask_views(state: StaticState) -> StaticState:
-    return {
-        "cells": {
-            view: mask_to_cell(source, cell_path(state["work_dir"], view), state["scale"])
-            for view, source in state["sources"].items()
-        }
-    }
+    """Cut every view out into its cell, at the character's real height.
+
+    A turned view (a `local` build) is scaled from its own figure, not the key
+    art's: the turn draws the figure at whatever size it likes, 7-14% short of
+    the key art in Belter's, and height is the one measure no turn changes.
+    """
+    spec = state["spec"]
+    cells = {}
+    for view, source in state["sources"].items():
+        scale = state["scale"]
+        if state.get("local", False) and view != KEY_VIEW:
+            scale = key_art_scale(cutout(source), spec.height_inches)
+        cells[view] = mask_to_cell(source, cell_path(state["work_dir"], view), scale)
+    return {"cells": cells}
 
 
 def build_static_graph(

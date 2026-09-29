@@ -212,6 +212,27 @@ hand, "lowered at the side, upright") squared it on both. A set reference keeps
 its own stance and gets the line without "lowered". One character, judged by
 eye; the back view's arm still came back a little raised.
 
+**The front is turned from the profile, never from the key art**
+(`FRONT_FROM`). Those square-on fronts were luck of that one key art: the angle
+LoRA reads a three-quarter key art as a front view already and hands it back
+unturned. Belter's next two key arts came back three-quarter on every seed and
+wording tried, from "front view", "front-left" and "front-right quarter view",
+a hands line, and plain 2511 with no LoRA; Frank's too. Turned from the profile
+(itself turned from the key art, and one of the projection views anyway),
+Belter, Frank and Trooper each came back square-on on both seeds tried, face
+and skin tone kept (2026-09-29). Two routes that also squared up and must not
+be used: from the back view, which shows no face, so the turn invents one —
+Trooper came back a different, lighter-skinned man, his white plates orange;
+and a second pass handing the key art back as identity, which dragged the angle
+back or, for Frank, drew a different man in blue armour. The front carries the
+brief's `recognition_cues` (`recognition_clause`), which held Belter's hair
+fuller. A set reference facing front goes the same way, by a
+`<set>-key-profile-for-front.png`.
+
+A turned view is cut into its cell at the character's real height, measured
+from its own figure (`mask_views`), not at the key art's scale: the turn draws
+the figure at whatever size it likes, Belter's front 7-14% short.
+
 The local key art is not shown a character either. Its detail sample was
 Belter's approved key art, and Qwen-Image-2.1 copied it: both of Belter's local
 key arts on 2026-09-28 were that picture again, mic and missing belt included,

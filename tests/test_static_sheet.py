@@ -327,17 +327,24 @@ def test_a_view_draw_turns_the_key_art_rather_than_drawing_from_words(tmp_path, 
     static_sheet.approve(tmp_path / "lou")
     graph.invoke(state)
 
-    assert [call["out"] for call in turned] == static_sheet.projection_views()
+    # The angle LoRA reads a three-quarter key art as a front view already, so
+    # the front is turned from the profile, which is drawn first.
+    assert [call["out"] for call in turned] == ["profile", "front", "back"]
     key_art = tmp_path / "lou" / "source" / "key.png"
+    profile = tmp_path / "lou" / "source" / "profile.png"
     by_view = {call["out"]: call for call in turned}
+    assert by_view["front"]["refs"] == [profile]
+    assert by_view["back"]["refs"] == by_view["profile"]["refs"] == [key_art]
     for call in turned:
-        assert call["refs"] == [key_art], "one image in: the approved key art"
         assert call["prompt"].startswith("<sks> "), "the angle LoRA reads the camera from <sks>"
         assert BIBLE not in call["prompt"], "identity is the picture's to carry"
     assert by_view["back"]["prompt"].startswith("<sks> back view eye-level shot wide shot.")
     # "right side view" sees the character's right: they face screen-left, as profile asks.
     assert by_view["profile"]["prompt"].startswith("<sks> right side view")
     assert "square-on" in by_view["front"]["prompt"]
+    cues = spec.recognition_cues
+    if cues:
+        assert all(cue in by_view["front"]["prompt"] for cue in cues), "the front keeps what makes them them"
     # The prop's whole clause pinned Belter to her key art's singing pose: the
     # front came back three-quarter on every seed. The picture carries its look.
     for call in turned:
@@ -368,8 +375,11 @@ def test_a_set_reference_is_turned_too_under_a_view_draw(tmp_path):
                        view_draw_fn=record(turned))
     assert path.name == "dance-key-front.png"
     assert not drawn, "nothing is drawn from words when the key art can be turned"
+    # A front reference is turned by way of the profile, as the projection front is.
+    via_prompt, via_refs = turned["dance-key-profile-for-front.png"]
+    assert via_refs == [key_art] and via_prompt.startswith("<sks> right side view")
     prompt, references = turned["dance-key-front.png"]
-    assert references == [key_art]
+    assert references == [tmp_path / "source" / "dance-key-profile-for-front.png"]
     assert prompt.startswith("<sks> front view")
     assert "Both of their hands are empty" in prompt, "the set's own hands, not the key art's"
     assert "arms hanging" not in prompt, "a set reference keeps its stance, turned"
@@ -398,3 +408,27 @@ def test_a_local_key_art_is_shown_swatches_never_a_character(tmp_path):
         assert "squares of material, not a character" in local_prompt
     assert "squares of material" not in other_prompt
     assert other_refs == ([DETAIL_FRAMES[level]] if level in DETAIL_FRAMES else [])
+
+
+def test_a_turned_view_is_cut_to_the_characters_height_not_the_key_arts_scale(tmp_path, monkeypatch):
+    """The turn draws the figure at whatever size it likes: Belter's front came
+    back 7-14% shorter than her key art. Height is what no turn changes."""
+    monkeypatch.setattr(static_sheet, "cutout", flat_cutout)
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    sources = {}
+    for view, tall in (("key", 180), ("front", 140)):
+        image = Image.new("RGBA", (100, 200), (255, 0, 255, 255))
+        image.paste((20, 20, 20, 255), (40, 200 - tall, 60, 200))
+        sources[view] = tmp_path / f"{view}.png"
+        image.save(sources[view])
+    scale = mask.key_art_scale(flat_cutout(sources["key"]), spec.height_inches)
+
+    def heights(local):
+        state = {"spec": spec, "work_dir": tmp_path / str(local), "sources": sources,
+                 "scale": scale, "local": local}
+        cells = static_sheet.mask_views(state)["cells"]
+        return {v: numpy.array(Image.open(p))[:, :, 3].any(axis=1).sum() for v, p in cells.items()}
+
+    assert abs(heights(True)["front"] - heights(True)["key"]) <= 1
+    assert heights(False)["front"] < heights(False)["key"], "other backends keep the key art's scale"
