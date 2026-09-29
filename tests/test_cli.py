@@ -382,6 +382,7 @@ def test_no_restyle_needs_a_machine(tmp_path, monkeypatch):
 
 def test_no_restyle_reaches_the_build_and_the_machine_check(tmp_path, monkeypatch):
     seen, checked = {}, {}
+    monkeypatch.setattr(cli, "draw_with", lambda *a, **kw: fake_draw)
 
     def machine_with(backend, name, work_root, given=None, client=None, restyle=True):
         checked["restyle"] = restyle
@@ -407,6 +408,7 @@ def test_no_finish_needs_a_machine(tmp_path, monkeypatch):
 
 def test_no_finish_reaches_the_build(tmp_path, monkeypatch):
     seen = {}
+    monkeypatch.setattr(cli, "draw_with", lambda *a, **kw: fake_draw)
     monkeypatch.setattr(cli, "machine_with", lambda *a, **kw: (object(), {}))
     monkeypatch.setattr(cli, "build", lambda *a, **kw: seen.update(kw))
     args = [*BUILD, "--draw-backend", "comfy", "--machine", "cloud",
