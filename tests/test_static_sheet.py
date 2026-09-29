@@ -432,3 +432,30 @@ def test_a_turned_view_is_cut_to_the_characters_height_not_the_key_arts_scale(tm
 
     assert abs(heights(True)["front"] - heights(True)["key"]) <= 1
     assert heights(False)["front"] < heights(False)["key"], "other backends keep the key art's scale"
+
+
+def test_a_finished_build_finishes_its_views_on_one_palette(tmp_path, monkeypatch):
+    """The turnaround gets the cell finish the dance gets: one palette, an inner outline."""
+    monkeypatch.setattr(static_sheet, "cutout", flat_cutout)
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    spec = load_spec("tests/fixtures/velvet-lou.json")
+    rng = numpy.random.default_rng(1)
+    sources = {}
+    for view in ("key", "front", "back"):
+        pixels = numpy.full((200, 100, 3), (255, 0, 255), numpy.uint8)
+        pixels[20:180, 40:60] = rng.integers(0, 150, (160, 20, 3), dtype=numpy.uint8)
+        sources[view] = tmp_path / f"{view}.png"
+        Image.fromarray(pixels).save(sources[view])
+    scale = mask.key_art_scale(flat_cutout(sources["key"]), spec.height_inches)
+    state = {"spec": spec, "work_dir": tmp_path / "lou", "sources": sources, "scale": scale,
+             "finish": True}
+    cells = static_sheet.mask_views(state)["cells"]
+    for view, path in cells.items():
+        assert path == static_sheet.cell_path(tmp_path / "lou", view)
+        assert static_sheet.cut_path(tmp_path / "lou", view).exists(), "the cut-out is kept apart"
+        rgba = numpy.array(Image.open(path))
+        opaque = rgba[..., 3] > 0
+        colours = numpy.unique(rgba[opaque][:, :3], axis=0)
+        assert len(colours) <= 65, "the palette, plus the outline"
+        top = numpy.flatnonzero(opaque.any(axis=1))[0]
+        assert (rgba[top][opaque[top]][:, :3] == 0).all(), "the silhouette's edge is the black outline"

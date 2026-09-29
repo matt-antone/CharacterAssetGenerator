@@ -161,6 +161,12 @@ the hardware and the bill.
   `cag.snap` are untouched. One set, one roll, judged by eye: it is approved
   as the look, not measured as a floor.
 
+  **The views get it too,** in any build whose sets do (`--machine` without
+  `--no-finish`): the key art and every projection view on one palette, built
+  over the key art, cut-outs under `cells-cut/views/`, finished into `cells/`,
+  stamped in `cells/finish.sha`. So the turnaround and the dance are one palette
+  size and one outline.
+
 Trial renders on a branch are scratch, as below. The video path keeps each restyle as drawn; nothing is snapped to the key art's
 grid (`cag.snap` still serves the pose-edit path), because snapping made the faces
 blocky. What `cag build` itself has

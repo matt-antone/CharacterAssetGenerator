@@ -19,6 +19,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 
 from .draw import draw
+from .finish import finish_set
 from .mask import cutout, key_art_scale, mask_to_cell
 from .prompts import (
     BIBLE_SYSTEM,
@@ -66,6 +67,9 @@ class StaticState(TypedDict, total=False):
     #: A `local` build: its key art model copies its references, so the key art
     #: gets the swatch sample (`LOCAL_DETAIL_FRAMES`), never a character.
     local: bool
+    #: Give the views the cell finish, as the video path's sets get it, so the
+    #: turnaround and the dance are one palette size and one outline.
+    finish: bool
 
 
 def source_path(work_dir: Path, view: str) -> Path:
@@ -74,6 +78,11 @@ def source_path(work_dir: Path, view: str) -> Path:
 
 def cell_path(work_dir: Path, view: str) -> Path:
     return Path(work_dir) / "cells" / f"{view}.png"
+
+
+def cut_path(work_dir: Path, view: str) -> Path:
+    """A view's cut-out, before the finish: the finish never runs on its own output."""
+    return Path(work_dir) / "cells-cut" / "views" / f"{view}.png"
 
 
 class ApprovalRequired(RuntimeError):
@@ -339,12 +348,26 @@ def mask_views(state: StaticState) -> StaticState:
     the key art in Belter's, and height is the one measure no turn changes.
     """
     spec = state["spec"]
+    work_dir = state["work_dir"]
+    finishing = state.get("finish", False)
     cells = {}
     for view, source in state["sources"].items():
         scale = state["scale"]
         if state.get("local", False) and view != KEY_VIEW:
             scale = key_art_scale(cutout(source), spec.height_inches)
-        cells[view] = mask_to_cell(source, cell_path(state["work_dir"], view), scale)
+        dst = cut_path(work_dir, view) if finishing else cell_path(work_dir, view)
+        cells[view] = mask_to_cell(source, dst, scale)
+    if finishing:
+        # One palette over the key art and every view, as a set's is over its
+        # reference and every frame.
+        views = list(cells)
+        done = finish_set(
+            {i: cells[view] for i, view in enumerate(views)},
+            lambda i: cell_path(work_dir, views[i]),
+            state["sources"][KEY_VIEW],
+            label="views",
+        )
+        cells = {view: done[i] for i, view in enumerate(views)}
     return {"cells": cells}
 
 

@@ -290,6 +290,9 @@ def _build(
                 "work_dir": work_dir,
                 "detail_after_key": backend == "codex",
                 "local": backend == "local",
+                # The views get the cell finish exactly when the video path's
+                # sets do, so the turnaround matches the dance.
+                "finish": machine is not None and finish,
             }
         )
     except ApprovalRequired as gate:
