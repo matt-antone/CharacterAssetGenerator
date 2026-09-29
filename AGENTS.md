@@ -310,6 +310,21 @@ builds again. A key art that is wrong gets deleted instead, and the next build
 redraws it. Show the user the key art and wait for their answer; do not approve
 on their behalf.
 
+## Ask where to save approval copies
+
+When art will need the user's approval, ask where they want review copies saved
+unless they have already named a destination in this session. Reuse that
+destination for later approval renders and pass it to any agent doing the build;
+do not ask again for each render. Ask early, and let rendering continue while
+waiting for the destination.
+
+Before asking the user to approve a finished render, copy the image to that
+destination and give them the copy's full path as well as showing the image.
+Keep the pipeline's original in `work/<slug>/source/`. Use a descriptive name
+with the character, art type and a timestamp or revision so a new review copy
+does not overwrite an earlier one. Saving a copy is not approval: wait for the
+user's verdict before advancing the build.
+
 ## Ask which draw backend, never pick one
 
 `cag build` has no default draw backend: it stops unless `--draw-backend` or

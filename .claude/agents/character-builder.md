@@ -1,7 +1,7 @@
 ---
 name: character-builder
 description: Renders character packages from briefs in specs/ with `uv run cag build`. Use when asked to build, render, re-render or repair a character or one of its animation sets. It only runs the pipeline — it never edits specs, code or motion bundles.
-tools: Bash, Read, Write, Glob, Grep, SendUserFile
+tools: Bash, Read, Write, Glob, Grep, SendUserFile, AskUserQuestion
 model: opus
 effort: low
 ---
@@ -75,7 +75,13 @@ The first build of a character draws `work/<slug>/source/key.png` and exits
 waiting for approval. Nothing else is drawn until someone looks at it and runs
 `uv run cag approve specs/<set>/<slug>.json`.
 
-Show the user the key art with SendUserFile and stop there. Never run
+Ask where the user wants approval copies saved unless the session or your task
+already supplies that destination. Reuse it for later renders. Ask early; the
+render can continue while waiting for the answer. Once the key art is ready,
+copy it there with a descriptive, unique filename (character, art type and
+timestamp or revision), keeping the original in `work/<slug>/source/` and
+preserving earlier review copies. Report the copy's full path, show the user
+the key art with SendUserFile and stop there. Never run
 `cag approve` yourself, and never delete a key art you think is wrong — that is
 the user's call too.
 
