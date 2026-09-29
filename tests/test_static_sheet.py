@@ -302,3 +302,67 @@ def test_under_comfy_only_the_key_art_gets_the_detail_sample(tmp_path, monkeypat
         assert sample not in call["refs"], call["out"].stem
         # The prompt no longer describes a sample that is not attached.
         assert "detail-level sample" not in call["prompt"], call["out"].stem
+
+
+def test_a_view_draw_turns_the_key_art_rather_than_drawing_from_words(tmp_path, monkeypatch):
+    """Qwen-Image-2.1 copies its reference: asked for Belter's back it returned
+    the key art. A local build turns the key art with an edit model instead, and
+    that model is shown only the key art and told only the camera and the hands."""
+    fake_draw.calls = []
+    turned = []
+
+    def fake_view_draw(prompt, out_path, references=(), **kwargs):
+        turned.append({"prompt": prompt, "out": Path(out_path).stem, "refs": list(references)})
+        return fake_draw(prompt, out_path, references)
+
+    monkeypatch.setattr(static_sheet, "cutout", flat_cutout)
+    monkeypatch.setattr(mask, "cutout", flat_cutout)
+    model = FakeMessagesListChatModel(responses=[AIMessage(BIBLE)])
+    graph = static_sheet.build_static_graph(model, draw_fn=fake_draw, view_draw_fn=fake_view_draw)
+    state = {"spec": load_spec("tests/fixtures/velvet-lou.json"), "work_dir": tmp_path / "lou"}
+    with pytest.raises(static_sheet.ApprovalRequired):
+        graph.invoke(state)
+    static_sheet.approve(tmp_path / "lou")
+    graph.invoke(state)
+
+    assert [call["out"] for call in turned] == static_sheet.projection_views()
+    key_art = tmp_path / "lou" / "source" / "key.png"
+    by_view = {call["out"]: call for call in turned}
+    for call in turned:
+        assert call["refs"] == [key_art], "one image in: the approved key art"
+        assert call["prompt"].startswith("<sks> "), "the angle LoRA reads the camera from <sks>"
+        assert BIBLE not in call["prompt"], "identity is the picture's to carry"
+    assert by_view["back"]["prompt"].startswith("<sks> back view eye-level shot wide shot.")
+    # "right side view" sees the character's right: they face screen-left, as profile asks.
+    assert by_view["profile"]["prompt"].startswith("<sks> right side view")
+    assert "square-on" in by_view["front"]["prompt"]
+
+
+def test_a_set_reference_is_turned_too_under_a_view_draw(tmp_path):
+    brief = tmp_path / "c.json"
+    brief.write_text(json.dumps({
+        "name": "Velvet Lou", "height": "5' 9\"", "description": "A lounge performer.",
+        "build": "Lean.", "props": ["mic"], "animations": {"dance": "A club loop."},
+    }))
+    spec = load_spec(brief)
+    key_art = tmp_path / "key.png"
+    key_art.write_bytes(b"key")
+    drawn, turned = {}, {}
+
+    def record(into):
+        def fake(prompt, out_path, references=(), **kwargs):
+            Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+            Path(out_path).write_bytes(b"drawn")
+            into[Path(out_path).name] = (prompt, list(references))
+            return Path(out_path)
+        return fake
+
+    path = set_key_art(spec, "dance", "B", tmp_path, key_art, record(drawn), "front",
+                       view_draw_fn=record(turned))
+    assert path.name == "dance-key-front.png"
+    assert not drawn, "nothing is drawn from words when the key art can be turned"
+    prompt, references = turned["dance-key-front.png"]
+    assert references == [key_art]
+    assert prompt.startswith("<sks> front view")
+    assert "Both of their hands are empty" in prompt, "the set's own hands, not the key art's"
+    assert "arms hanging" not in prompt, "a set reference keeps its stance, turned"

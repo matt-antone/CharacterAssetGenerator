@@ -275,6 +275,75 @@ def view_prompt(
     )
 
 
+#: The camera for a view, in the words fal's Multiple-Angles LoRA was trained on
+#: (`<sks> <azimuth> <elevation> <distance>`). The azimuth names the side the
+#: camera sees: "right side view" sees the character's right, so they face
+#: screen-left, as `profile` and a `left` frame ask.
+ANGLES = {
+    "key": "front-right quarter view",
+    "3/4": "front-right quarter view",
+    "front": "front view",
+    "back": "back view",
+    "profile": "right side view",
+    "left": "right side view",
+    "right": "left side view",
+}
+
+#: The LoRA turns the camera; these say what the turned figure looks like.
+#: Without the front's, Belter came back at the key art's three-quarter angle.
+FACINGS = {
+    **{view: VIEWS["key"] for view in ("key", "3/4")},
+    "front": (
+        "The character faces the viewer square-on: chest, shoulders, hips and both feet turned "
+        "straight to the camera, the face looking straight out of the picture."
+    ),
+    "back": (
+        "The character faces directly away from the camera: we see the back of the head, the "
+        "back of the costume and the heels."
+    ),
+    **{view: "A strict side profile: head, body and feet in full profile, facing screen-left."
+       for view in ("profile", "left")},
+    "right": "A strict side profile: head, body and feet in full profile, facing screen-right.",
+}
+
+#: A set reference keeps the key art's stance, turned. PROJECTION_STANCE's arms
+#: hanging would come back through every frame drawn from it (see there).
+TURNED_STANCE = (
+    "Keep the stance from the image, turned to this camera angle, with the arms readable and "
+    "clear of the torso."
+)
+
+#: The edit model is shown the key art, so identity is the picture's to carry,
+#: not a bible's: this only asks it to keep what it sees.
+ANGLE_KEEP = (
+    "Redraw the same character from this camera angle. Full body, head to feet, the whole figure "
+    "in frame, at the same size as in the image. Keep the face, hair, costume, colours, "
+    "proportions and pixel-art style exactly as in the image."
+)
+ANGLE_BACKDROP = "Flat solid magenta #FF00FF background, no floor and no shadow."
+
+
+def angle_prompt(view: str, props: str = "", stance: str = PROJECTION_STANCE) -> str:
+    """Prompt for turning the approved key art to `view` (`comfy.VIEW_WORKFLOW`).
+
+    `view` names a static view or a MotionArtist frame facing, as in
+    `view_prompt`. `props` says what the hands hold, which may not be what the
+    key art's hold.
+    """
+    if view not in ANGLES:
+        raise KeyError(f"unknown view {view!r}")
+    return "\n\n".join(
+        part for part in [
+            f"<sks> {ANGLES[view]} eye-level shot wide shot.",
+            FACINGS[view],
+            stance,
+            props,
+            ANGLE_KEEP,
+            ANGLE_BACKDROP,
+        ] if part
+    )
+
+
 #: The pose cue names arm positions and the skeleton draws bare joints, so
 #: between them a frame reads as an empty hand and the prop quietly disappears
 #: mid-set. Neither is describing what the character is holding.

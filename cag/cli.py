@@ -187,6 +187,7 @@ def render_set(
     graphs: dict[str, Path] | None = None,
     scail_only: bool = False,
     finish: bool = True,
+    view_draw_fn: Callable[..., Path] | None = None,
 ) -> dict:
     """Draw and mask one animation set, continuing from the set drawn before it.
 
@@ -209,7 +210,7 @@ def render_set(
     # art's: a prop on the character follows it into every frame that quotes it.
     key_art = set_key_art(
         spec, set_name, static["bible"], work_dir, static["sources"][KEY_VIEW], draw_fn,
-        motion.view, detail_after_key=backend == "codex",
+        motion.view, detail_after_key=backend == "codex", view_draw_fn=view_draw_fn,
     )
     log(f"[{set_name}] reference: {key_art.name}")
     animated = build_animation_graph(text_model(work_dir), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
@@ -251,6 +252,7 @@ def build(
     scail_only: bool = False,
     finish: bool = True,
     remote: str | None = None,
+    view_draw_fn: Callable[..., Path] | None = None,
 ) -> Path:
     """Draw one brief's package into `<out>/<theme>/<slug>/`, then publish it.
 
@@ -270,7 +272,9 @@ def build(
 
     log(f"[static] {spec.name}: bible, key art, projection")
     try:
-        static = build_static_graph(text_model(work_dir), draw_fn=draw_fn).invoke(
+        static = build_static_graph(
+            text_model(work_dir), draw_fn=draw_fn, view_draw_fn=view_draw_fn
+        ).invoke(
             {"spec": spec, "work_dir": work_dir, "detail_after_key": backend == "codex"}
         )
     except ApprovalRequired as gate:
@@ -319,6 +323,7 @@ def build(
                     graphs,
                     scail_only,
                     finish,
+                    view_draw_fn,
                 )
             except TextPending as pending:
                 # Not a failure: the session's AI answers it and the build goes on.
@@ -664,6 +669,7 @@ def main(argv: list[str] | None = None) -> int:
         scail_only=args.scail_only,
         finish=args.finish,
         remote=args.output_remote,
+        view_draw_fn=view_draw_with(args.draw_backend),
     )
     return 0
 
@@ -1011,6 +1017,31 @@ def draw_with(backend: str, workflow: Path | None = None) -> Callable[..., Path]
         raise SystemExit(f"[{backend}] {error}") from None
     log(f"[{backend}] drawing with {path}, {comfy.reference_slots(loaded)} reference slots; "
         f"traced sets frame by frame with {comfy.pose_workflow_path()}")
+    return partial(draw, backend=backend, workflow=path)
+
+
+def view_draw_with(backend: str, client: comfy.Client | None = None) -> Callable[..., Path] | None:
+    """The draw that turns the key art round, for a `local` build; None for any other.
+
+    A local build's key art model copies its reference, so every other view goes
+    through `comfy.VIEW_WORKFLOW` (see there). Checked against the server before
+    anything is drawn, like the machine's graphs: a missing LoRA would otherwise
+    fail the build only after the key art was approved.
+    """
+    if backend != "local":
+        return None
+    path = comfy.view_workflow_path()
+    try:
+        comfy.load_workflow(path)
+        missing = comfy.preflight(client or comfy.Client(local=True), [path])
+    except comfy.ComfyError as error:
+        raise SystemExit(f"[local] {error}") from None
+    if missing:
+        raise SystemExit(
+            f"[local] {path} turns the key art into its views; the server lacks:\n  "
+            + "\n  ".join(missing)
+        )
+    log(f"[local] views turned from the key art with {path}")
     return partial(draw, backend=backend, workflow=path)
 
 

@@ -26,7 +26,9 @@ from .prompts import (
     KEY_FRAME_VIEW,
     KEY_VIEW,
     READY_STANCE,
+    TURNED_STANCE,
     VIEWS,
+    angle_prompt,
     assemble_bible,
     bible_request,
     location_prompt,
@@ -153,6 +155,7 @@ def set_key_art(
     draw_fn: Callable[..., Path] | None = None,
     view: str = KEY_FRAME_VIEW,
     detail_after_key: bool = True,
+    view_draw_fn: Callable[..., Path] | None = None,
 ) -> Path:
     """The key art with this set's hands and facing, drawn once per set that needs it.
 
@@ -174,11 +177,18 @@ def set_key_art(
     time — profile frames came back at three-quarters. So a set whose motion
     faces another way gets its reference redrawn at that facing, and the
     three-quarter key art is not among the frame references at all.
+
+    `view_draw_fn`, when given, turns the key art with `angle_prompt` instead
+    (`comfy.VIEW_WORKFLOW`): a model that copies its reference cannot redraw it
+    at another facing.
     """
     held = spec.animation_props.get(set_name, ())
     if held == spec.props and view == KEY_FRAME_VIEW:
         return key_art
     dst = work_dir / "source" / f"{set_name}-key-{view.replace('/', '-')}.png"
+    hands = clauses(held, set_name) if held else EMPTY_HANDS
+    if view_draw_fn is not None:
+        return view_draw_fn(angle_prompt(view, hands, TURNED_STANCE), dst, references=[key_art])
     detail = detail_frame(spec.detail_level) if detail_after_key else None
     return (draw_fn or draw)(
         view_prompt(
@@ -188,7 +198,7 @@ def set_key_art(
             pose=READY_STANCE,
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
-            props=clauses(held, set_name) if held else EMPTY_HANDS,
+            props=hands,
         ),
         dst,
         references=[key_art, *([detail] if detail else [])],
@@ -215,12 +225,28 @@ def measure_scale(state: StaticState) -> StaticState:
     return {"scale": key_art_scale(key_art, state["spec"].height_inches)}
 
 
-def draw_projection(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
+def draw_projection(
+    state: StaticState,
+    draw_fn: Callable[..., Path],
+    view_draw_fn: Callable[..., Path] | None = None,
+) -> StaticState:
+    """Draw every projection view from the approved key art.
+
+    With a `view_draw_fn` each view is the key art turned (`angle_prompt`),
+    one image in and no bible; otherwise it is drawn from words against it.
+    """
     spec = state["spec"]
     key_art = state["sources"][KEY_VIEW]
     detail = detail_frame(spec.detail_level) if state.get("detail_after_key", True) else None
     sources = dict(state["sources"])
     for view in projection_views():
+        if view_draw_fn is not None:
+            sources[view] = view_draw_fn(
+                angle_prompt(view, clauses(spec.props, None)),
+                source_path(state["work_dir"], view),
+                references=[key_art],
+            )
+            continue
         sources[view] = draw_fn(
             view_prompt(
                 spec,
@@ -263,7 +289,11 @@ def mask_views(state: StaticState) -> StaticState:
     }
 
 
-def build_static_graph(model: BaseChatModel, draw_fn: Callable[..., Path] | None = None):
+def build_static_graph(
+    model: BaseChatModel,
+    draw_fn: Callable[..., Path] | None = None,
+    view_draw_fn: Callable[..., Path] | None = None,
+):
     # Resolved here, not as a default, so the module attribute stays swappable.
     draw_fn = draw_fn or draw
     graph = StateGraph(StaticState)
@@ -271,7 +301,7 @@ def build_static_graph(model: BaseChatModel, draw_fn: Callable[..., Path] | None
     graph.add_node("key_art", partial(draw_key_art, draw_fn=draw_fn))
     graph.add_node("approval", check_approval)
     graph.add_node("scale", measure_scale)
-    graph.add_node("projection", partial(draw_projection, draw_fn=draw_fn))
+    graph.add_node("projection", partial(draw_projection, draw_fn=draw_fn, view_draw_fn=view_draw_fn))
     graph.add_node("location", partial(draw_location, draw_fn=draw_fn))
     graph.add_node("mask", mask_views)
     graph.add_edge(START, "bible")

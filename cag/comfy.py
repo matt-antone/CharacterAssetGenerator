@@ -79,6 +79,15 @@ LOCAL_WORKFLOW = Path("comfy/qwen-image-2.1.json")
 #: differ only by pose.
 POSE_WORKFLOW = Path("comfy/pose-edit.json")
 
+#: What turns the approved key art round for a `local` build: every view that is
+#: not the key art (the projection views, and a set reference drawn at another
+#: facing or with other hands). Qwen-Image-Edit 2511 with fal's Multiple-Angles
+#: LoRA, which reads the camera from the prompt's `<sks>` words
+#: (`prompts.ANGLES`). Qwen-Image-2.1 copies its reference and does not re-pose
+#: it: asked for a back view of Belter it returned the key art, front, back and
+#: profile alike (2026-09-28). Both are Apache-2.0.
+VIEW_WORKFLOW = Path("comfy/view-edit-2511.json")
+
 
 @dataclass(frozen=True)
 class Canvas:
@@ -137,6 +146,13 @@ def pose_workflow_path(given: Path | str | None = None) -> Path:
     key art may not be the one its traced frames are drawn with.
     """
     return Path(given or os.environ.get("CAG_COMFY_POSE_WORKFLOW") or POSE_WORKFLOW)
+
+
+def view_workflow_path(given: Path | str | None = None) -> Path:
+    """The workflow a `local` build turns the key art round with, chosen the way
+    `workflow_path` is. It takes one image, the key art, and no bible: the
+    picture carries the identity, and the prompt only the camera and the hands."""
+    return Path(given or os.environ.get("CAG_LOCAL_VIEW_WORKFLOW") or VIEW_WORKFLOW)
 
 
 def load_workflow(path: Path | str) -> dict:

@@ -118,10 +118,11 @@ the hardware and the bill.
   restyled. Why: a restyle takes about 7.5 minutes a frame on the RX 9070,
   no prompt wording moved the face it draws, and SCAIL frames alone read as a
   smooth illustration. It does **not** clear the Qwen-Image-2.1 licence above:
-  a `local` build draws the key art and every set reference with
-  Qwen-Image-2.1 (`comfy/qwen-image-2.1.json`, or the fp8 copy on `local16`),
-  and SCAIL-2 animates that set reference, so every frame is still derived
-  from a research-licensed render.
+  a `local` build draws the key art with Qwen-Image-2.1
+  (`comfy/qwen-image-2.1.json`, or the fp8 copy on `local16`), every set
+  reference is turned from it (see "Local views" below), and SCAIL-2 animates
+  that set reference, so every frame is still derived from a research-licensed
+  render.
   The two modes are stamped apart in `drawn.sha` (`scail` and `video`), so
   switching moves the other mode's frames into `source/<set>/superseded/`, and
   both reuse the one SCAIL video. A local `--no-restyle` build starts with the
@@ -183,6 +184,33 @@ The SCAIL prompt quoting the bible, untested before these runs, held identity
 on both dances. There is still no pose-fidelity floor for this path, and one
 character is not a cast: the bulky trooper, over the 8.1 colour bar in 6 of 15
 frames in the scratch-script run, has not been drawn through `cag build`.
+
+## Local views
+
+Under `--draw-backend local` every view that is not the key art — the
+projection views (front, back, profile) and a set reference drawn at another
+facing or with other hands — is the approved key art **turned**, not drawn from
+words: the view graph, `comfy/view-edit-2511.json` (`CAG_LOCAL_VIEW_WORKFLOW`),
+Qwen-Image-Edit 2511 at fp8 with the Lightning 4-step LoRA and fal's
+Multiple-Angles LoRA. It is shown the key art alone and told the camera in the
+LoRA's words (`<sks> back view eye-level shot wide shot`, `prompts.ANGLES`),
+the facing, the stance and the hands (`angle_prompt`); no bible, since the
+picture carries the identity. A local build checks the server has every model
+the view graph loads before it draws anything. Both models are Apache-2.0.
+
+Why: Qwen-Image-2.1 copies its reference. Asked for Belter's front, back and
+profile on `local16` (2026-09-28) it returned the key art three times, differing
+only by noise. On Comfy Cloud the views were Gemini's, which turns a figure on
+request. The view graph's first scratch rolls turned Belter correctly — a true
+back view, profiles facing the way `profile` means (the LoRA's "right side
+view" sees the character's right, so they face screen-left) — at about 32 s a
+view. The front needed the square-on sentence in `FACINGS`: without it the
+figure stayed at the key art's three-quarter angle. One character, one seed,
+judged by eye; the back view's arm still came back a little raised.
+
+Views are cached like any render: a source drawn before this is kept until it
+is deleted (`work/<slug>/source/{front,back,profile}.png`, and a set's
+`<set>-key-<view>.png`). A new set reference draws a new SCAIL video.
 
 ## The team
 
@@ -558,6 +586,7 @@ A new term is named here before it is used.
 | **set** | one animation: dance, sing, flinch, guard, entrance, victory, ko |
 | **draw backend** | what draws a build's art: `codex`, `comfy` or `local` (`--draw-backend`). Never assumed. The user may say "processor" |
 | **set reference** | the identity image a set is drawn against, what `set_key_art` returns: `key.png`, or `source/<set>-key-<view>.png` |
+| **view graph** | `comfy/view-edit-2511.json`: what a `local` build turns the approved key art into every other view with (`comfy.VIEW_WORKFLOW`, `angle_prompt`). See "Local views" |
 | **machine profile** | `comfy/machines/<name>.json`: the model files, sizes, steps, rate, length cap and timeouts for one machine (`Machine`, `--machine`) |
 | **video path** / **pose-edit path** | the two ways a traced set is drawn under a workflow backend: from its source clip through SCAIL-2 (`video_frames`), or one pose card at a time through Qwen-Image-2.1 (`pose_edit_frames`) |
 | **drive video** | the source clip resampled to the drive rate, cut to a 2:3 box, sized to the machine profile, as one animated PNG: `work/drive/<bundle>-<digest12>/drive.png`. Shared across characters |

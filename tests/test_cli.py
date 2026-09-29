@@ -652,3 +652,14 @@ def test_backfill_itself_refuses_a_tracers_clip(tmp_path):
     (root / "clip.mp4").write_bytes(b"not the tracer's")
     with pytest.raises(clips.ClipError, match="never cuts again; pull the bundle again: cag motions pull shuffle/shuffle-3"):
         clips.backfill(root, tmp_path / "cache")
+
+
+def test_only_a_local_build_turns_its_views_with_the_view_graph():
+    assert cli.view_draw_with("codex") is None
+    assert cli.view_draw_with("comfy") is None
+
+
+def test_a_local_build_whose_server_lacks_the_view_graph_stops_before_drawing(monkeypatch):
+    monkeypatch.setattr(cli.comfy, "preflight", lambda client, graphs: ["lora qwen-image-edit-2511-multiple-angles-lora.safetensors"])
+    with pytest.raises(SystemExit, match="multiple-angles"):
+        cli.view_draw_with("local", client=object())
