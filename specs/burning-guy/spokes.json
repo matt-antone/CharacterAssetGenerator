@@ -1,0 +1,54 @@
+{
+  "id": "spokes",
+  "name": "Spokes",
+  "height": "5' 4\"",
+  "description": "A wiry woman in her mid twenties, a bike mechanic at a desert arts festival who sings loud, scrappy riot grrrl punk, all grease and glitter.",
+  "build": "A small, wiry, compact adult woman of ordinary proportions: narrow shoulders, lean arms and legs, standing upright with springy knees.",
+  "face": "Pale peachy skin, big bright green eyes under thick dark brows, a snub nose, a wide mouth, and a large bold smear of black grease across one cheek.",
+  "hair": "Short choppy bright orange hair in a messy crop, bunched up and held back from the forehead by a wide cobalt-blue elastic headband.",
+  "outfit": "Faded denim-blue mechanic's coveralls with the top half off and its sleeves tied round the waist; a fitted black tank top underneath covered in bold gold glitter; a wide tool belt of brown canvas with empty pouches; black high-top canvas sneakers; a thick loop of black bike inner tube worn bandolier-style across the chest; big bold gold glitter patches on both bare shoulders. Both hands bare.",
+  "performance_style": "Springy and ready: feet apart, weight on the balls of the feet, knees bent a little. Both arms loose at her sides, the character-right and character-left hands open, empty, fingers visible. Chin up, a cheeky grin.",
+  "location": "A desert playa at midday: flat pale cracked alkali ground to the bottom of the frame, a pop-up bike repair camp of patched shade cloth at one side, a heap of dusty bicycles decked in bright fake flowers, a hand-painted wooden sign with no words, and a bleached white sky.",
+  "recognition_cues": [
+    "short choppy bright orange hair and a cobalt headband",
+    "denim coveralls tied at the waist over a gold-glitter tank",
+    "a black inner tube worn across the chest",
+    "a bold black grease smear on the cheek"
+  ],
+  "palette": [
+    "coveralls denim blue #4A6FA0 / #2D4566 / #7396C4",
+    "tank top black #1C1B1F / #0C0B0D / #3A3940",
+    "glitter gold #D6AE3A / #8E7020 / #F6DE84",
+    "headband cobalt #1F4FC4 / #122F7A / #4E7BE8",
+    "tool belt brown canvas #7A5A36 / #4A361F / #A48058",
+    "inner tube black rubber #222224 / #101011 / #46464A",
+    "sneakers black canvas #1E1E22 / #0E0E10 / #404048",
+    "grease smear #2A2420",
+    "skin #EDBFA0 / #BD8C6E / #FFDCC4",
+    "hair bright orange #E0661C / #9E4210 / #FF9448",
+    "eye green #3E9A4C",
+    "eye white #F3E8D8",
+    "lip #C2706A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a wrench or tool in hand",
+    "offensive slogans on clothing"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-02"
+    },
+    "sing": {
+      "intent": "Riot-grrrl vocal loop: stamp one sneaker, bring the mic in the character-right hand hard to the mouth, punch the character-left fist up to shoulder height on the shout, then drop back to the springy stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A popping tyre nearby: she jumps a little, both hands flying up, then shakes it off. No opponent, strike or physical contact.",
+    "guard": "One-shot: drop into a wide stance with the character-left forearm up in front of the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: stride in fast with bouncy steps, push the headband back with the character-right hand, then land in the springy stance.",
+    "victory": "One-shot finish: both fists thrown straight up, one sneaker kicked out, head back yelling with the mouth wide open, then hold.",
+    "ko": "Non-contact performance defeat: the spring goes out of her — the shoulders drop, both open hands hang limp at her sides, and her head hangs low, chin toward her chest. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

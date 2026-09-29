@@ -1,0 +1,48 @@
+{
+  "id": "holo",
+  "name": "Holo",
+  "height": "5' 4\"",
+  "description": "A virtual pop idol projected as a hologram, presenting as a young woman in her early twenties, who sings bright vocaloid-style J-pop.",
+  "build": "A slim young adult build of ordinary proportions: narrow shoulders, a straight torso, slim arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Pale aqua-tinted skin, very large round bright-cyan eyes under thin dark-teal brows, a small nose and small full lips.",
+  "hair": "Very long teal hair in two big thick twin tails tied high at each side of the head with bold white ribbons, the tails hanging behind the shoulders to the knees, clear of the arms and hands; a straight fringe to the brows.",
+  "outfit": "The whole figure is a solid, opaque hologram: a sleeveless white idol dress with a fitted bodice and a short pleated skirt edged in a wide bold cyan hem, a big cyan bow at the chest, white gloves ending at the elbows, and white knee-high boots with wide cyan tops. A bright cyan glow rims the outer silhouette, and three or four wide bold horizontal bands of lighter cyan cross the figure as scanlines.",
+  "performance_style": "Idol pose: feet together, the character-left knee bent in. The character-right hand open in a small wave at shoulder height beside the head, the character-left hand open at the hip, both empty with every finger visible. Head tilted, a bright smile.",
+  "location": "A virtual concert stage seen from a glossy black floor running to the bottom of the frame: a huge curved wall of cyan light grids, floating white stars and rows of abstract glowing crowd lights.",
+  "recognition_cues": [
+    "long teal twin tails with white ribbons",
+    "a white idol dress with a wide cyan hem and chest bow",
+    "a bright cyan rim glow and bold horizontal scanline bands"
+  ],
+  "palette": [
+    "dress, gloves, boots and ribbons white #F2F6F8 / #B8C8D0 / #FFFFFF",
+    "hem, bow, boot tops and rim glow cyan #22D8F0 / #0E8CA0 / #A8F4FF",
+    "scanline bands pale cyan #8EEAF6",
+    "hair teal #1FA8A0 / #0E6A66 / #58D8CE",
+    "skin pale aqua #E4F0EE / #A8C4C2 / #FFFFFF",
+    "eye cyan #1CC8E8",
+    "brows dark-teal #145A5A",
+    "lip #C87A6A"
+  ],
+  "avoid": [
+    "a see-through body showing the backdrop",
+    "a headset microphone",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-02"
+    },
+    "sing": {
+      "intent": "J-pop vocal loop: the mic in the character-right hand comes up to the mouth, the character-left hand waves open at shoulder height, a small hop on the chorus beat, then she returns to the idol pose. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief glitch startle: the figure jolts, both open hands lift, the scanline bands thicken for a moment, then she steadies. No opponent or contact.",
+    "guard": "One-shot stage self-protection: cross both open forearms before the chest, then hold a steady pose. Not combat.",
+    "entrance": "One-shot entrance: the figure snaps into place in a column of cyan light, spins once and lands in the idol pose.",
+    "victory": "One-shot finish: a sparkling jump with both open hands high overhead, landing in a two-handed wave, then hold a beaming pose.",
+    "ko": "Non-contact performance defeat: the rim glow dims, both open hands drop limp and her head bows so the twin tails swing forward. She holds a standing, flickering finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

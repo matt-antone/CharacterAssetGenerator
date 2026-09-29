@@ -1,0 +1,48 @@
+{
+  "id": "spiker",
+  "name": "Spiker",
+  "height": "6' 0\"",
+  "description": "A woman in her mid twenties, a beach-volleyball star who sings stadium pop, competitive and loud.",
+  "build": "A tall, lean, powerful athlete's build: broad shoulders, long strong arms, a firm flat torso and long springy legs, standing tall on straight knees.",
+  "face": "Warm brown skin, dark brown eyes under strong straight brows, a broad nose, high cheekbones and full lips.",
+  "hair": "Long dark-brown box braids gathered into a thick high bun on the crown.",
+  "outfit": "A sporty coral-orange crop-top athletic swim top with wide straps; matching coral-orange athletic shorts to mid-thigh; a pair of black wraparound sunglasses hanging on the chest from a thick bright turquoise cord round the neck; bare feet. Her head is bare.",
+  "performance_style": "Ready and bouncy: feet wide, knees softly bent, weight forward. Both arms low in front, the character-right and character-left hands open and empty, fingers spread and visible. Head up, eyes locked forward, a fierce closed mouth.",
+  "location": "A beach-volleyball court on sunlit sand running to the bottom of the frame, a net strung behind with a bright yellow ball resting on the sand, a crowded low bleacher and blue sea beyond.",
+  "recognition_cues": [
+    "coral-orange sports top and shorts",
+    "black sunglasses on a thick turquoise cord",
+    "a high bun of dark box braids"
+  ],
+  "palette": [
+    "top and shorts coral orange #F2703A / #A84520 / #FFA074",
+    "sunglasses black #16181C / #08090B / #3A3E46",
+    "sunglasses cord turquoise #1CB5B8 / #117578 / #62E0E2",
+    "skin #8A5A3C / #573620 / #B07C58",
+    "braids dark brown #2C1C14 / #140C08 / #4E3628",
+    "eye brown #2A1A12",
+    "lip #6A3A30",
+    "teeth #F2EADB",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a volleyball in hand",
+    "a cap or visor"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-04"
+    },
+    "sing": {
+      "intent": "Stadium-pop vocal loop: the mic in the character-right hand at the mouth, the character-left fist pumps up overhead on the hook, feet bounce, then back to the ready stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A whistle blast: she flinches, shoulders up, then snaps back to ready. No opponent or contact.",
+    "guard": "One-shot: both forearms rise together before the face like a block at the net, hands open; hold. Not combat.",
+    "entrance": "One-shot: sprints in, skids to a stop in the sand, drops into the ready stance.",
+    "victory": "One-shot: leaps with both fists up, lands with feet wide, roaring with mouth open, holds.",
+    "ko": "Non-contact defeat: she straightens slowly, both open hands hang limp, and her head drops with shoulders heaving. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

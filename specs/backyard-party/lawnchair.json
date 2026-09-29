@@ -1,0 +1,51 @@
+{
+  "id": "lawnchair",
+  "name": "Lawnchair",
+  "height": "5' 7\"",
+  "description": "A dry-witted grandpa in his late eighties, a man who wears a cardigan in July and sings big-band standards.",
+  "build": "A slight, slightly stooped elderly build: narrow rounded shoulders, a thin frame, a small belly, thin arms and legs of ordinary length, standing upright with the knees nearly straight.",
+  "face": "Pale pink weathered skin with deep smile lines, pale blue eyes behind large square black-framed glasses with thick frames, bushy white brows, a big nose, big ears and thin lips.",
+  "hair": "A thin ring of white hair round the back and sides of the head, the crown bald and bare.",
+  "outfit": "A mustard-yellow button-front cardigan with large brown buttons over a short-sleeved white undershirt, the cardigan sleeves pushed to the elbow; high-waisted brown trousers with a wide black belt pulled up over the belly; white socks pulled high; brown leather sandals. Both hands are bare.",
+  "performance_style": "Unhurried: feet together, weight slightly back, shoulders rounded. Both arms hang at his sides, the character-right and character-left hands open, empty, fingers loose and visible. Head level, a dry one-sided smile.",
+  "location": "The shady corner of a suburban backyard: green lawn running to the bottom of the frame, a green-and-white webbed aluminium lawn chair beside a small side table with a transistor radio, a big oak tree and a white picket fence behind, and warm afternoon light through the leaves.",
+  "recognition_cues": [
+    "a mustard-yellow cardigan with large brown buttons",
+    "large square black-framed glasses",
+    "a bald crown with a ring of white hair and trousers belted high"
+  ],
+  "palette": [
+    "cardigan mustard-yellow #D1A63A / #8F7022 / #EDC766",
+    "cardigan buttons brown #5A3A22",
+    "undershirt and socks white #F1EFE8 / #BCB9B0 / #FFFFFF",
+    "trousers and sandals brown #6E4A2E / #45301D / #93684A",
+    "belt black #1C1C1C",
+    "glasses frames black #161616",
+    "skin #EBBBA8 / #B8887A / #F8D8CA",
+    "hair and brows white #E6E4DE / #B2AFA8",
+    "eye pale-blue #7FA0B8",
+    "eye white #F1EBE0",
+    "teeth #EDE4D0"
+  ],
+  "avoid": [
+    "a walking cane",
+    "sitting in the chair on the key art",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-02"
+    },
+    "sing": {
+      "intent": "Big-band vocal loop: a slow shoulder sway, the mic in the character-right hand held at the chin, the character-left hand snapping gently at hip height, then return to the unhurried stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A slow start at a firecracker: brows jump, both open hands lift to chest height, then he settles back, unimpressed. No opponent or contact.",
+    "guard": "One-shot: raise the character-left open hand palm out like waving off nonsense, then hold. Not combat.",
+    "entrance": "One-shot: shuffle in slowly, stop square to the front and settle into the unhurried stance.",
+    "victory": "One-shot: raise both open hands to shoulder height, head back in a wheezing open-mouthed laugh, then hold.",
+    "ko": "The shoulders round further, both open hands hang limp and the head drops forward, eyes closed as if dozing. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

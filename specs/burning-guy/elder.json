@@ -1,0 +1,53 @@
+{
+  "id": "elder",
+  "name": "Old Sage",
+  "height": "5' 8\"",
+  "description": "A man in his mid seventies who has come to the desert arts festival since its first year, a gentle storytelling elder who sings sixties psychedelic folk, serene and twinkly.",
+  "build": "A slim, slightly stooped elderly man of ordinary proportions: narrow shoulders, a thin straight torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Tanned, deeply lined light skin, bright blue eyes under long bushy white brows, a long hooked nose, weathered cheeks, and a long full white beard falling to the middle of the chest.",
+  "hair": "Long straight white hair to the shoulders, a wide woven rainbow-striped headband across the forehead.",
+  "outfit": "A floor-length loose patchwork robe of big bold square patches, each about eight inches across, in rust orange, mustard yellow, teal and deep purple, with wide sleeves ending at the wrists so both hands are bare; a long braided brown rope sash at the waist; a big round turquoise-and-silver pendant on a leather cord on the chest over the beard; brown leather sandals.",
+  "performance_style": "Serene and still: feet hip-width, weight even. Both arms hang at his sides, the character-right and character-left hands open and empty, palms turned slightly forward, fingers visible. Head level, a gentle twinkling smile.",
+  "location": "Sunrise at a small temple of carved wood on the open playa: flat pale clay running to the bottom of the frame, the intricate latticed wooden temple behind glowing in low gold light, prayer ribbons fluttering, and a pink-and-gold dawn sky.",
+  "recognition_cues": [
+    "a floor-length robe of big bold square patches in rust, mustard, teal and purple",
+    "a long full white beard to mid-chest",
+    "long white hair with a rainbow-striped headband",
+    "a big round turquoise pendant"
+  ],
+  "palette": [
+    "robe rust patch #B0522A / #6E3218 / #D8784A",
+    "robe mustard patch #D0A028 / #8A6A18 / #F0C85A",
+    "robe teal patch #1E7A78 / #104A4A / #48A8A4",
+    "robe purple patch #5A2E7A / #36184A / #84509E",
+    "headband rainbow stripes red #C83A2E",
+    "rope sash, cord and sandals brown #6A4428 / #3E2615 / #946440",
+    "pendant turquoise #30B0A8 / #1A706A / #70DCD4",
+    "pendant setting silver #B8BEC6",
+    "skin #D0A080 / #946C52 / #ECC0A0",
+    "hair and beard white #EAE6DE / #B2AEA4 / #FFFFFF",
+    "eye blue #4A8AC8",
+    "eye white #EFE6D8",
+    "lip #A86A5A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a wizard hat or staff",
+    "small fine patchwork",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Prose dance, a slow gentle folk sway looping back to the opening stance: step side to side in small easy steps under the long robe, both open hands lifting slowly out to shoulder height and drifting down again like leaves, the head swaying gently with the rhythm, then return to the serene stance.",
+    "sing": {
+      "intent": "Psychedelic folk vocal loop: sway gently, raise the mic in the character-right hand to the mouth for a soft wandering phrase, float the open character-left hand in a slow circle at chest height, then lower the mic to the beard. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a sudden sound: the brows lift, both open hands rise to chest height, then he chuckles and settles back into stillness. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider and raise both open hands palms-out before the chest in a peaceful halt, holding the finish. Not combat.",
+    "entrance": "One-shot entrance: walk in with slow unhurried steps, press both open palms together at the chest in greeting, then lower them into the serene stance.",
+    "victory": "One-shot song-finish celebration: raise both open hands slowly to the sky, tip the head back in a warm open-mouthed laugh, and hold the pose with the arms high.",
+    "ko": "Non-contact performance defeat: the serenity fades to weariness — the shoulders stoop, both open hands hang limp at his sides, and his head hangs with the beard resting on the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

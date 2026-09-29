@@ -1,0 +1,47 @@
+{
+  "id": "barback",
+  "name": "Barback",
+  "height": "5' 6\"",
+  "description": "A wry, warm woman in her mid thirties who gives free drinks and free advice at a desert arts festival bar camp and sings smoky torch-song jazz-pop.",
+  "build": "A curvy adult woman of ordinary proportions: medium shoulders, a full bust and hips, a defined waist, standing upright with one hip out.",
+  "face": "Light golden skin, dark hazel eyes under arched black brows, a small beauty mark on the cheek, and full lips.",
+  "hair": "A sleek black bob cut sharply at the jaw with a heavy straight fringe.",
+  "outfit": "A black bowler hat; a fitted scoop-neck waistcoat covered all over in bold scarlet sequins, over a white shirt with sleeves rolled to the elbows; a narrow black bow tie; black high-waisted wide-leg trousers; black ankle boots with a low heel. Both hands bare.",
+  "performance_style": "Knowing and relaxed: feet apart, weight on the character-left hip. The character-left hand rests open on the hip, fingers visible; the character-right arm hangs at her side, hand open and empty. Head tilted, a wry half-smile.",
+  "location": "A desert playa at night: flat pale cracked alkali ground to the bottom of the frame, a salvaged-wood bar with a patched canvas awning at one side strung with warm bulbs, mismatched stools, and a deep star-filled night sky.",
+  "recognition_cues": [
+    "a black bowler hat",
+    "a bold scarlet sequin waistcoat over a white shirt",
+    "a sleek black bob with a heavy fringe"
+  ],
+  "palette": [
+    "waistcoat scarlet sequin #C21E2E / #7A101A / #F0505E",
+    "shirt white cotton #F1EEE5 / #BDB9AE / #FFFFFF",
+    "bowler hat, bow tie, trousers and boots black #1B1A1E / #0B0A0C / #3C3A42",
+    "skin #D8A67E / #A0724E / #F2C8A0",
+    "hair black #141216 / #060508 / #36323C",
+    "eye hazel #6A5A2E",
+    "eye white #EFE6D8",
+    "lip #A83A40",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a tray, glass or bottle in hand"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-02"
+    },
+    "sing": {
+      "intent": "Torch-song vocal loop: roll the hip slowly, bring the mic in the character-right hand close to the mouth, trail the character-left hand down from the bowler brim to the waist, then return to the relaxed stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A glass smashes nearby: she starts, both hands rising, then rolls her eyes and settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: turn the character-left shoulder forward with the character-left forearm up, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: saunter in, tip the bowler brim with the character-right hand, then settle into the relaxed stance.",
+    "victory": "One-shot finish: sweep the bowler off with the character-right hand and hold it high, the character-left hand on the hip, head back in an open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: the cool slips — the shoulders slump, both open hands hang limp at her sides, and her head hangs low, the bowler brim tipping down. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

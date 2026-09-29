@@ -1,0 +1,50 @@
+{
+  "id": "pinata",
+  "name": "Piñata",
+  "height": "5' 3\"",
+  "description": "A woman in her thirties, the party host and undefeated piñata-swinging champion, fiery and festive, who sings merengue.",
+  "build": "A curvy, compact adult woman's build of ordinary proportions: rounded shoulders, a defined waist, full hips, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm brown skin, dark brown eyes with bold black lashes under thick arched black brows, a rounded nose, and full lips in bold red.",
+  "hair": "Thick black hair pulled up into a big high round bun, with one big orange silk flower pinned at the character-left side of the bun.",
+  "outfit": "A sunshine-yellow knee-length dress with short puffed sleeves, a fitted bodice and a full flounced skirt with three tiers, each tier edged by a wide bold ribbon band — turquoise, orange, turquoise; red strappy low-heeled sandals. Arms and hands bare.",
+  "performance_style": "Bold and ready: feet apart, weight on the character-right leg, one hip out. The character-right hand open and empty on the hip, the character-left hand open and empty raised at shoulder height, fingers spread. Head high, a fierce bright smile.",
+  "location": "A festive suburban backyard in the late afternoon: green lawn running to the bottom of the frame, a bright paper donkey piñata hanging from a tree branch, papel picado banners and string lights across the fence, and a table of snacks and a cooler behind.",
+  "recognition_cues": [
+    "a sunshine-yellow tiered flounced dress with wide turquoise and orange ribbon bands",
+    "a big high black bun with a big orange flower",
+    "bold red lips"
+  ],
+  "palette": [
+    "dress yellow #F2C418 / #A8840A / #FFE45C",
+    "ribbon turquoise #1CA6A6 / #0E6868 / #58D0CC",
+    "ribbon and flower orange #EC6A14 / #A04008 / #FF9A4E",
+    "sandals red leather #C21E26 / #7A1016 / #E4505A",
+    "skin #A86E48 / #704628 / #CA926C",
+    "hair black #151214 / #080708 / #36303A",
+    "lips red #BA1E2A",
+    "eye white #F2EADC",
+    "eye brown #2A1A10",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a pink or magenta dress",
+    "a stick or bat in the key art",
+    "a blindfold"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-03"
+    },
+    "sing": {
+      "intent": "Merengue vocal loop: step side to side on the beat, hips swinging the flounced skirt, hold the mic in the character-right hand at the mouth, sweep the character-left open hand out and up on the chorus, then return to the bold stance. The mouth visibly opens wide and changes shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A burst of candy from a breaking piñata startles her: shoulders lift, both open hands rise to the face, then she laughs and settles. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: plant the feet wide, raise both open hands in front of the chest, holding a fierce stance. Not combat.",
+    "entrance": "One-shot entrance: shimmy in with a skirt swish, set the character-right hand on the hip, then land in the bold stance.",
+    "victory": "One-shot celebration: a triumphant twirl ending square to the front with both open hands flung high, head back in an open-mouthed cheer, then hold with both feet planted.",
+    "ko": "Non-contact defeat: the fire goes out — shoulders drop, both open hands hang limp, head bows so the flower tilts forward. She holds a standing, deflated finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

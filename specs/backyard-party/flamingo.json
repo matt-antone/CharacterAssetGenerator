@@ -1,0 +1,47 @@
+{
+  "id": "flamingo",
+  "name": "Flamingo",
+  "height": "5' 6\"",
+  "description": "A sassy plastic pink lawn flamingo come to life as an adult woman-voiced diva with arms and hands, who sings sixties girl-group doo-wop.",
+  "build": "A flamingo figure in molded plastic: a big rounded egg-shaped body, a long thick S-curved neck, and two long thick straight dark-pink legs; from the shoulders of the body grow two human-length pink arms ending in pink four-fingered hands with a thumb, the feathers suggested by broad molded ridges.",
+  "face": "A small rounded flamingo head of matte pink plastic, a big round black eye with a white ring on each side, long lashes molded in black, and a thick down-bent beak, pale pink at the base and solid black at the tip.",
+  "hair": "A big molded bouffant crest of hot-pink plastic plumage on top of the head, rounded and solid.",
+  "outfit": "A wide white plastic pearl necklace round the base of the neck, big bold beads; a short white satin scarf tied at the neck in a bow; two thick black metal lawn stakes form the lower legs below the knees, ending in flat black feet.",
+  "performance_style": "One-legged: standing on the character-right leg, the character-left leg folded up at the knee behind. The character-right hand rests open on the hip; the character-left hand is raised open beside the head, fingers splayed and visible. Head cocked, beak tipped up with sass.",
+  "location": "A suburban backyard lawn: bright green grass running to the bottom of the frame, a row of other plastic pink flamingos staked in the grass, a blue kiddie pool, a white picket fence and a hedge behind, and string lights overhead.",
+  "recognition_cues": [
+    "a big rounded pink plastic flamingo body and long S-curved neck",
+    "a down-bent beak with a black tip",
+    "one-legged stance with a big hot-pink bouffant crest"
+  ],
+  "palette": [
+    "body and arms flamingo-pink plastic #F07AA0 / #B84E74 / #FFA8C4",
+    "crest hot-pink #E8407A / #A82456 / #FF7AA6",
+    "legs dark-pink #C8466E / #8C2C4C / #E8729A",
+    "beak base pale pink #F6C8D4",
+    "beak tip black #1A1A1A",
+    "eye black #111111",
+    "eye ring white #F4F2EE",
+    "pearls and scarf white #F4F2EE / #C2BEB6 / #FFFFFF",
+    "lawn stakes and feet black metal #26262A / #101012 / #4A4A50"
+  ],
+  "avoid": [
+    "translucent plastic",
+    "thin spindly legs",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Prose doo-wop loop on one leg and then two: a hip-swinging girl-group step-touch, the neck swaying in an S, both open hands doing a synchronised hand-roll then a finger-wag at shoulder height, a little hop back onto the character-right leg, and a return to the one-legged stance.",
+    "sing": {
+      "intent": "Doo-wop vocal loop: sway the long neck side to side, the mic in the character-right hand at the beak, the character-left hand doing a girl-group palm push, then return to the one-legged stance. The beak visibly opens and closes on each phrase. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A startled flap: the neck jerks back, both open hands fly up, then she smooths back into the one-legged stance. No opponent or contact.",
+    "guard": "One-shot: tuck the neck back and raise the character-left open hand palm-out, sassy, then hold. Not combat.",
+    "entrance": "One-shot: hop in on one leg, stop square to the front and settle into the one-legged stance.",
+    "victory": "One-shot: both feet down, both open hands raised high, beak wide open and crest held high, then hold.",
+    "ko": "The sass drains: the long neck droops forward, both open hands hang limp and the crest tips down. She stands on both legs. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "uncle-dj",
+  "name": "Uncle DJ",
+  "height": "5' 9\"",
+  "description": "A loud, lovable uncle in his mid fifties who lives for the aux cord at every backyard party and sings eighties freestyle.",
+  "build": "A stocky adult build of ordinary height: rounded shoulders, a round belly, thick forearms, legs of ordinary length, standing upright with straight knees.",
+  "face": "Medium brown skin, dark brown eyes under thick black brows, a broad nose, round cheeks, a neat black goatee flecked with grey, and full lips.",
+  "hair": "Short black hair receding at the temples, cut close and neat.",
+  "outfit": "Big over-ear headphones in bright orange resting round the neck, not on the ears; a boxy short-sleeved shirt with a bold turquoise-and-purple geometric eighties pattern of large triangles; a bright yellow fanny pack belted across the belly; black knee-length shorts; a chunky black box-shaped portable speaker with a round grille hanging at his character-left hip from a wide black strap across the chest; white high-top sneakers. Both hands and forearms are bare.",
+  "performance_style": "Hyping the crowd: feet wide, knees soft, belly forward. Both arms raised to shoulder height, the character-right and character-left hands open and empty, palms up, fingers spread and visible. Head up, a huge open grin.",
+  "location": "A backyard deck at dusk: grey-stained deck boards running to the bottom of the frame, a folding table with a laptop and tangled cables at one side, a cooler and lawn chairs behind, and coloured string lights zig-zagging overhead against a violet sky.",
+  "recognition_cues": [
+    "bright orange headphones round the neck",
+    "a yellow fanny pack across the belly",
+    "a boxy turquoise-and-purple triangle-pattern shirt and a black speaker on a strap"
+  ],
+  "palette": [
+    "headphones orange #F2811D / #B05810 / #FFAA55",
+    "shirt turquoise #22A5A0 / #147069 / #55CFC9",
+    "shirt purple triangles #6A2E9A / #431C63 / #9150C4",
+    "fanny pack yellow #F2C81E / #B08F10 / #FFE162",
+    "shorts, strap and speaker black #1E1E22 / #0C0C0E / #3E3E46",
+    "speaker grille grey #55575C",
+    "sneakers white #EDEDEA / #B9B9B4 / #FFFFFF",
+    "skin #8A5A3C / #5A3A25 / #AE7B58",
+    "hair and goatee black #1A1614 / #0A0806 / #3A332E",
+    "goatee grey fleck #8A8580",
+    "eye brown #2E1C12",
+    "teeth #F2EADA"
+  ],
+  "avoid": [
+    "headphones on the ears",
+    "a phone in hand",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "breakin-01"
+    },
+    "sing": {
+      "intent": "Freestyle vocal loop: step-touch side to side, the mic in the character-right hand at the mouth, the character-left hand pointing up and pumping on the beat, then return to the hype stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A jolt as the music cuts out: shoulders jump, both open hands spread in alarm, then he recovers to the hype stance. No opponent or contact.",
+    "guard": "One-shot: turn the belly aside and cup both open hands over the speaker at the hip, protecting it, then hold. Not combat.",
+    "entrance": "One-shot: bounce in on the beat, stop square to the front and throw both open hands up into the hype stance.",
+    "victory": "One-shot: both open hands raised high, the head thrown back in a big whooping shout, then hold a wide-footed pose.",
+    "ko": "The hype drains out: the arms fall, both open hands hang limp, the belly sags and the head bows. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

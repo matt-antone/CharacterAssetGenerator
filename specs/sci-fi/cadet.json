@@ -1,0 +1,51 @@
+{
+  "id": "cadet",
+  "name": "Cadet",
+  "height": "5' 6\"",
+  "description": "A nineteen-year-old woman, a first-year space-academy cadet who sings show-choir pop with painful, spotless keenness.",
+  "build": "A slight, upright young adult build of ordinary proportions: narrow square shoulders, a straight torso, a neat waist, and arms and legs of ordinary length, standing tall with straight knees.",
+  "face": "Light warm-beige skin, round bright hazel eyes under straight light-brown brows, a small upturned nose, rounded cheeks and full pink lips.",
+  "hair": "Light-brown hair pulled into one large tight round bun at the back of the crown, smooth and flat over the top of the head, the ears and forehead clear. Her head is bare.",
+  "outfit": "A pressed royal-blue academy tunic, high round collar, single-breasted with one bold white vertical band down the front closure, a plain unadorned chest, long sleeves ending at the wrists so both hands are bare; a wide white belt at the waist with a plain square silver buckle; royal-blue straight-legged trousers with one wide white stripe down each outer leg; glossy black ankle boots with rounded toes.",
+  "performance_style": "Standing to attention: heels together, weight even, chest up. Both arms straight at her sides, the character-right and character-left hands open, empty, fingers together and fully visible against the thighs. Head level, a wide eager smile.",
+  "location": "An empty academy assembly hall seen from a low stage of pale grey deck plating running to the bottom of the frame: a curved white back wall with long horizontal light panels, a row of round portholes showing a starfield, and two plain blue banners hanging either side.",
+  "recognition_cues": [
+    "a royal-blue high-collared academy tunic with a bold white front band",
+    "a wide white belt and white stripes down the trousers",
+    "one large tight round light-brown bun"
+  ],
+  "palette": [
+    "tunic and trousers royal-blue #2548B8 / #152B75 / #4F74E0",
+    "front band, belt and trouser stripe white #EEF0F4 / #B9BEC8 / #FFFFFF",
+    "buckle silver #A9B0BA / #6B727C / #DCE1E8",
+    "boots black #1A1B20 / #0B0B0E / #454852",
+    "skin #E8BE9C / #B98A6A / #F7D9C0",
+    "hair light-brown #8A5E3A / #5A3B22 / #B8875C",
+    "eye hazel #6B5A2A",
+    "eye white #F2EDE4",
+    "lip #D0747A",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a peaked cap or beret",
+    "medals, rank insignia or badges",
+    "a sidearm or holster",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-03"
+    },
+    "sing": {
+      "intent": "Show-choir vocal loop: the mic in the character-right hand comes up to the mouth, the character-left hand sweeps open from the chest out to the side at shoulder height on the big note, a bright bounce of the knees, then she returns to attention. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud klaxon: the shoulders jump, both open hands fly up to chest height, then she snaps back to attention. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet apart and raise both open forearms in front of the chest, then hold a steady upright finish. Not combat.",
+    "entrance": "One-shot entrance: march in with crisp high-kneed steps, turn square to the front, click the heels together and snap to attention with both open hands at her sides.",
+    "victory": "One-shot song-finish celebration: jump both fists up above the head, land on both boots, then hold a beaming pose with the character-right hand in a crisp open salute at the brow.",
+    "ko": "Non-contact performance defeat: the posture wilts — the shoulders round, both open hands hang limp and her head droops toward the collar in dejection. She holds a standing, crestfallen finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

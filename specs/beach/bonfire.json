@@ -1,0 +1,50 @@
+{
+  "id": "bonfire",
+  "name": "Bonfire",
+  "height": "6' 0\"",
+  "description": "A man in his mid forties, the warm host of every beach bonfire, who sings laid-back reggae rock.",
+  "build": "A solid, broad adult build: wide shoulders, a thick chest, a comfortable belly and strong arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm medium-brown skin, brown eyes under thick dark brows with crinkled corners, a broad nose, a full dark beard with grey at the chin, and full lips.",
+  "hair": "Shoulder-length thick dark-brown dreadlocks tied back loosely at the nape, a few falling forward over the shoulders.",
+  "outfit": "A heavy faded brick-red pullover hoodie with a big front pouch pocket, the hood down, sleeves pushed up to the forearms with both hands fully bare; olive-green cargo shorts to the knee; tan canvas slip-on shoes; a bold wooden bead bracelet on the character-right wrist.",
+  "performance_style": "Easy host stance: feet wide, weight settled back, shoulders loose. Both arms open and relaxed slightly out from the sides, the character-right and character-left hands open, palms forward in welcome, fingers visible. Head level, a warm easy smile.",
+  "location": "A beach at night around a crackling bonfire: dark sand lit orange running to the bottom of the frame, driftwood logs as benches, sparks rising, dark sea behind and a deep blue starry sky.",
+  "recognition_cues": [
+    "a heavy brick-red hoodie with a big pouch pocket",
+    "tied-back dark dreadlocks",
+    "a full dark beard greying at the chin"
+  ],
+  "palette": [
+    "hoodie brick red #A63A2A / #6A2218 / #CC5C48",
+    "cargo shorts olive #5E6630 / #3A401C / #858E4E",
+    "shoes tan canvas #C2A67A / #8A7250 / #E0C8A0",
+    "bracelet wood #7A4E2A / #4A2E16",
+    "skin #8A5838 / #563420 / #B07A56",
+    "hair and beard dark brown #2E2018 / #16100C / #4E3A2C",
+    "beard grey #9A948C",
+    "eye brown #2E1C12",
+    "eye white #F0E8DA",
+    "lip #6A3A2E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "hands in the hoodie pocket",
+    "a bottle or drink"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-02"
+    },
+    "sing": {
+      "intent": "Reggae-rock vocal loop: the mic in the character-right hand at the mouth, he skanks gently with an off-beat knee bounce, the character-left hand open and swaying at chest height, then returns to the host stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: he ambles in with a slow rolling walk, raises the character-left hand in a wave and settles into the host stance.",
+    "victory": "One-shot finish: he spreads both open hands wide overhead like greeting the whole beach, tips the head back with an open-mouthed laugh and holds.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the energy drains out: the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

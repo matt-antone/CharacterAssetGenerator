@@ -1,0 +1,48 @@
+{
+  "id": "gnome",
+  "name": "Gnome",
+  "height": "3' 4\"",
+  "description": "A garden gnome come to life, a very short stout old man carved and painted in glossy ceramic colours, jolly and stubborn, who sings oompah polka.",
+  "build": "Very short and stout: a round barrel belly, broad short torso, short thick arms, very short sturdy legs, and a large head about a third of his height, standing upright on flat feet.",
+  "face": "Rosy peach painted-ceramic skin with bright red round cheeks, small round dark-blue eyes under bushy white brows, a big round bulb nose, and a wide mouth half hidden in the beard.",
+  "hair": "A thick bushy snow-white beard in one big full rounded mass from the cheeks down to the belt; bushy white hair at the sides. On his head a tall pointed bright-red cone hat, tip bent slightly back.",
+  "outfit": "A royal-blue belted tunic to mid-thigh with short sleeves ending at the elbow so forearms and hands are bare; a wide black belt with a large square gold buckle; brown trousers tucked into chunky black boots with rounded toes.",
+  "performance_style": "Planted and proud: short feet apart, weight even. Both arms bent, the character-right and character-left hands open and empty resting on his round belly above the belt, every finger visible. Head level, a jolly closed-mouth smile under the beard.",
+  "location": "A flowerbed at the edge of a suburban backyard at dusk: short green lawn running to the bottom of the frame, a low stone border with red geraniums, a bird bath and a small ornamental windmill behind, and warm string lights overhead along the fence.",
+  "recognition_cues": [
+    "a tall pointed bright-red cone hat",
+    "a big bushy snow-white beard",
+    "a royal-blue belted tunic"
+  ],
+  "palette": [
+    "hat red ceramic #CE2A22 / #841712 / #EE5A4E",
+    "tunic royal blue #2244A8 / #13286A / #4468D0",
+    "belt and boots black #1E1C1E / #0E0D0E / #3E3A3E",
+    "buckle gold #D4A830 / #8A6A18 / #F2D06A",
+    "trousers brown #6E4A2C / #422A16 / #946C48",
+    "skin peach ceramic #EDB592 / #BC8266 / #FAD2B6",
+    "cheeks red #E0584A",
+    "beard and hair white #EDEAE4 / #B8B4AC / #FFFFFF",
+    "eye blue #1E3A78",
+    "eye white #F4ECE0",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a fishing rod, lantern or wheelbarrow",
+    "chipped or cracked ceramic"
+  ],
+  "animations": {
+    "dance": "Oompah-polka hop loop: bounce on the short legs, hop from the character-left foot to the character-right, each hand gripping the belt, the round belly and beard bouncing, the cone hat tip wagging, then return to the planted proud stance.",
+    "sing": {
+      "intent": "Oompah vocal loop: puff out the belly, hold the mic in the character-right hand at the mouth under the beard, pump the character-left fist up and down to the tuba beat, then return to the proud stance. The beard parts so the open mouth shows. The mouth visibly opens wide and changes shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sprinkler hiss startles him: the whole stout body stiffens, both open hands rise to the beard, then he settles. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: plant the short legs wide and raise both open hands in front of the belly, holding a stubborn stance. Not combat.",
+    "entrance": "One-shot entrance: waddle in on short steps, tip the red hat with the character-right hand, then settle hands-on-belly into the proud stance.",
+    "victory": "One-shot celebration: a little hop with both open hands thrown up, head back in a big open-mouthed laugh through the beard, then hold with both feet planted.",
+    "ko": "Non-contact defeat: he goes stiff and still like a garden ornament — both open hands drop to his sides, the cone hat droops forward and his head bows. He holds a standing, glum finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

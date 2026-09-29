@@ -1,0 +1,50 @@
+{
+  "id": "shaker",
+  "name": "Shaker",
+  "height": "5' 11\"",
+  "description": "A man in his late twenties, the cousin who has appointed himself the party's mixologist, smooth and pleased with himself, who sings nu-disco.",
+  "build": "A lean average adult man's build of ordinary proportions: medium shoulders, a trim waist, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm tan skin, hazel eyes under thick straight dark brows, a straight nose, a neatly trimmed short dark beard along the jaw, and medium lips.",
+  "hair": "Dark-brown hair pulled back tight from the forehead into one large round man-bun high on the back of the crown, the sides short.",
+  "outfit": "A crisp white short-sleeved button-up shirt tucked in, top button open; wide bright-red suspenders, one bold band over each shoulder, clipped to high-waisted navy chino trousers with the hems rolled once above the ankle; tan suede loafers with no socks. His forearms and hands are bare.",
+  "performance_style": "Smooth and loose: feet hip-width apart, weight shifted onto the character-left leg. The character-right hand open and empty at chest height, palm up as if presenting, the character-left hand open and empty at his side. Head tilted slightly, a knowing half-smile.",
+  "location": "The drinks corner of a suburban backyard in the evening: a wooden deck running to the bottom of the frame, a trestle table crowded with jugs of bright punch, lemons and a big blue picnic cooler, a wooden fence behind with warm globe string lights, and potted herbs along the rail.",
+  "recognition_cues": [
+    "wide bright-red suspenders over a white short-sleeved shirt",
+    "a large round dark-brown man-bun",
+    "navy chinos rolled above bare ankles"
+  ],
+  "palette": [
+    "shirt white cotton #F2EFE8 / #BDB8AC / #FFFFFF",
+    "suspenders red #D1262E / #85141A / #F0555B",
+    "chinos navy #1F2E55 / #111A33 / #3A4E82",
+    "loafers tan suede #B07A48 / #6E4A2A / #D6A06C",
+    "skin #C58C62 / #8A5A3A / #E0AD86",
+    "hair and beard dark brown #33231A / #1A110C / #5A4232",
+    "eye white #F1E8DA",
+    "eye hazel #6A5A2E",
+    "lips #9A5E48",
+    "teeth #F3EDE1"
+  ],
+  "avoid": [
+    "a bartender's waistcoat or bow tie",
+    "a drinks tray or cocktail shaker",
+    "sleeves covering the hands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-02"
+    },
+    "sing": {
+      "intent": "Nu-disco vocal loop: sway the hips on the beat, raise the mic in the character-right hand to the mouth, roll the character-left shoulder and point the character-left finger upward on the hook, then return to the smooth loose stance. The mouth visibly opens wide and changes shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A cold splash from the cooler startles him: the torso jerks back, both open hands lift to chest height, then he smooths his hair back and settles. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn the character-left shoulder forward and raise both open hands in front of the chest, holding a cool braced stance. Not combat.",
+    "entrance": "One-shot entrance: stroll in with a little shoulder groove, snap the suspenders with both thumbs, then land in the smooth loose stance.",
+    "victory": "One-shot celebration: both open hands point up high on a disco beat, head tipped back in a broad open-mouthed grin, then hold the pose with both feet planted.",
+    "ko": "Non-contact defeat: the swagger drains out — the shoulders slump, both open hands hang limp at his sides, and his head hangs low. He holds a standing, deflated finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

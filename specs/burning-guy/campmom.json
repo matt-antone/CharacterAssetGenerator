@@ -1,0 +1,54 @@
+{
+  "id": "campmom",
+  "name": "Camp Mom",
+  "height": "5' 4\"",
+  "description": "A woman in her mid fifties who runs her camp at a desert arts festival with snacks, first aid and sunscreen for everyone, and sings warm seventies singer-songwriter pop, motherly and brisk.",
+  "build": "A soft, rounded adult woman of ordinary proportions: medium shoulders, a full figure with a natural waist, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Light freckled pink-beige skin, warm brown eyes under soft greying brows, a round nose, full rosy cheeks, smile lines at the eyes and mouth, thin lips.",
+  "hair": "Shoulder-length curly light brown hair streaked with grey, held back under a wide sunflower-yellow cotton headscarf tied at the nape.",
+  "outfit": "A loose sunflower-yellow cotton tunic with big bold white daisy prints, sleeves to the elbow; knee-length wide olive-green cotton shorts; sturdy brown hiking sandals with thick straps; a big bright red nylon fanny pack worn at the front of the waist with a large white cross on its pocket; a white plastic sunscreen bottle clipped to the fanny pack strap; big round tortoiseshell sunglasses pushed up on the headscarf.",
+  "performance_style": "Warm and brisk: feet hip-width, weight even. The character-left hand rests open on the hip, the character-right hand open at her side, fingers visible, both empty. Head tilted, a warm fond smile.",
+  "location": "Afternoon in a shade camp on the playa: flat pale clay running to the bottom of the frame, a big silver shade canopy on poles behind with a folding table of water jugs and fruit, bright rugs on the ground and a hot pale sky.",
+  "recognition_cues": [
+    "a big red front fanny pack with a white cross",
+    "a sunflower-yellow tunic with big white daisies",
+    "a sunflower-yellow headscarf over grey-streaked curls",
+    "round tortoiseshell sunglasses up on the headscarf"
+  ],
+  "palette": [
+    "tunic and headscarf sunflower yellow #E8B82A / #A8801A / #FFD85E",
+    "daisies and cross white #F2F0EA / #C0BCB2 / #FFFFFF",
+    "shorts olive cotton #6A7240 / #424826 / #94A064",
+    "sandals brown leather #6A4428 / #3E2615 / #946440",
+    "fanny pack red nylon #C82A2A / #801818 / #EC5A56",
+    "sunscreen bottle white plastic #E8E6E0",
+    "sunglasses tortoiseshell #6A3E1C / #3A200C / #A0683A",
+    "skin #E8B8A0 / #B08672 / #F8D4C0",
+    "hair grey-streaked light brown #8A6A4E / #5A4430 / #B8A08A",
+    "eye brown #4A3020",
+    "eye white #EFE6D8",
+    "lip #B86A60",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a medical uniform or nurse cap",
+    "small fine floral print",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
+    "sing": {
+      "intent": "Seventies pop vocal loop: sway warmly from sandal to sandal, bring the mic in the character-right hand up to the mouth for a heartfelt phrase, open the character-left hand outward at chest height as if welcoming the room, then lower the mic. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a sudden shout: both open hands fly to the fanny pack, the shoulders lift, then she pats it and settles back into her warm stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet wider and raise the character-left forearm across the chest, the character-right hand open over the fanny pack, holding a firm motherly finish. Not combat.",
+    "entrance": "One-shot entrance: bustle in with quick short steps, give a big wave with the character-right hand, then settle into the stance with the character-left hand on her hip.",
+    "victory": "One-shot song-finish celebration: clasp both open hands to the heart, then fling them wide above the shoulders with a big open-mouthed laugh, and hold a proud beaming pose.",
+    "ko": "Non-contact performance defeat: the brisk warmth runs out — the shoulders sag, both open hands hang limp at her sides, and her head drops with the chin toward the tunic. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

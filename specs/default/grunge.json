@@ -1,0 +1,53 @@
+{
+  "id": "grunge",
+  "name": "Grunge",
+  "height": "6' 0\"",
+  "description": "A man in his late twenties, a nineties grunge singer, mumbling and brooding until the chorus erupts.",
+  "build": "A lanky, narrow adult build of ordinary proportions: bony shoulders, a thin straight torso, long slim arms and legs, standing loose with straight knees.",
+  "face": "Pale fair skin with a light flush, grey-blue eyes under straight light-brown brows, a narrow straight nose, hollow cheeks, patchy light-brown stubble on the jaw, and thin lips.",
+  "hair": "Dirty-blond hair, straight and uneven, to the chin, parted in the middle and hanging forward on both sides of the face over the brows, clear of the eyes' centres, tucked in front of the shoulders.",
+  "outfit": "An oversized red-and-black flannel shirt with big bold buffalo checks, worn open, sleeves pushed up to the forearms so both hands are fully bare; a charcoal-grey waffle thermal shirt underneath; faded light-blue jeans ripped open at both knees; scuffed black lace-up combat boots. His head is bare.",
+  "performance_style": "Slouched and loose: feet apart, weight sunk onto the character-right leg. Both arms hang long at his sides, the character-right and character-left hands open and empty beside the thighs, fingers fully visible. Head tipped forward a little, a sleepy brooding look.",
+  "location": "A cramped Seattle club stage: scuffed black-painted floorboards running to the bottom of the frame, a back wall of peeling band flyers, a tall amp stack at one side and a dim green stage light through haze.",
+  "recognition_cues": [
+    "an open red-and-black buffalo-check flannel",
+    "chin-length dirty-blond hair hanging forward",
+    "ripped light-blue jeans and black boots"
+  ],
+  "palette": [
+    "flannel red check #B3262A / #6E1518 / #D8504F",
+    "flannel black check #1E1C1C / #0E0D0D",
+    "thermal charcoal #4A4A4E / #2C2C30 / #6C6C72",
+    "jeans faded blue denim #8AA6C4 / #5A7594 / #B4CBE0",
+    "knee skin patches #E6BFA8",
+    "boots black leather #232124 / #111012 / #45424A",
+    "skin #E6BFA8 / #AE8672 / #F7DCCB",
+    "hair dirty-blond #A88E5C / #6C5A37 / #CBB482",
+    "stubble light brown #8A6E4E",
+    "eye white #F1ECE4",
+    "eye grey-blue #6A8096",
+    "lip #B07A70",
+    "teeth #EDE5D6"
+  ],
+  "avoid": [
+    "hair covering the eyes completely",
+    "a beanie",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "party-01"
+    },
+    "sing": {
+      "intent": "Grunge vocal loop: mumble low with the mic in the character-right hand at the mouth and the head hanging, then on the chorus throw the head up, open the mouth wide into a raw howl and swing the character-left hand out loose to the side, then sag back to the slouch. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief flinch at a loud room sound: the shoulders hunch up to the ears and both open hands rise to the chest, then he slumps back into the slouch. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn the shoulders in and raise both forearms loosely in front of the face, hands open, then hold a hunched steady finish. Not combat.",
+    "entrance": "One-shot entrance: shamble in with a loose heavy step, stop square to the front and sink into the slouched stance with both hands open at his sides.",
+    "victory": "One-shot finish: fling both open hands wide overhead, tip the head back so the hair swings clear, mouth open in a yell, then hold.",
+    "ko": "Non-contact performance defeat: the slouch deepens, both open hands dangle, and the head drops so the hair hangs forward. He holds a standing, drained finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

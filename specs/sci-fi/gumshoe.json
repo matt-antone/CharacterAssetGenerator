@@ -1,0 +1,50 @@
+{
+  "id": "gumshoe",
+  "name": "Gumshoe",
+  "height": "5' 11\"",
+  "description": "A man in his fifties, a rain-soaked future-noir private detective with a cybernetic eye, who sings slow smoky trip-hop.",
+  "build": "A lean adult build of ordinary proportions: medium shoulders, a straight torso and arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Weathered olive skin, a long straight nose, heavy dark-grey stubble along the jaw, a dark-brown natural character-left eye, and a round glowing amber cybernetic character-right eye set in a bold dark-steel ring.",
+  "hair": "Short swept-back dark-grey hair, damp. A wide-brimmed charcoal fedora with a black band sits level on the head.",
+  "outfit": "A knee-length belted tan trench coat, double-breasted, wide lapels and a matching tan belt tied at the waist, open below the belt, sleeves ending at the wrists so both hands are bare; a charcoal shirt and a wide dark-red tie beneath; charcoal straight-legged trousers; black leather shoes. The coat is darkened with rain on the shoulders.",
+  "performance_style": "Weight on the character-left leg, the character-right knee loose. Both arms hang at his sides, the character-right and character-left hands open, empty, fingers fully visible beside the coat. Head level, a tired half-lidded look.",
+  "location": "A rain-swept city street at night, seen from wet black pavement running to the bottom of the frame: a dark brick wall, a lit amber streetlamp, glowing cyan wordless neon shapes and falling rain.",
+  "recognition_cues": [
+    "a knee-length belted tan trench coat",
+    "a wide-brimmed charcoal fedora",
+    "a glowing amber cybernetic character-right eye in a dark-steel ring"
+  ],
+  "palette": [
+    "coat and coat belt tan #A88B5E / #6E5A3A / #CDB38A",
+    "fedora, shirt and trousers charcoal #34363B / #1C1D20 / #55585F",
+    "fedora band black #121214",
+    "tie dark-red #7A1E22 / #4A1014 / #A0343A",
+    "shoes black #141416 / #070708 / #3A3A40",
+    "cyber eye amber #FFB02A / #C07410 / #FFE08A",
+    "eye ring dark-steel #3E4652",
+    "skin #B08A64 / #7A5A3E / #D2AC86",
+    "hair and stubble dark-grey #4A4A4C / #2C2C2E / #767678",
+    "eye brown #3A2618"
+  ],
+  "avoid": [
+    "a pistol or holster",
+    "a cigarette or smoke",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
+    "sing": {
+      "intent": "Trip-hop vocal loop: slow, the mic in the character-right hand rises to the mouth, the character-left hand drifts open at chest height, the head tips down under the brim on a low line, then lifts and he returns to the loose stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a siren: the shoulders tighten, the head turns aside and both open hands lift slightly, then he settles. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn a shoulder forward and raise the character-left forearm before the chest, then hold. Not combat.",
+    "entrance": "One-shot entrance: walk in slowly, tip the fedora brim with the character-right hand, then settle into the loose stance with both hands open at his sides.",
+    "victory": "One-shot finish: tip the fedora back with the character-right hand, the cyber eye flaring bright, and hold a small knowing grin.",
+    "ko": "Non-contact performance defeat: the shoulders slump, both open hands hang limp and his head drops so the brim shades the face, the cyber eye dimmed. He holds a standing, weary finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

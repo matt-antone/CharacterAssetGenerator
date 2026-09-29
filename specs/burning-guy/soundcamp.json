@@ -1,0 +1,50 @@
+{
+  "id": "soundcamp",
+  "name": "Soundcamp",
+  "height": "5' 7\"",
+  "description": "A woman in her mid thirties, a sunrise-set DJ at a desert arts festival who sings warm, hypnotic deep house, serene and completely in the groove.",
+  "build": "A slim, athletic adult woman of ordinary proportions: narrow shoulders, a long straight torso, long legs, standing upright with loose knees.",
+  "face": "Warm tan skin, dark brown almond eyes under straight dark brows, high cheekbones, a small straight nose and full lips.",
+  "hair": "Long straight jet-black hair in one thick high ponytail falling to the shoulder blades, a short straight fringe across the brows.",
+  "outfit": "Huge round over-ear headphones in matte white with thick padded cups worn on the ears, a wide white headband over the crown; a short shoulder cape of large square mirror tiles, each tile flat pale silver-grey, falling to the elbows, fastened at the throat; underneath, a fitted sleeveless teal crop top and high-waisted teal flared trousers; a wide tan leather belt; chunky tan leather desert boots. Both arms bare from the elbow, both hands bare.",
+  "performance_style": "Loose and grooving: feet hip-width, weight rolling onto the character-left boot, knees soft. Both arms relaxed at her sides, the character-right and character-left hands open, empty, fingers visible. Head level, eyes half-closed, a serene smile.",
+  "location": "A desert playa at sunrise: flat cracked pale alkali ground running to the bottom of the frame, a low wooden DJ platform draped in faded rugs at one side with a pair of tall speaker stacks, strings of warm bulbs overhead, and a wide peach-and-gold dawn sky over a line of distant mountains.",
+  "recognition_cues": [
+    "huge round white over-ear headphones",
+    "a short cape of large square silver mirror tiles",
+    "a high black ponytail",
+    "teal crop top and flared trousers"
+  ],
+  "palette": [
+    "headphones white plastic #E8E6E0 / #B4B1A8 / #FFFFFF",
+    "mirror tiles silver-grey #A9B2BA / #6E767E / #DDE4EA",
+    "top and trousers teal #138A8A / #0A5656 / #3EB9B4",
+    "belt and boots tan leather #A8743F / #6A4623 / #D49C62",
+    "skin #C08A62 / #86593B / #E0AE86",
+    "hair black #17141A / #08070A / #3A3540",
+    "eye white #F1E9DD",
+    "eye brown #2A1A12",
+    "lip #9A5048",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a headset microphone boom on the headphones",
+    "the cape read as clear glass"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-03"
+    },
+    "sing": {
+      "intent": "Deep-house vocal loop: rock gently on the knees, bring the mic in the character-right hand to the mouth, press the character-left hand to the headphone cup, then lower the mic and return to the grooving stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sudden feedback squeal: shoulders lift, both hands jump to the headphone cups, then she settles back into the groove. No opponent, strike or physical contact.",
+    "guard": "One-shot: step the feet wider and raise the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: walk in with a loose rolling step, the cape swinging, settle the headphones with both hands, then take the grooving stance.",
+    "victory": "One-shot finish: both open hands thrown straight up above the head, head tipped back, a wide open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: the groove stops — the shoulders drop, both open hands hang limp at her sides, and her head hangs low, chin toward her chest. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

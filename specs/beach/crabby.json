@@ -1,0 +1,44 @@
+{
+  "id": "crabby",
+  "name": "Crabby",
+  "height": "5' 10\"",
+  "description": "A grumpy male anthropomorphic crab, middle-aged in manner, who sings blues shuffle, crotchety and put-upon.",
+  "build": "A human-sized crab standing upright on four thick jointed legs: a wide, rounded, bright red shell for a body, two short thick arms each ending in one huge claw, and short eyestalks on top of the shell.",
+  "face": "A face on the front of the shell: two large round black eyes on thick short stalks, a heavy shelled brow ridge, and a wide mouth with a pale underside.",
+  "hair": "No hair; the top of the shell is smooth and bright red.",
+  "outfit": "A navy-blue ship captain's cap with a shiny black peak and a gold band, sitting on top of the shell between the eyestalks. Otherwise his bare red shell.",
+  "performance_style": "Planted and sour: all four legs splayed wide, weight low. Both huge claws held open in front at chest height, empty. Eyestalks upright, a heavy scowling brow.",
+  "location": "A weathered wooden pier at dusk, planks running to the bottom of the frame, a coil of rope and a lobster pot at one side, and a grey-blue sea and orange sky beyond.",
+  "recognition_cues": [
+    "a bright red shell body with two huge claws",
+    "a navy captain's cap with a gold band",
+    "eyes on short thick stalks"
+  ],
+  "palette": [
+    "shell red #D23A24 / #8A2214 / #F2765A",
+    "underside pale cream #F2D6B4 / #BFA282 / #FFF0D8",
+    "cap navy #1E2A4A / #0E1428 / #3A4A74",
+    "cap peak black #16181C",
+    "cap band gold #D8AE3A / #957422 / #F4D682",
+    "eye black #111111",
+    "eye glint white #F2F2F2"
+  ],
+  "avoid": [
+    "human hands",
+    "a pipe or cigar"
+  ],
+  "animations": {
+    "dance": "Prose shuffle: a grumbling side-to-side sidestep, the four legs stepping in pairs, both claws snapping open and shut at chest height on the beat, the shell rocking, then back to the planted stance.",
+    "sing": {
+      "intent": "Blues vocal loop: the mic held in the character-right claw at the mouth, the character-left claw snaps open and shut on the beat, the eyestalks sway, then back. The wide mouth visibly opens. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A wave crashes: the eyestalks snap down flat, the claws jerk up, then they rise back. No opponent or contact.",
+    "guard": "One-shot: both claws raise before the face, crossed like a shield; hold. Not combat.",
+    "entrance": "One-shot: scuttles in sideways, turns square to the front and plants.",
+    "victory": "One-shot: both claws raised high snapping, eyestalks upright, mouth wide open, holds.",
+    "ko": "Non-contact defeat: both claws droop to the planks' level beside the legs, the eyestalks sag and the cap tilts. The legs stay planted. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

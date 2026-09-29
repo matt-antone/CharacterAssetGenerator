@@ -1,0 +1,52 @@
+{
+  "id": "balloon",
+  "name": "Balloon",
+  "height": "5' 4\"",
+  "description": "A woman in her twenties, the party's water-balloon ambusher, soaked through and gleeful, who sings ska-punk.",
+  "build": "A wiry, athletic adult woman's build of ordinary proportions: narrow shoulders, a lean torso, arms and legs of ordinary length, standing upright with springy straight knees.",
+  "face": "Medium brown skin, dark brown eyes under thick straight black brows, a small upturned nose, round cheeks with bold water droplets, and full lips.",
+  "hair": "Thick black hair in a short choppy bob to the jaw, wet and clumped, held back from the forehead by a knotted bright-red bandana tied round the head, the knot at the back.",
+  "outfit": "A solid opaque lime-green oversized T-shirt, wet and darkened in big patches, clinging, short sleeves; black-and-white checkered shorts with bold big checks; bright-yellow rubber flip-flops. Both arms and hands bare.",
+  "performance_style": "Coiled and sly: feet apart, knees slightly bent, weight forward. The character-right hand open and empty cocked back at shoulder height as if about to throw, the character-left hand open and empty forward at waist height. Head level, a mischievous grin.",
+  "location": "A sunny suburban backyard lawn in mid-afternoon running to the bottom of the frame: a blue kiddie pool, a green garden hose snaking across the grass, a bucket of coloured water balloons, and a wooden fence with string lights behind.",
+  "recognition_cues": [
+    "a bright-red bandana tied round short wet black hair",
+    "a soaked opaque lime-green oversized tee",
+    "bold black-and-white checkered shorts"
+  ],
+  "palette": [
+    "tee lime green #7EC832 / #4A7E18 / #A8E866",
+    "tee wet patches #5A9A22",
+    "bandana red #D02828 / #861414 / #F05858",
+    "shorts check black #1E1E20 / #0E0E10 / #3C3C40",
+    "shorts check white #EEEDE8 / #B8B6B0 / #FFFFFF",
+    "flip-flops yellow rubber #F0D020 / #A88E10 / #FFE866",
+    "skin #9E6A48 / #684228 / #C28E6A",
+    "hair black #151416 / #080808 / #36343A",
+    "water droplets pale blue #BDE2F2",
+    "eye white #F2EADC",
+    "eye brown #2A1A10",
+    "lips #7E4838",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a water gun or squirt gun",
+    "see-through wet fabric"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-02"
+    },
+    "sing": {
+      "intent": "Ska-punk vocal loop: skank on the spot with knees pumping, hold the mic in the character-right hand at the mouth, chop the character-left open hand up and down on the offbeat, then return to the coiled stance. The mouth visibly opens wide and changes shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A splash of cold water from off frame: she squeals, hunches with both open hands up by the shoulders, then shakes it off and grins. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: duck the head and raise both open hands in front of the face, knees bent, holding a braced stance. Not combat.",
+    "entrance": "One-shot entrance: sneak in on tiptoe, pop up and settle into the coiled stance.",
+    "victory": "One-shot celebration: jump with both open hands flung up, head back in an open-mouthed whoop, then hold with both feet planted.",
+    "ko": "Non-contact defeat: her energy drains — shoulders drop, both open hands hang dripping at her sides, head hangs. She holds a standing, bedraggled finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

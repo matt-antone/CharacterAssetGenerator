@@ -1,0 +1,53 @@
+{
+  "id": "crypt",
+  "name": "Crypt",
+  "height": "6' 1\"",
+  "description": "A cackling male late-night horror-show host in his fifties, a gaunt vampire-ish showman who sings novelty monster rock and never stops making puns, silly rather than scary.",
+  "build": "Tall and lanky with bony shoulders, a slight showman's stoop, long thin arms and long thin legs of ordinary human proportion.",
+  "face": "Pale grey-green skin, deep-set bright yellow eyes under thick arched black brows, a long hooked nose, high sharp cheekbones, a wide thin-lipped mouth and two small white pointed fangs.",
+  "hair": "Slick black hair combed straight back from a sharp widow's peak, flat to the skull, ending at the nape.",
+  "outfit": "A black single-breasted tuxedo jacket with wide black satin lapels and three large round moth-eaten holes showing the white shirt beneath, a crisp white wing-collar shirt, a big floppy crimson bow tie, black straight-leg trousers, and worn black leather shoes. Over the shoulders a short black cape with a scarlet lining, its hem at the backs of the knees, fastened at the throat. The sleeves end at the wrists so both bony grey-green hands are fully bare. His head is bare.",
+  "performance_style": "Showman's stance: feet apart, weight on the character-right foot, a slight forward lean. The character-right hand open and empty at his side, the character-left hand raised open and empty at shoulder height, fingers spread in a spooky wiggle. Head cocked, a sly mischievous grin.",
+  "location": "A cheap late-night TV horror set: a painted cardboard castle wall with a crooked arched window, a plastic candelabra on a dusty coffin-shaped desk, fake cobwebs in the corners, and a creaky wooden floor running to the bottom of the frame under a green-tinted studio light.",
+  "recognition_cues": [
+    "a black tuxedo with three large round moth-eaten holes",
+    "a short black cape with scarlet lining",
+    "a big floppy crimson bow tie",
+    "slick black hair with a sharp widow's peak",
+    "pale grey-green skin and bright yellow eyes"
+  ],
+  "palette": [
+    "tuxedo and cape black #1E1C22 / #0E0D11 / #3E3B44",
+    "lapels black satin #2A2830 / #141318 / #56525E",
+    "cape lining scarlet #B51E2A / #70121A / #E0474F",
+    "shirt white #EDEAE2 / #B5B1A7 / #FFFFFF",
+    "bow tie crimson #C4162E / #7A0D1C / #EC4A5C",
+    "trousers black #25232A / #121116 / #45424B",
+    "shoes black leather #18171B / #0A0A0C / #3A3840",
+    "skin grey-green #A9B59A / #6E7A62 / #CBD5BE",
+    "hair black #121114 / #060607 / #34323A",
+    "eyes yellow #F2C230",
+    "fangs and teeth #F2EEE2",
+    "lip #5A4A50"
+  ],
+  "avoid": [
+    "blood or gore",
+    "a full-length or floor-length cape",
+    "a top hat or headwear",
+    "a snarling menacing face"
+  ],
+  "animations": {
+    "dance": "Novelty monster-rock loop: a knock-kneed twisting stomp in place, feet planted wide, knees swinging in and out, both open hands wiggling spookily at shoulder height, the cape swinging from the shoulders, head bobbing on the beat. Returns to the showman's stance.",
+    "sing": {
+      "intent": "Hammy monster-rock vocal loop: lean in with the mic at the mouth in the character-right hand, the character-left hand wiggling spooky fingers beside the face, then throw the head back in a cackle between lines and return to the showman's stance. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: he jumps with both open hands up, the cape flaring, then smooths his hair back with the character-left hand. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: sweep the character-left arm up so the cape covers the lower face, eyes peeking over, and hold. Not combat.",
+    "entrance": "One-shot entrance: creep in on tiptoe with long exaggerated steps, then plant both feet and spread both open hands wide as if introducing the show, and hold.",
+    "victory": "One-shot celebration: throw both open hands high, cape flaring, head back in a huge open-mouthed cackle, then hold a triumphant pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet as the act falls flat — the shoulders slump, the cape hangs limp, both open hands dangle at his sides and his head hangs with the chin on the bow tie. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

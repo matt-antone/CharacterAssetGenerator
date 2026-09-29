@@ -1,0 +1,48 @@
+{
+  "id": "plague",
+  "name": "Plague",
+  "height": "5' 10\"",
+  "description": "A plague doctor, a man in his sixties, courtly and old-fashioned, who sings Renaissance madrigals with a bow and a flourish.",
+  "build": "A lean, straight-backed adult man of ordinary proportions, level shoulders, standing upright with straight knees.",
+  "face": "A rigid tan-leather mask over the whole face with a long curved beak about a foot long pointing forward and down, two big round opaque amber-glass eye lenses in brass rims, and a chin strap; the mask covers the face entirely, only a little pale neck showing below it.",
+  "hair": "No hair shows: a black leather hood covers the head and neck under the hat.",
+  "outfit": "A wide-brimmed flat-crowned black hat; a dark brown waxed coat buttoned to the throat, fitted to the body and ending at the knee, the sleeves ending at the wrists; a short deep-crimson shoulder cape to the elbows; tan leather gloves covering the fingers; black breeches and tall black boots.",
+  "performance_style": "Courtly and upright: feet together, the character-right foot a half step forward. Both arms at his sides, the character-right and character-left gloved hands open and empty, every finger visible. The beak level, pointing forward.",
+  "location": "A candlelit Renaissance courtyard at night: flagstones running to the bottom of the frame, a stone arcade of round arches behind, an old well at one side, and torches in iron brackets casting warm light.",
+  "recognition_cues": [
+    "a long curved tan-leather beak mask with round amber lenses",
+    "a wide-brimmed flat-crowned black hat",
+    "a knee-length dark brown waxed coat",
+    "a short deep-crimson shoulder cape"
+  ],
+  "palette": [
+    "beak mask tan leather #B68A5A / #7A5A36 / #D8AE80",
+    "eye lenses amber glass #D89A30 / #8C5E14 / #F4C468",
+    "lens rims brass #B8903A / #7A5E20 / #E0C070",
+    "hat and hood black #1C1A1A / #0A0909 / #3C3838",
+    "waxed coat dark brown #4A3424 / #281C12 / #6E5038",
+    "shoulder cape crimson #8E1E24 / #561014 / #BA4046",
+    "gloves tan leather #B68A5A / #7A5A36 / #D8AE80",
+    "breeches and boots black #242022 / #121011 / #464044",
+    "neck skin #E0C4A8"
+  ],
+  "avoid": [
+    "a cane or staff",
+    "blood, disease or sores",
+    "an ankle-length flaring coat"
+  ],
+  "animations": {
+    "dance": "Prose dance, since the rigid beak and knee-length coat suit a courtly step better than a traced club dance: a stately madrigal pavane. Step forward with the character-right foot and bow from the waist, beak dipping, the character-right gloved hand sweeping open across the body; step back and rise, then repeat on the character-left side. Return to the courtly opening stance.",
+    "sing": {
+      "intent": "Madrigal vocal loop: the mask cannot move, so the head and body carry the singing: bring the mic in the character-right gloved hand up beside the beak's base, lift the beak on the rising phrase and dip it on the fall, open the character-left gloved hand in a courtly flourish, the chest swelling on each breath, then lower the mic and return to the upright stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the beak jerks up, both gloved hands rise open at the chest, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: turn the hat brim down, raise the character-left gloved forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: walk in with measured steps, turn square to the front and make a small courtly bow, then rise with both hands open at his sides.",
+    "victory": "One-shot celebration: sweep a deep courtly bow with the character-right gloved hand flourishing open, rise with both hands raised, and hold.",
+    "ko": "Non-contact defeat: the shoulders sag, both gloved hands hang limp, the beak droops toward the chest. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

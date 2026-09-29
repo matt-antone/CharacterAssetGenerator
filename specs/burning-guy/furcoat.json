@@ -1,0 +1,51 @@
+{
+  "id": "furcoat",
+  "name": "Furcoat",
+  "height": "6' 1\"",
+  "description": "A flamboyant man in his late thirties, a dancer at a desert arts festival who sings bouncing, strutting funk, generous and delighted with everyone.",
+  "build": "A tall, lean adult man of ordinary proportions: medium shoulders, long arms and legs, a narrow waist, standing upright with a loose swaggering hip.",
+  "face": "Deep brown skin, dark brown eyes under neat arched black brows, high cheekbones, a broad nose, a thin neat black moustache, and full lips.",
+  "hair": "A big rounded black afro about four inches deep around the head, under the hat.",
+  "outfit": "An open floor-length faux-fur coat in wide bold horizontal bands of red, orange, yellow, green and blue, very thick and shaggy, the collar huge, the sleeves ending at the wrists so both hands are bare; underneath, a fitted gold sequin vest with a bare chest at the neckline, and wide gold flared trousers; tall black platform boots; a tall black top hat with a wide rainbow-striped band.",
+  "performance_style": "A strutting pose: feet apart, weight on the character-right hip, knees loose. Both arms held out a little from the coat, the character-right and character-left hands open, empty, fingers spread and visible. Chin up, a delighted smile.",
+  "location": "A desert playa at dusk: flat pale cracked alkali ground to the bottom of the frame, a rainbow-lit art car shaped like a giant disco ball on wheels at one side, strings of coloured bulbs, faint fine dust in the air, and a deep orange sky fading to indigo.",
+  "recognition_cues": [
+    "a floor-length rainbow-banded shaggy faux-fur coat",
+    "a tall black top hat with a rainbow band",
+    "a big black afro",
+    "gold sequin vest and flared trousers"
+  ],
+  "palette": [
+    "fur red #D23A2E / #8A2119 / #F2685A",
+    "fur orange #E8822A / #A45816 / #FFAA5A",
+    "fur yellow #F2CC34 / #B0921C / #FFE67A",
+    "fur green #3AA44A / #22692C / #6CCF78",
+    "fur blue #2E6CD0 / #1B438A / #5E96F0",
+    "vest and trousers gold sequin #D4A53A / #8C6B1E / #F6D882",
+    "boots and top hat black #1B1A1E / #0B0A0C / #3C3A42",
+    "skin #6B4330 / #432818 / #92634A",
+    "hair and moustache black #1C1714 / #0D0A08 / #3A302A",
+    "eye white #EFE6D8",
+    "eye brown #2A1A12",
+    "lip #5A3228",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "the coat closed and hiding the vest",
+    "purple or pink bands in the fur"
+  ],
+  "animations": {
+    "dance": "Funk strut, looping: rock the hips side to side on the beat, flare the coat open with both open hands out wide, step the character-left platform boot forward and back, bounce the shoulders, and tip the top hat with the character-right hand before returning to the strutting pose. The coat stays around the body, square to the front throughout.",
+    "sing": {
+      "intent": "Funk vocal loop: bounce the knees, bring the mic in the character-right hand to the mouth, sweep the character-left hand out wide on the hook, then return to the strutting pose. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sudden bang nearby: the shoulders jump and both hands clutch the fur collar, then he preens and settles. No opponent, strike or physical contact.",
+    "guard": "One-shot: pull the coat across the chest with the character-left hand, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: strut in with long swaggering steps, the coat swinging, then plant the platform boots in the strutting pose.",
+    "victory": "One-shot finish: both open hands thrown high and wide, the coat flared open, head back in a big open-mouthed laugh, then hold.",
+    "ko": "Non-contact performance defeat: the strut drains out — the shoulders slump inside the coat, both open hands hang limp at his sides, and his head hangs low, the hat brim tipping down. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

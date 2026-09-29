@@ -1,0 +1,54 @@
+{
+  "id": "wasteland",
+  "name": "Buckles",
+  "height": "5' 8\"",
+  "description": "A woman in her mid thirties dressed as a post-apocalyptic wasteland warrior at a desert arts festival, who sings crushing industrial metal and is the sweetest, most polite person on the playa.",
+  "build": "A broad-shouldered, strong adult woman of ordinary proportions: thick arms, a solid straight torso, a natural waist, sturdy legs, standing upright with straight knees.",
+  "face": "Pale peach skin with round rosy cheeks, big warm grey-blue eyes under soft light brown brows, a small button nose, a bold smear of black grease paint in one wide band across both eyes, and full lips.",
+  "hair": "A tall mohawk of dirty-blonde hair about five inches high down the centre of the head, the sides shaved short.",
+  "outfit": "Two huge black leather shoulder pads, one on each shoulder, each set with a row of five big blunt silver-grey cone studs; a sleeveless black leather jerkin crossed by wide brown leather straps with many large square steel buckles; a wide brown leather belt with big buckles; fitted rust-brown canvas trousers with wide black leather knee pads; tall black lace-up combat boots; black fingerless leather gloves ending at the knuckles so every finger is bare.",
+  "performance_style": "Planted and friendly: feet shoulder-width, weight even. Both arms hang at her sides, the character-right and character-left gloved hands open and empty, fingers visible. Head tilted, a sweet shy smile.",
+  "location": "Harsh noon on the playa: flat cracked pale clay running to the bottom of the frame, a hulking rusted spiked art car with oil-drum wheels behind, a ragged canvas shade structure at one side and a hazy white sky.",
+  "recognition_cues": [
+    "huge black leather shoulder pads with rows of big cone studs",
+    "wide brown straps with many large steel buckles across the chest",
+    "a tall dirty-blonde mohawk",
+    "a wide black grease-paint band across the eyes"
+  ],
+  "palette": [
+    "shoulder pads, jerkin, gloves and boots black leather #26232A / #121015 / #4A4650",
+    "straps and belt brown leather #7A4E2E / #4A2E18 / #A67448",
+    "buckles and studs steel #9AA0A8 / #5E636A / #D0D4DA",
+    "trousers rust canvas #9A4E2A / #5E2E16 / #C47448",
+    "grease paint black #141214",
+    "skin #F0C8B0 / #C09078 / #FFE0CC",
+    "cheek rose #E08A84",
+    "hair dirty blonde #B89A5E / #7A6438 / #DCC28A",
+    "eye grey-blue #6A849A",
+    "eye white #EFE6D8",
+    "lip #C07068",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "weapons, blades or chains in her hands",
+    "blood or wounds",
+    "a helmet",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "breakin-01"
+    },
+    "sing": {
+      "intent": "Industrial metal vocal loop: stamp a heavy boot in time, lift the mic in the character-right hand to the mouth for a huge growled phrase, pump the open character-left hand up and down beside the shoulder pad, then lower the mic to the chest. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud clang: the shoulder pads hunch up, both open gloved hands fly to her cheeks, then she giggles and settles back to her planted stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn a big shoulder pad forward, the character-left forearm across the chest, the character-right hand open at the hip, holding a solid finish. Not combat.",
+    "entrance": "One-shot entrance: stomp in with heavy boots, give a small polite wave with the character-right hand, then plant her feet shoulder-width with both hands open at her sides.",
+    "victory": "One-shot song-finish celebration: raise both gloved fists high, throw the head back in an open-mouthed roar, then clasp both open hands together under the chin and hold a sweet pleased pose.",
+    "ko": "Non-contact performance defeat: the fierce show deflates — the big shoulder pads sag, both gloved hands hang limp at her sides, and her head drops with the chin toward the chest straps. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

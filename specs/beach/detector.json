@@ -1,0 +1,52 @@
+{
+  "id": "detector",
+  "name": "Detector",
+  "height": "5' 3\"",
+  "description": "A woman in her mid seventies, a metal-detecting retiree who sings honky-tonk, dogged and chatty.",
+  "build": "A small, wiry, slightly stooped build: narrow shoulders, thin strong arms and legs, standing upright on straight knees.",
+  "face": "Weathered tanned skin with deep laugh lines, bright blue eyes under thin white brows, a small upturned nose and thin lips.",
+  "hair": "Short curly white hair puffing out round the sides and back of the visor.",
+  "outfit": "A wide bright lime-green sun visor; big padded black over-ear headphones on a thick band over the visor; a sleeveless teal fishing vest over a white tee; a big tan canvas pouch on a belt at the hip, bulging with bottle caps; khaki capri pants; white sneakers.",
+  "performance_style": "Dogged and ready: feet hip-width apart, a slight forward lean. Both arms at her sides, the character-right and character-left hands open and empty, fingers visible. Head cocked as if listening, a shrewd look.",
+  "location": "An early-morning beach with flat damp sand running to the bottom of the frame, footprints leading away, the pier's wooden pilings behind at one side, and a pale pink-gold sky over calm grey-blue water.",
+  "recognition_cues": [
+    "a lime-green visor under big black headphones",
+    "a teal vest over a white tee",
+    "a bulging tan canvas pouch at the hip"
+  ],
+  "palette": [
+    "visor lime green #A6D63A / #6C8E22 / #D2F27A",
+    "headphones black #1C1E22 / #0C0D0F / #40444C",
+    "vest teal #1E8A86 / #115754 / #4CBAB5",
+    "tee white #F1EEE5 / #BDB9AE / #FFFFFF",
+    "pouch and belt canvas tan #B99A66 / #7C6640 / #DCC390",
+    "capris khaki #A89468 / #6E6044 / #CFBC92",
+    "sneakers white #EDEAE2 / #B8B4AA / #FFFFFF",
+    "skin #C08A66 / #845A40 / #DDAC8A",
+    "hair white #ECEAE4 / #B9B6AE / #FFFFFF",
+    "eye blue #4E8AC4",
+    "lip #A0625A",
+    "teeth #EFE6D4",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a metal detector in hand",
+    "a wide-brim hat"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-01"
+    },
+    "sing": {
+      "intent": "Honky-tonk vocal loop: the mic in the character-right hand at the mouth, the character-left hand slaps the thigh on the beat, head nodding, then back to the ready stance. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A loud beep in the headphones: she jolts and clutches the headphones with both hands, then recovers. No opponent or contact.",
+    "guard": "One-shot: plants the feet, the character-left hand covers the pouch, the character-right hand out open; hold. Not combat.",
+    "entrance": "One-shot: walks in sweeping her gaze over the sand, stops, straightens into the ready stance.",
+    "victory": "One-shot: raises both open hands high, hops once, whoops with an open mouth, holds.",
+    "ko": "Non-contact defeat: her stoop deepens, both open hands hang, her head droops under the visor. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

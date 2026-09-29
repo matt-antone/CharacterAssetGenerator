@@ -1,0 +1,54 @@
+{
+  "id": "kite",
+  "name": "Kite",
+  "height": "5' 4\"",
+  "description": "A delighted woman in her sixties who sings sixties folk-pop, a kite flyer permanently tangled in her own string and loving it.",
+  "build": "A slim, small-framed older woman of ordinary proportions: narrow shoulders, a straight torso, slender arms and legs, standing upright with straight knees.",
+  "face": "Fair lightly freckled skin with rosy cheeks, bright hazel eyes framed by laugh lines, arched silver-grey brows, a small upturned nose, and thin lips.",
+  "hair": "A short curly silver-grey bob, full and wind-tousled, standing out around the head and clear of the eyes.",
+  "outfit": "A roomy bright red zip-up windbreaker with wide bold white stripes down both sleeves, sleeves pushed to the forearms so both hands are fully bare; a teal-green high-necked cotton top under it; slim khaki-tan cropped trousers to mid-calf; white canvas sneakers with thick soles. Two loops of thick bright yellow kite string wrap loosely around her torso and her character-left forearm. Her head is bare.",
+  "performance_style": "Light and upright: feet close together, weight on the balls of the feet. Both arms raised, the character-right and character-left hands open and empty at shoulder height, fingers visible, as if feeling the wind. Head tipped up slightly, a wide delighted smile.",
+  "location": "A breezy grassy dune top above a wide beach: pale sand and marram grass running to the bottom of the frame, a low wooden snow fence behind, the sea glittering beyond, and a bright blue sky dotted with colourful diamond kites.",
+  "recognition_cues": [
+    "a red windbreaker with wide bold white sleeve stripes",
+    "loops of thick yellow kite string wrapped around her",
+    "a short curly wind-tousled silver-grey bob"
+  ],
+  "palette": [
+    "windbreaker red #D22B2B / #8A1616 / #F2605A",
+    "sleeve stripes white #F3F0EA / #C6C1B6",
+    "top teal-green #1E8A7A / #105548 / #4FB8A6",
+    "trousers khaki-tan #C4A878 / #8A734C / #E0CBA0",
+    "sneakers white canvas #ECE8DF / #B8B2A6 / #FFFFFF",
+    "sneaker soles grey #9A968E",
+    "kite string yellow #F5CE2A / #B8940E / #FFE670",
+    "skin #EBC4A8 / #B98C6E / #FADDC6",
+    "cheek rose #E08A84",
+    "hair silver-grey #B8B8BC / #7E7E84 / #E2E2E6",
+    "eye hazel #7A6A3A",
+    "eye white #F2ECE2",
+    "lip #B86A68",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a kite held in the hands on the key art",
+    "a hood pulled up",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-02"
+    },
+    "sing": {
+      "intent": "Folk-pop vocal loop: sway gently from foot to foot, bring the mic in the character-right hand to the mouth, sweep the open character-left hand in a slow arc overhead like a kite on the wind, then return to the light upright stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a gust: the shoulders lift, both open hands grab at the air at chest height, then she settles back to the light stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: step the feet wider, cross both forearms loosely in front of the chest with the hands open, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: skip in backward-glancing as if following a kite, turn square to the front, and land in the light upright stance with both hands raised and open.",
+    "victory": "One-shot celebration: rise onto her toes, fling both open hands up high, tip the head back into a joyful open-mouthed laugh, then hold the pose.",
+    "ko": "Non-contact performance defeat: the breeze drops out of her — the arms fall, both open hands hang limp at her sides tangled in the yellow string, and her head droops, chin toward the chest, holding a deflated standing finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

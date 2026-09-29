@@ -1,0 +1,46 @@
+{
+  "id": "discoball",
+  "name": "Discoball",
+  "height": "5' 8\"",
+  "description": "A cool, mysterious woman in her early thirties who sings French house at a desert arts festival, her whole head hidden inside a mirrored disco-ball helmet.",
+  "build": "A tall slender adult build of ordinary proportions: straight shoulders, a slim torso, long arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Her face is fully hidden inside an opaque spherical helmet only slightly wider than a head, covered in a grid of large bold square silver mirror tiles about an inch across, reflecting pale blue-white highlights; light-brown skin shows at the neck and hands.",
+  "hair": "No hair visible; the mirror-ball helmet covers the whole head down to the jaw line.",
+  "outfit": "A sleek black long-sleeved turtleneck jumpsuit, fitted, the sleeves ending at the wrists so both hands are bare; a wide silver metallic belt at the waist; a short cropped white faux-fur jacket ending at the ribs, sleeves to the elbows; black ankle boots with chunky heels.",
+  "performance_style": "Cool and still: feet hip-width, weight on one hip. The character-right hand rests open on the belt, the character-left arm bent with the open hand at shoulder height, palm forward, fingers spread and fully visible. The mirror-ball head held level and square to the front.",
+  "location": "A sound camp dance floor on the playa at night: a low wooden deck running to the bottom of the frame, a tall steel truss with a big speaker stack behind, strings of blue and white lights overhead, and a dark starry sky.",
+  "recognition_cues": [
+    "a spherical mirror-ball helmet of large silver tiles hiding the whole head",
+    "a cropped white faux-fur jacket",
+    "a sleek black jumpsuit with a wide silver belt"
+  ],
+  "palette": [
+    "mirror tiles silver #B8C0CC / #6A7280 / #F2F6FC",
+    "mirror highlight pale blue #CCE4FF",
+    "jumpsuit black #1A1A1E / #0A0A0C / #36363C",
+    "faux-fur jacket white #EEEAE4 / #BEB8AE / #FFFFFF",
+    "belt silver metallic #9EA4AC / #62666E / #D4D8DE",
+    "ankle boots black leather #141416 / #060607 / #302F33",
+    "skin #B88A64 / #7E5C40 / #D8AC86"
+  ],
+  "avoid": [
+    "a visible face, eyes or mouth",
+    "a helmet much wider than the shoulders"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-03"
+    },
+    "sing": {
+      "intent": "French-house vocal loop: her face is hidden, so the head and body carry the singing — bring the mic in the character-right hand up to the mirror-ball helmet where the mouth would be, bob the helmet forward and back on every beat and tilt it on the long phrase, roll the shoulders, sweep the character-left open hand out on the filter drop, then lower the mic and return to the cool stance. The helmet stays a smooth mirror ball throughout. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: glide in with slow smooth steps, the mirror-ball head level, turn square to the front, then land in her opening stance with both open hands in full view.",
+    "victory": "One-shot finish: snap both hands up in a wide V, tip the mirror-ball helmet back toward the sky, pop one hip, then hold a cool triumphant pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the cool fades — the shoulders slump, both open hands hang limp at her sides, and the mirror-ball helmet tips heavily forward toward the ground. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

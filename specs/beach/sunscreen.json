@@ -1,0 +1,55 @@
+{
+  "id": "sunscreen",
+  "name": "Sunscreen",
+  "height": "5' 11\"",
+  "description": "An overprotective, warm-hearted dad in his forties who sings sunny sixties-style close-harmony surf pop, always ready with the sunscreen.",
+  "build": "A soft, average dad build: medium rounded shoulders, a modest paunch, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Very pale fair skin, a broad bold stripe of thick white zinc cream down the nose, round brown eyes under straight brown brows, a friendly round nose, a neat brown moustache, and thin lips.",
+  "hair": "Short neat brown hair, side-parted, showing below the hat.",
+  "outfit": "A very wide-brimmed khaki-tan bucket-style sun hat with a chin cord; a loose short-sleeved mustard-yellow shirt with big bold white palm-tree prints, buttoned up; knee-length navy cargo shorts; white crew socks pulled high; brown leather sandals. A small tan waist pack at the belly. Both hands bare.",
+  "performance_style": "Earnest and upright: feet hip-width, weight even. Both arms slightly forward, the character-right and character-left hands open and empty at waist height, palms up as if offering help. Head level, a kind eager smile.",
+  "location": "A family spot on a crowded sunny beach: pale sand running to the bottom of the frame, a big striped beach umbrella planted behind, a cool box and a folding chair, a sandcastle with a little flag, and a bright blue sea and sky beyond.",
+  "recognition_cues": [
+    "a broad white zinc stripe down the nose",
+    "a very wide-brimmed khaki sun hat with a chin cord",
+    "a mustard shirt with big white palm prints",
+    "white socks pulled high with sandals"
+  ],
+  "palette": [
+    "zinc cream white #F4F4F2 / #C8C8C4",
+    "sun hat khaki-tan #BCA474 / #80704A / #DCC89A",
+    "shirt mustard-yellow #D8A628 / #967010 / #F0C85E",
+    "palm print white #F2EEE4",
+    "cargo shorts navy #243052 / #121A30 / #3E4E7A",
+    "socks white #EEEBE4 / #BEBAB0",
+    "sandals brown leather #7A4E2C / #4A2E18 / #A2704A",
+    "waist pack tan #B08A5C / #74583A",
+    "skin #F0CDB6 / #C29C86 / #FCE4D4",
+    "hair and moustache brown #6A4A30 / #3E2A1A / #90684A",
+    "eye brown #4A3020",
+    "eye white #F0E8DC",
+    "lip #C08070",
+    "teeth #F2EADA"
+  ],
+  "avoid": [
+    "a sunscreen bottle on the key art",
+    "a camera",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-04"
+    },
+    "sing": {
+      "intent": "Close-harmony surf-pop vocal loop: a bouncy step-touch side to side, raise the mic in the character-right hand to the mouth, wag the open character-left hand in a friendly finger-raised warning at chest height, then return to the earnest stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a beach ball: the shoulders jump, both open hands fly up protectively at chest height, then he settles back to the earnest stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: step wide, spread both open arms out at chest height as if shielding the family, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: hurry in with quick short steps, turn square to the front, and settle into the earnest stance with both hands open.",
+    "victory": "One-shot celebration: plant both sandals, raise both open hands high in a big two-handed wave, tip the head back into a proud open-mouthed laugh, then hold the pose.",
+    "ko": "Non-contact performance defeat: the dad-energy fizzles — the shoulders slump, both open hands hang at his sides, and his head droops so the hat brim tips down, holding a deflated standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

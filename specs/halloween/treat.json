@@ -1,0 +1,55 @@
+{
+  "id": "treat",
+  "name": "Treat",
+  "height": "5' 10\"",
+  "description": "A nineteen-year-old young man, an adult trick-or-treater in a homemade cardboard robot costume, far too old for it and totally unbothered, who sings loud pop-punk.",
+  "build": "Lanky teenage-adult build of ordinary proportions: narrow shoulders, long thin arms and legs, standing upright and loose.",
+  "face": "Light peachy skin, bold dark eyebrows, brown eyes, a snub nose, a wide mouth, and a few bold red spots on the chin.",
+  "hair": "Messy shaggy dark-brown hair poking out in big tufts around the face beneath the box helmet.",
+  "outfit": "A homemade robot costume: a big brown cardboard box worn over the torso from shoulders to hips, with bold hand-drawn black marker dials and a big square of silver duct tape on the chest; a smaller brown cardboard box on the head with a large square face opening showing his whole face, and two big silver foil balls on short stubby cardboard posts on top; black long-sleeved t-shirt arms, sleeves ending at the wrists so both hands are bare; baggy black skate jeans; chunky red-and-white skate sneakers. An orange plastic pumpkin candy bucket hangs from his character-left forearm by its handle, with the character-left hand open and free.",
+  "performance_style": "Loose slouch: feet apart, weight on the character-right foot. The character-right hand open and empty at his side; the character-left forearm bent at the waist with the orange pumpkin bucket hanging from it, hand open and empty. Head cocked, a cocky grin.",
+  "location": "A suburban front porch on Halloween night: a painted wooden porch floor running to the bottom of the frame, carved jack-o'-lanterns on the steps, a front door with a paper-skeleton decoration, and a porch light casting a warm glow.",
+  "recognition_cues": [
+    "a big brown cardboard box torso with black marker dials",
+    "a cardboard box helmet with a large square face opening",
+    "a big square of silver duct tape on the chest",
+    "an orange plastic pumpkin candy bucket on the character-left forearm",
+    "chunky red-and-white skate sneakers"
+  ],
+  "palette": [
+    "cardboard brown #B98A55 / #7E5A32 / #D8AE7A",
+    "marker black #1A1A1C",
+    "duct tape and antenna foil silver #A7ABB2 / #6C7078 / #D2D6DC",
+    "t-shirt black #222226 / #111113 / #424248",
+    "jeans black #2A2A2E / #151517 / #4A4A50",
+    "sneakers red #D0262A / #861518 / #F05A5C",
+    "sneaker white #F2F0EA",
+    "pumpkin bucket orange #F07A18 / #A84E0A / #FFA85A",
+    "skin #F0C3A0 / #BE8E6C / #FAD9BE",
+    "spots red #C8504A",
+    "hair dark-brown #3E2A1C / #22160E / #62462E",
+    "eyes brown #4A2E1C",
+    "teeth #F2EDE2"
+  ],
+  "avoid": [
+    "a real robot or metal armour",
+    "a face hidden by the box",
+    "any costume that covers the hands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-02"
+    },
+    "sing": {
+      "intent": "Pop-punk vocal loop: mic at the mouth in the character-right hand, bouncing on the knees, the character-left arm with the pumpkin bucket pumping up on the chorus and back down, then return to the loose slouch. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the box helmet jolts, both shoulders jump and both open hands fly up, then he shrugs it off. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn the cardboard chest toward the room and raise both forearms before the face, bucket swinging, and hold. Not combat.",
+    "entrance": "One-shot entrance: skip in swinging the pumpkin bucket, stop square to the front, and land in the loose slouch.",
+    "victory": "One-shot celebration: jump up with both arms high, the pumpkin bucket held aloft on the character-left forearm, mouth open in a yell, landing into a held pose with the feet planted.",
+    "ko": "Non-contact performance defeat: he stays on his feet as he deflates — the box torso sags forward, the bucket arm drops, both open hands hang and the head in its box helmet droops. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "hammock",
+  "name": "Hammock",
+  "height": "6' 1\"",
+  "description": "A blissfully laid-back man in his mid thirties who practically lives in the backyard hammock, and sings mellow jam-band rock.",
+  "build": "A lean, loose adult build: relaxed sloping shoulders, a slim chest, long arms and legs of ordinary proportion, standing upright with soft relaxed knees.",
+  "face": "Tanned golden skin, sleepy brown eyes under straight brown brows, a long nose, a full untrimmed brown beard, and a wide mouth.",
+  "hair": "Long wavy brown hair to the shoulders, full and loose, tucked behind both ears.",
+  "outfit": "A faded oversized mustard tee with short sleeves and a big faded orange sun circle on the chest; a chunky necklace of large wooden beads; loose olive-green drawstring cargo shorts to the knee; brown leather flip-flops. Both arms and hands are bare.",
+  "performance_style": "Totally at ease: feet apart, weight sunk into one hip, shoulders loose. Both arms hang long and relaxed, the character-right and character-left hands open and empty, fingers loose and visible. Head tilted, a lazy half-lidded smile.",
+  "location": "A shady backyard corner: green lawn running to the bottom of the frame, a striped rope hammock slung between two big oak trees, a cooler and a tiki torch nearby, and warm evening sun through the leaves with string lights above.",
+  "recognition_cues": [
+    "long wavy brown hair and a full beard",
+    "a faded mustard tee with a big orange sun",
+    "a chunky wooden-bead necklace"
+  ],
+  "palette": [
+    "tee faded mustard #C9A95A / #917838 / #E4C888",
+    "tee sun orange #E08A3A",
+    "necklace wooden beads #8A5A30 / #5A3A1C / #B07E4E",
+    "shorts olive-green #6A7440 / #454C28 / #8E9A60",
+    "flip-flops brown #6A4428",
+    "skin #C69064 / #8E6242 / #E0AE84",
+    "hair and beard brown #6A4A2E / #432E1A / #906A48",
+    "eye brown #3A2618",
+    "eye white #F0E8DA",
+    "teeth #F0E8D6"
+  ],
+  "avoid": [
+    "a guitar",
+    "a hand in a pocket",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-05"
+    },
+    "sing": {
+      "intent": "Jam-band vocal loop: a slow noodling sway, eyes half closed, the mic in the character-right hand at the mouth, the character-left hand floating up in a lazy wave, then return to the easy stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A slow-motion startle at a slammed cooler lid: brows rise, both open hands lift a little, then he sinks back into the easy stance. No opponent or contact.",
+    "guard": "One-shot: raise both open hands palm-out at chest height in a peaceful 'easy, man', then hold. Not combat.",
+    "entrance": "One-shot: amble in, stop square to the front, stretch both arms and settle into the easy stance.",
+    "victory": "One-shot: both open hands raised high in a slow wave, head back, mouth open in a big laugh, then hold.",
+    "ko": "The laid-back stance melts further: shoulders slump, both open hands hang limp and the head lolls forward. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

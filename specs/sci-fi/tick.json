@@ -1,0 +1,53 @@
+{
+  "id": "tick",
+  "name": "Tick",
+  "height": "5' 9\"",
+  "description": "A scatterbrained time traveller, a woman in her late thirties dressed in clashing clothes from five centuries, who sings bouncy forties swing.",
+  "build": "A wiry adult build of ordinary proportions: narrow shoulders, a straight torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm tan skin, wide bright green eyes under arched dark brows, a long nose and a wide mouth.",
+  "hair": "A big wild mass of curly auburn hair standing out around the head to the shoulders, with big round brass-rimmed goggles pushed up on the forehead at its front.",
+  "outfit": "A burgundy Regency tailcoat, cut away at the waist with tails to the backs of the knees and big brass buttons, over a Victorian waistcoat of wide bold yellow and teal stripes; a big white ruffed Elizabethan collar at the neck; teal-green 1970s flared trousers; chunky silver future sneakers. Sleeves end at the wrists so both hands are bare. A big brass pocket watch hangs from a heavy chain on the waistcoat.",
+  "performance_style": "Mid-step: the character-left foot forward, weight on it, knees loose. The character-right hand open and raised to shoulder height, the character-left hand open out at hip height, both empty with every finger visible. Head cocked, a distracted grin.",
+  "location": "A cluttered time-machine cabin seen from a checkered brass-and-teal floor running to the bottom of the frame: walls of big round clock faces, pipes and dials, and a glowing round portal on the back wall.",
+  "recognition_cues": [
+    "a big wild mass of curly auburn hair with brass goggles on the forehead",
+    "a burgundy tailcoat over a wide yellow-and-teal striped waistcoat",
+    "a big white ruffed collar",
+    "teal flared trousers and silver sneakers"
+  ],
+  "palette": [
+    "tailcoat burgundy #7A1E34 / #4A0F1E / #A8405A",
+    "waistcoat stripe yellow #F0C030 / #A88418 / #F8DC78",
+    "waistcoat stripe and trousers teal #1E8A86 / #0F5654 / #48B8B2",
+    "ruff collar white #F2EEE6 / #BDB7AC / #FFFFFF",
+    "buttons, goggle rims and watch brass #C8A040 / #7E6420 / #F0D680",
+    "goggle lenses dark-green #2A4A3A",
+    "sneakers silver #C4CAD2 / #8A9098 / #EEF2F6",
+    "skin #C89468 / #8E6440 / #E4B48A",
+    "hair auburn #9A3A1A / #5E200C / #C8602E",
+    "eye green #3A9A4A",
+    "eye white #F2EDE4",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a gun or ray gun",
+    "a phone booth",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-01"
+    },
+    "sing": {
+      "intent": "Swing vocal loop: the mic in the character-right hand comes to the mouth, the character-left hand snaps open at shoulder height on the off-beat, the knees bounce, then she returns to the mid-step pose. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a chiming clock: both open hands fly up to the goggles, the hair bounces, then she shakes it off. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step back and raise both open forearms before the chest, then hold. Not combat.",
+    "entrance": "One-shot entrance: stumble in with a hopping step as if just arrived, pat the tailcoat, then settle into the mid-step pose with both hands open.",
+    "victory": "One-shot finish: kick one heel up and throw both open hands high, head tipped back laughing, then hold.",
+    "ko": "Non-contact performance defeat: the shoulders droop, both open hands hang limp, and her head bows under the wild hair. She holds a standing, flustered finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "slider",
+  "name": "Slider",
+  "height": "5' 6\"",
+  "description": "A fearless, fast-moving woman in her mid twenties who runs the slip-n-slide and sings dance-pop, all momentum.",
+  "build": "An athletic, compact woman's build: toned shoulders, a strong core, muscular legs of ordinary length, standing upright.",
+  "face": "Light olive skin with a sun flush across the nose, bright green eyes under straight dark brows, a small straight nose, full lips, a streak of mud on one cheek.",
+  "hair": "Thick dark brown hair in one high wet ponytail reaching the shoulders, a few wet strands at the forehead.",
+  "outfit": "A bright orange racer-back one-piece swimsuit with one wide bold white stripe down each side; big green grass-stain smears across both knees and the belly; bare legs; bright yellow rubber water shoes.",
+  "performance_style": "Springy and ready: feet hip-width apart, knees slightly bent, weight forward on the balls of the feet. Both arms hang at the sides, the character-right and character-left hands open, empty, every finger visible beside the thighs. Head up, eyes bright, mouth open in an eager grin.",
+  "location": "A sunlit backyard lawn with a long yellow slip-n-slide running across the wet grass to the bottom of the frame, a garden hose spraying beside it, a kiddie pool and a wooden fence behind, and string lights over the patio.",
+  "recognition_cues": [
+    "an orange one-piece with wide white side stripes",
+    "big green grass stains on the knees and belly",
+    "a high wet dark ponytail",
+    "yellow water shoes"
+  ],
+  "palette": [
+    "swimsuit orange #F06A1E / #A84410 / #FF9A55",
+    "stripe white #F2F0EA / #C1BDB3",
+    "grass stain green #4E8A2A / #2E5718",
+    "water shoes yellow #F4CF2C / #B39116",
+    "mud brown #6B4A2E",
+    "skin #D29C74 / #9A6A4A / #EAB995",
+    "hair dark brown #3A2618 / #1E130B / #5E4430",
+    "eye green #3F8A4E",
+    "lip #B0655A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a bikini: she wears a one-piece",
+    "a surfboard or towel in the hands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-02"
+    },
+    "sing": {
+      "intent": "Dance-pop vocal loop: bounce on the knees, bring the mic in the character-right hand to the mouth, pump the character-left fist up on the beat, ponytail swinging, then return to the springy stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: run in and skid to a stop square to the front, arms out for balance, then settle into the springy stance.",
+    "victory": "One-shot win: jump the feet apart and throw both arms up in a wide V, mouth open in a shout, then land and hold.",
+    "ko": "Non-contact performance defeat. She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at her sides and the head hangs low. She remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

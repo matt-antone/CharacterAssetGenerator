@@ -1,0 +1,53 @@
+{
+  "id": "bluesman",
+  "name": "Bluesman",
+  "height": "5' 11\"",
+  "description": "A Chicago electric-blues singer, a man in his late sixties, sharp-dressed and weathered, who has earned every note he sings.",
+  "build": "A lean, rangy older man of ordinary height: narrow shoulders held square, a flat chest, long arms with big knuckled hands, long legs, standing upright with a slight settled stoop in the upper back.",
+  "face": "Deep dark-brown skin, heavy-lidded dark eyes under grey brows, a broad nose, weathered cheeks with deep laugh lines, a short neat white moustache over full lips, and a gold front tooth among white teeth.",
+  "hair": "Short close-cropped white hair at the sides and back, showing below the hat brim.",
+  "outfit": "A sharp double-breasted deep royal-blue wool suit: broad peak lapels, the jacket buttoned, straight wide-legged trousers with a sharp crease; a crisp white shirt; a wide solid mustard-yellow silk tie; a folded white pocket square; two-tone black-and-white wingtip shoes. A black felt fedora with a pinched crown, a short snap brim and a wide mustard-yellow hatband. Both hands bare, a heavy gold ring on the character-left hand.",
+  "performance_style": "Settled and patient: feet hip-width apart, knees soft, weight low. Both arms hang loose, the character-right and character-left hands open, empty and fully visible at the thighs. Head tilted slightly, eyes half closed, mouth resting closed.",
+  "location": "A cramped Chicago blues club at 2 a.m.: a low worn plank stage running to the bottom of the frame, a brick back wall with old gig posters as bold colour blocks, a red neon glow at one side and a Fender-style amp stack in shadow.",
+  "recognition_cues": [
+    "a black fedora with a wide mustard hatband",
+    "a double-breasted royal-blue suit with a mustard tie",
+    "a short white moustache and close-cropped white hair",
+    "two-tone black-and-white wingtips"
+  ],
+  "palette": [
+    "suit royal-blue wool #2447A0 / #142A63 / #4B6FCB",
+    "fedora black felt #1D1B1E / #0C0B0D / #3B383D",
+    "hatband and tie mustard-yellow silk #D6A22A / #8C6814 / #F4CD62",
+    "shirt and pocket square white #EFECE4 / #BBB6AA / #FFFFFF",
+    "wingtips black and white leather #1E1D20 / #0C0B0D / #F0EEE8",
+    "ring and tooth gold #D4A536 / #8A6A1A / #FBE08A",
+    "skin #5A3A28 / #36221A / #7E563E",
+    "hair and moustache white #E8E5DF / #B3AEA5 / #FFFFFF",
+    "eye white #EAE0D0",
+    "eye brown #22150E",
+    "lip #4A2C24",
+    "teeth #EFE7D6"
+  ],
+  "avoid": [
+    "a guitar in the key art",
+    "a wide cowboy brim on the fedora",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-05"
+    },
+    "sing": {
+      "intent": "Slow electric-blues vocal loop: squeeze the eyes shut on a long bent note, hold the mic close in the character-right hand, clench the open character-left hand into a slow fist at chest height as the note tightens, then open it and lower the mic to the chest in the settled stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A slow wary startle at a loud room sound: the shoulders hunch, the head pulls back under the brim, both open hands rise to the waist, then he settles back. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn the character-left shoulder forward with that forearm across the chest, the character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: walk in slow and unhurried, touch the fedora brim with the character-right hand, then settle square to the front with both open hands loose at the thighs.",
+    "victory": "One-shot celebration: lift the open character-right hand high, tip the fedora back with the character-left hand, grin wide showing the gold tooth, and hold the pose.",
+    "ko": "Non-contact performance defeat: the stoop deepens, both open hands hang limp and the head drops so the fedora brim hides the eyes. He holds a standing, weary finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

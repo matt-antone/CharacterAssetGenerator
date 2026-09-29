@@ -1,0 +1,56 @@
+{
+  "id": "dolly",
+  "name": "Dolly",
+  "height": "5' 2\"",
+  "description": "A sweet porcelain doll come to life, a young adult woman in her early twenties with a doll's face and jointed limbs, who sings music-box waltzes and chamber pop with jerky, precise little movements.",
+  "build": "Petite and slim, adult proportions, with a small waist, slim arms and legs, and visible round ball joints at the elbows and knees; stiffly upright.",
+  "face": "Glossless white porcelain skin, round rosy-pink painted cheeks, very large round glassy blue eyes with long thick black painted lashes, small arched brown brows, a small bow-shaped rose-red mouth, and one bold dark crack running from the character-left cheekbone down to the jaw.",
+  "hair": "Big bouncy golden-blonde ringlet curls to the shoulders, with a large sky-blue satin bow on top of the head.",
+  "outfit": "A knee-length sky-blue dress with short puffed sleeves, a fitted bodice and a full skirt edged with a wide bold band of white lace at the hem and collar; white knee socks; black patent Mary-Jane shoes with a single strap. Both porcelain hands are bare.",
+  "performance_style": "Doll-like and stiff: feet together, toes pointed straight, weight even. Both arms held slightly out from the sides, the character-right and character-left hands open and empty with fingers together, palms down. Head tilted to one side, a sweet vacant little smile.",
+  "location": "A moonlit Victorian nursery: faded rose wallpaper, a tall wooden dollhouse at one side, a rocking horse, a music box on a small table, and worn floorboards running to the bottom of the frame under soft silver window light.",
+  "recognition_cues": [
+    "white porcelain skin with round rosy cheeks",
+    "one bold dark crack down the character-left cheek",
+    "big golden-blonde ringlets with a large sky-blue bow",
+    "a knee-length sky-blue dress with a wide white lace hem band",
+    "round ball joints at the elbows and knees"
+  ],
+  "palette": [
+    "porcelain skin #F3EEE8 / #C9BFB6 / #FFFFFF",
+    "cheeks rose-pink #E68A96",
+    "crack dark #3A2E2E",
+    "dress sky-blue #7FB3E0 / #4A7EAE / #AED3F2",
+    "bow sky-blue satin #6FA8DC / #3E74A8 / #A7CDF0",
+    "lace white #F7F5F0 / #CFCBC2 / #FFFFFF",
+    "hair golden-blonde #E4B84C / #A87E26 / #F6DB8A",
+    "socks white #EEECE6 / #C2BEB5 / #FFFFFF",
+    "shoes black patent #1A1A1E / #0A0A0C / #45454E",
+    "eyes blue #3F7FC4",
+    "lashes and pupils black #121214",
+    "brows brown #6A4A30",
+    "lip rose-red #C0303E",
+    "teeth #F4F0E8"
+  ],
+  "avoid": [
+    "a creepy or menacing face",
+    "broken limbs or missing pieces",
+    "a floor-length gown"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-02"
+    },
+    "sing": {
+      "intent": "Music-box vocal loop: the mic held in the character-right hand at the mouth, the head ticking side to side in small precise jerks, the character-left hand lifting stiffly to shoulder height and lowering, then return to the doll-like stance. The mouth must visibly open wide and change shape across the loop so she unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the head clicks sharply to one side, both arms jerk up stiffly, then she resets with small ticks. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: both stiff arms rise and cross in front of the face in jerky ticks, and hold. Not combat.",
+    "entrance": "One-shot entrance: walk in with small stiff wind-up steps, stop, turn the head in two clicks toward the front, and settle into the doll-like stance.",
+    "victory": "One-shot celebration: a stiff little twirl in place ending square to the front, both arms raised in a ballerina arc above the head, a sweet open-mouthed smile, and hold.",
+    "ko": "Non-contact performance defeat: she stays on her feet as she winds down like a spent music box — the arms sink slowly to hang limp, the head droops forward in small ticks, and she holds still. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "golem",
+  "name": "Golem",
+  "height": "7' 2\"",
+  "description": "A hulking, slow and gentle male clay golem, an ancient adult giant who sings deep lullabies and throat-sung folk songs, kind and patient.",
+  "build": "Enormous and heavy: very broad shoulders, a thick barrel torso, massive thick arms hanging to mid-thigh, short thick legs and big flat feet, standing upright and solid.",
+  "face": "Smooth reddish terracotta clay skin with bold thumb-pressed dents, two deep round eye sockets each holding a warm amber glow, a broad flat nose, a wide straight mouth, and a single bold pale-gold rune pressed into the centre of the brow.",
+  "hair": "Bald, smooth clay crown with a small tuft of green moss on top.",
+  "outfit": "Bare clay body wearing a wide knee-length oatmeal-brown burlap wrap belted at the waist with a thick coil of brown rope, and a burlap sash over the character-left shoulder. The big four-fingered clay hands and flat clay feet are bare.",
+  "performance_style": "Solid and still: feet planted wide, weight even. Both massive arms hang at his sides, the character-right and character-left clay hands open and empty, fingers loosely curled and visible beside the thighs. Head level, a calm gentle look.",
+  "location": "A quiet moonlit old-town courtyard: worn cobblestones running to the bottom of the frame, a low stone wall with ivy, a bare tree, and a warm lantern glowing in an arched doorway.",
+  "recognition_cues": [
+    "huge reddish terracotta clay body with thumb-pressed dents",
+    "a bold pale-gold rune in the centre of the brow",
+    "deep round eye sockets with a warm amber glow",
+    "an oatmeal burlap wrap belted with brown rope",
+    "a tuft of green moss on the crown"
+  ],
+  "palette": [
+    "clay terracotta #B0603C / #723A22 / #D48A62",
+    "rune pale-gold #EAD27A / #B39A40 / #FFF0B0",
+    "eyes amber glow #F2A233 / #A86412 / #FFD27A",
+    "burlap oatmeal-brown #A8906A / #6E5C40 / #CCB690",
+    "rope brown #6B4A2C / #422C18 / #946A44",
+    "moss green #5A7A32 / #384E1E / #82A454"
+  ],
+  "avoid": [
+    "a snarling or menacing face",
+    "cracks that read as crumbling or injury",
+    "armour or weapons"
+  ],
+  "animations": {
+    "dance": "Slow heavy folk sway loop: the big flat feet stay planted, the whole massive body rocks slowly side to side, both huge open hands rising to chest height and swaying like cradling a baby, then lowering. Returns to the still stance.",
+    "sing": {
+      "intent": "Deep lullaby throat-song loop: hold the mic in the character-right hand at the mouth, the character-left hand open over the chest, the body swaying very slowly, head bowing and lifting on long low notes, then return to the still stance. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief slow room-sound startle: the massive shoulders lift a little, both open hands rise slowly to chest height, then settle. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: raise both huge forearms slowly before the chest, open palms outward, and hold solidly. Not combat.",
+    "entrance": "One-shot entrance: lumber in with slow heavy steps, stop square to the front, plant the feet wide and settle into the still stance.",
+    "victory": "One-shot celebration: raise both massive open hands slowly high above the head, head tipped back with a wide open-mouthed smile, the rune shining, and hold.",
+    "ko": "Non-contact performance defeat: he stays on his feet as he slowly powers down — the rune dims, the shoulders sag, both huge hands hang heavy and the head bows forward. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

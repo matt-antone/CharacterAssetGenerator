@@ -1,0 +1,52 @@
+{
+  "id": "grime",
+  "name": "Grime",
+  "height": "5' 5\"",
+  "description": "A young woman in her early twenties, a UK grime MC with rapid-fire bars and a flat deadpan delivery.",
+  "build": "A slight, wiry adult build of ordinary proportions: narrow shoulders, a straight torso, slim arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm light-brown skin, dark brown eyes under straight dark brows, a small straight nose, high cheekbones, full lips, and small bold gold hoop earrings.",
+  "hair": "Dark brown hair scraped back into a high tight bun on the crown, with straight baby hairs laid flat along the forehead.",
+  "outfit": "A cropped black quilted puffer jacket with wide bold horizontal baffles, unzipped, the cuffs ending at the wrists so both hands are fully bare; underneath, a plain royal-blue tracksuit top zipped to the collarbone; royal-blue tracksuit trousers with one wide bold white stripe down each outer leg, tapered at the ankle; chunky white trainers with thick soles. Her head is bare.",
+  "performance_style": "Squared up and still: feet shoulder-width apart, weight even. Both arms hang at her sides, the character-right and character-left hands open, empty and fully visible beside the thighs. Head level, a flat unimpressed deadpan.",
+  "location": "A concrete underpass turned rave: bare grey concrete floor running to the bottom of the frame, a back wall of layered grey paste-up posters, a stack of black speaker cabinets at one side, and a single orange sodium streetlight overhead.",
+  "recognition_cues": [
+    "a cropped black quilted puffer with wide baffles",
+    "a royal-blue tracksuit with a wide white leg stripe",
+    "a high tight bun"
+  ],
+  "palette": [
+    "puffer jacket black nylon #1E1F24 / #0E0F12 / #3E414A",
+    "tracksuit royal-blue #1F4FB8 / #12306F / #4A78E0",
+    "tracksuit stripe white #F2F2EE",
+    "trainers white leather #EDEBE4 / #B9B6AC / #FFFFFF",
+    "trainer soles pale grey #C9C8C2",
+    "earrings gold #D4A93A / #8A6C1F / #F5DB86",
+    "skin #A9754F / #6E4830 / #CD9870",
+    "hair dark brown #2B1C14 / #140C08 / #4A3326",
+    "eye white #F0E8DC",
+    "eye brown #2A1A12",
+    "lip #7A4636",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a cap or hood up",
+    "a big smile",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-03"
+    },
+    "sing": {
+      "intent": "Grime vocal loop: the mic in the character-right hand held tight at the mouth, the character-left hand chopping short flat beats at chest height on every bar, the head nodding in quick small drops, then back to the square stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud room sound: the shoulders jolt up and the head snaps back an inch, both open hands lift to the chest, then she drops straight back to the square deadpan stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet wider and cross both forearms in front of the chest, hands open, then hold a firm grounded finish. Not combat.",
+    "entrance": "One-shot entrance: walk in with a slow unbothered stride, stop square to the front and settle into the flat stance with both hands open at her sides.",
+    "victory": "One-shot finish: plant both trainers and point the character-right index finger straight up overhead, the character-left hand open at the hip, a small closed-mouth smirk, then hold.",
+    "ko": "Non-contact performance defeat: the deadpan slides into a tired sigh, the shoulders drop inside the puffer, both open hands hang limp and the head tips down to one side. She holds a standing, deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

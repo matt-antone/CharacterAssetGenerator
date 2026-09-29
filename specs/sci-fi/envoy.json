@@ -1,0 +1,48 @@
+{
+  "id": "envoy",
+  "name": "Envoy",
+  "height": "6' 8\"",
+  "description": "A tall alien ambassador, a woman who looks about fifty in human terms, who sings smooth bossa-lounge exotica, gracious, exact and serene.",
+  "build": "A very tall, slender humanoid woman's build: long neck, narrow sloping shoulders, long arms with long five-fingered hands and a long straight torso, standing upright and still.",
+  "face": "Smooth cobalt-blue skin, large almond-shaped eyes of solid bright gold, fine arched silver-white brows, high sharp cheekbones, a small straight nose and full lips in deep indigo; a bold row of three silver dots above each brow.",
+  "hair": "Long silver-white hair drawn smoothly back from the face into a tall wrapped cone at the back of the crown, bound by a wide gold band.",
+  "outfit": "Layered diplomatic robes: a floor-length inner robe of deep teal silk, over it a knee-length saffron-gold tabard with a wide straight hem, and over both a sleeveless ivory mantle hanging to the calves from wide squared shoulder pieces; bare cobalt forearms and hands clear of every sleeve; a broad gold collar at the neck; teal soft slippers.",
+  "performance_style": "Serene and exact: feet together, weight even, spine tall. Both forearms raised to the waist, the character-right and character-left hands open and empty, palms up and turned slightly outward, every long finger visible. Head level, a calm closed-mouth smile.",
+  "location": "A grand embassy reception hall, seen from the front of a pale marble floor running to the bottom of the frame: tall slender white columns, a wide arched window onto a turquoise alien sea under two moons, and hanging gold lanterns.",
+  "recognition_cues": [
+    "smooth cobalt-blue skin and solid gold eyes",
+    "silver-white hair in a tall wrapped cone with a gold band",
+    "layered teal, saffron-gold and ivory diplomatic robes"
+  ],
+  "palette": [
+    "skin cobalt-blue #2F58B8 / #1C3678 / #5A84E0",
+    "eyes and gold band and collar gold #E0B040 / #9A7420 / #FFE08A",
+    "hair and brows silver-white #E4E8EE / #A8B0BC",
+    "inner robe and slippers deep teal silk #13605E / #0A3A38 / #2A8E8A",
+    "tabard saffron-gold #D88A1C / #94580E / #F4B450",
+    "mantle ivory #EFE8D6 / #BDB49E / #FFFBF0",
+    "brow dots silver #C8CCD4",
+    "lips deep indigo #2A1E5A",
+    "teeth #F2EEE6"
+  ],
+  "avoid": [
+    "antennae, tentacles or extra limbs",
+    "a crown, staff or sceptre",
+    "translucent or sheer fabric",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Bossa-lounge sway loop: from the serene stance, shift the weight gently to character-left with a small bend of the knee while both open hands sway out to character-left at waist height, return through centre, shift to character-right with the hands following, then settle back to the exact opening stance. The feet stay close together on the floor and the robes hang still; no turns, jumps or kicks.",
+    "sing": {
+      "intent": "Bossa vocal loop: bring the mic in the character-right hand up to the lips, turn the open character-left hand palm-up at chest height and draw it slowly outward on a long phrase, then lower the mic and return to the serene stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: walk in with slow, stately steps, turn square to the front, then settle into the serene stance with both hands open at the waist.",
+    "victory": "One-shot song-finish: plant both feet, open both hands wide at shoulder height, palms up, and incline the head in a gracious bow with an open-mouthed smile, then hold a still, composed pose.",
+    "ko": "She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. She holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

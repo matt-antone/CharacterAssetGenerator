@@ -1,0 +1,51 @@
+{
+  "id": "bhangra",
+  "name": "Bhangra",
+  "height": "5' 11\"",
+  "description": "A Punjabi Sikh man in his mid thirties, a bhangra singer bursting with energy, arms always up.",
+  "build": "A broad, strong adult build of ordinary proportions: wide shoulders, a deep chest, a straight torso, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm medium-brown skin, dark brown eyes under thick black brows, a strong straight nose, full cheeks, a full black beard neatly rolled and shaped close to the jaw, and a thick black moustache.",
+  "hair": "Hair fully covered by the turban; the full black beard below.",
+  "outfit": "A tall saffron-orange pagri turban wrapped in crisp angled folds to a peak at the front; a knee-length emerald-green silk kurta with wide bold gold embroidery bands at the collar and down the front placket, the sleeves ending at the wrists so both hands are fully bare; a wide gold-and-emerald sash tied at the waist; loose white churidar trousers; gold-brown leather jutti slippers with curled toes.",
+  "performance_style": "Bursting and open: feet wide apart, knees springy. Both arms raised up and out above the shoulders, the character-right and character-left hands open and empty, fingers spread and fully visible. Head up, a huge open-mouthed grin.",
+  "location": "An outdoor wedding stage in Punjab at night: a marigold-strewn wooden stage floor running to the bottom of the frame, strings of marigold garlands and warm fairy lights behind, and a big drum on a stand at one side.",
+  "recognition_cues": [
+    "a tall saffron turban",
+    "an emerald kurta with bold gold embroidery bands",
+    "a full black beard"
+  ],
+  "palette": [
+    "turban saffron #EE8A1C / #A85C0E / #FAB25A",
+    "kurta emerald silk #0F7A4E / #08492E / #33A676",
+    "embroidery and sash gold #D8AE3C / #8E7020 / #F5D884",
+    "trousers white cotton #EEEBE3 / #BDB9AF",
+    "jutti gold-brown leather #9C7038 / #5E4220 / #C69A5E",
+    "skin #9C6A48 / #62422C / #C08C68",
+    "beard and moustache black #1A1614 / #0B0908 / #3A322E",
+    "eye white #F0E8DC",
+    "eye brown #2A1A12",
+    "lip #6E4034",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a sword or dagger",
+    "a small flat turban",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-02"
+    },
+    "sing": {
+      "intent": "Bhangra vocal loop: the mic in the character-right hand at the mouth, the character-left arm pumping straight up overhead with the hand open, the shoulders bouncing on every beat, the head nodding, then back to the open stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud room sound: both raised arms jerk in to the chest, hands open, then fling back up with a laugh. No opponent or contact.",
+    "guard": "One-shot stage self-protection: bring both forearms in front of the chest, hands open, and plant the feet wide, then hold a sturdy grinning finish. Not combat.",
+    "entrance": "One-shot entrance: bound in with high knee-lifting steps, stop square to the front and throw both open hands up into the open stance.",
+    "victory": "One-shot finish: one leg lifted at the knee, both arms thrust high overhead with the hands open and index fingers pointing up, mouth open in a shout, then land and hold.",
+    "ko": "Non-contact performance defeat: the raised arms sink slowly down to his sides, hands open and limp, the shoulders drop and the head bows. He holds a standing, deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

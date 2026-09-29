@@ -1,0 +1,46 @@
+{
+  "id": "gargoyle",
+  "name": "Gargoyle",
+  "height": "5' 0\"",
+  "description": "A stone gargoyle from a cathedral roof, a male figure centuries old, deep, slow and patient, who sings baritone gospel hymns.",
+  "build": "Short, broad and heavy: a barrel chest, thick short neck, thick arms and short bowed legs, standing upright on flat clawed feet with weight even. Two stubby bat-shaped stone wings, each about the size of his head, fold flat against the upper back behind the shoulders.",
+  "face": "Rough pale warm-grey granite skin with bold dark cracks, a broad heavy brow, deep-set round eyes of plain carved stone, a wide flat nose, a wide lipless mouth with two short blunt fangs at the lower corners, and two short stubby stone horns above the brow.",
+  "hair": "No hair: the head is bare carved granite.",
+  "outfit": "A plain wide band of dark moss-green lichen patches across the shoulders and a heavy weathered bronze-green chain hanging in a loop around the neck to the chest. He wears nothing else; the granite body is smooth and plain, with thick stone hands, four blunt fingers each, bare.",
+  "performance_style": "Solid and patient: feet planted wide, weight low and even. Both thick arms hang at his sides, the character-right and character-left stone hands open and empty, fingers visible. Head level, calm closed mouth.",
+  "location": "A cathedral rooftop at dusk: a stone parapet ledge running to the bottom of the frame, tall Gothic spires and flying buttresses behind, a round rose window glowing warm, and a violet-to-amber evening sky over the city.",
+  "recognition_cues": [
+    "rough pale warm-grey granite skin with bold dark cracks",
+    "two stubby bat-shaped stone wings folded on the back",
+    "a broad squat stone body",
+    "a bronze-green chain looped round the neck"
+  ],
+  "palette": [
+    "granite warm-grey #ACA492 / #726C5E / #CCC6B4",
+    "cracks dark #3E3A32",
+    "eyes carved stone #8A8474",
+    "fangs and horns #C4BCA8",
+    "lichen moss-green #4E6A34 / #2E4020 / #728E52",
+    "chain bronze-green #4E7A64 / #2C4A3A / #7AA28A",
+    "mouth #2E2A24"
+  ],
+  "avoid": [
+    "a robe or clothing",
+    "large spread wings",
+    "a menacing crouch"
+  ],
+  "animations": {
+    "dance": "Prose dance for a squat winged stone body: a slow gospel sway. Step side to side heavily, clapping the open stone hands together at chest height on the off-beat, the shoulders rocking and the stubby wings twitching up and down, the head nodding. Return to the planted opening stance.",
+    "sing": {
+      "intent": "Gospel hymn loop: plant the feet, bring the mic in the character-right stone hand to the mouth for a deep held baritone note, raise the character-left open hand up high, rock back on the heels, then lower the mic and return to the planted stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders hunch, the wings flick up, both stone hands rise open, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: fold both thick forearms across the chest, hands open, the wings drawn in, and hold like a statue. Not combat.",
+    "entrance": "One-shot entrance: stomp in heavily, turn square to the front and settle with both stone hands open at the sides.",
+    "victory": "One-shot celebration: raise both open stone hands high, wings flicked up, head tipped back with mouth open in a hallelujah, and hold.",
+    "ko": "Non-contact defeat: the shoulders drop, both stone hands hang heavy, the head bows and the wings droop. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

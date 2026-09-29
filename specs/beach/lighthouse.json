@@ -1,0 +1,53 @@
+{
+  "id": "lighthouse",
+  "name": "Lighthouse",
+  "height": "5' 10\"",
+  "description": "A weathered, gentle lighthouse keeper, a man in his seventies, who sings rolling sea shanties.",
+  "build": "A stocky, barrel-chested older man of ordinary height: broad rounded shoulders, a thick torso, sturdy arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Ruddy weather-beaten pale skin, small bright blue eyes, bushy white brows, a big round red nose, and a full thick white beard covering the jaw and chin down to the collarbone, joined to a white moustache.",
+  "hair": "Short thick white hair around the sides and a bald crown, under the cap.",
+  "outfit": "A chunky cream cable-knit fisherman's sweater with wide bold cable columns, rolled high at the neck, the cuffs at the wrists so both hands are bare; heavy navy-blue wool trousers, straight-legged; tall black rubber boots to the knee. A navy-blue knit watch cap rolled at the brim, sitting on the head.",
+  "performance_style": "Rooted and steady: feet planted shoulder-width, weight even, knees easy. Both arms hang loose at the sides, the character-right and character-left hands open and empty, big fingers visible. Head level, a warm crinkle-eyed smile under the beard.",
+  "location": "A rocky point at the end of a beach: wet grey rocks and shingle running to the bottom of the frame, a tall white lighthouse with a bold red band behind, the sea churning white against the rocks, and a soft golden late-afternoon sky.",
+  "recognition_cues": [
+    "a full white beard to the collarbone",
+    "a chunky cream cable-knit sweater",
+    "a navy rolled watch cap",
+    "tall black rubber boots"
+  ],
+  "palette": [
+    "sweater cream knit #E4D8BC / #B2A588 / #F8EED8",
+    "trousers navy wool #243452 / #131D30 / #3E5278",
+    "watch cap navy knit #2A3A5C / #172238 / #465C86",
+    "boots black rubber #1C1D20 / #0B0B0C / #3A3C42",
+    "skin #E0A48A / #A8705A / #F2C4AE",
+    "nose red #CC6A5E",
+    "beard and hair white #E8E6E2 / #B4B0AA / #FFFFFF",
+    "brows white #E0DED8",
+    "eye blue #4E8AC8",
+    "eye white #EFE8DE",
+    "lip #B06458",
+    "teeth #EDE4D2"
+  ],
+  "avoid": [
+    "a pipe",
+    "a peaked captain's cap",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-03"
+    },
+    "sing": {
+      "intent": "Sea-shanty vocal loop: rock the weight from boot to boot like a deck in a swell, raise the mic in the character-right hand to the mouth, swing the open character-left hand in a broad beat at chest height, then return to the rooted stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a foghorn: the shoulders hunch, both open hands rise to chest height, then he settles back to the rooted stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: set the boots wider as if bracing on a pitching deck, raise both open hands in front of the chest, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: stomp in with a rolling sailor's gait, turn square to the front, and land in the rooted stance with both hands open at his sides.",
+    "victory": "One-shot celebration: plant both boots, raise both open hands high overhead, tip the head back into a big open-mouthed booming laugh, then hold the pose.",
+    "ko": "Non-contact performance defeat: the old man tires — the broad shoulders sag, both open hands hang heavy at his sides, and his head bows until the beard rests on the chest, holding a weary standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

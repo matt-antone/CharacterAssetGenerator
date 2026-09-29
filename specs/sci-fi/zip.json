@@ -1,0 +1,51 @@
+{
+  "id": "zip",
+  "name": "Zip",
+  "height": "5' 5\"",
+  "description": "A woman in her mid twenties, a hoverbike courier who sings bright glitchy hyperpop, fast, breathless and always running late.",
+  "build": "A wiry, compact young woman's build of human proportions: narrow shoulders, slim strong arms and quick athletic legs, standing upright and springy.",
+  "face": "Warm light-brown skin, big dark-brown eyes under bold straight black brows, a small upturned nose, full round cheeks and a wide mouth; a bold blocky strip of bright yellow face paint across the nose and both cheeks.",
+  "hair": "Thick black hair in two big round high buns on top of the head, with short choppy bangs.",
+  "outfit": "A puffy cropped padded jacket in bright lime-green with wide horizontal quilted panels, the sleeves ending at the wrists so both hands are bare; a big square royal-blue delivery backpack on both shoulders, its straps crossing the chest; black bike shorts over knee-length white-and-royal-blue striped leggings with wide bold stripes; chunky royal-blue high-top trainers with thick white soles.",
+  "performance_style": "Springy and restless: feet hip-width, weight on the balls of the feet, the character-left heel lifted. The character-right hand is open and empty at chest height tugging a backpack strap with fingers visible, the character-left arm bent with the open empty hand at the hip. Head up, eyes wide, a quick closed-mouth grin.",
+  "location": "A crowded neon night market in a floating city, seen from the front of a slick dark street running to the bottom of the frame: stacked food stalls with bright yellow and teal awnings, hanging paper lanterns, and hovering traffic lights far behind.",
+  "recognition_cues": [
+    "a puffy cropped lime-green padded jacket",
+    "a big square royal-blue delivery backpack",
+    "two big round black hair buns and a yellow face-paint strip"
+  ],
+  "palette": [
+    "jacket lime-green padded #8CD82E / #58941A / #C4F46E",
+    "backpack, trainers and leggings stripe royal-blue #2448C8 / #142C84 / #4E74F0",
+    "leggings stripe and soles white #F4F4F2 / #C4C4C0",
+    "shorts black #18181C / #0A0A0C / #34343A",
+    "face paint yellow #F4D426 / #B89A10",
+    "skin warm light-brown #C08A62 / #8C5E40 / #DEAC84",
+    "hair and brows black #141216 / #08070A / #34303A",
+    "eyes dark-brown #2E1C12",
+    "eye white #F0EADF",
+    "teeth #F4F0E8"
+  ],
+  "avoid": [
+    "a helmet on the head",
+    "a hoverbike, board or vehicle",
+    "a phone or parcel in a hand",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "nicki-minaj-03"
+    },
+    "sing": {
+      "intent": "Hyperpop vocal loop: bounce on the balls of the feet, bring the mic in the character-right hand up to the mouth, flick the open character-left hand up beside the buns and back down on quick beats, then lower the mic and return to the springy stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: sprint in, skid to a stop square to the front, then bounce into the springy stance with the character-right hand on a backpack strap.",
+    "victory": "One-shot song-finish: jump into a planted wide stance, throw the open character-left hand straight up in a peace sign, the character-right hand low with the mic, a huge open-mouthed grin, then hold the pose.",
+    "ko": "She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. She holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

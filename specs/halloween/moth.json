@@ -1,0 +1,53 @@
+{
+  "id": "moth",
+  "name": "Moth",
+  "height": "6' 4\"",
+  "description": "A shy male Mothman-style cryptid in his late twenties, an adult winged moth-man who sings dreamy shoegaze and drifts toward any stage light, gentle and soft rather than scary.",
+  "build": "Tall and slender with narrow shoulders, long thin arms and legs of human proportion, and a small rounded fuzzy torso. From his shoulder blades grow two huge opaque moth wings, each wider than his torso is tall, folded down behind him like a heavy cloak so their lower tips reach his calves; the wings are solid and fully opaque, soft and velvety.",
+  "face": "Soft dusty-brown fur over a rounded moth-like head, two very large round glowing red eyes with no pupils, a small soft mouth with a plain lower lip, and two broad feathery brown antennae, each as wide as a hand, curving up and back from the brow.",
+  "hair": "A thick ruff of cream-white fluffy fur ringing the neck and upper chest like a big soft collar.",
+  "outfit": "Body covered in short dusty-brown velvety fur. Over it an oversized charcoal-grey mohair cardigan, sleeves ending at the wrists so both four-fingered grey-brown hands are fully bare, worn open over the cream ruff; plain dark-denim straight-leg jeans; scuffed charcoal canvas high-top sneakers. The wings are dusty tan with one large bold dark-brown eyespot on each upper wing. His head is bare.",
+  "performance_style": "Shy and slightly hunched: feet together, weight on the character-left foot, wings folded down behind him. Both arms hang in front of the body, the character-right and character-left hands open and empty, fingers loosely touching at hip height. Head tilted a little, a soft bashful look.",
+  "location": "A dim basement venue: a small black-painted stage running to the bottom of the frame, a haze-free dark back wall, and one bright warm spotlight lamp on a stand at one side circled by a few painted moths, pedals and a tangle of cables on the floor.",
+  "recognition_cues": [
+    "two huge dusty-tan moth wings with bold dark-brown eyespots",
+    "very large round glowing red eyes",
+    "a thick cream-white fur ruff at the neck",
+    "broad feathery brown antennae",
+    "an oversized charcoal mohair cardigan"
+  ],
+  "palette": [
+    "fur dusty-brown #6E5A48 / #45382C / #9A826B",
+    "ruff cream-white #E8DFCB / #B6AA92 / #FBF6EA",
+    "wings dusty tan #B79F7C / #7F6B50 / #D8C4A1",
+    "eyespot dark-brown #3A2A1E",
+    "antennae brown #7A5E42 / #4C3A28 / #A58563",
+    "eyes glowing red #E0281E / #8E1410 / #FF7A5C",
+    "cardigan charcoal mohair #4A4A50 / #2C2C31 / #6E6E76",
+    "jeans dark denim #2C3A55 / #1A2234 / #4A5C80",
+    "sneakers charcoal canvas #33343A / #1C1D21 / #55575E",
+    "sneaker soles off-white #D9D4C8",
+    "hands grey-brown #5E5048 / #3A302A / #85736A",
+    "lip #4A3A32"
+  ],
+  "avoid": [
+    "a menacing or horror-film face",
+    "translucent or see-through wings",
+    "wings spread wide in the key art",
+    "sleeves over the hands"
+  ],
+  "animations": {
+    "dance": "Shoegaze sway loop: feet stay planted hip-width, the body rocks slowly side to side with the knees soft, head tipped dreamily to one side, both open hands drifting up to chest height and down again in slow waves, the folded wings rising a little and settling back behind him. Returns to the shy opening stance.",
+    "sing": {
+      "intent": "Dreamy shoegaze vocal loop: hold the mic close to the mouth in the character-right hand, eyes half-lidded, sway gently while the character-left hand drifts up toward an imagined light above, then lower it and return to the shy stance. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the wings flutter half-open behind him, the shoulders jump and both open hands rise to the chest, then the wings fold down and he settles. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: draw both folded wings forward around the shoulders like a cloak while both open hands cross at the chest, then hold. Not combat.",
+    "entrance": "One-shot entrance: flutter in with the wings half-spread, land softly on both sneakers, fold the wings down behind him and settle into the shy stance, hands open and empty.",
+    "victory": "One-shot celebration: spread both wings wide and upward, raise both open hands high toward the light, tip the head back with a big open-mouthed smile, and hold.",
+    "ko": "Non-contact performance defeat: he stays on his feet as the energy drains away — the wings droop low behind him, the antennae sag, both open hands hang limp and the head hangs forward. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "sunrise",
+  "name": "Sunrise",
+  "height": "5' 6\"",
+  "description": "A serene, lithe woman in her mid forties who teaches sunrise yoga on a desert playa and sings Balearic chill-out, blissfully calm until the chorus sets her wild.",
+  "build": "A lithe, toned adult build of ordinary proportions: open level shoulders, a long straight torso, slim strong arms and legs, standing upright with straight knees.",
+  "face": "Sun-warmed golden-tan skin with light freckles, soft hazel eyes under straight light-brown brows, a small straight nose, high cheekbones, and a wide mouth.",
+  "hair": "Long wavy sun-bleached honey-blonde hair falling past the shoulders, held back from the face by a wide saffron-orange cloth headband.",
+  "outfit": "A loose natural-white linen wrap top with wide three-quarter sleeves ending just below the elbow, belted with a wide saffron-orange sash; loose natural-white linen wide-leg trousers to the ankle; bare feet; a long necklace of large round dark-brown wooden mala beads hanging to the waist.",
+  "performance_style": "Centred and serene: bare feet together, weight even, spine tall. Both hands in front of the chest with palms pressed together in a prayer pose, all ten fingers visible. Head level, eyes softly half-closed, a peaceful closed-mouth smile.",
+  "location": "The open playa at first light: pale flat desert floor running to the bottom of the frame, a few rolled-up yoga mats laid out, a tall wooden shade frame with sheer panels hanging still, and a wide peach, rose and gold sunrise sky over distant mountains.",
+  "recognition_cues": [
+    "loose natural-white linen wrap top and wide-leg trousers",
+    "a wide saffron-orange sash and headband",
+    "long honey-blonde wavy hair",
+    "a long necklace of large dark wooden mala beads"
+  ],
+  "palette": [
+    "linen natural-white #EDE6D6 / #BCB29E / #FFFBF0",
+    "sash and headband saffron-orange #E08A1E / #9A5A10 / #F8B458",
+    "mala beads dark-brown wood #5A3620 / #36200F / #825434",
+    "skin #D8A47A / #A07450 / #F0C69E",
+    "freckles #B07A52",
+    "hair honey-blonde #D6B06A / #9C7A3E / #F2D69A",
+    "eye white #F2EADE",
+    "eye hazel #7A7040",
+    "lip #B06A58",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a see-through linen fabric",
+    "a long flowing robe or cape"
+  ],
+  "animations": {
+    "dance": "Chill-out dance loop from the centred stance: sway slowly with flowing arm sweeps overhead like a sun salutation, then burst into a wild joyful shimmy with the shoulders shaking and hair tossing, both open hands raised, before melting back into the centred stance.",
+    "sing": {
+      "intent": "Balearic vocal loop: start serene, swaying slowly with the mic in the character-right hand at the mouth, then on the chorus suddenly throw the character-left open hand high overhead and whip the hair side to side, then ease back down to the centred stance. The mood swings from bliss to wild abandon and back. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: float in with slow gliding steps, palms together, turn square to the front, then land in her opening stance with both open hands in full view.",
+    "victory": "One-shot finish: leap into a wide star with both open hands flung high, hair flying, shout with the mouth wide open, then land and hold a blissful tree pose on one foot with palms pressed overhead.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the serenity collapses — the shoulders fall, both open hands hang limp at her sides, and her head bows with the hair falling forward. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

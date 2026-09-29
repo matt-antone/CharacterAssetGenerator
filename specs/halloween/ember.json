@@ -1,0 +1,53 @@
+{
+  "id": "ember",
+  "name": "Ember",
+  "height": "5' 9\"",
+  "description": "A fire-demon woman in her late twenties, a tireless party animal who sings Italo disco, all glitter and heat.",
+  "build": "Slim athletic build of ordinary human proportions: medium shoulders, a narrow waist, long legs, standing upright with a springy energy.",
+  "face": "Charcoal-black skin with bold glowing orange cracks along the cheekbones and collarbones, bright glowing yellow eyes, sharp arched orange brows, a straight nose, full lips, and two short curved black horns rising from the hairline.",
+  "hair": "A tall solid opaque mass of flame for hair, rising about a foot above the head in big bold tongues: bright orange at the base and yellow at the tips, solid-coloured and opaque.",
+  "outfit": "A sleeveless gold sequin mini dress with a high neck and a wide belt of gold, ending mid-thigh, both charcoal arms and hands bare; knee-high glossy red platform boots.",
+  "performance_style": "Party-ready: feet hip-width, weight on the character-left leg, hip cocked. The character-right hand on the hip, fingers visible, and the character-left hand raised open and empty at shoulder height pointing up. Head high, a bright confident look.",
+  "location": "A glittering eighties disco: a lit floor of big coloured squares running to the bottom of the frame, a mirror ball overhead, neon-pink and blue light strips on a dark back wall, and a DJ booth with synths at one side.",
+  "recognition_cues": [
+    "a tall solid mass of orange-to-yellow flame hair",
+    "charcoal-black skin with glowing orange cracks",
+    "two short curved black horns",
+    "a sleeveless gold sequin mini dress",
+    "knee-high red platform boots"
+  ],
+  "palette": [
+    "skin charcoal #2E2A2C / #171416 / #4E484C",
+    "cracks glowing orange #F2711C / #A8440A / #FFA85A",
+    "flame hair orange #F27A12 / #B24A06 / #FFA640",
+    "flame tips yellow #FFD23A / #D6A012 / #FFF08A",
+    "eyes yellow #FFE04A",
+    "horns black #151315 / #070607 / #3A363A",
+    "dress gold sequin #D6A83A / #93711E / #F6DA7A",
+    "belt gold #C49428 / #85621A / #EBC660",
+    "boots red #C41E24 / #7A1014 / #EE5058",
+    "lip #5A2A24",
+    "teeth #F2EAD8"
+  ],
+  "avoid": [
+    "smoke or translucent flame",
+    "a sinister or menacing face",
+    "pitchfork or tail"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-02"
+    },
+    "sing": {
+      "intent": "Italo-disco vocal loop: mic at the mouth in the character-right hand, hips swinging on the beat, the character-left hand pointing up to the mirror ball and back down, then return to the party-ready stance. The mouth must visibly open wide and change shape across the loop so she unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the flame hair flares taller, the shoulders jump and both open hands rise, then she laughs it off. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: cross both forearms before the chest, hip cocked, and hold with attitude. Not combat.",
+    "entrance": "One-shot entrance: strut in on the platform boots, stop square to the front with a hip pop, and land in the party-ready stance.",
+    "victory": "One-shot celebration: both open hands thrown high, the flame hair blazing taller, head back in a big open-mouthed laugh, and hold.",
+    "ko": "Non-contact performance defeat: she stays on her feet as the party dies — the flame hair shrinks low, the cracks dim, both open hands hang and the head drops forward. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

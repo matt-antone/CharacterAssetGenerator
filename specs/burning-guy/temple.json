@@ -1,0 +1,48 @@
+{
+  "id": "temple",
+  "name": "Temple",
+  "height": "5' 11\"",
+  "description": "A quiet, heartfelt man in his mid forties, a carpenter who builds the great wooden temple at a desert arts festival and sings slow, aching slow-core ballads.",
+  "build": "A lean, rangy adult man of ordinary proportions: medium shoulders, long sinewy arms, standing upright with straight knees.",
+  "face": "Sun-browned light skin, soft grey eyes under straight brown brows, a long nose, hollow cheeks, and a short brown stubble beard.",
+  "hair": "Shaggy mid-length brown hair to the jaw, tucked behind the ears.",
+  "outfit": "Faded rust-brown canvas carpenter's bib overalls with a big bib pocket and a hammer loop, empty; underneath, a long-sleeved oatmeal thermal shirt with the sleeves pushed to the elbows; a big dusty sage-green bandana tied loosely round the neck; tan leather work boots. Both hands bare.",
+  "performance_style": "Quiet and grounded: feet hip-width, weight even. Both arms hang at his sides, the character-right and character-left hands open, empty, fingers visible. Head level, a soft, thoughtful look.",
+  "location": "A desert playa at sunset: flat pale cracked alkali ground to the bottom of the frame, a tall intricate wooden temple of carved lattice spires at one side, a stack of timber and sawhorses, and a soft pink-gold sky.",
+  "recognition_cues": [
+    "rust-brown canvas bib overalls",
+    "a big sage-green bandana at the neck",
+    "shaggy brown hair tucked behind the ears"
+  ],
+  "palette": [
+    "overalls rust-brown canvas #9A5430 / #5E321A / #C27A52",
+    "thermal shirt oatmeal #D8CBB0 / #A69A82 / #F0E6D0",
+    "bandana sage green #7E9A74 / #50664A / #A6C29C",
+    "boots tan leather #A8743F / #6A4623 / #D49C62",
+    "skin #C99472 / #8E6048 / #E6B494",
+    "hair and stubble brown #5A3E26 / #362414 / #80603E",
+    "eye grey #7C8A90",
+    "eye white #EFE6D8",
+    "lip #A06050",
+    "teeth #EDE3D0"
+  ],
+  "avoid": [
+    "a hammer or saw in hand"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-03"
+    },
+    "sing": {
+      "intent": "Slow-core vocal loop: stand nearly still, bring the mic in the character-right hand to the mouth, press the character-left open hand to the bib of the overalls on the long line, then lower both and return to the grounded stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A plank falls nearby: he flinches, shoulders lifting, then settles quietly. No opponent, strike or physical contact.",
+    "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
+    "entrance": "One-shot entrance: walk in slowly with long easy steps, pull the bandana loose with the character-right hand, then settle into the grounded stance.",
+    "victory": "One-shot finish: both open hands raised to shoulder height, head tipped back with an open-mouthed, relieved smile, then hold.",
+    "ko": "Non-contact performance defeat: the quiet turns to sorrow — the shoulders fold forward, both open hands hang limp at his sides, and his head hangs low, hair falling forward. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "smores",
+  "name": "S'mores",
+  "height": "6' 0\"",
+  "description": "A mellow man in his thirties devoted to making s'mores, soft-spoken and happy, who sings seventies soft rock.",
+  "build": "A soft, heavy-set adult man's build of ordinary proportions: rounded shoulders, a gentle belly, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Ruddy fair skin, warm brown eyes under soft light-brown brows, a broad rounded nose, a full bushy ginger beard, and medium lips.",
+  "hair": "Thick wavy ginger hair to the collar, parted in the centre and tucked behind both ears.",
+  "outfit": "A red-and-black buffalo-check flannel shirt with big bold checks, sleeves rolled to the elbow, open over a plain cream T-shirt; on each sleeve, forearm and shoulder a few big fluffy white marshmallow blobs stuck on; relaxed tan corduroy trousers; brown leather work boots.",
+  "performance_style": "Mellow and easy: feet hip-width apart, weight even. Both arms hang relaxed, the character-right and character-left hands open and empty at his sides, fingers loose and visible. Head tilted slightly, a soft contented smile.",
+  "location": "A backyard fire pit at twilight: a stone ring with glowing embers in the foreground, lawn running to the bottom of the frame, a folding table with a plate of graham crackers, chocolate and a big bag of marshmallows, lawn chairs and string lights behind.",
+  "recognition_cues": [
+    "a red-and-black buffalo-check flannel shirt with big checks",
+    "big white marshmallow blobs stuck on the sleeves",
+    "a full bushy ginger beard"
+  ],
+  "palette": [
+    "flannel red check #B8242A / #761418 / #DC5056",
+    "flannel black check #1E1A1C / #0E0C0D / #3C3638",
+    "tee cream cotton #EADFC6 / #B8AB90 / #FAF2DE",
+    "marshmallow white #F6F2EA / #CFC8BA / #FFFFFF",
+    "trousers tan corduroy #B08A5A / #726042 / #D0AE7E",
+    "boots brown leather #6A4428 / #3E2614 / #926644",
+    "skin #E8B498 / #B4826A / #F8D2BC",
+    "hair and beard ginger #B8561E / #783210 / #DE8048",
+    "eye white #F2EADC",
+    "eye brown #5A3A20",
+    "lips #B06858",
+    "teeth #F2ECE0"
+  ],
+  "avoid": [
+    "a roasting stick or skewer in the key art",
+    "burnt marshmallow"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-01"
+    },
+    "sing": {
+      "intent": "Soft-rock vocal loop: sway gently, hold the mic in the character-right hand at the mouth, lay the character-left open hand over the heart on the long note, then return to the mellow stance. The mouth visibly opens wide and changes shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "An ember pops: he blinks and draws back, both open hands lifting to chest height, then settles back to the mellow stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn the shoulders slightly and raise both open hands in front of the chest, holding a calm stance. Not combat.",
+    "entrance": "One-shot entrance: amble in slowly, give a lazy wave with the character-right hand, then settle into the mellow stance.",
+    "victory": "One-shot celebration: raise both open hands wide overhead, head back in a big open-mouthed laugh, then hold with both feet planted.",
+    "ko": "Non-contact defeat: he deflates — shoulders sag, both open hands hang limp at his sides, head droops. He holds a standing, sleepy finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

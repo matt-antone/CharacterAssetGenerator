@@ -1,0 +1,51 @@
+{
+  "id": "burlesque",
+  "name": "Burlesque",
+  "height": "5' 7\"",
+  "description": "A glamorous, witty woman in her mid forties who sings swing-era burlesque jazz on a desert-festival cabaret stage.",
+  "build": "A curvy hourglass adult build of ordinary proportions: rounded shoulders, a full bust, a nipped waist, full hips, and arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Porcelain-fair skin, large green eyes with bold black winged eyeliner, arched dark brows, a beauty mark high on the character-left cheek, and full lips in deep scarlet lipstick.",
+  "hair": "Jet-black hair in big glossy sculpted victory rolls at the front and a smooth shoulder-length curled back, with one large scarlet silk flower pinned above the character-left ear.",
+  "outfit": "A scarlet satin overbust corset with bold black vertical boning lines and wide black satin shoulder straps, over a black ruffled full petticoat skirt in tiered layers standing out to the knee; black opera gloves to above the elbow, fitted snug to every finger; black seamed stockings; scarlet satin T-strap heels.",
+  "performance_style": "Showgirl stance: feet in a tight T, the front knee bent across, hip cocked. The character-right gloved hand rests open on the hip, the character-left gloved hand lifted open beside the face at shoulder height, fingers fanned and fully visible. Chin lifted, a sly closed-mouth smile.",
+  "location": "A cabaret tent on the night playa: a low wooden stage running to the bottom of the frame, swagged gold-fringed deep-red canvas drapes behind, a row of round bulb footlights along the stage edge, and dark desert night glimpsed at the tent's open sides.",
+  "recognition_cues": [
+    "a scarlet satin corset with black boning",
+    "a black tiered knee-length petticoat skirt",
+    "black opera gloves above the elbow",
+    "jet-black victory-roll hair with a scarlet flower"
+  ],
+  "palette": [
+    "corset, hair flower and heels scarlet satin #C01E2E / #7A0F1B / #E8505A",
+    "corset boning and straps black satin #19171A / #09080A / #38343A",
+    "petticoat black #1E1C20 / #0C0B0D / #3E3A42",
+    "opera gloves black #141316 / #060507 / #302E34",
+    "stockings black sheer-dark #2A2628",
+    "skin #F2D6C8 / #C4A696 / #FFEDE4",
+    "hair jet-black #111013 / #050406 / #34323A",
+    "eyeliner black #0A0A0A",
+    "eye white #F4EEE6",
+    "eye green #3E8A5A",
+    "lip scarlet #A8141E",
+    "beauty mark #3A2420",
+    "teeth #F4EDE2"
+  ],
+  "avoid": [
+    "nudity or lingerie-only styling",
+    "feather fans"
+  ],
+  "animations": {
+    "dance": "Swing burlesque dance loop from the showgirl stance: step side to side in a slow swing rhythm, bump the hip on each downbeat so the petticoat sways, circle both gloved hands outward at shoulder height and draw them back to frame the face, then settle back into the showgirl stance.",
+    "sing": {
+      "intent": "Burlesque jazz vocal loop: roll the hips slowly, bring the mic in the character-right gloved hand to the mouth, trail the character-left gloved hand down from the shoulder to the hip on the sultry line, then lower the mic and return to the showgirl stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: sashay in with slow swaying steps, turn square to the front, then land in her opening stance with both open hands in full view.",
+    "victory": "One-shot finish: pop one heel up behind, blow a kiss from the character-left gloved hand with the mouth open in a laugh, then hold a glamorous arms-wide pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the glamour wilts — the shoulders roll forward, both gloved hands drop limp at her sides, and her head droops with the flower tipping forward. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

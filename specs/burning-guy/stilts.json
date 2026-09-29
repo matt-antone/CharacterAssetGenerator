@@ -1,0 +1,51 @@
+{
+  "id": "stilts",
+  "name": "Longshanks",
+  "height": "5' 9\"",
+  "description": "A man in his early thirties, a stilt walker at a desert arts festival standing on tall hidden stilts, who sings circus cabaret with sweeping theatrical grandeur and a wink.",
+  "build": "A slim adult man of ordinary upper-body proportions standing on tall stilts: the body from hip to crown is ordinary, while each leg continues straight down in one very long trouser leg about twice the ordinary length to a small boot at the ground, so the whole figure is very tall and narrow. He stands upright with both long legs straight.",
+  "face": "Fair skin, green eyes under thin arched dark brows, a long narrow nose, a neat pointed black moustache curled at the tips, thin lips.",
+  "hair": "Short neat black hair combed back, mostly hidden under the hat.",
+  "outfit": "A tall black silk top hat with a wide red band; a fitted red tailcoat, cut away at the waist, tails to the backs of the knees, gold buttons, sleeves ending at the wrists so both hands are bare in white cotton gloves; a black waistcoat; floor-to-hip trousers of wide bold vertical stripes in red and cream, about four inches wide, running the full length of the very long legs to small black boots.",
+  "performance_style": "Tall and grand: the long legs straight and slightly apart, weight even. Both arms out a little from the sides, the character-right and character-left gloved hands open and empty, fingers spread. Head high, a sly smile.",
+  "location": "Afternoon on the open playa: flat pale clay running to the bottom of the frame, a tall striped red-and-cream circus tent behind with pennants, a low line of tents and bikes beyond, and a clear hot blue sky.",
+  "recognition_cues": [
+    "very long legs on hidden stilts in wide bold red-and-cream vertical stripes",
+    "a tall black silk top hat with a red band",
+    "a red tailcoat with gold buttons",
+    "white gloves and a curled black moustache"
+  ],
+  "palette": [
+    "top hat, waistcoat and boots black #1C1A1E / #0D0C0E / #3E3A42",
+    "hat band, tailcoat and red stripes red #C02A2E / #7A171A / #E4565A",
+    "cream stripes #E8DCC0 / #B8AA8E / #FFF4DC",
+    "buttons gold #D4A838 / #8A6A1E / #F4D878",
+    "gloves white cotton #F2F0EA / #C0BCB2 / #FFFFFF",
+    "skin #E8C2A4 / #B08A6C / #F8DCC4",
+    "hair and moustache black #1A1614 / #0C0A09 / #3A322C",
+    "eye green #3A7A4A",
+    "eye white #EFE6D8",
+    "lip #B06A5E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "visible wooden or metal stilt poles",
+    "an ordinary-length leg",
+    "thin pinstripes",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Prose dance, a slow stilt-walker's cabaret sway looping back to the opening stance: rock the tall body side to side from one long straight leg to the other, take one tall high step in place with each leg, doff the top hat with the character-right hand in a wide sweeping arc and set it back on, then open both gloved hands wide at shoulder height and return to the grand stance.",
+    "sing": {
+      "intent": "Cabaret vocal loop: lean the tall body gently forward from the hips, bring the mic in the character-right gloved hand up to the mouth for a grand theatrical phrase, fling the open character-left gloved hand out wide at shoulder height, then draw the mic back to the chest. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief wobble at a sudden noise: the tall body sways, both gloved hands fly out wide for balance, then he steadies upright into the grand stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: bring the character-left gloved forearm across the chest and the character-right gloved hand open at the hat brim, the long legs planted apart, holding a steady finish. Not combat.",
+    "entrance": "One-shot entrance: stride in on huge slow stilt steps, halt, tip the top hat with the character-right gloved hand, and settle into the tall grand stance.",
+    "victory": "One-shot song-finish celebration: sweep the top hat off with the character-right gloved hand into a deep theatrical bow from the waist, then rise tall with the hat held high and the mouth open in a laugh, holding the pose.",
+    "ko": "Non-contact performance defeat: the grandeur sags — the tall body stoops from the waist, both gloved hands dangle limp, the top hat tips askew and his head hangs with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

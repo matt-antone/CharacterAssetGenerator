@@ -1,0 +1,50 @@
+{
+  "id": "hoa",
+  "name": "HOA",
+  "height": "5' 6\"",
+  "description": "A strict homeowners-association president in her mid fifties, a woman who polices every lawn but secretly loves barbershop harmony and a cappella singing.",
+  "build": "A trim, upright adult build of ordinary height: squared shoulders, a straight posture, a narrow waist, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Fair pinkish skin, sharp blue eyes under thin arched brows, a narrow straight nose, defined cheekbones, and thin lips in pink-coral lipstick.",
+  "hair": "A short, stiff, perfectly set platinum-blonde bob, chin length, rounded and solid below the visor.",
+  "outfit": "A bright white sun visor with a wide flat kelly-green bill; a sleeveless kelly-green polo shirt with a white collar, buttoned up; a big round white lanyard badge on a wide green cord at the chest; white capri trousers to mid-calf with a wide brown belt; white tennis shoes. Both arms and hands are bare.",
+  "performance_style": "Rigid and watchful: feet together, back straight, chin up. The character-right hand held open at the waist, palm up as if reading; the character-left hand raised open with the index finger up, making a point, fingers visible. A tight polite smile.",
+  "location": "A perfectly kept suburban backyard: an immaculate striped green lawn running to the bottom of the frame, identical trimmed boxwood hedges, a white vinyl fence, a white gazebo behind, and neat white string lights.",
+  "recognition_cues": [
+    "a white visor with a kelly-green bill",
+    "a set platinum-blonde bob",
+    "a kelly-green polo with a big white badge"
+  ],
+  "palette": [
+    "visor, badge, capris and shoes white #F4F2EC / #C0BCB2 / #FFFFFF",
+    "visor bill, polo and cord kelly-green #2A9A48 / #186630 / #56C472",
+    "polo collar white #F4F2EC",
+    "belt brown #6A4A2E",
+    "skin #EEC2AA / #BC907A / #FAD8C6",
+    "hair platinum-blonde #E8D9A0 / #B8A870 / #FAF0CA",
+    "lipstick pink-coral #D8707A",
+    "eye blue #3A6EA8",
+    "eye white #F2ECE2",
+    "teeth #F2EBDD"
+  ],
+  "avoid": [
+    "a clipboard on the key art",
+    "a golf-club or tennis-racket",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-04"
+    },
+    "sing": {
+      "intent": "Barbershop vocal loop: a crisp side-step and tip of the visor, the mic in the character-right hand at the mouth, the character-left hand conducting a tidy harmony line at chest height, then return to the rigid stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A sharp start at a loud stereo: shoulders snap up, both open hands rise, then she smooths the bob back into place. No opponent or contact.",
+    "guard": "One-shot: hold the character-left hand up palm-out, 'stop right there', feet together, then hold. Not combat.",
+    "entrance": "One-shot: march in heel-toe, stop square to the front and hold up the pointing finger in the rigid stance.",
+    "victory": "One-shot: both open hands raised in a barbershop finish, head back, mouth open on the last chord, then hold.",
+    "ko": "The rigid posture fails: shoulders drop, both open hands hang limp, the chin sinks and the visor tips down. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "broadway",
+  "name": "Broadway",
+  "height": "5' 8\"",
+  "description": "A Broadway showtune tenor, a man in his mid forties, polished and theatrical, who ends every song on jazz hands.",
+  "build": "A trim, neat adult man of ordinary proportions: medium square shoulders, a slim waist, arms and legs of ordinary length, standing tall and upright with straight knees and a lifted chest.",
+  "face": "Fair pinkish skin, bright hazel eyes under neat arched brown brows, a straight nose, a clean-shaven square jaw with a dimpled chin, thin lips, and bright white teeth.",
+  "hair": "Short chestnut-brown hair in a tall glossy pompadour swept up and back from the forehead, neat at the sides.",
+  "outfit": "A white long-sleeved dress shirt with the sleeves at the wrists so both hands are bare; a fitted plum-purple satin waistcoat, single-breasted with bold gold buttons; a big bright scarlet-red bow tie; slim black trousers; black patent leather tap shoes. No jacket. His head is bare.",
+  "performance_style": "Showman's pose: feet in a neat ballet third position, weight on the character-left leg. Both arms raised out wide at shoulder height, the character-right and character-left hands open in jazz hands, all fingers spread and fully visible. Head up, a bright closed-mouth smile.",
+  "location": "A classic Broadway theatre stage: glossy black stage boards running to the bottom of the frame, a gold proscenium arch with a deep red velvet curtain behind, and a row of warm footlights along the stage edge.",
+  "recognition_cues": [
+    "a plum-purple satin waistcoat with gold buttons",
+    "a big scarlet bow tie",
+    "a tall chestnut pompadour",
+    "jazz hands with all fingers spread"
+  ],
+  "palette": [
+    "waistcoat plum-purple satin #6A2A6E / #401842 / #9A52A0",
+    "buttons gold #D8AA3A / #8E6C1C / #FAE08A",
+    "shirt white #F0EDE6 / #BCB8AE / #FFFFFF",
+    "bow tie scarlet-red #D0202E / #84121C / #F2545E",
+    "trousers and tap shoes black #1C1B1F / #0B0A0D / #403E46",
+    "skin #EAC0A6 / #B68C74 / #F8DCC8",
+    "hair chestnut-brown #6A3A1E / #3E200E / #9A6038",
+    "eye white #F3ECE0",
+    "eye hazel #7A6A30",
+    "lip #B8706A",
+    "teeth #F8F4EC"
+  ],
+  "avoid": [
+    "a top hat or cane",
+    "a dinner jacket over the waistcoat",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "lindey-hop-02"
+    },
+    "sing": {
+      "intent": "Showtune vocal loop: hold the mic in the character-right hand at the mouth, sweep the open character-left arm up and out on the rising phrase, rise onto the toes for the big held note, then lower and return to the showman's pose. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A theatrical startle at a loud room sound: both open hands clap to the cheeks, the eyebrows shoot up, then he recovers into the showman's pose. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn the character-left shoulder forward with that forearm across the chest, character-right hand open at the hip, and hold a poised finish. Not combat.",
+    "entrance": "One-shot entrance: tap-step in with quick bright steps, spin once to the front, and land in the showman's pose with jazz hands.",
+    "victory": "One-shot celebration: drop into a deep lunge, both arms flung out wide in jazz hands, head up with a huge open-mouthed smile, and hold the finale pose.",
+    "ko": "Non-contact performance defeat: the jazz hands wilt, both open hands droop to hang at his sides, the chest caves and the head bows. He holds a standing, deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "moop",
+  "name": "Moop",
+  "height": "5' 10\"",
+  "description": "A wiry, relentlessly cheerful man in his mid thirties who sings ska at a desert arts festival and volunteers to pick up every speck of litter on the playa.",
+  "build": "A lean wiry adult build of ordinary proportions: medium-narrow shoulders, a flat torso, long slim arms and legs, standing upright with straight knees.",
+  "face": "Sunburnt fair skin, bright green eyes under thin ginger brows, a long straight nose, a narrow jaw with short ginger stubble, and a wide mouth.",
+  "hair": "Short bright ginger hair in a tidy flat-top about an inch high, clear of the ears.",
+  "outfit": "A fluorescent safety-yellow high-visibility vest with two wide bold silver reflective bands around the torso, worn open over a black-and-white checkerboard short-sleeved shirt with big bold squares; khaki cargo shorts to the knee with two large empty thigh pockets; tall white socks; chunky grey hiking boots. A black-and-white checked bandana tied round the neck. Both hands bare.",
+  "performance_style": "Bouncy and upright: feet hip-width apart, knees soft, weight on the balls of the feet. Both elbows bent, the character-right and character-left hands open at waist height, empty, fingers spread and fully visible. Head up, an eager beaming smile.",
+  "location": "A wide stretch of open playa at morning: flat pale cracked desert floor running to the bottom of the frame, a line of orange traffic cones and a stack of empty collection bags by a small white shade canopy, and a clear pale-blue sky over distant brown mountains.",
+  "recognition_cues": [
+    "a fluorescent safety-yellow vest with two wide silver reflective bands",
+    "a bold black-and-white checkerboard shirt",
+    "a short bright ginger flat-top"
+  ],
+  "palette": [
+    "vest safety-yellow #D9E021 / #99A014 / #F2F77A",
+    "reflective bands silver #B8BEC4 / #7E848A / #E4E8EC",
+    "shirt and bandana checks black #1B1B1D / #0A0A0B / #38383C",
+    "shirt and bandana checks white #EEEDE8 / #B8B6AE / #FFFFFF",
+    "cargo shorts khaki #A8905E / #6E5C38 / #CDB583",
+    "socks white #E8E6E0",
+    "hiking boots grey #5C5A56 / #37352F / #85827B",
+    "skin #E3A88A / #A8705A / #F5C8AE",
+    "hair and stubble ginger #C0602A / #80391A / #E68A4E",
+    "eye white #F0E9DE",
+    "eye green #4E8A3C",
+    "lip #B06A5A",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a litter grabber on the key art (no prop exists yet)",
+    "a hard hat or helmet"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-01"
+    },
+    "sing": {
+      "intent": "Ska vocal loop: skank the knees up and down on the offbeat, bring the mic in the character-right hand to the mouth, pump the character-left open hand in time at chest height, then lower the mic and return to the bouncy stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then he settles back to his stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: speed-walk in with quick springy steps, scanning the ground, turn square to the front, then land in his opening stance with both open hands in full view.",
+    "victory": "One-shot finish: jump the heels together, fling both open hands up above the shoulders, beam with the mouth wide open, then hold a triumphant upright pose.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the zeal drains away — the shoulders slump, both open hands hang limp at his sides, and his head hangs looking down at the ground. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

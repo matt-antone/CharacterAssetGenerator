@@ -1,0 +1,53 @@
+{
+  "id": "breaker",
+  "name": "Breaker",
+  "height": "5' 11\"",
+  "description": "A man in his early twenties, a loud, lovable spring-breaker who sings 2000s pop-rap party anthems.",
+  "build": "A lanky adult build: narrow shoulders, long thin arms, a flat torso and long legs, standing upright with straight knees.",
+  "face": "Light tan skin with pink sunburned shoulders and nose, bright blue eyes under light brows, a straight nose and a wide mouth.",
+  "hair": "Spiky frosted hair: short dark-brown roots with bleached pale-yellow tips gelled up in points.",
+  "outfit": "Big white shutter-shade sunglasses with wide horizontal slats across the eyes; a baggy sleeveless tank top in bright kelly green with one large bold white block number 07 on the chest; long baggy knee-length board shorts in bright yellow with wide bold green side stripes; white flip-flops; a thick chunky puka-shell necklace.",
+  "performance_style": "Hyped party stance: feet wide, knees bouncing, chest pushed out. Both arms raised, the character-right and character-left hands open with fingers spread wide at head height, all fingers visible. Head tipped back, a whooping open grin.",
+  "location": "A crowded spring-break beach party at midday: bright sand running to the bottom of the frame, a DJ booth under a striped canopy, inflatable palm trees, beach balls in the air, and a hard blue sky.",
+  "recognition_cues": [
+    "big white shutter-shade sunglasses",
+    "a kelly-green tank top with a big white 07",
+    "yellow board shorts with green side stripes",
+    "spiky frosted hair"
+  ],
+  "palette": [
+    "shutter shades white #F4F4F0 / #C6C6C0",
+    "tank top kelly green #1E9A3E / #116024 / #4CC468",
+    "number white #F2F0EA",
+    "board shorts yellow #F2D22A / #B09414 / #FFEB70",
+    "side stripes green #1E9A3E",
+    "flip-flops white #E8E6E0",
+    "puka shells cream #EDE3CB / #BFB195",
+    "skin #D9A07A / #9E6A4C / #F0C2A0",
+    "sunburn pink-red #E0806A",
+    "hair roots brown #4A3020 / #2A1A10",
+    "hair tips pale yellow #F0DC8A / #C2AC5A",
+    "eye blue #4A7AB0",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "real college names or logos",
+    "a drink cup in hand"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-01"
+    },
+    "sing": {
+      "intent": "Pop-rap vocal loop: the mic in the character-right hand at the mouth, he bounces hard on both knees and pumps the character-left hand open overhead on the beat, then returns to the party stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: he runs in whooping, slides to a stop and lands in the party stance.",
+    "victory": "One-shot finish: he jumps in place, lands with both open hands thrown overhead in a whoop with the mouth wide open, and holds.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the energy drains out: the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

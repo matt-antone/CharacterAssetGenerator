@@ -1,0 +1,57 @@
+{
+  "id": "busker",
+  "name": "Busker",
+  "height": "5' 10\"",
+  "description": "A one-man-band street busker, a scruffy, cheerful man in his mid twenties who plays everything at once to anyone passing.",
+  "build": "A wiry, lean adult man of ordinary proportions: narrow shoulders, a slim torso, long thin arms and long legs, standing upright with loose knees.",
+  "face": "Light olive skin with a sunburnt nose, green eyes under straight brown brows, a long nose, a patchy short russet-brown beard along the jaw, thin lips, and white teeth.",
+  "hair": "Shaggy chin-length russet-brown hair, messy and tucked behind both ears.",
+  "outfit": "A long mustard-yellow wool greatcoat to mid-thigh with big bold square patches in bottle-green and brick-red on the elbows and chest, sleeves rolled to the wrists so both hands are bare; a dark teal wool jumper beneath; worn blue-grey jeans; scuffed brown leather boots. A wire harmonica rack around the neck holds a steel harmonica just below the chin. A large round bass drum with a red shell and a cream head is strapped flat on his back, rising above his shoulders. His head is bare.",
+  "performance_style": "Loose and bouncy: feet hip-width apart, one knee bent in time. Both arms out from his sides, the character-right and character-left hands open, empty and fully visible at hip height. Head level, the harmonica below the chin, a cheeky closed-mouth grin.",
+  "location": "A cobbled city street corner on a grey afternoon: wet cobblestones running to the bottom of the frame, a brick shopfront with a green awning behind, a lamp post at one side and an open guitar case of coins on the ground.",
+  "recognition_cues": [
+    "a big red-shelled bass drum strapped on his back",
+    "a mustard greatcoat with bold green and red patches",
+    "a harmonica rack around the neck",
+    "shaggy russet hair and patchy beard"
+  ],
+  "palette": [
+    "greatcoat mustard-yellow wool #C49A2E / #7E6218 / #E8C462",
+    "patches bottle-green #2F6A3E / #1A4024 / #52955E",
+    "patches brick-red #A0402E / #62261A / #CC6A54",
+    "jumper teal wool #1E5A60 / #10363A / #3C8A90",
+    "jeans blue-grey denim #54667A / #334050 / #7E92A6",
+    "boots and drum straps brown leather #6E4828 / #422A14 / #9A6E44",
+    "drum shell red #B8282C / #741618 / #E0585A",
+    "drum head cream #EADFC4 / #B8AC90 / #FAF2DC",
+    "harmonica and rack steel #9A9EA4 / #5E6268 / #D0D4D8",
+    "skin #D4A882 / #9E7658 / #EEC8A4",
+    "nose sunburn #D07A64",
+    "hair and beard russet-brown #7A4424 / #4A2812 / #A86A40",
+    "eye white #F2EADC",
+    "eye green #4A8A4E",
+    "lip #A0645A",
+    "teeth #F3EDE0"
+  ],
+  "avoid": [
+    "a guitar in the key art",
+    "hands in the coat pockets",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-01"
+    },
+    "sing": {
+      "intent": "Street folk-rock vocal loop: stamp the character-left boot as if kicking the bass drum pedal, hold the mic in the character-right hand at the mouth beside the harmonica rack, pump the open character-left hand at chest height to the beat, then lower the mic and return to the bouncy stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A quick startle at a loud street sound: the shoulders jump so the drum on his back bounces, both open hands lift, then he grins and settles. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn the character-left shoulder forward, forearm across the chest, character-right hand open at the hip, and hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: stroll in with a jaunty bouncing walk, the drum riding on his back, then face front in the bouncy stance with both hands open.",
+    "victory": "One-shot celebration: jump and click the heels, land with both open arms up wide, laughing open-mouthed, and hold the pose.",
+    "ko": "Non-contact performance defeat: the bounce goes out of him — the shoulders sag under the drum's weight, both open hands hang limp and the head drops. He holds a standing, deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "cabana",
+  "name": "Cabana",
+  "height": "6' 1\"",
+  "description": "A smooth, attentive cabana attendant, a Black man in his mid twenties, who sings slick nineties New Jack Swing.",
+  "build": "A tall, athletic young man: broad shoulders, a trim waist, long arms and legs, standing upright with straight knees.",
+  "face": "Deep brown skin, warm dark-brown eyes under neat thick black brows, a broad nose, high cheekbones, a thin neat black moustache and chin beard, and full lips.",
+  "hair": "A tall flat-top high-top fade in black, squared off on top, the sides shaved short.",
+  "outfit": "A short-sleeved crisp white resort polo shirt with a bold wide teal band across the chest; tailored knee-length coral-orange shorts; white canvas slip-on shoes. A folded big turquoise beach towel draped over the character-left forearm, the hand below it bare and visible. A thin gold chain at the neck.",
+  "performance_style": "Smooth and attentive: feet together, a slight lean forward from the waist. The character-left forearm bent at waist height with the towel over it, its hand open and visible; the character-right hand open and empty at the side. Head level, a warm easy smile.",
+  "location": "A luxury beach club by the sand: pale decking running to the bottom of the frame, a row of white cabanas with striped curtains behind, crisp white loungers with rolled towels, potted palms, and a bright turquoise sea under a clear sky.",
+  "recognition_cues": [
+    "a tall black high-top fade",
+    "a turquoise towel draped over the character-left forearm",
+    "a white polo with a bold teal chest band",
+    "coral-orange shorts"
+  ],
+  "palette": [
+    "polo white #F2F0EA / #C4C0B6 / #FFFFFF",
+    "polo band teal #148C8C / #0A5656 / #40B8B8",
+    "shorts coral-orange #EE7050 / #A84830 / #FF9C80",
+    "towel turquoise #28B4C8 / #14748A / #6AD8E6",
+    "shoes white canvas #ECE8DE / #BAB4A8",
+    "chain gold #D6AA3C",
+    "skin #6A4230 / #42281A / #90624A",
+    "hair and beard black #16120F / #080605 / #362E28",
+    "eye dark-brown #2C1A10",
+    "eye white #F0E8DC",
+    "lip #58302A",
+    "teeth #F4ECDC"
+  ],
+  "avoid": [
+    "a tray or drinks",
+    "a bow tie or waiter's jacket",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "hiphop-03"
+    },
+    "sing": {
+      "intent": "New Jack Swing vocal loop: a bouncy swing step side to side, raise the mic in the character-right hand to the mouth, keep the towel over the character-left forearm and roll that open hand at waist height on the beat, then return to the attentive stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle: the shoulders jump, both hands lift to chest height, the towel still on the forearm, then he smooths back into the attentive stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: step back a half pace, raise the towel-draped character-left forearm across the chest, open character-right hand at the hip, then hold a steady finish. Not combat.",
+    "entrance": "One-shot entrance: glide in with a smooth sliding step, turn square to the front, and settle into the attentive stance with the towel over the forearm.",
+    "victory": "One-shot celebration: sweep the towel off the forearm with the character-left hand and twirl it overhead, raise the open character-right hand, flash a broad open-mouthed grin, then hold the pose.",
+    "ko": "Non-contact performance defeat: the smoothness slips — the shoulders sag, both arms hang with the towel sliding down the character-left forearm, and his head drops, chin to the chest, holding a deflated standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

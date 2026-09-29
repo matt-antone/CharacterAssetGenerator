@@ -1,0 +1,51 @@
+{
+  "id": "ice",
+  "name": "Ice",
+  "height": "5' 4\"",
+  "description": "A stocky, stoic woman in her mid fifties who sings Tex-Mex conjunto and runs the ice line at a desert arts festival, calm in any heat.",
+  "build": "A short, solid, sturdy adult build of ordinary proportions: square shoulders, a thick straight torso, strong forearms and sturdy legs, standing upright with straight knees.",
+  "face": "Tanned olive-brown skin, dark-brown eyes under straight dark brows with a few grey hairs, a broad nose, weathered cheeks, and a firm wide mouth.",
+  "hair": "Thick salt-and-pepper grey hair in one long heavy braid over the character-right shoulder to the chest, mostly under the hat.",
+  "outfit": "A chunky knitted wool beanie in deep red with a wide folded brim, pulled low over the brow; a fluorescent orange high-visibility vest with two wide silver reflective bands over a long-sleeved navy-blue work shirt with the cuffs rolled to mid-forearm; faded dark-blue denim jeans; tan leather work boots. Both hands bare.",
+  "performance_style": "Square and immovable: feet shoulder-width apart, weight even. Both forearms folded loosely at the waist with the character-right hand resting open on the character-left forearm and the character-left hand open on the character-right elbow, all fingers visible. Head level, a flat unreadable calm.",
+  "location": "An ice-sale shade structure on the playa at blazing noon: pale cracked desert floor running to the bottom of the frame, a wide canvas awning on steel poles behind, a stack of plain white insulated coolers under it, and a white-hot sky.",
+  "recognition_cues": [
+    "a chunky deep-red knitted wool beanie",
+    "a fluorescent orange vest with two wide silver reflective bands",
+    "a long salt-and-pepper braid over the shoulder"
+  ],
+  "palette": [
+    "beanie deep-red wool #9E2A2B / #621819 / #C8504D",
+    "vest fluorescent orange #F26A1B / #A8430C / #FF9A58",
+    "reflective bands silver #B8BEC4 / #7E848A / #E4E8EC",
+    "work shirt navy #253656 / #141E33 / #3E5480",
+    "jeans dark-blue denim #3A5478 / #22324A / #5D7AA2",
+    "work boots tan leather #9A6C3E / #5F4122 / #C29462",
+    "skin #A87A56 / #6E4E36 / #C99C78",
+    "hair salt-and-pepper grey #8C8A86 / #4E4C49 / #BDBBB6",
+    "eye white #EDE5D8",
+    "eye brown #2A1A12",
+    "lip #7E4E40",
+    "teeth #EDE4D6"
+  ],
+  "avoid": [
+    "a big grin at rest",
+    "hands tucked under the arms"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-01"
+    },
+    "sing": {
+      "intent": "Conjunto vocal loop: sway gently side to side in a two-step, bring the mic in the character-right hand to the mouth, lift the character-left open hand to shoulder height on the long note, then lower the mic and return to the square stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: walk in at a steady unhurried pace, turn square to the front, then land in her opening stance with both open hands in full view.",
+    "victory": "One-shot finish: give a single slow nod, raise the character-right open hand in a firm salute beside the brow, allow a small open-mouthed smile, then hold a steady upright pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the calm finally cracks — the shoulders sag, both open hands drop to hang at her sides, and her head bows under the beanie. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

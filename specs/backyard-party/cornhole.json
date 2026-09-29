@@ -1,0 +1,52 @@
+{
+  "id": "cornhole",
+  "name": "Cornhole",
+  "height": "6' 0\"",
+  "description": "A fiercely competitive man in his early thirties, the backyard cornhole champion, who sings upbeat country pop.",
+  "build": "An athletic adult build: broad shoulders, a flat chest, a trim waist, strong arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Fair lightly tanned skin, green eyes under straight light-brown brows, a straight nose, a square jaw with short light-brown stubble, and thin lips.",
+  "hair": "Short light-brown hair showing below the cap band at the sides and over the ears.",
+  "outfit": "A red baseball cap worn backwards, its short bill pointing behind the head; a loose royal-blue mesh sports jersey with short sleeves and a large bold white number 1 on the chest; grey athletic shorts to the knee; white tube socks with two wide red bands at the top; white-and-red high-top sneakers. Both arms and hands are bare.",
+  "performance_style": "Ready to throw: feet staggered, the character-left foot forward, knees soft, weight forward. Both arms hang forward, the character-right and character-left hands open and empty, fingers visible. Head up, eyes narrowed, a cocky half-smile.",
+  "location": "A suburban backyard lawn at golden hour: green grass running to the bottom of the frame, two wooden cornhole boards painted red and blue set apart with scattered red and blue beanbags, a wooden fence and a maple tree behind, and a string of bulb lights overhead.",
+  "recognition_cues": [
+    "a red cap worn backwards",
+    "a royal-blue jersey with a big white number 1",
+    "white tube socks with wide red bands"
+  ],
+  "palette": [
+    "cap red #C8282E / #88181C / #EE5A5E",
+    "jersey royal-blue mesh #2552B8 / #163478 / #4E7CE0",
+    "jersey number white #F4F4F2",
+    "shorts grey #7C8088 / #52555B / #A4A8B0",
+    "socks and sneakers white #EFEFEC / #BBBBB6 / #FFFFFF",
+    "sock bands and sneaker trim red #C8282E",
+    "skin #E0AE8C / #AA7A5E / #F3CBAE",
+    "hair and stubble light-brown #7A5A3A / #4E3822 / #A07E58",
+    "eye green #4E7A4A",
+    "eye white #F2ECE2",
+    "teeth #F2EBDD"
+  ],
+  "avoid": [
+    "a beanbag in hand",
+    "a cap facing forward",
+    "real team logos",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-01"
+    },
+    "sing": {
+      "intent": "Country-pop vocal loop: bounce on the toes, the mic in the character-right hand at the mouth, the character-left hand pumping an open palm at shoulder height, then return to the ready stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A quick wince at a missed throw he hears: shoulders hunch, both open hands rise, then he shakes it off back to the ready stance. No opponent or contact.",
+    "guard": "One-shot: square up, knees bent, both open hands forward at waist height like a goalkeeper, then hold. Not combat.",
+    "entrance": "One-shot: jog in, stop square to the front, roll the shoulders and settle into the ready stance.",
+    "victory": "One-shot: the character-right fist punches high overhead, the character-left hand open at the chest, mouth wide in a shout, then hold.",
+    "ko": "The competitor's stance collapses: shoulders slump, both open hands hang limp and the head drops back to look at the sky in disbelief, then down. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "id": "giggles",
+  "name": "Giggles",
+  "height": "5' 9\"",
+  "description": "A vaudeville circus clown, a man in his late forties, more wistful than scary, who sings ragtime vaudeville numbers with a soft sad heart.",
+  "build": "An average lean adult man, slightly narrow shoulders, long arms and legs, standing upright with straight knees.",
+  "face": "White greasepaint over the whole face, big black upside-down teardrop shapes painted over each eye, a round bright red nose, a wide painted red mouth outline around the lips, and soft grey-blue eyes under thin painted black brows arched high.",
+  "hair": "Two big tufts of bright orange curly hair above each ear, the crown bald and pale.",
+  "outfit": "A loose baggy clown suit in two big halves, the character-right half cream with large royal-blue polka dots and the character-left half royal-blue with large cream polka dots, cuffs ending at the wrists so the white-gloved hands are fully visible; a wide stiff white ruffled collar around the neck, three big red pom-pom buttons down the front, and long black clown shoes with round toes. A tiny black top hat pinned at an angle on the bald crown.",
+  "performance_style": "Soft and upright: feet turned out in the long shoes, weight even. Both arms hang at his sides, the character-right and character-left white-gloved hands open and empty, fingers visible. Head tilted, a small wistful closed-mouth smile.",
+  "location": "An empty vaudeville theatre stage after the show: bare worn floorboards running to the bottom of the frame, a single footlight row glowing warm, a faded red curtain half drawn, and a lonely wooden stool in one spotlight.",
+  "recognition_cues": [
+    "white greasepaint with black teardrop shapes over the eyes and a round red nose",
+    "orange curly hair tufts above the ears on a bald crown",
+    "a wide white ruffled collar",
+    "a half-cream, half-royal-blue polka-dot suit",
+    "a tiny black top hat"
+  ],
+  "palette": [
+    "greasepaint white #F2EEE8 / #C4BEB4 / #FFFFFF",
+    "skin (neck and ears) #E2B596 / #A87C60 / #F4D0B4",
+    "eye paint black #161414",
+    "nose and mouth paint red #D02A2A / #8A1616 / #EE6060",
+    "eye grey-blue #6A86A0",
+    "hair orange #E8741E / #A04C0E / #F8A050",
+    "suit cream #EDE0C0 / #B8A884 / #FFF5DC",
+    "suit royal-blue #2848A8 / #162A68 / #4A6CD0",
+    "ruffled collar white #F6F4EE / #C8C4BA / #FFFFFF",
+    "pom-poms red #D02A2A / #8A1616 / #EE6060",
+    "gloves white #F4F2EC / #C2BEB4 / #FFFFFF",
+    "shoes and top hat black #1A1818 / #0A0909 / #3A3636"
+  ],
+  "avoid": [
+    "sharp teeth or a sinister grin",
+    "balloons, knives or props",
+    "blood or gore"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-05"
+    },
+    "sing": {
+      "intent": "Ragtime vocal loop: rock heel to toe in the long shoes, bring the mic in the character-right gloved hand to the painted mouth for a wistful phrase, open the character-left gloved hand outward at chest height, tilt the head, then lower the mic and return to the soft stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the knees buckle comically, both gloved hands fly up open, the eyebrows jump, then settle back to the resting stance. No opponent, strike or physical contact.",
+    "guard": "One-shot self-protection: hunch the shoulders and raise both gloved hands open in front of the face, peeking between the fingers, then hold. Not combat.",
+    "entrance": "One-shot entrance: waddle in on the long shoes, turn square to the front, tip the tiny top hat with the character-right gloved hand, and settle with both hands open at the sides.",
+    "victory": "One-shot celebration: kick up one long shoe, fling both gloved hands high, mouth wide in a laugh, then hold with the arms raised.",
+    "ko": "Non-contact defeat: the shoulders fall, both gloved hands hang limp, the head droops and the collar sags. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

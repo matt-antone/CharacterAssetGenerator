@@ -1,0 +1,54 @@
+{
+  "id": "yodel",
+  "name": "Yodel",
+  "height": "5' 4\"",
+  "description": "An alpine yodeler, a woman in her mid sixties, sturdy and rosy-cheeked, with lungs like a mountain and a voice that carries three valleys.",
+  "build": "A sturdy, solid adult woman of ordinary height: broad shoulders, a deep chest, a thick waist, strong arms and strong legs, standing upright with straight knees.",
+  "face": "Fair skin with bold rosy cheeks, bright blue eyes under light grey brows, a round nose, a wide mouth with thin lips, white teeth, and soft lines at the eyes and mouth of a woman in her sixties.",
+  "hair": "Silver-grey hair braided into two thick plaits pinned in a crown over the top of the head.",
+  "outfit": "A traditional dirndl: a fitted forest-green bodice laced across the front, over a white short-puff-sleeved blouse; a full deep-red skirt to mid-calf with a broad solid sky-blue apron tied at the waist; thick grey wool knee socks; sturdy brown leather lace-up hiking boots. Both arms and hands bare below the puff sleeves. Her head is bare.",
+  "performance_style": "Planted like a mountain: feet shoulder-width apart, weight even on both boots, chest filled. Both hands rest open on the hips, elbows out, fingers fully visible on the waist. Head level, a hearty closed-mouth smile.",
+  "location": "A high alpine meadow in summer: green grass and wildflowers running to the bottom of the frame, a wooden chalet at one side, and big snow-capped peaks under a clear blue sky beyond.",
+  "recognition_cues": [
+    "a green dirndl bodice over a white puff-sleeved blouse",
+    "a deep-red skirt with a sky-blue apron",
+    "silver plaits pinned in a crown",
+    "brown hiking boots and grey knee socks"
+  ],
+  "palette": [
+    "bodice forest-green #2E6B3A / #1A4222 / #4E9A5C",
+    "blouse white #F1EEE6 / #BDB8AC / #FFFFFF",
+    "skirt deep-red #A3222A / #661418 / #D04A50",
+    "apron sky-blue #5AA0D8 / #34688E / #92C8F0",
+    "socks grey wool #8A8A88 / #585856 / #B4B4B0",
+    "boots brown leather #6A4424 / #3E2612 / #96683E",
+    "skin #EBC4A8 / #B88C70 / #FADACA",
+    "cheeks rose #D8707A",
+    "hair silver-grey #BEBCB8 / #858380 / #E6E4E0",
+    "eye white #F3EDE2",
+    "eye blue #3E82C4",
+    "lip #B06A64",
+    "teeth #F4EEE2"
+  ],
+  "avoid": [
+    "a hat",
+    "hands behind the back",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-04"
+    },
+    "sing": {
+      "intent": "Yodel vocal loop: fill the chest, hold the mic at the mouth in the character-right hand, cup the open character-left hand beside the mouth on the high flip, then swing it wide as the voice rings out across the valley, and lower the mic to return to the planted stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A brief startle at a loud room sound: the shoulders lift and both open hands jump up to chest height, then she huffs and plants her hands back on her hips. No opponent or contact.",
+    "guard": "One-shot stage self-protection: widen the boots, raise the character-left forearm across the chest, character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: march in with a hiker's firm stride, swinging both open arms, then plant the boots and set both hands on the hips.",
+    "victory": "One-shot celebration: fling both open arms high overhead, tip the head back with a huge open-mouthed whoop, and hold the pose.",
+    "ko": "Non-contact performance defeat: the chest empties, both open hands slide off the hips and hang limp, and the head bows. She holds a standing, deflated finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

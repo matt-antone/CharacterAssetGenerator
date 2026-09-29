@@ -1,0 +1,55 @@
+{
+  "id": "bronze",
+  "name": "Bronze",
+  "height": "5' 7\"",
+  "description": "A woman in her mid forties, a devoted sun-worshipper who sings seventies AM gold, languid and glamorous.",
+  "build": "A slim, long-limbed build with narrow shoulders and long legs, standing upright with a slight hip tilt.",
+  "face": "Deeply tanned golden-brown skin, hazel eyes under thin arched brows, a straight nose, high cheekbones and glossy coral lips.",
+  "hair": "Voluminous feathered honey-blonde hair falling past the shoulders from under the hat.",
+  "outfit": "An enormous floppy wide-brimmed white sun hat; big round tortoiseshell sunglasses; a modest one-piece swimsuit in orange with a deep brown band at the waist; a long open cream crochet cover-up reaching mid-thigh; gold hoop bracelets; cork-soled sandals. She carries a folding silver sun reflector in both hands.",
+  "performance_style": "Languid and poised: feet together, one knee forward. The character-right and character-left hands both hold open a folding silver sun reflector low at waist height, fingers visible on its edges. Chin up, a serene lazy smile.",
+  "location": "A sun-drenched beach at midday: pale sand running to the bottom of the frame, a striped deck chair and a big orange umbrella at one side, and a glittering blue sea beyond.",
+  "recognition_cues": [
+    "an enormous white floppy sun hat",
+    "big round tortoiseshell sunglasses",
+    "a deep tan and an orange swimsuit"
+  ],
+  "palette": [
+    "hat white #F4F1EA / #C2BDB1 / #FFFFFF",
+    "sunglasses tortoiseshell #6A3E1E / #3C220E / #9A6232",
+    "swimsuit orange #E8782C / #A04E18 / #FFA868",
+    "swimsuit band deep brown #5A3218",
+    "cover-up cream #EADCB8 / #B8A888 / #FFF4DC",
+    "bracelets gold #D8AE3A / #957422 / #F4D682",
+    "sandals cork #B08858 / #765A36 / #D6B084",
+    "reflector silver #BCC2CA / #7C828A / #EEF2F6",
+    "skin #A8683E / #6C4024 / #D0905E",
+    "hair honey blonde #D8B064 / #9E7C3E / #F2D69A",
+    "eye hazel #7A6A3A",
+    "lip coral #E0705A",
+    "teeth #F2EADB",
+    "eye white #F2EADB"
+  ],
+  "avoid": [
+    "a bikini",
+    "a drink in hand"
+  ],
+  "animations": {
+    "dance": {
+      "intent": "Seventies disco sway: hips rock side to side, the reflector swings from one side to the other at waist height in both hands, the hat brim bouncing, then back to the poised stance.",
+      "props": [],
+      "playback": "loop"
+    },
+    "sing": {
+      "intent": "AM-gold vocal loop: the reflector tucked under the character-left arm, the mic in the character-right hand at the mouth, the character-left hand drifts open at the hip, a slow sway, then back. The mouth must visibly open and change shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A cloud covers the sun: she startles, both hands up at chest height, then settles. No opponent or contact.",
+    "guard": "One-shot: lifts the reflector before her face like a shield in both hands; hold. Not combat.",
+    "entrance": "One-shot: saunters in, tips the sunglasses down, and poses with the reflector.",
+    "victory": "One-shot: raises the reflector high overhead in both hands, head back laughing, holds.",
+    "ko": "Non-contact defeat: she wilts, the reflector hangs from both limp hands, the hat brim drooping over her face. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

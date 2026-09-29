@@ -1,0 +1,55 @@
+{
+  "id": "tombs",
+  "name": "Tombs",
+  "height": "5' 8\"",
+  "description": "A cheerfully morbid graveyard gravedigger, a man in his seventies with a warm twinkle, who sings murder ballads and old Appalachian songs.",
+  "build": "Wiry and a little stooped with rounded shoulders, a small pot belly, and thin arms and legs of ordinary human proportion, standing on slightly bowed legs.",
+  "face": "Weathered ruddy pale skin, bright blue eyes under big bushy white eyebrows, a big red bulbous nose, deep smile lines, and a thick white walrus moustache over a wide mouth.",
+  "hair": "Short wispy white hair at the sides under a brown tweed flat cap.",
+  "outfit": "A brown tweed flat cap; a faded olive-green wool waistcoat over a collarless off-white work shirt, sleeves rolled to the elbows so both forearms and hands are bare; brown corduroy trousers held up by bold red braces; heavy brown leather work boots caked in dark mud to the ankle.",
+  "performance_style": "Easy and stooped: feet apart, weight on the character-left boot. Both arms hang loose at his sides, the character-right and character-left hands open and empty, fingers visible beside the thighs. Head tilted forward, a cheerful knowing look.",
+  "location": "An old hillside graveyard at dusk: leaning mossy headstones, a wrought-iron gate, a mound of fresh earth, a bare crooked oak and a lantern on a stone wall, with grassy ground running to the bottom of the frame.",
+  "recognition_cues": [
+    "a brown tweed flat cap",
+    "a thick white walrus moustache and bushy white brows",
+    "bold red braces over an off-white shirt",
+    "an olive-green waistcoat",
+    "heavy brown work boots caked in dark mud"
+  ],
+  "palette": [
+    "flat cap brown tweed #7A5E40 / #4E3B27 / #A28462",
+    "waistcoat olive-green wool #5E6A34 / #3A4220 / #86925A",
+    "shirt off-white #E6DFCC / #B2AA96 / #F8F3E6",
+    "braces red #B8262C / #72161A / #E0585C",
+    "trousers brown corduroy #6A4A30 / #42301E / #926A4A",
+    "boots brown leather #5A3C22 / #362414 / #82603E",
+    "boot mud dark #3A2E24",
+    "skin ruddy #E3AC92 / #AD7862 / #F4CAB4",
+    "nose red #D06A60",
+    "hair moustache and brows white #F0EEE8 / #BDB9B0 / #FFFFFF",
+    "eyes blue #4A7ABE",
+    "lip #9A5A50",
+    "teeth #EAE2CC"
+  ],
+  "avoid": [
+    "a shovel or spade in the key art",
+    "gore, bones or bodies",
+    "a hunched menacing villain look"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "country-02"
+    },
+    "sing": {
+      "intent": "Murder-ballad vocal loop: mic at the mouth in the character-right hand, the character-left hand lifted open to the side as he tells the tale, a slow sway on the bowed legs, a wink between lines, then return to the easy stance. The mouth must visibly open wide and change shape across the loop so he unmistakably reads as singing; the mic stays in the character-right hand.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief room-sound startle: the bushy brows shoot up, both open hands rise to the chest, then he chuckles. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: tug the flat cap down with the character-left hand, the character-right forearm across the waistcoat, and hold. Not combat.",
+    "entrance": "One-shot entrance: amble in with a bow-legged gait, tip the flat cap with the character-left hand, and settle into the easy stance.",
+    "victory": "One-shot celebration: a little heel-click hop landing on both boots, both open hands raised high, head back with a big open-mouthed laugh under the moustache, and hold.",
+    "ko": "Non-contact performance defeat: he stays on his feet as he tuckers out — the shoulders droop, both open hands hang, and his head bows so the flat cap tips low. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

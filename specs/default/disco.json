@@ -1,0 +1,49 @@
+{
+  "id": "disco",
+  "name": "Disco",
+  "height": "5' 6\"",
+  "description": "A disco queen, a woman in her mid fifties who never left 1978: glamorous, fearless and ready to dance all night.",
+  "build": "A slim, long-limbed adult woman of ordinary proportions: medium shoulders, a narrow waist, long arms and long legs, standing tall and upright with straight knees.",
+  "face": "Light warm-beige skin, bright blue eyes with bold teal eyeshadow under thin arched brows, high rosy cheekbones, a straight nose, full lips in glossy coral-red lipstick, gentle smile lines at the eyes, and white teeth.",
+  "hair": "Big voluminous feathered honey-blonde hair, swept back from the face in large layered wings on both sides and falling to the shoulders.",
+  "outfit": "A long-sleeved gold sequin jumpsuit with a deep V neckline, a fitted body cinched by a wide gold belt, and wide flared bell-bottom legs ending at the ankle; cuffs end at the wrists so both hands are bare. Gold platform sandals. Big gold disc earrings. Her head is bare.",
+  "performance_style": "Diva pose: feet together, weight on the character-right leg, the character-left knee bent in. The character-right arm points up high, index finger to the sky, the character-left hand open on the character-left hip. Head high, a bright confident smile.",
+  "location": "A 1978 discotheque: a lit dance floor of big glowing coloured squares running to the bottom of the frame, a mirror ball hanging above spraying light spots, dark walls with chrome railing and coloured stage lights.",
+  "recognition_cues": [
+    "a gold sequin jumpsuit with wide bell-bottom legs",
+    "big feathered honey-blonde hair",
+    "one arm pointed high to the sky"
+  ],
+  "palette": [
+    "jumpsuit gold sequin #D8A93A / #8F6A1C / #FFE48C",
+    "belt, sandals and earrings gold metal #B98A22 / #6E5210 / #F2CF6A",
+    "skin #E6BC9A / #B08466 / #F8D8BC",
+    "hair honey-blonde #D8A95A / #9A7234 / #F4D28E",
+    "eyeshadow teal #2A9A9E",
+    "lipstick coral-red #D2403A",
+    "eye white #F3EADF",
+    "eye blue #3A7AC8",
+    "teeth #F5EFE2"
+  ],
+  "avoid": [
+    "a pink or purple jumpsuit",
+    "hair covering the pointing hand",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-02"
+    },
+    "sing": {
+      "intent": "Disco-anthem vocal loop: hold the mic to the mouth in the character-right hand, fling the character-left arm out and up with the palm open on the big chorus, sway the hips, then bring the mic down to the chest and return to the diva stance. The mouth must visibly open wide and change shape across the loop so the singing reads unmistakably.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A startled beat at a loud room sound: both open hands fly up to shoulder height and the shoulders lift, then she smooths her hair with the character-left hand and returns to the diva stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet apart, raise the character-left forearm before the face, character-right hand open at the hip, and hold a poised finish. Not combat.",
+    "entrance": "One-shot entrance: strut in on the platforms, toss the feathered hair with a flick of the head, and land in the diva stance with the character-right finger pointed high.",
+    "victory": "One-shot celebration: both arms thrown high overhead, palms open, head back in an open-mouthed laugh, hips cocked, holding the pose under the mirror ball.",
+    "ko": "Non-contact performance defeat: the pointing arm drops, both open hands hang at her sides, the shoulders fold and the head bows so the feathered hair falls forward. She holds a standing, deflated finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

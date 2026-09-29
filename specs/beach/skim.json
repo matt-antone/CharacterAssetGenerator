@@ -1,0 +1,51 @@
+{
+  "id": "skim",
+  "name": "Skim",
+  "height": "5' 4\"",
+  "description": "A nineteen-year-old woman, a scrappy, quick-footed skimboarder who sings fast surf-punk.",
+  "build": "A small, wiry adult build: narrow shoulders, a flat torso and quick thin arms and legs, standing upright with straight knees.",
+  "face": "Sun-browned skin with a scatter of bold dark freckles across the nose, bright green eyes under thick dark brows, a snub nose and a wide mouth.",
+  "hair": "A messy chin-length shag of salt-bleached blonde hair with dark roots, choppy and windblown.",
+  "outfit": "A fitted short-sleeved rash guard in black with one wide bold electric-lime band across the chest; baggy royal-blue board shorts to the knee with a wide bold black side panel; a black sweatband on the character-left wrist; bare feet with sand on them. Her head is bare.",
+  "performance_style": "Twitchy and ready: feet staggered, weight on the balls of the feet, knees bent a little. Both arms loose and slightly out from the body, the character-right and character-left hands open, fingers spread for balance and visible. Head forward, a scrappy crooked smile.",
+  "location": "The shallow shore break on a bright afternoon: glassy wet sand shining to the bottom of the frame, a thin sheet of wave water sliding up, a lifeguard tower on stilts behind, and gulls against a clear sky.",
+  "recognition_cues": [
+    "a choppy salt-bleached blonde shag",
+    "a black rash guard with a wide lime band",
+    "royal-blue board shorts"
+  ],
+  "palette": [
+    "rash guard black #1C1C20 / #0C0C0E / #3A3A42",
+    "band lime #9ED62A / #6A9414 / #C6F260",
+    "board shorts royal blue #2448B8 / #142C75 / #4C70E0",
+    "shorts panel black #1C1C20",
+    "sweatband black #202024",
+    "skin #B87C52 / #7C5234 / #D8A078",
+    "freckles #6A3E24",
+    "hair blonde #E0C88A / #A68E54 / #F6E6B8",
+    "hair roots #6A5030",
+    "eye green #3A8A50",
+    "eye white #F2EADC",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a skimboard in the key art",
+    "a young child's proportions"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-02"
+    },
+    "sing": {
+      "intent": "Surf-punk vocal loop: the mic in the character-right hand jammed to the mouth, she stomps quick feet in place and throws the character-left hand open forward on each shout, then returns to the ready stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back into the opening stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: she sprints in, skids on the wet sand with arms out for balance, and lands in the ready stance.",
+    "victory": "One-shot finish: she hops twice on quick feet, kicks one heel up behind, throws the character-left fist overhead with an open-mouthed yell and holds.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out: the shoulders drop, both open hands hang limp at her sides, and her head hangs low with the chin toward the chest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

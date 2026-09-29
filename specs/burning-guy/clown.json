@@ -1,0 +1,53 @@
+{
+  "id": "clown",
+  "name": "Clown",
+  "height": "5' 11\"",
+  "description": "A lanky, goofy man in his early thirties who sings Balkan brass numbers as a desert clown at an arts festival, his whiteface dusted with playa dust.",
+  "build": "A tall lanky adult build of ordinary proportions: narrow shoulders, a slim torso, long thin arms and legs, standing upright with straight knees.",
+  "face": "Whiteface clown makeup in a flat warm off-white over the whole face, dusted faintly tan; bold black arched brows painted high; brown eyes; a round bright-red foam clown nose; a painted wide red mouth outline around the lips; light-tan skin on the neck and hands.",
+  "hair": "Short curly dark-brown hair in a small rounded mop, topped with a tiny battered black bowler hat perched on the crown.",
+  "outfit": "A mustard-yellow collared short-sleeved shirt with big bold red polka dots; wide bright-red suspenders; baggy royal-blue trousers held up by the suspenders, cuffed at the ankle; big round-toed brown leather clown shoes about one and a half times ordinary length. Both hands bare.",
+  "performance_style": "Gangly and loose: feet turned out wide in the big shoes, knees soft. The character-right and character-left hands each hook the fingers over the front of a suspender strap at chest height, thumbs and fingers visible. Head cocked to one side, a sly closed-mouth grin.",
+  "location": "A playa crossroads at dusk: flat pale desert floor running to the bottom of the frame, a wooden street sign post with blank painted arrows, a lone red-and-white striped bike rack, and a warm orange-and-violet sunset sky over distant mountains.",
+  "recognition_cues": [
+    "dusty off-white whiteface with a round red nose",
+    "wide bright-red suspenders over a mustard polka-dot shirt",
+    "a tiny black bowler hat",
+    "big brown clown shoes"
+  ],
+  "palette": [
+    "whiteface off-white #EEE6D6 / #C4B8A2 / #FFFAF0",
+    "clown nose, painted mouth and polka dots red #D22A2A / #8A1616 / #F0615A",
+    "painted brows black #151313",
+    "bowler hat black felt #1C1B1D / #0B0A0B / #3A383C",
+    "shirt mustard-yellow #D4A52A / #8E6C16 / #F0C95E",
+    "suspenders bright-red #C62828 / #7E1717 / #E85650",
+    "trousers royal-blue #2C4FA8 / #1A3068 / #5078CE",
+    "clown shoes brown leather #7A4A26 / #4A2C14 / #A8703E",
+    "skin #D8A882 / #A07556 / #EEC8A6",
+    "hair dark-brown #3A2518 / #1C110A / #5E4230",
+    "eye white #F2ECE0",
+    "eye brown #3A2416",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a frightening or sinister clown",
+    "a clown wig in bright colours"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-05"
+    },
+    "sing": {
+      "intent": "Balkan brass vocal loop: stamp the big shoes in a quick two-beat, bring the mic in the character-right hand to the mouth, snap the character-left open hand out to the side on the accent, then lower the mic and return to the gangly stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then he settles back to his stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: waddle in on the big shoes with exaggerated knee lifts, turn square to the front, then land in his opening stance with both open hands in full view.",
+    "victory": "One-shot finish: kick one big shoe forward, doff the tiny bowler high with the character-left hand, laugh with the mouth wide open, then hold a deep showman's pose with the hat raised.",
+    "ko": "Non-contact performance defeat: he stays on his feet while the goofiness wilts — the shoulders droop, both open hands hang limp from the suspenders to his sides, and his head hangs so the red nose points at the ground. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

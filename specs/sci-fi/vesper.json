@@ -1,0 +1,49 @@
+{
+  "id": "vesper",
+  "name": "Vesper",
+  "height": "5' 9\"",
+  "description": "A woman android who looks about thirty, an elegant lounge singer of slow smoky torch songs, poised, composed and precise.",
+  "build": "A slender, long-limbed adult woman's build of human proportions: narrow shoulders, a long neck, a defined waist and long straight legs, standing tall and upright with straight knees.",
+  "face": "Smooth porcelain-white synthetic skin with a matte finish, one bold dark-grey seam line running along each side of the jaw from ear to chin, large pale-gold eyes, fine arched black brows, a straight narrow nose and full lips in deep wine red.",
+  "hair": "Glossy jet-black hair in a sleek sculpted chin-length bob with a deep side part, the ends curving under at the jaw, clear of the eyes.",
+  "outfit": "A fitted liquid-silver satin column gown, sleeveless with a high halter neck, close to the body to the knee and ending at mid-calf in a straight hem with a slit up the character-left side to the knee, a bright mirror-silver finish with broad soft white highlights; long opera gloves in deep wine-red satin to above the elbow, fitted to every finger; deep wine-red satin pointed-toe heels.",
+  "performance_style": "Poised and still: feet together, weight on the character-right leg, the character-left knee eased forward through the slit. Both arms lowered in a soft curve, the character-right and character-left gloved hands open and empty in front of the thighs, fingers visible. Head level, a cool closed-mouth half-smile.",
+  "location": "A late-night orbital lounge seen from the front of a small round stage of polished black floor running to the bottom of the frame: a wide curved window behind showing a deep blue planet and stars, low wine-red velvet booths along the wall, and small round amber table lamps.",
+  "recognition_cues": [
+    "porcelain-white skin with a bold dark seam along each side of the jaw",
+    "a mirror-silver halter column gown to mid-calf",
+    "long wine-red opera gloves and a sleek black chin-length bob"
+  ],
+  "palette": [
+    "gown liquid-silver satin #D6DAE0 / #8E949E / #FFFFFF",
+    "gloves, heels and lips wine-red satin #7A1830 / #4A0C1C / #B03050",
+    "skin porcelain #F2EEE8 / #C8C0B8 / #FFFFFF",
+    "jaw seam dark grey #3A3C42",
+    "hair jet-black #141418 / #08080A / #3A3C48",
+    "eyes pale-gold #D8B85A / #9A7C2A",
+    "brows black #141418",
+    "teeth #F4F0EA"
+  ],
+  "avoid": [
+    "exposed wiring, circuitry or a cracked face",
+    "a floor-length train pooling on the floor",
+    "a robot head or metal skull",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "shuffle-04"
+    },
+    "sing": {
+      "intent": "Torch-song vocal loop: bring the mic in the gloved character-right hand up close to the lips for a long held phrase, lay the gloved character-left hand open against the chest on the swell, tip the head slightly, then lower the mic to the chest and return to the poised stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then she settles back to the opening stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: glide in with small even steps, turn square to the front, then settle into the poised stance with both gloved hands open in front of the thighs.",
+    "victory": "One-shot song-finish celebration: plant both heels, sweep the gloved character-left hand out wide at shoulder height and the character-right hand to the chest, lift the chin with a composed open-mouthed smile, then hold an elegant still pose.",
+    "ko": "She stays on her feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. She holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

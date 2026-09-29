@@ -1,0 +1,50 @@
+{
+  "id": "greeter",
+  "name": "Welcome Wanda",
+  "height": "5' 6\"",
+  "description": "A woman in her mid forties who greets every newcomer at the gate of a desert arts festival with a huge hug, and sings uplifting gospel-tinged pop soul, radiant and generous.",
+  "build": "A curvy, full-figured adult woman of ordinary proportions: rounded shoulders, a full bust and hips, a natural waist, arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Warm medium-brown skin, dark brown eyes under full arched brows, a broad nose, round high cheekbones, full lips.",
+  "hair": "A big round natural afro of dark brown hair about six inches deep, with a wide turquoise cloth headband across the front of the hairline.",
+  "outfit": "A short open sleeveless vest covered solid in big round gold sequins, over a fitted turquoise tank top; a flowing knee-length skirt of wide bold horizontal bands in orange, gold and turquoise; flat gold sandals; big chunky round gold hoop earrings; a stack of three wide gold bangles on each wrist, leaving both hands bare.",
+  "performance_style": "Open and welcoming: feet hip-width, weight forward. Both arms spread wide at waist height, ready for a hug, the character-right and character-left hands open and empty, fingers spread. Head tilted, a huge warm smile.",
+  "location": "The festival gate at golden hour: flat pale clay road running to the bottom of the frame, a tall wooden gateway arch hung with ribbons and bells behind, a line of dusty cars waiting beyond, and a warm gold sky.",
+  "recognition_cues": [
+    "a vest of big round gold sequins over a turquoise tank top",
+    "a big round dark brown afro with a turquoise headband",
+    "a knee-length skirt in bold orange, gold and turquoise bands",
+    "chunky gold hoop earrings and stacked gold bangles"
+  ],
+  "palette": [
+    "sequin vest, sandals, hoops and bangles gold #D8AA30 / #8E6C18 / #FFE07A",
+    "tank top and headband turquoise #1EA8A8 / #107070 / #5AD4D0",
+    "skirt orange band #E0702A / #9A4814 / #FF9A5A",
+    "skin #8A5A3C / #5A3822 / #B07A58",
+    "hair dark brown #2E1E14 / #180F0A / #4E3626",
+    "eye brown #2A1A12",
+    "eye white #EFE6D8",
+    "lip #6A3A2E",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "arms crossed or hidden in a hug",
+    "small fine sequin sparkle as the only detail",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "club-02"
+    },
+    "sing": {
+      "intent": "Gospel pop soul vocal loop: sway and clap on the backbeat, raise the mic in the character-right hand to the mouth for a big soaring phrase, lift the open character-left hand high overhead with the palm to the sky, then bring it down to the heart. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing, then return to the opening stance.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a loud horn: the shoulders jump, both open hands fly to the chest, then she laughs and opens her arms wide again. No opponent or contact.",
+    "guard": "One-shot stage self-protection: step the feet wider and cross both forearms in front of the chest with open hands, holding a steady finish. Not combat.",
+    "entrance": "One-shot entrance: hurry in with bouncy steps and a big wave of the character-right hand, then open both arms wide at waist height in the welcoming stance.",
+    "victory": "One-shot song-finish celebration: throw both open hands high overhead, tip the head back in a huge open-mouthed hallelujah, then hold the pose with both arms high and the palms open to the sky.",
+    "ko": "Non-contact performance defeat: the welcome fades — the wide arms drop, both open hands hang limp at her sides, the shoulders slump, and her head hangs with the chin toward the sequin vest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "mutant",
+  "name": "Mutant",
+  "height": "5' 6\"",
+  "description": "A commanding, wry woman in her mid sixties who sings steampunk sea-shanty rock and captains a huge wheeled ship-shaped art car across a desert playa.",
+  "build": "A trim, upright older adult build of ordinary proportions: squared shoulders, a straight torso, slim arms and legs of ordinary length, standing tall with straight knees.",
+  "face": "Weathered pale pink-beige skin with deep laugh lines, sharp grey eyes under silver brows, a strong hooked nose, a firm jaw, and thin lips.",
+  "hair": "Silver-white hair cut in a short blunt bob to the jaw, under a black felt bicorne hat worn side to side with a wide gold braid along its edge.",
+  "outfit": "A navy-blue wool admiral's coat, cut hip-length and fitted at the waist, with a stand collar, two rows of big bold brass buttons down the chest, wide gold epaulettes on each shoulder and wide gold cuff bands ending at the wrists; black leggings; knee-high cognac-brown leather riding boots. Brass-rimmed aviator goggles with round amber lenses rest on the hat brim. Both hands bare.",
+  "performance_style": "Captain at the helm: feet planted shoulder-width, weight on the back foot, chest out. Both hands rest open on the hips, fingers spread over the coat and fully visible, elbows out. Chin level, a dry knowing smirk.",
+  "location": "The deck of a ship-shaped art car parked on the playa at golden hour: weathered wooden deck planks running to the bottom of the frame, a brass ship's wheel and rope railing behind, a tall mast with a furled canvas sail, and beyond it flat pale desert under a honey-gold sky.",
+  "recognition_cues": [
+    "a hip-length navy admiral's coat with two rows of big brass buttons and gold epaulettes",
+    "a black bicorne hat with gold braid",
+    "brass aviator goggles with amber lenses on the hat",
+    "a silver-white jaw-length bob"
+  ],
+  "palette": [
+    "admiral's coat navy wool #1F2E58 / #111A35 / #3A4E88",
+    "buttons and goggle rims brass #C9A13B / #7F6120 / #F0D77A",
+    "epaulettes, cuff bands and hat braid gold #D8B040 / #8E7020 / #F5DC80",
+    "goggle lenses amber #D88A2A",
+    "bicorne black felt #1A1A1E / #09090B / #36363C",
+    "leggings black #222226",
+    "riding boots cognac-brown leather #8A4E26 / #552E14 / #B8763E",
+    "skin #E6BCA6 / #B08872 / #F5D8C8",
+    "hair silver-white #D8D8DA / #A0A0A6 / #F6F6F8",
+    "eye white #EFE8DE",
+    "eye grey #7A8288",
+    "lip #A8706A",
+    "teeth #EDE4D6"
+  ],
+  "avoid": [
+    "a sword, pistol or telescope",
+    "a floor-length coat"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "twist-03"
+    },
+    "sing": {
+      "intent": "Sea-shanty rock vocal loop: stamp the back boot on the beat, bring the mic in the character-right hand to the mouth, swing the character-left fist forward at chest height as if hauling a rope, then lower the mic and return to the helm stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
+    "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
+    "entrance": "One-shot entrance: march in with long confident strides, turn square to the front, then land in her opening stance with both open hands in full view.",
+    "victory": "One-shot finish: snap to attention, raise the character-left hand in a crisp salute at the hat brim, laugh with the mouth open, then hold a proud upright pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the command drains away — the epaulettes sag with the shoulders, both open hands drop limp to her sides, and her head bows so the bicorne tips forward. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "grillmaster",
+  "name": "Grillmaster",
+  "height": "5' 11\"",
+  "description": "A cheerful suburban dad in his mid fifties, a man who runs the backyard grill like a yacht-rock bandleader and sings smooth yacht rock.",
+  "build": "A solid dad build of ordinary height: broad soft shoulders, a rounded belly under the apron, sturdy arms and legs of ordinary length, standing upright with straight knees.",
+  "face": "Light tan sun-reddened skin, blue-grey eyes under thick sandy-grey brows, a straight nose, full cheeks, a thick sandy-grey moustache, and thin lips.",
+  "hair": "Short sandy-grey hair cut close at the sides, showing below the visor band and over the ears.",
+  "outfit": "A bright white sun visor with a wide flat navy bill over the forehead; a short-sleeved coral-red camp shirt with a wide open collar; over it a full-length navy canvas bib apron, from chest to knee, tied at the waist, with KISS THE COOK in large bold white block letters across the chest; khaki cargo shorts to the knee; white crew socks and white canvas sneakers with thick soles. Both forearms and hands are bare.",
+  "performance_style": "Planted and proud: feet shoulder-width apart, belly forward, weight back on the heels. Both arms hang loosely at his sides, the character-right and character-left hands open, empty, fingers spread and visible. Head level, a broad satisfied grin.",
+  "location": "A sunny suburban backyard at late afternoon: a trimmed green lawn running to the bottom of the frame, a black kettle grill with a thin trail of grey smoke at one side, a cedar fence behind, a red-and-white checked picnic table, and a string of bulb lights looping overhead.",
+  "recognition_cues": [
+    "a navy bib apron with KISS THE COOK in bold white letters",
+    "a white visor with a navy bill",
+    "a coral-red camp shirt and a sandy-grey moustache"
+  ],
+  "palette": [
+    "visor white #F2F0EA / #BDB9B0 / #FFFFFF",
+    "visor bill and apron navy canvas #1F3358 / #111D33 / #3A5585",
+    "apron lettering white #F4F2EC",
+    "camp shirt coral-red #E05A47 / #A0372A / #F58A74",
+    "shorts khaki #B9A57A / #85744F / #D8C79C",
+    "socks and sneakers white #ECEAE4 / #B8B4AA / #FFFFFF",
+    "skin #D9A07E / #A76E52 / #F0BF9E",
+    "hair and moustache sandy-grey #A89A80 / #756A56 / #CFC3AA",
+    "eye blue-grey #5D7385",
+    "eye white #F1EBE0",
+    "teeth #F1EADB"
+  ],
+  "avoid": [
+    "grill tongs or a spatula on the key art",
+    "a baseball cap instead of the visor",
+    "real brand logos"
+  ],
+  "animations": {
+    "dance": {
+      "motion": "oldies-02"
+    },
+    "sing": {
+      "intent": "Yacht-rock vocal loop: sway the belly side to side, bring the mic in the character-right hand to the mouth, roll the character-left hand in a lazy circle at chest height, then return to the planted stance. The mouth visibly opens and changes shape across the loop so the character unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "A startled hop back from a flare-up of the grill he cannot see: shoulders jump, both open hands rise to chest height, then he settles back to the planted stance. No opponent or contact.",
+    "guard": "One-shot: widen the feet and hold both open hands out palm-forward at chest height like shielding the grill, then hold a steady finish. Not combat.",
+    "entrance": "One-shot: stride in with a proud belly-first walk, stop square to the front and plant both sneakers, both open hands at his sides.",
+    "victory": "One-shot: raise both open hands high above the visor, tip the head back in a big open-mouthed laugh, then hold a proud wide-footed pose.",
+    "ko": "The planted stance sags: shoulders drop, both open hands hang limp, the belly slumps and the head hangs with the chin to the apron. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}

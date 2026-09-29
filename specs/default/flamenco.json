@@ -1,0 +1,48 @@
+{
+  "id": "flamenco",
+  "name": "Flamenco",
+  "height": "5' 5\"",
+  "description": "A woman in her mid thirties, a flamenco cantaora with a raw, fierce voice who drives the rhythm with hard hand-claps.",
+  "build": "A slim, strong adult build of ordinary proportions: square upright shoulders, a straight proud back, a narrow waist, arms and legs of ordinary length, standing tall with straight knees.",
+  "face": "Olive skin, dark brown eyes under strong arched black brows, a straight nose with a slight bump, high cheekbones, full lips painted deep red, and large round red earrings.",
+  "hair": "Glossy black hair pulled back hard from the face into a tight round bun low at the nape, with a flat curl pressed to each temple.",
+  "outfit": "A fitted scarlet dress with big bold white polka dots, each the size of a coin, snug through the body to the hips, with short fitted sleeves; from the hips the skirt falls to mid-calf in three wide ruffled tiers; black leather heeled character shoes with a strap. A large red rose sits at one side of the bun.",
+  "performance_style": "Proud and upright: feet together, heels close, back straight, chin lifted. Both arms held down at her sides, the character-right and character-left hands open and empty, fingers visible. A fierce intent look.",
+  "location": "A tablao in Seville: dark wooden stage boards running to the bottom of the frame, a whitewashed back wall with blue-and-white tiles along its base, two empty rush-seated chairs at one side and warm lamplight.",
+  "recognition_cues": [
+    "a scarlet dress with big white polka dots and ruffled tiers",
+    "a tight black bun with a red rose",
+    "deep red lips and red earrings"
+  ],
+  "palette": [
+    "dress scarlet #C21E2A / #7A1119 / #E24A52",
+    "polka dots white #F2EEE6",
+    "shoes black leather #1E1A1A / #0D0B0B / #403838",
+    "rose and earrings red #B01822 / #6E0E14 / #D8424A",
+    "skin #C9956B / #8A6244 / #E4B48A",
+    "hair black #141214 / #070607 / #38343A",
+    "eye white #F0E8DC",
+    "eye brown #2A1A12",
+    "lip deep red #8E1A22",
+    "teeth #F2EADB"
+  ],
+  "avoid": [
+    "a fan, castanets or shawl",
+    "a floor-length train",
+    "logos, text or real brands"
+  ],
+  "animations": {
+    "dance": "Prose flamenco dance, looping: from the proud upright stance she stamps the heels in a sharp rhythm, claps hard palmas at chest height on the accents, then sweeps both arms slowly up overhead with the wrists turning and fingers curling, gathers a fistful of the ruffled skirt at the hip with the character-left hand and flicks it aside, and returns to the upright stance.",
+    "sing": {
+      "intent": "Cante vocal loop: the mic in the character-right hand at the mouth, the character-left hand clenched then opening at the chest on each wail, the brows drawn together and the chin rising on the long cry, then back to the upright stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
+      "props": [
+        "mic"
+      ]
+    },
+    "flinch": "Brief startle at a room sound: the chin snaps up and both open hands lift sharply to chest height, then she recomposes the proud stance. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left forearm across the chest, hand open, then hold a fierce steady finish. Not combat.",
+    "entrance": "One-shot entrance: walk in with sharp heel-strikes, stop square to the front, give two hard claps and settle into the upright stance.",
+    "victory": "One-shot finish: stamp once, sweep both open hands high overhead with the wrists curled, chin high, mouth open in a triumphant cry, then hold.",
+    "ko": "Non-contact performance defeat: the proud back softens, the shoulders drop, both open hands fall to her sides and the head turns down. She holds a standing, bitter finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+  }
+}
