@@ -54,8 +54,14 @@ the plan as an ordered dispatch list naming each agent and its task, and stop.
    frames (`--no-restyle`) — the user's call like the backend. Under `local`,
    dispatch two or three builders at a time, not the whole cast: the local
    ComfyUI draws one job at a time.
-5. **Key art.** One `character-builder` task per character. Each stops at
-   `work/<slug>/source/key.png` and waits. **Show the user the key art and ask.
+5. **Key art.** Ask where the user wants approval copies saved unless they have
+   already named a destination in this session. Reuse it and pass it to every
+   builder; rendering can continue while waiting for the answer. One
+   `character-builder` task per character. Each stops at
+   `work/<slug>/source/key.png` and waits. Ensure a copy is saved to the chosen
+   destination with a descriptive, unique filename, preserving the pipeline
+   original and earlier review copies. Give the user the copy's full path.
+   **Show the user the key art and ask.
    Never approve on anyone's behalf and never delete one you dislike** — both
    are the user's call. Use AskUserQuestion when several are waiting at once.
 6. **Full build.** After approval, re-dispatch the builder per character, with
