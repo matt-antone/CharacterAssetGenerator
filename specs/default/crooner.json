@@ -6,7 +6,7 @@
   "build": "Lean, tall, narrow and controlled. Long clean jacket and trouser lines, low relaxed shoulders; never broad, squat or heavily coiled.",
   "hair": "A hard jet-black slick side part with one sharp highlight band.",
   "outfit": "A bright moss dinner jacket with satin peak lapels over a cream dress shirt with an open collar, a black bow tie left hanging undone, black dress trousers with a satin side stripe, and polished black loafers. The dinner-jacket line stays narrow. No hat or headwear.",
-  "performance_style": "Narrow staggered feet with both knees slightly flexed, chin raised, one shoulder angled forward, and the character-right hand at chest height, angled upward and inward toward his mouth.",
+  "performance_style": "Narrow staggered feet with both knees slightly flexed, chin raised, one shoulder angled forward, and the character-right hand open at chest height, the palm angled upward and inward toward his mouth, and the character-left hand relaxed at his side.",
   "location": "A supper-club stage late in the evening: a shallow parquet platform running to the bottom of the frame, heavy wine-red velvet curtains swagged across the back wall, a black baby grand angled away at one side with its lid propped, a chrome mic stand left empty beside it, and a single warm spotlight pooling on the parquet under a haze of cigarette smoke.",
   "recognition_cues": [
     "a hard jet-black slick side part with one sharp highlight band",
@@ -30,9 +30,6 @@
     "flashy jewellery",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": {
       "motion": "oldies-01"
@@ -46,7 +43,7 @@
     "flinch": "Brief unexpected room-sound reaction: the eyes and shoulders tighten for a beat, then he restores his unflappable lounge posture. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn one shoulder forward, then hold a composed final stance. Not a fight pose.",
     "entrance": "One-shot entrance: walk in with measured long steps, straighten the dinner-jacket line and dangling bow tie, then take the canonical staggered stance.",
-    "victory": "One-shot performance finish: make a contained bow and one free-hand acknowledgement, then rise into a tall settled finish.",
+    "victory": "One-shot performance finish: make a contained bow and one open-hand acknowledgement, then rise into a tall settled finish.",
     "ko": "Non-contact performance defeat: he stays on his feet while the unflappable control drains out of him — the shoulders slump forward without breaking the dinner-jacket line, and his head hangs low with the chin toward his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   }
 }

@@ -8,7 +8,7 @@
   "hair": "A very tall towering cylindrical mass of black hair rising well above the head, crimped and swept straight up, with two sharp white lightning-bolt streaks running from each temple up the sides of the tower. The tower is taller than her face is long and stays vertical in every view.",
   "outfit": "A long flowing white gown with wide wrapped gauze-like sleeves banded to the wrists, a high gathered neckline, and a skirt falling straight to the floor that hides her feet, cinched at the waist with a narrow pale silver sash. No hat, veil or headwear.",
   "personality": "Composed, regal and a little haughty.",
-  "performance_style": "Tall and poised: feet together beneath the gown, chin raised, and the free character-left hand held out at waist height with fingers spread in a stiff theatrical flourish.",
+  "performance_style": "Tall and poised: feet together beneath the gown, chin raised, the character-left hand held out at waist height with fingers spread in a stiff theatrical flourish, and the character-right hand resting open at her side.",
   "location": "A grand theatre gone to ruin: a warped parquet stage floor running to the bottom of the frame with dust and fallen plaster across it, shredded ivory drapes hanging in ribbons at the sides, a cracked plaster proscenium with its gilding flaked away, and an enormous cobwebbed crystal chandelier hanging low and unlit. Cold blue moonlight slants in from a broken window high at one side.",
   "recognition_cues": [
     "a very tall towering cylindrical mass of black hair rising well above the head",
@@ -42,9 +42,6 @@
     "any real actor's likeness or any film's makeup design",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": {
       "motion": "shakira-01"
@@ -55,10 +52,10 @@
         "mic"
       ]
     },
-    "flinch": "Brief room-sound startle: the head jerks back with a sharp bird-like twitch, the shoulders rise and the free hand flies up with fingers spread, then she recomposes herself with a haughty tilt of the chin. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder toward the room and draw the wide wrapped sleeve of the free character-left arm across the torso like a shield, then hold a stiff, regal finish. Not a combat action.",
-    "entrance": "One-shot entrance: glide in with small even steps beneath the gown, pause, turn the head sharply toward the room with the hair tower upright, then unfold into the tall poised ready stance with the free hand flourished.",
-    "victory": "One-shot song-finish celebration: sweep into a slow deep curtsy-like dip of the head and shoulders while staying upright, then rise and lift the free hand high in a triumphant diva flourish, holding a proud regal pose.",
+    "flinch": "Brief room-sound startle: the head jerks back with a sharp bird-like twitch, the shoulders rise and the character-left hand flies up with fingers spread, then she recomposes herself with a haughty tilt of the chin. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder toward the room and draw the wide wrapped sleeve of the character-left arm across the torso like a shield, then hold a stiff, regal finish. Not a combat action.",
+    "entrance": "One-shot entrance: glide in with small even steps beneath the gown, pause, turn the head sharply toward the room with the hair tower upright, then unfold into the tall poised ready stance with the character-left hand flourished.",
+    "victory": "One-shot song-finish celebration: sweep into a slow deep curtsy-like dip of the head and shoulders while staying upright, then rise and lift the character-left hand high in a triumphant diva flourish, holding a proud regal pose.",
     "ko": "Non-contact performance defeat: she stays on her feet while the drama drains out of her — the squared shoulders drop, the wrapped sleeves hang limp, and her head tips low with the chin toward the high neckline while the hair tower tilts forward with the head but keeps its tall cylindrical shape and white streaks. She holds a standing, visibly crestfallen finish with the gown an unbroken column. She remains standing in every frame — no kneeling, crouching, sitting, sinking, swooning or going to the ground. Do not imply a hit, injury or opponent."
   }
 }

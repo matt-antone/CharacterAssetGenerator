@@ -8,7 +8,7 @@
   "hair": "None. Bumpy olive scales over the scalp and a ridge of short blunt spines down the back of the neck.",
   "outfit": "Battered gunmetal-grey plate armour: a dented chest plate with scuffed rust-red trim, one large rounded pauldron on the character-left shoulder only, plain metal bracers, a wide brown leather belt with pouches, heavy brown armoured shin guards and bare clawed feet. A frayed tan poncho hangs over the character-right shoulder.",
   "personality": "Gruff, lonely and deeply sentimental.",
-  "performance_style": "Feet planted wide, knees slightly bent, tail resting behind, the character-right claw cradling the mic at chest height and the free character-left hand pressed over the heart.",
+  "performance_style": "Feet planted wide, knees slightly bent, tail resting behind, the character-right claw open at chest height and the character-left hand pressed over the heart.",
   "location": "A frontier spaceport saloon: worn dusty plank floor running to the bottom of the frame, a clean rust-orange riveted metal back wall with a round porthole showing twin setting suns, a battered jukebox-like wordless console glowing at one side, and dim warm lamplight.",
   "recognition_cues": [
     "a pale jagged scar across a long olive-scaled snout",
@@ -33,9 +33,8 @@
     "any franchise bounty-hunter armour design",
     "logos, text or real brands"
   ],
-  "props": ["mic"],
   "animations": {
-    "dance": "Slow country two-step loop: step the character-left foot forward and back, then the character-right, the massive shoulders rolling gently and the tail swaying behind, the free hand dipping from the heart in a slow sway, then return to the wide planted opening stance.",
+    "dance": "Slow country two-step loop: step the character-left foot forward and back, then the character-right, the massive shoulders rolling gently and the tail swaying behind, the character-left hand dipping from the heart in a slow sway, then return to the wide planted opening stance.",
     "sing": {
       "intent": "Heartbroken ballad loop: tip the snout up toward the ceiling on a long mournful note with the free claw pressed to the chest, eyes half closed, then lower back into the stance. The mouth must visibly open and change shape across the loop so he unmistakably reads as singing.",
       "props": ["mic"]
@@ -43,7 +42,7 @@
     "flinch": "Brief startle: the neck spines flare up, the golden eyes go wide and the tail snaps stiff, then everything settles and he resumes the stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn the pauldron shoulder forward and raise the armoured bracer in front of the snout, then hold a heavy upright finish. Not a fight pose.",
     "entrance": "One-shot entrance: lumber in with slow heavy strides and the tail dragging, stop, tug the poncho straight over the shoulder, then settle into his planted stance.",
-    "victory": "One-shot finish: raise the free claw high with a slow proud nod, the tail swishing once, then settle into a tall satisfied pose with the claw back over the heart.",
+    "victory": "One-shot finish: raise the character-left claw high with a slow proud nod, the tail swishing once, then settle into a tall satisfied pose with the claw back over the heart.",
     "ko": "Non-contact performance defeat: he stays on his feet while the heartbreak wins — the huge shoulders sag, the tail goes limp on the floor and the scarred snout droops toward the chest plate. He holds a standing, visibly heartsore finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   }
 }

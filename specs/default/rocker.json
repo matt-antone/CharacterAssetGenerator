@@ -7,7 +7,7 @@
   "face": "Angular with high cheekbones, a knowing sideways smirk, and a bold silver lightning streak painted diagonally across the character-left eye.",
   "hair": "Huge teased platinum-blond hair, a wide shaggy mane layered and backcombed into a round cloud well past the shoulders.",
   "outfit": "A one-piece silver sequined jumpsuit with a deep V neck to the sternum, wide pointed collar, long sleeves, a narrow waist and dramatic bell-bottom flares covering the feet down to the tips of tall magenta platform boots. A thin magenta sash tied at the waist. No hat or headwear.",
-  "performance_style": "Wide cocky stance with the character-left leg forward and hip cocked to character-right, chin lifted, the character-right hand holding the mic near his mouth with the elbow flared high, and the free arm flung out to the side with fingers splayed.",
+  "performance_style": "Wide cocky stance with the character-left leg forward and hip cocked to character-right, chin lifted, the character-right fist raised near his mouth with the elbow flared high, and the character-left arm flung out to the side with fingers splayed.",
   "location": "An arena rock stage: a glossy black riser floor running to the bottom of the frame, a back wall of tall black truss hung with rows of white and magenta lamps, a pair of low monitor wedges at the front edge, and a thin haze catching the beams.",
   "recognition_cues": [
     "huge teased platinum-blond hair in a round cloud",
@@ -30,9 +30,6 @@
     "a cape or feathers",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": "Glam strut loop: from the cocky stance he swaggers two slow steps toward character-right on the platforms, swings the hips on each step, snaps back with a sharp shoulder shimmy that sets the flares swinging, whips the hair with one head toss, then struts back and lands in the opening stance.",
     "sing": {
@@ -41,10 +38,10 @@
         "mic"
       ]
     },
-    "flinch": "Brief feedback-squeal reaction: he recoils with a theatrical wince, the hair cloud bouncing, then smooths it with the free hand and resumes the swagger. No contact or opponent.",
-    "guard": "One-shot stage self-protection: swing the free forearm up in front of the face in a dramatic pose, one flared leg turned in, and hold it like a photo call. Not a fight pose.",
+    "flinch": "Brief feedback-squeal reaction: he recoils with a theatrical wince, the hair cloud bouncing, then smooths it with the character-left hand and resumes the swagger. No contact or opponent.",
+    "guard": "One-shot stage self-protection: swing the character-left forearm up in front of the face in a dramatic pose, one flared leg turned in, and hold it like a photo call. Not a fight pose.",
     "entrance": "One-shot entrance: strut in on long platform steps with the hips swinging, stop, flick the hair back, and snap into the canonical cocky stance.",
     "victory": "One-shot finish: fling both arms wide, drop the head back with a triumphant grin, then hold a star-shaped final pose.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the swagger collapses — the hips straighten, the shoulders sag, the free arm dangles, and the head hangs low with the teased hair drooping over his face. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "ko": "Non-contact performance defeat: he stays on his feet while the swagger collapses — the hips straighten, the shoulders sag, the character-left arm dangles, and the head hangs low with the teased hair drooping over his face. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   }
 }

@@ -8,7 +8,7 @@
   "hair": "A shaggy grey-brown coat with a lighter cream chest and muzzle, and a bushy tail. Fur, not human hair.",
   "outfit": "A red plaid flannel shirt with the sleeves ripped off at the shoulders and a few ragged tears across the back, worn open over the cream chest fur. Faded blue jeans torn off raggedly at mid-shin. A loose red bandana knotted around his neck. His large clawed wolf feet are bare — he wears no footwear of any kind. The claws are short and blunt.",
   "personality": "Goofy, eager and loyal. Reads as delighted to be on stage.",
-  "performance_style": "Upright and eager: feet planted, chest open, ears up, tail raised in a happy curve, the free character-left hand relaxed at the side.",
+  "performance_style": "Upright and eager: feet planted, chest open, ears up, tail raised in a happy curve, both hands relaxed at the sides.",
   "location": "A roadside dive bar: a sticky dark-plank floor running to the bottom of the frame, a back wall of panelled wood covered in nailed-up licence plates and a dartboard, a battered amp and a bar stool shoved to one side, and a big uncurtained window filling the back with an enormous full moon over black pine trees. Dim red bar light inside, cold silver moonlight through the glass.",
   "recognition_cues": [
     "full wolf head with a long muzzle",
@@ -43,9 +43,6 @@
     "a hat or headwear",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": {
       "motion": "party-01"
@@ -57,9 +54,9 @@
       ]
     },
     "flinch": "Brief room-sound startle: the ears flatten back, the tail tucks and the shoulders hunch up for a beat like a surprised dog, then the ears pop back up and the tail lifts as he restores his upright eager stance. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward and fold the free furry arm up in front of the muzzle, ears pressed back, then hold a steady upright finish. Not a combat action.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and fold the character-left furry arm up in front of the muzzle, ears pressed back, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: bound in with springy upright strides, skid to a happy stop, give a quick full-body shake that ruffles the fur and flannel, then plant into the upright ready stance with the tail curled high.",
-    "victory": "One-shot song-finish celebration: throw the free fist overhead, tail wagging hard, let out one short triumphant howl with the muzzle up, then hold a proud upright pose with a big tongue-out grin.",
+    "victory": "One-shot song-finish celebration: throw the character-left fist overhead, tail wagging hard, let out one short triumphant howl with the muzzle up, then hold a proud upright pose with a big tongue-out grin.",
     "ko": "Non-contact performance defeat: he stays on his feet while the enthusiasm drains out of him — the tall ears droop flat to the sides, the tail sinks low between the legs, and his head hangs with the muzzle pointed toward the floor in a hangdog sulk. He holds a standing, visibly dejected finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, lying down, dropping to all fours or going to the ground. Do not imply a hit, injury or opponent."
   }
 }

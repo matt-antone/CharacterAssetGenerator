@@ -33,9 +33,6 @@
     "brand marks or legible text",
     "narrow fitted jacket"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": {
       "motion": "hiphop-04"
@@ -46,10 +43,10 @@
         "mic"
       ]
     },
-    "flinch": "Brief room-sound surprise: the cap brim and shoulders snap back, the free hand opens, then he regains the wide low festival stance. No contact, strike, or opponent.",
+    "flinch": "Brief room-sound surprise: the cap brim and shoulders snap back, the character-left hand opens, then he regains the wide low festival stance. No contact, strike, or opponent.",
     "guard": "One-shot stage self-protection: drop deeper into the coiled base, then hold a stable low finish. Not combat.",
-    "entrance": "One-shot entrance: stride in with bouncy low energy, sweep the free hand toward the crowd, let the towel and puffer mass follow, then land in the wide coiled ready stance.",
-    "victory": "One-shot song-finish celebration: spring upward from the low base, throw one open free-hand acknowledgement, then land in a wide, beaming upright pose.",
+    "entrance": "One-shot entrance: stride in with bouncy low energy, sweep the character-left hand toward the crowd, let the towel and puffer mass follow, then land in the wide coiled ready stance.",
+    "victory": "One-shot song-finish celebration: spring upward from the low base, throw one open-hand acknowledgement, then land in a wide, beaming upright pose.",
     "ko": "Non-contact performance defeat: he stays on his feet while the coiled kinetic energy drains away — the arms drop and go still, the oversized puffer mass settles, and his head hangs low with the chin toward his chest. The straight flat-brim cap tips forward with the head and stays fully readable, and he holds a standing, visibly deflated finish, planted where he would normally bounce. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
   }
 }

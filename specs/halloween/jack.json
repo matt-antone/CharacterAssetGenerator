@@ -8,7 +8,7 @@
   "hair": "Tufts of dry golden straw poking out under the hat brim at the sides and back of the pumpkin.",
   "outfit": "A floppy wide-brimmed straw hat with a frayed edge and a faded red band; a faded blue-and-red plaid shirt with straw poking from the cuffs and collar; patched denim overalls with one strap unbuttoned and hanging, square patches of red gingham and brown corduroy on the knees and bib; worn brown work gloves; and scuffed brown lace-up work boots with straw sticking out of the tops.",
   "personality": "Gentle, polite and a little shy until the fiddle kicks in.",
-  "performance_style": "Loose and folksy: feet apart with toes turned out, one knee slightly bent, the free character-left gloved hand hooked in the overall bib, pumpkin head tilted with a lit grin.",
+  "performance_style": "Loose and folksy: feet apart with toes turned out, one knee slightly bent, the character-left gloved hand resting on the overall bib, the character-right gloved hand loose at the side, pumpkin head tilted with a lit grin.",
   "location": "A moonlit barn: a floor of wide weathered planks scattered with loose straw running to the bottom of the frame, a clean back wall of red barn boards with a big open hayloft door showing a huge orange harvest moon, stacked hay bales and a lantern hung on a nail at one side. Warm lantern-orange light and cool blue moonlight.",
   "recognition_cues": [
     "an orange carved pumpkin head with a glowing jagged grin",
@@ -40,11 +40,8 @@
     "a pole or post behind him",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
-    "dance": "Bluegrass buck-step loop: from the folksy stance, do a quick loose shuffle-tap with the character-right boot, then the character-left, knees flapping loosely like a scarecrow, the free hand slapping the thigh on the beat, one hop in place with the straw tufts bouncing, and land back in the exact opening stance.",
+    "dance": "Bluegrass buck-step loop: from the folksy stance, do a quick loose shuffle-tap with the character-right boot, then the character-left, knees flapping loosely like a scarecrow, the character-left hand slapping the thigh on the beat, one hop in place with the straw tufts bouncing, and land back in the exact opening stance.",
     "sing": {
       "intent": "High lonesome vocal loop: tip the pumpkin head up toward the moon on a long keening note with the free gloved hand lifting out to the side, then bring it back to the bib and settle into his folksy stance. The carved grin is his mouth and must visibly stretch open, round into an O and change shape across the loop, glowing inside, so he unmistakably reads as singing.",
       "props": [
@@ -52,9 +49,9 @@
       ]
     },
     "flinch": "Brief room-sound startle: the loose limbs jerk, straw puffs out of the cuffs, the glow in the carved eyes flares and the hat hops up off the pumpkin, then it lands back and he resettles into his folksy stance. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward and pull the floppy hat brim down over the carved eyes with the free gloved hand, elbow raised, then hold a steady upright finish. Not a combat action.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and pull the floppy hat brim down over the carved eyes with the character-left gloved hand, elbow raised, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: amble in with long gangly loose-kneed steps, stop, tip the straw hat politely, set it back on the pumpkin, then settle into his folksy stance with a thumb hooked in the bib.",
-    "victory": "One-shot song-finish celebration: wave the straw hat high overhead with the free hand, give one loose hop, then set the hat back and hold a proud upright pose with the carved grin glowing bright.",
+    "victory": "One-shot song-finish celebration: wave the straw hat high overhead with the character-left hand, give one loose hop, then set the hat back and hold a proud upright pose with the carved grin glowing bright.",
     "ko": "Non-contact performance defeat: he stays on his feet while the stuffing goes out of him — the arms hang limp, the shoulders sag, the pumpkin head lolls to one side, the carved glow dims low and the hat brim flops down over the eyes. He holds a standing, visibly wilted finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, collapsing or going to the ground. Do not imply a hit, injury or opponent."
   }
 }

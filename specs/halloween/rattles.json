@@ -8,7 +8,7 @@
   "hair": "A tall glossy jet-black pompadour quiff sitting on top of the bare skull, swept up and forward with one loose curl falling over the forehead, and short slick sides.",
   "outfit": "A black leather motorcycle jacket with an asymmetric zip, wide lapels and the collar turned up, worn open over a plain white T-shirt, the collarbones and top ribs showing at its neckline; dark indigo jeans with wide turned-up cuffs showing bare ankle bones, and black leather engineer boots.",
   "personality": "Cocky, charming and endlessly pleased with himself.",
-  "performance_style": "Loose and cocky: feet apart with one knee cocked in, hips shifted, the free character-left hand sliding back along the side of the quiff, skull tipped with a grin.",
+  "performance_style": "Loose and cocky: feet apart with one knee cocked in, hips shifted, the character-left hand sliding back along the side of the quiff, the character-right hand loose at the hip, skull tipped with a grin.",
   "location": "A fifties roadhouse at midnight: a black-and-white checkerboard linoleum floor running to the bottom of the frame, a clean back wall of pale mint tile with a chrome trim stripe, a chrome jukebox glowing at one side with no readable labels, and a row of red vinyl diner stools. Warm neon red and cool mint light.",
   "recognition_cues": [
     "a bare ivory skull topped with a tall jet-black pompadour quiff",
@@ -37,21 +37,18 @@
     "a jacket zipped closed",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
-    "dance": "Rockabilly knee-shake loop: from the cocked stance, swivel both knees in and out twice on the beat with the heels planted and the hips rolling, snap the free fingers down at character-right, slide the free hand back along the quiff, swivel twice more, and settle back into the exact opening stance.",
+    "dance": "Rockabilly knee-shake loop: from the cocked stance, swivel both knees in and out twice on the beat with the heels planted and the hips rolling, snap the character-left fingers down at character-right, slide the character-left hand back along the quiff, swivel twice more, and settle back into the exact opening stance.",
     "sing": {
       "intent": "Rockabilly hiccup vocal loop: lean the skull back and jut the chin, then snap forward with a quick hiccupping shake of the head that bounces the quiff curl, free hand snapping on the beat, and return to his cocky stance. The hinged jaw must visibly drop open and change shape across the loop so he unmistakably reads as singing.",
       "props": [
         "mic"
       ]
     },
-    "flinch": "Brief room-sound startle: the whole skeleton rattles in place, the jaw clacks open and the pinpoint glints shrink, the quiff wobbles, then he checks it with the free hand and resettles into his cocky stance. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the free bony hand flat over the quiff to protect it, leather collar up, then hold a steady upright finish. Not a combat action.",
-    "entrance": "One-shot entrance: stroll in with a loose swaggering walk, stop, tug the jacket lapels straight with both hands, slide the free hand back along the quiff, then drop into his cocky stance with a grin.",
-    "victory": "One-shot song-finish celebration: point the free finger straight up overhead, give one sharp knee swivel, then hold a proud upright pose smoothing the quiff with a wink of one pinpoint glint.",
+    "flinch": "Brief room-sound startle: the whole skeleton rattles in place, the jaw clacks open and the pinpoint glints shrink, the quiff wobbles, then he checks it with the character-left hand and resettles into his cocky stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left bony hand flat over the quiff to protect it, leather collar up, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: stroll in with a loose swaggering walk, stop, tug the jacket lapels straight with both hands, slide the character-left hand back along the quiff, then drop into his cocky stance with a grin.",
+    "victory": "One-shot song-finish celebration: point the character-left finger straight up overhead, give one sharp knee swivel, then hold a proud upright pose smoothing the quiff with a wink of one pinpoint glint.",
     "ko": "Non-contact performance defeat: he stays on his feet while the swagger leaves him — the shoulders droop inside the jacket, the jaw hangs slack and the proud quiff flops down over the eye sockets. He holds a standing, visibly deflated finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, falling apart into a pile of bones or going to the ground. Do not imply a hit, injury or opponent."
   }
 }

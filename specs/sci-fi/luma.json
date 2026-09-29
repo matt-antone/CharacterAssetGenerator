@@ -8,7 +8,7 @@
   "hair": "A translucent domed jellyfish bell in place of hair, glowing soft aqua with a pink frilled rim, from which dozens of long thin glowing tendrils trail down past the shoulders to the waist, fading from aqua to pink at the tips.",
   "outfit": "No clothing: the translucent pale-aqua body carries a soft internal glow, with ruffled translucent frills at the wrists, the waist and the ankles that fade from aqua to pink, and faint pink luminous spots in rows down the arms.",
   "personality": "Dreamy, shy and sweet.",
-  "performance_style": "Soft upright stance with the feet close together, the weight on the character-left foot, the free character-right hand floating at shoulder height with the fingers trailing, the head tilted with the tendrils swaying.",
+  "performance_style": "Soft upright stance with the feet close together, the weight on the character-left foot, the character-right hand floating at shoulder height with the fingers trailing, the character-left hand resting open at her side, the head tilted with the tendrils swaying.",
   "location": "A neon retro-future lounge: a glossy black floor with a glowing magenta grid running to the bottom of the frame, a clean deep-purple back wall with a huge striped orange-to-pink setting sun disc, and teal and pink neon light.",
   "recognition_cues": [
     "a glowing translucent jellyfish bell on the head",
@@ -32,9 +32,6 @@
     "any franchise alien design",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": "Dreamy synthwave drift loop: from the soft opening stance, sway slowly to character-left with both arms rippling outward like water and the tendrils swinging after them, do a slow half-turn in place on both feet, ripple the arms back across to character-right, then return to the exact opening stance. Both feet stay on the floor throughout; no jumps or kicks.",
     "sing": {
@@ -44,7 +41,7 @@
       ]
     },
     "flinch": "Brief room-sound startle: the whole body glow flickers bright, the bell contracts slightly and the tendrils flare outward, then everything dims back and she resettles into her soft stance. No opponent or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward, draw the tendrils around the body with the free arm like a veil and dim the glow, then hold a small upright stance. Not a combat pose.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward, draw the tendrils around the body with the character-left arm like a veil and dim the glow, then hold a small upright stance. Not a combat pose.",
     "entrance": "One-shot entrance: walk in with slow soft steps, the tendrils trailing behind, pause, let the glow brighten, and settle into her soft stance with the hand floating up.",
     "victory": "One-shot finish: spread both arms wide and glow brightest, the tendrils fanning out like a halo, then bring the hands together at the chest and hold a shy happy stance.",
     "ko": "Non-contact performance defeat: she stays on her feet while her light fades — the glow dims to a faint flicker, the tendrils hang straight and limp, the arms droop at her sides and the head bows. She holds a standing, visibly dimmed finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."

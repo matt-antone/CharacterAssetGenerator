@@ -8,7 +8,7 @@
   "hair": "A short dark-brown undercut, shaved at the sides, with the top swept back and slightly flattened as if just out of a helmet.",
   "outfit": "Chunky rounded plated armour in bright orange with off-white panels: oversized dome shoulder pauldrons, a thick segmented chest plate, a wide armoured belt, heavy thigh plates, big boxy knee guards, armoured forearm gauntlets and large chunky boots. A dark grey padded bodysuit shows at the neck, elbows and joints. A few scuffs and chipped paint on the plates. No helmet anywhere.",
   "personality": "Loud, loyal and fearless; a big-hearted squad leader.",
-  "performance_style": "Wide heroic power stance with the feet planted apart, chest out, the free character-left gauntleted fist raised to shoulder height, chin up with a fierce grin.",
+  "performance_style": "Wide heroic power stance with the feet planted apart, chest out, the character-left gauntleted fist raised to shoulder height, the character-right gauntlet clenched at the hip, chin up with a fierce grin.",
   "location": "A starship hangar bay: a floor of yellow-and-grey hazard-striped steel deck plating running to the bottom of the frame, a clean back wall of tall grey blast doors with orange warning lights along the top, and cold white overhead floodlight.",
   "recognition_cues": [
     "oversized orange dome shoulder pauldrons",
@@ -31,11 +31,8 @@
     "any franchise space-marine armour design",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
-    "dance": "Power-metal headbang loop: from the planted opening stance, pump the free fist up and down in time, headbang with the undercut flopping, step the character-left foot forward into a lunging rock stance, windmill the free arm once, then step back and return to the exact opening stance with the fist at shoulder height. Low stomps only, no kicks.",
+    "dance": "Power-metal headbang loop: from the planted opening stance, pump the character-left fist up and down in time, headbang with the undercut flopping, step the character-left foot forward into a lunging rock stance, windmill the character-left arm once, then step back and return to the exact opening stance with the fist at shoulder height. Low stomps only, no kicks.",
     "sing": {
       "intent": "Power-metal anthem loop: lean back, throw the chin up on a soaring high note and punch the free gauntlet skyward, then pull it back to shoulder height. The mouth must visibly open wide and change shape across the loop, from a shout to a held open vowel, so she unmistakably reads as singing.",
       "props": [
@@ -43,9 +40,9 @@
       ]
     },
     "flinch": "Brief room-sound startle: the big pauldrons hitch up, the eyes snap sideways alert, then she rolls her neck and resettles into her power stance. No opponent or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward so the dome pauldron leads and raise the free forearm gauntlet in front of the face, then hold a braced planted stance. Not a combat attack.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward so the dome pauldron leads and raise the character-left forearm gauntlet in front of the face, then hold a braced planted stance. Not a combat attack.",
     "entrance": "One-shot entrance: march in with heavy clanking strides, stop with a stomp, roll the armoured shoulders, and plant into her wide power stance.",
-    "victory": "One-shot finish: raise the free fist high overhead with a triumphant roar, then bring it down to thump the chest plate and hold a proud chest-out stance.",
+    "victory": "One-shot finish: raise the character-left fist high overhead with a triumphant roar, then bring it down to thump the chest plate and hold a proud chest-out stance.",
     "ko": "Non-contact performance defeat: she stays on her feet while the fight drains out — the heavy pauldrons sag, the arms hang loose, and her head drops forward with the eyes shut. She holds a standing, visibly spent finish, braced upright by the heavy armour. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   }
 }

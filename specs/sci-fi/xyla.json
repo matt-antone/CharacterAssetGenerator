@@ -8,7 +8,7 @@
   "hair": "No hair: a smooth emerald chitin crown rising into a tall pointed crest behind the antennae.",
   "outfit": "A floor-length iridescent carapace gown made of overlapping shell plates that shift from emerald to violet to gold, fitted tight through the wasp waist and flaring into a wide stiff bell skirt; a high fan-shaped collar of translucent amber wing membrane rising behind the head; ridged shell pauldrons at the shoulders; long fitted sleeves ending in slim three-fingered dark-green hands. The skirt hides the feet.",
   "personality": "Imperious, dramatic and secretly delighted by applause.",
-  "performance_style": "Tall and imperious: feet together under the bell skirt, chin lifted, the free character-left arm extended out and slightly raised with the three fingers spread, the wing collar framing the head.",
+  "performance_style": "Tall and imperious: feet together under the bell skirt, chin lifted, the character-right hand resting open at the waist, the character-left arm extended out and slightly raised with the three fingers spread, the wing collar framing the head.",
   "location": "A hive throne hall: a floor of polished amber hexagonal tiles running to the bottom of the frame, a clean curved back wall of honeycomb-textured resin glowing warm gold from behind, and two tall ribbed resin pillars at the sides.",
   "recognition_cues": [
     "large faceted gold compound eyes and curling antennae",
@@ -34,21 +34,18 @@
     "any franchise alien queen design",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
-    "dance": "Stately court-dance loop: from the imperious opening stance, glide a small step to character-left and turn the torso with the free arm sweeping in a high slow arc, dip in a shallow regal curtsey, rise and glide back to character-right with the arm sweeping the other way, antennae swaying, then return to the exact opening stance. Feet stay under the skirt; no kicks or jumps.",
+    "dance": "Stately court-dance loop: from the imperious opening stance, glide a small step to character-left and turn the torso with the character-left arm sweeping in a high slow arc, dip in a shallow regal curtsey, rise and glide back to character-right with the arm sweeping the other way, antennae swaying, then return to the exact opening stance. Feet stay under the skirt; no kicks or jumps.",
     "sing": {
       "intent": "Grand opera aria loop: swell the chest, lift the chin high and spread the free character-left arm wide on a soaring sustained note, antennae quivering, then draw the hand back to the chest. The small mouth must visibly open wide and change shape across the loop so she unmistakably reads as singing.",
       "props": [
         "mic"
       ]
     },
-    "flinch": "Brief room-sound startle: the antennae snap back flat, the wing collar flares wider and the free hand flies to the chest, then she recomposes with a haughty tilt of the head. No opponent or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward so the carapace pauldron leads and raise the free forearm across the body, antennae lowered, then hold a tall defiant stance. Not a combat pose.",
-    "entrance": "One-shot entrance: sweep in with a slow gliding walk, the bell skirt swaying, stop, fan the wing collar open, and extend the free arm into her imperious stance.",
-    "victory": "One-shot finish: throw the free arm and head back in a grand diva flourish with antennae high and wing collar fully spread, then descend into a deep regal bow and rise to a tall proud hold.",
+    "flinch": "Brief room-sound startle: the antennae snap back flat, the wing collar flares wider and the character-left hand flies to the chest, then she recomposes with a haughty tilt of the head. No opponent or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward so the carapace pauldron leads and raise the character-left forearm across the body, antennae lowered, then hold a tall defiant stance. Not a combat pose.",
+    "entrance": "One-shot entrance: sweep in with a slow gliding walk, the bell skirt swaying, stop, fan the wing collar open, and extend the character-left arm into her imperious stance.",
+    "victory": "One-shot finish: throw the character-left arm and head back in a grand diva flourish with antennae high and wing collar fully spread, then descend into a deep regal bow and rise to a tall proud hold.",
     "ko": "Non-contact performance defeat: she stays on her feet while the majesty drains away — the wing collar folds down, the antennae droop, the shoulders fall and the head bows with the arms hanging at her sides. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   }
 }

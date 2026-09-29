@@ -8,7 +8,7 @@
   "hair": "A short choppy crimson bob with a spiky fringe, a longer lock on the character-left side falling to the chin.",
   "outfit": "A sleek white form-fitting pilot suit with hard glossy panels: a crimson chest plate, crimson shoulder caps and forearm guards, white knee plates with black joints, black side panels down the ribs and legs, and white armoured boots with crimson toes. A slim black headset over the hair with a single ear cup on the character-right ear and a small boom mic arm. Fully covered, high neck.",
   "personality": "Bold, competitive and fiercely loyal.",
-  "performance_style": "Wide athletic stance with the front knee bent, torso leaned forward, the character-right hand gripping the mic up at the mouth and the free character-left fist clenched at hip height.",
+  "performance_style": "Wide athletic stance with the front knee bent, torso leaned forward, the character-right fist raised up at the mouth and the character-left fist clenched at hip height.",
   "location": "A mecha hangar: a painted grey concrete floor with white guide lines running to the bottom of the frame, a clean pale-blue steel back wall with a large closed hangar door, a huge white armoured robot foot and ankle standing at one side, and bright white floodlights.",
   "recognition_cues": [
     "a short choppy crimson bob with a spiky fringe",
@@ -31,17 +31,16 @@
     "a pin-up pose or exaggerated curves",
     "logos, text or real brands"
   ],
-  "props": ["mic"],
   "animations": {
-    "dance": "J-rock loop: headbang twice with the crimson fringe flying, pump the free fist up on the beat, stamp the character-left boot and swing the torso character-right and back, then land in the wide opening stance.",
+    "dance": "J-rock loop: headbang twice with the crimson fringe flying, pump the character-left fist up on the beat, stamp the character-left boot and swing the torso character-right and back, then land in the wide opening stance.",
     "sing": {
       "intent": "Anthemic vocal loop: throw the head back on a soaring note with the free fist raised, then snap forward into the leaned stance. The mouth must visibly open wide and change shape across the loop so she unmistakably reads as singing.",
       "props": ["mic"]
     },
-    "flinch": "Brief cockpit-alarm startle: the free hand snaps to the headset ear cup and the eyes go wide, then she shakes her head and resumes the stance. No contact or opponent.",
+    "flinch": "Brief cockpit-alarm startle: the character-left hand snaps to the headset ear cup and the eyes go wide, then she shakes her head and resumes the stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn the crimson shoulder cap forward and cross the forearm guard in front of the face, then hold a braced upright finish. Not a fight pose.",
-    "entrance": "One-shot entrance: sprint in with quick strides, skid to a stop, flip the headset boom into place with the free hand, then drop into the wide performance stance.",
-    "victory": "One-shot finish: jump with the free fist punched straight up and a huge grin, land, then flash a V-sign in a confident pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the fight leaves her — the shoulders drop, the free fist uncurls and her head bows so the crimson fringe hides the eyes. She holds a standing, visibly exhausted finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "entrance": "One-shot entrance: sprint in with quick strides, skid to a stop, flip the headset boom into place with the character-left hand, then drop into the wide performance stance.",
+    "victory": "One-shot finish: jump with the character-left fist punched straight up and a huge grin, land, then flash a V-sign in a confident pose.",
+    "ko": "Non-contact performance defeat: she stays on her feet while the fight leaves her — the shoulders drop, the character-left fist uncurls and her head bows so the crimson fringe hides the eyes. She holds a standing, visibly exhausted finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
   }
 }

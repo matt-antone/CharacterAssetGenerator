@@ -8,7 +8,7 @@
   "hair": "None; the head is fully wrapped, with one loose bandage end sticking up from the crown like a cowlick.",
   "outfit": "Wrapped head to foot in overlapping sand-coloured linen bandages running diagonally, with three long loose ends trailing from the character-right wrist, the waist and the character-left ankle; a wide gold-and-turquoise beaded collar across the shoulders and a pair of chunky gold cuffs on both wrists; bare wrapped feet.",
   "personality": "Wildly enthusiastic, easily delighted and a little out of date.",
-  "performance_style": "Bursting with pep: feet wide, knees soft, chest out, the free character-left fist pumped up beside the shoulder, eyes glowing wide.",
+  "performance_style": "Bursting with pep: feet wide, knees soft, chest out, the character-left fist pumped up beside the shoulder, the character-right hand clenched at the hip, eyes glowing wide.",
   "location": "A tomb burial chamber turned party: a floor of big square sandstone slabs running to the bottom of the frame, a clean back wall of smooth sandstone painted with plain bands of turquoise and gold and no figures or writing, a stack of treasure chests and a gold urn at one side, and a string of coloured party lights draped along the top. Warm torch-gold light with a pink-and-turquoise party glow.",
   "recognition_cues": [
     "a fully bandage-wrapped head with big round glowing turquoise eyes",
@@ -34,11 +34,8 @@
     "sunglasses, headband, leg warmers or eighties clothing over the wrappings",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
-    "dance": "Power-pop bounce loop: from the wide stance, bounce on the knees twice while punching the free fist up to character-right, step-touch to character-right with a shoulder shimmy, step-touch back to character-left with the fist punching the other way, the loose bandage ends swinging, and land back in the exact opening stance.",
+    "dance": "Power-pop bounce loop: from the wide stance, bounce on the knees twice while punching the character-left fist up to character-right, step-touch to character-right with a shoulder shimmy, step-touch back to character-left with the fist punching the other way, the loose bandage ends swinging, and land back in the exact opening stance.",
     "sing": {
       "intent": "Soaring chorus loop: throw the head back and the chest out on a big anthem note with the free arm flung wide, then snap forward and point to the crowd on the beat, and return to his pepped-up stance. The mouth gap in the bandages must visibly stretch open, round and change shape across the loop so he unmistakably reads as singing.",
       "props": [
@@ -46,7 +43,7 @@
       ]
     },
     "flinch": "Brief room-sound startle: the whole body jolts, the glowing eyes pop extra round and a loose bandage end springs straight up from the crown, then it flops back down and he resettles into his pepped-up stance. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward and fold the free wrapped forearm up in front of the eyes, gold cuff outward, then hold a steady upright finish. Not a combat action.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and fold the character-left wrapped forearm up in front of the eyes, gold cuff outward, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: bound in with springy jogging steps, stop, give a two-handed wave, tug a loose bandage end tight at the wrist, then drop into his pepped-up stance with the fist up.",
     "victory": "One-shot song-finish celebration: leap up with both arms overhead in a star so every loose bandage end flies out, land, then hold a proud upright pose with both fists pumped and eyes glowing.",
     "ko": "Non-contact performance defeat: he stays on his feet while the pep drains away — the fist drops, the shoulders slump, the glowing eyes dim to half-lidded slits and a loose bandage end droops down over his face. He holds a standing, visibly deflated finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, unravelling or going to the ground. Do not imply a hit, injury or opponent."

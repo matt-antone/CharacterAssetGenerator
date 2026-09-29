@@ -7,7 +7,7 @@
   "face": "Warm tan skin, dark brown eyes under straight auburn brows, a straight nose, defined cheekbones, faint lines at the outer eye corners, and full lips in deep berry red.",
   "hair": "A large mass of thick wavy auburn hair worn completely loose and down, every strand falling free from the scalp: a high crown, wide side volume and ends past the shoulders, the whole mass visibly wider than her shoulders.",
   "outfit": "A structured crimson performance jacket with angular lapels, worn open over a fitted charcoal top; high-waisted blue mom jeans with a crimson sash at the waist; chunky ankle boots in near-black dark brown leather, laced with thick warm mid-brown laces. No hat or headwear.",
-  "performance_style": "Planted: feet shoulder-width apart, knees soft, torso braced over a low centre. The mic held upright at the collarbone, the free character-left hand open at hip height, clear of the jacket. Chin level, a confident closed-mouth smile.",
+  "performance_style": "Planted: feet shoulder-width apart, knees soft, torso braced over a low centre. Both hands open and empty, the character-right hand at the collarbone and the character-left hand at hip height, clear of the jacket. Chin level, a confident closed-mouth smile.",
   "location": "A mid-size rock club, seen from the front of a low black stage: a scuffed matte-black deck running to the bottom of the frame, a bare red-brick back wall with a half-furled black drape at one side, a stack of road cases and a silent cabinet amp pushed against it, and a truss of warm PAR cans overhead throwing crossed pools of red and amber onto the brick.",
   "recognition_cues": [
     "a wavy auburn hair mass visibly wider than her shoulders",
@@ -32,9 +32,6 @@
     "laces in the same brown as the boot leather",
     "a gown or skirt silhouette",
     "logos, text or real brands"
-  ],
-  "props": [
-    "mic"
   ],
   "animations": {
     "dance": {

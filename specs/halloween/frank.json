@@ -8,7 +8,7 @@
   "hair": "Short blunt black hair cut straight across the forehead.",
   "outfit": "A worn charcoal suit coat one size too small, its sleeves ending short of the wrists, over a dull olive shirt buttoned to the collar, dark trousers ending above the ankles, and very heavy black boots with thick raised soles. No hat or headwear.",
   "personality": "Gentle and sincere; earnest rather than imposing.",
-  "performance_style": "Tall and square: feet planted a little apart, knees nearly straight, shoulders level, and the free character-left hand held open and slightly away from the body.",
+  "performance_style": "Tall and square: feet planted a little apart, knees nearly straight, shoulders level, and both hands held open and slightly away from the body.",
   "location": "A stone castle hall: a flagstone floor running to the bottom of the frame, massive rough-cut stone walls rising out of frame, a tall arched gothic window at the back with lightning flickering white behind the leaded glass, an iron candelabrum guttering at one side, and a heavy dark tapestry hanging crooked at the other. Cold blue storm light with warm candle glow low down.",
   "recognition_cues": [
     "a tall flat-topped rectangular head with a heavy brow ridge",
@@ -41,9 +41,6 @@
     "any real actor's likeness or any film's makeup design",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
     "dance": {
       "motion": "twist-01"
@@ -54,10 +51,10 @@
         "mic"
       ]
     },
-    "flinch": "Brief room-sound startle: the tall shoulders jerk up and the heavy brow lifts in surprise, the free hand opens wide, then he carefully resettles into his tall square stance. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one broad shoulder forward and raise the large free character-left hand as an open shield in front of the face, then hold a steady upright finish. Not a combat action.",
-    "entrance": "One-shot entrance: walk in with slow, heavy, deliberate steps, stop, straighten the too-small coat with the free hand, give the room a hopeful little wave, then take the tall square ready stance.",
-    "victory": "One-shot song-finish celebration: raise the free hand overhead in delighted disbelief, the whole tall frame lifting onto the balls of the heavy boots, then settle into a proud, beaming upright pose.",
+    "flinch": "Brief room-sound startle: the tall shoulders jerk up and the heavy brow lifts in surprise, the character-left hand opens wide, then he carefully resettles into his tall square stance. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one broad shoulder forward and raise the large character-left hand as an open shield in front of the face, then hold a steady upright finish. Not a combat action.",
+    "entrance": "One-shot entrance: walk in with slow, heavy, deliberate steps, stop, straighten the too-small coat with the character-left hand, give the room a hopeful little wave, then take the tall square ready stance.",
+    "victory": "One-shot song-finish celebration: raise the character-left hand overhead in delighted disbelief, the whole tall frame lifting onto the balls of the heavy boots, then settle into a proud, beaming upright pose.",
     "ko": "Non-contact performance defeat: he stays on his feet while the hope drains out of him — the heavy shoulders drop, the long arms hang, and his flat-topped head tips low with the chin toward the buttoned collar. He holds a standing, visibly dejected finish with weight even over both heavy boots. He remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent."
   }
 }

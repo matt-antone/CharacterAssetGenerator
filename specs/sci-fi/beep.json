@@ -8,7 +8,7 @@
   "hair": "None. A single short stub antenna with a small red bulb on top of the head.",
   "outfit": "Cream enamel body panels with rounded corners over chrome joints, a tangerine-orange enamel chest plate with three round push-buttons, chrome ribbed neck, elbow and knee joints, and chrome flat feet. Visible panel seams and rivets.",
   "personality": "Eager, polite and easily delighted.",
-  "performance_style": "Feet together and level, body upright and stiff, the character-right clamp holding the mic below the grille mouth and the free character-left arm bent up at a crisp right angle.",
+  "performance_style": "Feet together and level, body upright and stiff, the character-right clamp held open below the grille mouth and the character-left arm bent up at a crisp right angle.",
   "location": "A starship cargo bay: a steel diamond-plate floor with yellow-and-black hazard striping running to the bottom of the frame, a clean pale-grey back wall of large riveted panels with a closed round-cornered hatch, a few stacked crates at one side, and cool white overhead strip lights.",
   "recognition_cues": [
     "a rounded-cube cream head with a dark visor band and two round cyan eye-lights",
@@ -31,9 +31,8 @@
     "any franchise droid design",
     "logos, text or real brands"
   ],
-  "props": ["mic"],
   "animations": {
-    "dance": "Robotic synth-pop loop: stiff mechanical popping in sharp stops — the head ticks character-left then character-right, the free arm snaps from a right angle up to straight and back, the torso twists a quarter turn and back on the flat feet, then everything locks back into the opening stance.",
+    "dance": "Robotic synth-pop loop: stiff mechanical popping in sharp stops — the head ticks character-left then character-right, the character-left arm snaps from a right angle up to straight and back, the torso twists a quarter turn and back on the flat feet, then everything locks back into the opening stance.",
     "sing": {
       "intent": "Vocoder vocal loop: the head tilts up on a held note while the free arm slowly rises, then lowers back into the stance. The speaker-grille mouth visibly lights brighter and its glowing area opens tall, narrows and changes shape across the loop so Beep unmistakably reads as singing.",
       "props": ["mic"]

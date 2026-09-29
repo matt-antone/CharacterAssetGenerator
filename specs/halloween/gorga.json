@@ -8,7 +8,7 @@
   "hair": "A crown of about a dozen small live snakes growing from the scalp in place of hair, each emerald green with a pale yellow belly and tiny round black eyes, curling up and around the head in a tall rounded halo shape, all looking cheerful, several swaying and one or two with little forked tongues out.",
   "outfit": "A floor-length gold lamé column gown with a high halter neck, a full-length cape-sleeve of pleated gold from each shoulder to the wrist, a wide jewelled belt of emerald-green stones at the natural waist, and a straight skirt with a modest side slit to the knee; tall gold cuffs on both wrists and gold platform sandals with a moderate block heel.",
   "personality": "Kind, warm, regal and utterly committed to the beat.",
-  "performance_style": "Regal disco diva: feet apart with one hip shifted, shoulders back, the free character-left arm raised with the index finger pointing up to the mirror ball, golden eyes warm, snakes swaying.",
+  "performance_style": "Regal disco diva: feet apart with one hip shifted, shoulders back, the character-left arm raised with the index finger pointing up to the mirror ball, the character-right hand resting open on the shifted hip, golden eyes warm, snakes swaying.",
   "location": "An ancient temple turned disco: a floor of glossy lit squares in gold, emerald and rose running to the bottom of the frame, a clean back wall of pale marble between two plain fluted columns, a mirror ball hanging overhead scattering light, and a few cracked stone statues of dancers striking disco poses at one side. Warm gold light with emerald and rose disco spots.",
   "recognition_cues": [
     "a halo of small emerald-green live snakes in place of hair",
@@ -38,19 +38,16 @@
     "a mirror, shield, sword or severed head",
     "logos, text or real brands"
   ],
-  "props": [
-    "mic"
-  ],
   "animations": {
-    "dance": "Eurodisco point-and-sway loop: from the diva stance, point the free arm up to character-right on the beat then sweep it down across the body to character-left, hips swaying side to side with small stepping touches, give a half-turn of the shoulders with the gold sleeve swinging and the snakes bobbing in time, and settle back into the exact opening stance.",
+    "dance": "Eurodisco point-and-sway loop: from the diva stance, point the character-left arm up to character-right on the beat then sweep it down across the body to character-left, hips swaying side to side with small stepping touches, give a half-turn of the shoulders with the gold sleeve swinging and the snakes bobbing in time, and settle back into the exact opening stance.",
     "sing": {
       "intent": "Big eurodisco chorus loop: lift the chin and open the shoulders on a soaring note while the free hand sweeps up and outward and the snakes all rise and sway together, then bring the hand back to point up and return to her diva stance. The mouth must visibly open and change shape across the loop so she unmistakably reads as singing.",
       "props": [
         "mic"
       ]
     },
-    "flinch": "Brief room-sound startle: the snakes all shoot straight up in surprise, the golden eyes widen and the free hand flutters to the chest, then the snakes curl back down and she resettles into her diva stance with a laugh. No opponent, strike or contact.",
-    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the pleated gold sleeve across the lower face with the free arm while the snakes tuck in close around the head, then hold a steady upright finish. Not a combat action.",
+    "flinch": "Brief room-sound startle: the snakes all shoot straight up in surprise, the golden eyes widen and the character-left hand flutters to the chest, then the snakes curl back down and she resettles into her diva stance with a laugh. No opponent, strike or contact.",
+    "guard": "One-shot stage self-protection: turn one shoulder forward and raise the pleated gold sleeve across the lower face with the character-left arm while the snakes tuck in close around the head, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: strut in with long confident steps and the gown shimmering, stop with a hip shift, flip the pleated sleeves back off the arms, snakes perking up one by one, then point up into her diva stance.",
     "victory": "One-shot song-finish celebration: throw both arms up in a wide V with the sleeves fanning like wings and every snake stretching up tall, then hold a proud upright pose with one hand on the hip and a warm golden-eyed smile.",
     "ko": "Non-contact performance defeat: she stays on her feet while the glitter goes out of her — the pointing arm drops, the shoulders slump, her head bows, and the little snakes droop down limp around her face like wilted flowers. She holds a standing, visibly downcast finish with weight even over both feet. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, turning to stone or going to the ground. Do not imply a hit, injury or opponent."
