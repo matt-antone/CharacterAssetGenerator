@@ -13,7 +13,7 @@ from typing import Sequence
 
 from PIL import Image, ImageOps
 
-from .geometry import CELL_HEIGHT, CELL_WIDTH
+from .geometry import current
 
 #: Flat backdrop for the proof only. Never applied to a delivered cell.
 PROOF_BACKDROP = (68, 68, 68)
@@ -23,10 +23,10 @@ def tile(
     cells: Sequence[Path | str],
     dst: Path | str,
     columns: int | None = None,
-    cell: tuple[int, int] = (CELL_WIDTH, CELL_HEIGHT),
+    cell: tuple[int, int] | None = None,
 ) -> Path:
     """Lay the cells out left to right, top to bottom, in frame order."""
-    width, height = cell
+    width, height = cell or (current().cell, current().cell)
     cells = [Path(cell) for cell in cells]
     if not cells:
         raise ValueError("no cells to assemble")
@@ -49,15 +49,16 @@ def tile(
 def split_frame_sheet(sheet: Path | str, count: int, columns: int | None = None) -> list[Image.Image]:
     """Cut a frame sheet back into cells. The inverse of `tile`."""
     columns = columns or count
+    size = current().cell
     with Image.open(sheet) as image:
         image = image.convert("RGBA")
         return [
             image.crop(
                 (
-                    index % columns * CELL_WIDTH,
-                    index // columns * CELL_HEIGHT,
-                    (index % columns + 1) * CELL_WIDTH,
-                    (index // columns + 1) * CELL_HEIGHT,
+                    index % columns * size,
+                    index // columns * size,
+                    (index % columns + 1) * size,
+                    (index // columns + 1) * size,
                 )
             )
             for index in range(count)
@@ -209,7 +210,8 @@ def manifest(
             {
                 "name": name,
                 "height": height,
-                "cell": [CELL_WIDTH, CELL_HEIGHT],
+                "cell": [current().cell, current().cell],
+                **({"detail_level": current().level} if current().level else {}),
                 "views": {view: str(path) for view, path in views.items()},
                 # Beside the views, never among them: the views are transparent
                 # cells cut to `cell`, and this is an opaque 2K background.

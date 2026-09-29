@@ -138,9 +138,11 @@ the hardware and the bill.
      two pixels of the transparency it leaves the figure; deeper in, it takes
      the average colour of its untinted neighbours. The cut-out left a magenta
      fringe in the hair and along the silhouette.
-  2. **One 64-colour palette per set,** median cut over the set reference's
-     figure and every defringed cell of the set. A 48-colour palette from the
-     key art alone had nothing near the denim and put grey patches on the thigh.
+  2. **One palette per set, its detail level's size** (161 colours at level 8;
+     it was 64 before levels drew their own cells), median cut over the set
+     reference's figure and every defringed cell of the set. A 48-colour palette
+     from the key art alone had nothing near the denim and put grey patches on
+     the thigh.
   3. **Quantize with no dither, and keep the cut-out's silhouette exactly.** A
      majority filter over the silhouette refilled the tip of the gap between
      the legs and painted it the palette's colour nearest the magenta, a pale
@@ -265,9 +267,21 @@ step (2026-09-29). Rebuild them with
 `uv run python -m cag.ladder cag/references/ladder-source-ellis.png`.
 
 **The project's detail level is 8** (`DEFAULT_DETAIL_LEVEL`, 870 px and 161
-colours), set by the user on 2026-09-29; no brief sets its own. The ladder is
-so far only the samples: a build still asks the model for its level in words
-and shows it the level's sample, and on `local` the words do nothing.
+colours), set by the user on 2026-09-29; no brief sets its own.
+
+**A build draws its cells at its level.** `cag build` runs inside
+`geometry.using(geometry.at_level(detail_level))`: the cell keeps its world (9'0"
+static, 8'6" animated) and takes the ladder's density, 12.4 px an inch at level
+8, so cells are 1342 px square where they were 560 (`LEGACY`, still what
+anything outside a build sees, and what a package with no manifest `cell` is
+read as). Belter stands 833 px tall in hers, and the cell finish quantizes to
+the level's palette. The 560 px cell was about level 4. Level 8 is also about
+what the video path draws natively: Belter stands about 800 px tall in a SCAIL
+frame at 576x864, so its detail now reaches the cell instead of being shrunk
+away. The manifest records `cell` and `detail_level`, and `cag edit` sizes its
+canvas from the manifest. The model is still asked for its level in words and
+shown the level's sample, and on `local` the words do nothing: the cell is
+where the level is made.
 
 Views are cached like any render: a source drawn before this is kept until it
 is deleted (`work/<slug>/source/{front,back,profile}.png`, and a set's
@@ -675,7 +689,7 @@ A new term is named here before it is used.
 | **SCAIL frame** | one image of a SCAIL video |
 | **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
 | **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
-| **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one 64-colour palette per set, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
+| **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one palette per set of its detail level's size, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
 | **output remote** | the rclone destination packages are published to: `CAG_OUTPUT_REMOTE` or `--output-remote`, e.g. `kadrive:CharacterAssetGenerator/outputs`. A package lands at its path under `outputs/` |
 | **publish** | `rclone copy` of one package folder to the output remote (`cag/publish.py`): at the end of every build, on each `cag edit` Save, or by `cag publish`. Never sync, never deletes, never fails a build. Not the same act as publishing an Artifact |
 

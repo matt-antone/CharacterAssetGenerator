@@ -280,3 +280,17 @@ def test_a_pocket_with_no_untinted_neighbour_keeps_its_colour_not_black():
     assert (out[12:28, 12:28, :3].astype(int).sum(-1) > 0).all(), "a fill from nothing is not black"
     assert (out[20, 20, :3] == POCKET).all(), "its heart keeps its own colour"
     assert np.abs(out[12, 12, :3].astype(int) - DENIM).max() <= 1, "its rim still takes the denim"
+
+
+def test_a_sets_palette_is_its_detail_levels():
+    import numpy as np
+    from cag import finish, geometry
+    rng = np.random.default_rng(0)
+    cells = [np.dstack([rng.integers(0, 200, (40, 40, 3), dtype=np.uint8),
+                        np.full((40, 40), 255, np.uint8)])]
+    reference = np.full((10, 10, 3), 255, np.uint8)
+    for level in (1, 8):
+        with geometry.using(geometry.at_level(level)) as g:
+            palette = finish.set_palette(reference, cells)
+            assert len(palette.getpalette()) // 3 >= g.colours
+            assert len(palette.getcolors()) <= g.colours

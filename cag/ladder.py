@@ -25,6 +25,7 @@ import numpy as np
 from PIL import Image
 
 from .finish import finish_cell
+from .geometry import LADDER_COLOURS, LADDER_HEIGHTS, ramp
 from .mask import cutout
 
 REFERENCES = Path(__file__).parent / "references"
@@ -32,8 +33,8 @@ REFERENCES = Path(__file__).parent / "references"
 #: Figure height in art pixels and palette size at level 1 and level 10. The
 #: user chose the floor (what had been level 7 of a 43-347 px ladder) and this
 #: ladder's step, 1.26x a level, over one capped at today's cell (2026-09-29).
-BOTTOM_HEIGHT, TOP_HEIGHT = 173, 1380
-BOTTOM_COLOURS, TOP_COLOURS = 32, 256
+BOTTOM_HEIGHT, TOP_HEIGHT = LADDER_HEIGHTS
+BOTTOM_COLOURS, TOP_COLOURS = LADDER_COLOURS
 
 CANVAS = (1024, 1536)
 MAGENTA = (255, 0, 255)
@@ -46,11 +47,6 @@ FOOT_ROW = 1456
 TILES = [(0.5, 0.26), (0.5, 0.425), (0.36, 0.72), (0.3, 0.95)]
 TILE_SIDE = 0.1   # of the figure's height
 TILE_SHOWN = 320
-
-
-def ramp(level: int, low: float, high: float) -> int:
-    """Geometric: each level the same ratio above the last."""
-    return round(low * (high / low) ** ((level - 1) / 9))
 
 
 def rung(figure: Image.Image, level: int) -> Image.Image:

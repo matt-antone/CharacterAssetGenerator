@@ -104,8 +104,10 @@ def test_locate_tells_characters_apart_by_contents(tmp_path, monkeypatch):
         (tmp_path / slug / "dance-sheet.png").write_bytes(png.getvalue())
 
     tom = (tmp_path / "tall-tom" / "dance-sheet.png").read_bytes()
+    # No manifest, so the 560px cells builds drew before detail levels.
     assert locate(tmp_path, "dance-sheet.png", tom) == {
-        "folder": "tall-tom", "height": "6'", "row": 133, "fps": None  # 528 - 72in at 560px/102in
+        "folder": "tall-tom", "height": "6'", "row": 133, "fps": None,  # 528 - 72in at 560px/102in
+        "cell": 560, "floor": 527,
     }
     belter = (tmp_path / "belter" / "dance-sheet.png").read_bytes()
     assert locate(tmp_path, "dance-sheet.png", belter)["row"] is None  # no brief for belter

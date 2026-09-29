@@ -7,7 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from cag.geometry import CELL_HEIGHT, CELL_WIDTH
+from cag.geometry import at_level
+from cag.style import DEFAULT_DETAIL_LEVEL
 from langchain_core.language_models.fake_chat_models import FakeMessagesListChatModel
 from langchain_core.messages import AIMessage
 from PIL import Image, ImageSequence
@@ -21,6 +22,9 @@ from tests.test_animation import fake_draw
 from tests.test_static_sheet import flat_cutout
 
 SAMPLE = "motions/sample/motion.json"
+
+#: A build draws its cells at the brief's detail level; no test brief sets one.
+LEVEL_CELL = at_level(DEFAULT_DETAIL_LEVEL).cell
 
 
 @pytest.fixture
@@ -76,12 +80,13 @@ def test_the_gate_names_the_key_art_and_how_to_clear_it(tmp_path, monkeypatch):
 def test_writes_every_view_left_on(built):
     for view in (KEY_VIEW, *static_sheet.projection_views()):
         with Image.open(built / "views" / f"{view}.png") as cell:
-            assert cell.size == (CELL_WIDTH, CELL_HEIGHT)
+            assert cell.size == (LEVEL_CELL, LEVEL_CELL)
 
 
 def test_writes_a_wrapped_sprite_sheet(built):
     with Image.open(built / "dance-sheet.png") as sheet:
-        assert sheet.size == (CELL_WIDTH * 8, CELL_HEIGHT * 2)  # 16 frames, 8 to a row
+        # 16 frames, 8 to a row, in cells drawn at the brief's detail level.
+        assert sheet.size == (LEVEL_CELL * 8, LEVEL_CELL * 2)
 
 
 def test_writes_a_looping_proof_at_the_declared_rate(built):
@@ -461,7 +466,7 @@ def test_a_set_whose_drive_fails_is_logged_failed_and_the_next_set_draws(tmp_pat
     from cag.static_sheet import projection_views
 
     cell = tmp_path / "cell.png"
-    image = Image.new("RGBA", (CELL_WIDTH, CELL_HEIGHT), (0, 0, 0, 0))
+    image = Image.new("RGBA", (LEVEL_CELL,) * 2, (0, 0, 0, 0))
     image.paste((200, 60, 60, 255), (100, 100, 200, 500))
     image.save(cell)
     static = {"bible": "A lounge performer.", "scale": 2.875, "location": None,

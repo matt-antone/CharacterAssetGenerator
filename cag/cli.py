@@ -14,7 +14,7 @@ from typing import Callable
 
 from langchain_core.language_models.chat_models import BaseChatModel
 
-from . import clips, comfy, pull
+from . import clips, comfy, geometry, pull
 from .animation import WHOLE_SET_SHEET, build_animation_graph
 from .assemble import (
     MANIFEST,
@@ -236,7 +236,17 @@ def render_set(
     }
 
 
-def build(
+def build(spec_path: Path, *args, **kwargs) -> Path:
+    """Draw one brief's package at its detail level: see `_build`.
+
+    Every cell of the package, and the finish's palette, is drawn at the
+    brief's `detail_level` on the detail ladder (`geometry.at_level`).
+    """
+    with geometry.using(geometry.at_level(load_spec(spec_path).detail_level)):
+        return _build(spec_path, *args, **kwargs)
+
+
+def _build(
     spec_path: Path,
     motion_path: Path | None,
     set_names: list[str] | None,

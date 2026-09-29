@@ -35,11 +35,8 @@ import numpy
 from PIL import Image
 
 from .geometry import (
-    ANIM_CONTACT_ROW,
-    CELL_HEIGHT,
-    CELL_WIDTH,
-    CONTACT_ROW,
     anim_subject_height_px,
+    current,
     subject_height_px,
 )
 #: Alpha at or below this counts as background when measuring the subject.
@@ -266,7 +263,7 @@ def key_art_scale(key_art: Image.Image, height_inches: float) -> float:
 def register(
     image: Image.Image,
     scale: float,
-    contact_row: int = CONTACT_ROW,
+    contact_row: int | None = None,
     anchor: tuple[float, float] | None = None,
 ) -> Image.Image:
     """Place a cutout on the canonical cell: scaled, heel on the baseline.
@@ -298,9 +295,11 @@ def register(
     # Airborne frames would need the motion sheet's own floor offset instead.
     # Pasted without a mask: the cell is empty, and using the subject as its own
     # mask would multiply alpha by itself and eat the antialiased edge.
-    cell = Image.new("RGBA", (CELL_WIDTH, CELL_HEIGHT), (0, 0, 0, 0))
+    size = current().cell
+    contact_row = current().contact_row if contact_row is None else contact_row
+    cell = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     if anchor is None:
-        offset_x = (CELL_WIDTH - (right - left)) // 2 - left
+        offset_x = (size - (right - left)) // 2 - left
     else:
         source_x, cell_x = anchor
         offset_x = round(cell_x - (source_x - origin_left) * scale)
@@ -314,7 +313,7 @@ def register(
 
 
 def mask_to_cell(
-    src: Path | str, dst: Path | str, scale: float, contact_row: int = CONTACT_ROW
+    src: Path | str, dst: Path | str, scale: float, contact_row: int | None = None
 ) -> Path:
     """Cut `src` out and save it registered into the cell at `dst`."""
     dst = Path(dst)
@@ -423,10 +422,10 @@ def contact_row(
     """The cell row a frame's feet land on: the contact row, or above it by as far
     as an airborne frame's lowest sole is off the floor."""
     if not airborne or not pts or not body_h:
-        return ANIM_CONTACT_ROW
+        return current().anim_contact_row
     px = anim_subject_height_px(height_inches) / body_h
     lowest = max(pts[name][1] for name in SOLES if name in pts)
-    return ANIM_CONTACT_ROW - max(0, round((floor_y - lowest) * px))
+    return current().anim_contact_row - max(0, round((floor_y - lowest) * px))
 
 
 def placement(
@@ -448,7 +447,7 @@ def placement(
     sit a few percent off `floor_y` by noise, and that would come out as jitter.
     """
     if not pts or not body_h or home is None:
-        return None, ANIM_CONTACT_ROW
+        return None, current().anim_contact_row
     px = anim_subject_height_px(height_inches) / body_h
     row = contact_row(pts, floor_y, body_h, height_inches, airborne)
 
@@ -473,7 +472,7 @@ def placement(
             middles.append((run[0] + run[-1]) / 2)
     if not middles:
         return None, row
-    return (statistics.median(middles), CELL_WIDTH / 2 + (torso_x(pts) - home) * px), row
+    return (statistics.median(middles), current().cell / 2 + (torso_x(pts) - home) * px), row
 
 
 def pose_to_cell(
@@ -725,7 +724,7 @@ def canvas_to_cells(
         )
     else:
         scale = anim_subject_height_px(height_inches) / standing
-    anchor = (statistics.median((left + right) / 2 for left, _, right, _ in boxes.values()), CELL_WIDTH / 2)
+    anchor = (statistics.median((left + right) / 2 for left, _, right, _ in boxes.values()), current().cell / 2)
 
     cells, outliers = {}, []
     for index, subject in subjects.items():

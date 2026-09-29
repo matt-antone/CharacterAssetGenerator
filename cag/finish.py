@@ -45,11 +45,13 @@ from typing import Callable, Sequence
 import numpy as np
 from PIL import Image, ImageFilter
 
+from .geometry import current
 from .snap import backdrop
 
 #: Bumped whenever the finish changes, so every finished set is redone.
-FINISH_VERSION = "finish/2"
-#: Colours in a set's palette.
+FINISH_VERSION = "finish/3"
+#: Colours in a set's palette, before detail levels set their own: a build's is
+#: its level's (`geometry.current().colours`, 161 at level 8).
 PALETTE_COLOURS = 64
 #: Beside the finished cells: the digest they were finished under.
 STAMP = "finish.sha"
@@ -165,7 +167,7 @@ def set_palette(reference: Path | np.ndarray, cells: Sequence[np.ndarray]) -> Im
     if not len(pool):
         return None
     return Image.fromarray(pool.reshape(1, -1, 3)).quantize(
-        colors=PALETTE_COLOURS, method=Image.Quantize.MEDIANCUT
+        colors=current().colours, method=Image.Quantize.MEDIANCUT
     )
 
 
@@ -186,7 +188,9 @@ def finish_cell(cell: np.ndarray, palette: Image.Image | None) -> np.ndarray:
 
 def finish_key(cuts: dict[int, Path], reference: Path) -> str:
     """Everything a set's finished cells are a function of."""
-    digest = hashlib.sha256(FINISH_VERSION.encode() + b"\0" + Path(reference).read_bytes())
+    digest = hashlib.sha256(
+        f"{FINISH_VERSION}\0{current().colours}\0".encode() + Path(reference).read_bytes()
+    )
     for index, path in sorted(cuts.items()):
         digest.update(f"\0{index}\0".encode())
         digest.update(Path(path).read_bytes())
@@ -229,7 +233,7 @@ def finish_set(
         Image.fromarray(finish_cell(cell, palette)).save(cells[index], format="PNG")
     stamp.write_text(key + "\n")
     print(
-        f"[{label}] cell finish: {len(cells)} cells on one {PALETTE_COLOURS}-colour palette",
+        f"[{label}] cell finish: {len(cells)} cells on one {current().colours}-colour palette",
         file=sys.stderr,
         flush=True,
     )

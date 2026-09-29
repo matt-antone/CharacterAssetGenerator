@@ -19,7 +19,7 @@ from urllib.parse import parse_qs, urlparse
 from PIL import Image
 
 from .assemble import MANIFEST, gif_proof, split_frame_sheet
-from .geometry import ANIM_CONTACT_ROW, CELL_HEIGHT, CELL_WIDTH, anim_subject_height_px
+from .geometry import LEGACY, Geometry, from_cell, using
 from .publish import publish
 from .spec import load_spec
 
@@ -36,8 +36,10 @@ def save_frame_sheet(out_dir: Path | str, name: str, png: bytes, fps: int) -> Pa
     with Image.open(BytesIO(png)) as image:
         if image.size != size:
             raise ValueError(f"edited sheet is {image.size}, the original is {size}")
-    columns = size[0] // CELL_WIDTH
-    cells = split_frame_sheet(BytesIO(png), columns * (size[1] // CELL_HEIGHT), columns)
+    geometry = package_geometry(dst.parent)
+    columns = size[0] // geometry.cell
+    with using(geometry):
+        cells = split_frame_sheet(BytesIO(png), columns * (size[1] // geometry.cell), columns)
     while len(cells) > 1 and not cells[-1].getchannel("A").getbbox():
         cells.pop()  # blank tail of the last row
 
@@ -125,6 +127,17 @@ def folders(root: Path) -> list[Path]:
     return [root, *sorted(p for p in root.rglob("*") if p.is_dir())]
 
 
+def package_geometry(out_dir: Path) -> Geometry:
+    """The cell geometry a package was built at, from its manifest's `cell`.
+
+    A package from before detail levels drew their own cells has 560px cells,
+    and so does one with no manifest.
+    """
+    path = out_dir / MANIFEST
+    cell = json.loads(path.read_text()).get("cell") if path.is_file() else None
+    return from_cell(cell[0]) if cell else LEGACY
+
+
 def frame_sheet_block(out_dir: Path, sheet: str) -> dict:
     """What the manifest the build wrote says about this sheet.
 
@@ -150,17 +163,22 @@ def locate(root: Path, name: str, png: bytes) -> dict | None:
     for folder in folders(root):
         path = folder / Path(name).name
         if path.is_file() and path.read_bytes() == png:
+            geometry = package_geometry(folder)
             found = {
                 "folder": folder.relative_to(root).as_posix(),
                 "height": None,
                 "row": None,
                 "fps": frame_sheet_block(folder, path.name).get("fps"),
+                "cell": geometry.cell,
+                "floor": geometry.anim_contact_row,
             }
             spec_path = find_spec(folder)
             if spec_path is not None:
                 spec = load_spec(spec_path)
                 found["height"] = spec.height
-                found["row"] = ANIM_CONTACT_ROW + 1 - anim_subject_height_px(spec.height_inches)
+                found["row"] = (
+                    geometry.anim_contact_row + 1 - geometry.anim_subject_height_px(spec.height_inches)
+                )
             return found
     return None
 

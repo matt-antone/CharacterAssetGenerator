@@ -90,8 +90,8 @@
    <canvas id="view" width="560" height="560" aria-label="Current frame. Drag to move it."></canvas>
    <!-- Guides from cag/geometry.py: cell centre, and ANIM_CONTACT_ROW where the heel lands. -->
    <svg id="guides" viewBox="0 0 560 560" aria-hidden="true">
-    <line x1="280" y1="0" x2="280" y2="560"/><line x1="0" y1="527" x2="560" y2="527"/>
-    <text x="8" y="520">floor</text>
+    <line id="centre" x1="280" y1="0" x2="280" y2="560"/><line id="floor" x1="0" y1="527" x2="560" y2="527"/>
+    <text id="floor-label" x="8" y="520">floor</text>
     <g id="crown" display="none"><line class="crown" x1="0" x2="560"/><text x="8"></text></g>
    </svg>
    <div id="status" role="status"></div>
@@ -144,8 +144,19 @@
 </section>
 
 <script>
-const CELL = 560; // cag/geometry.py CELL_WIDTH/CELL_HEIGHT
-const AX = 280, AY = 527; // scale anchor: cell centre on the floor guide (ANIM_CONTACT_ROW)
+// The package's cell and floor row, which `cag edit` reads off its manifest: a
+// build draws cells at its detail level's size (cag/geometry.py). Opened from
+// disk, a sheet is taken to have the 560px cells builds drew before that.
+let CELL = 560, AX = 280, AY = 527; // scale anchor: cell centre on the floor guide
+function setCell(size, floor) {
+  CELL = size; AX = size / 2; AY = floor;
+  $('view').width = $('view').height = size;
+  $('guides').setAttribute('viewBox', `0 0 ${size} ${size}`);
+  for (const [id, attrs] of [['centre', {x1: AX, x2: AX, y2: size}], ['floor', {y1: AY, y2: AY, x2: size}],
+                             ['floor-label', {y: AY - 7}]])
+    for (const [k, v] of Object.entries(attrs)) $(id).setAttribute(k, v);
+  $('crown').children[0].setAttribute('x2', size);
+}
 const $ = id => document.getElementById(id);
 const served = location.protocol.startsWith('http'); // under `cag edit`, not opened from disk
 function crown(spec) { // the brief's height, where a standing frame's crown lands
@@ -161,6 +172,12 @@ let img, name, folder = null, cols, count = 0, offsets = [], thumbs = [], cur = 
 $('file').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   name = f.name; img = new Image(); img.src = URL.createObjectURL(f); await img.decode();
+  let found = null, refused = null;
+  if (served) { // only the bytes say whose sheet this is: every character has a dance-sheet.png
+    const r = await fetch(`/locate?name=${encodeURIComponent(name)}`, {method: 'POST', body: f});
+    if (r.ok) found = await r.json(); else refused = await r.text();
+  }
+  setCell(found && found.cell || 560, found && found.floor || 527);
   cols = img.width / CELL;
   count = cols * (img.height / CELL);
   while (count > 1 && empty(count - 1)) count--; // trailing cells of the last row are blank
@@ -175,10 +192,9 @@ $('file').onchange = async e => {
   $('frame').max = count - 1; $('sheet').textContent = name; $('stage').classList.add('loaded');
   status(''); e.target.blur(); show(0);
   crown(null); folder = null;
-  if (served) { // only the bytes say whose sheet this is: every character has a dance-sheet.png
-    const r = await fetch(`/locate?name=${encodeURIComponent(name)}`, {method: 'POST', body: f});
-    if (!r.ok) return status(`${await r.text()}. Save is off for this sheet.`, true);
-    const found = await r.json(); folder = found.folder; crown(found);
+  if (refused !== null) return status(`${refused}. Save is off for this sheet.`, true);
+  if (found) {
+    folder = found.folder; crown(found);
     if (found.fps) $('fps').value = found.fps; // the rate it was rendered for; Save writes it back
     $('sheet').textContent = `${found.folder === '.' ? '' : found.folder + '/'}${name}`;
   }
