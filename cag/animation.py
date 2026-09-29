@@ -55,6 +55,9 @@ class AnimationState(TypedDict, total=False):
     #: Locked appearance and scale, carried over from the static sheet.
     bible: str
     key_art: Path
+    #: The image a restyle takes its art from, when not `key_art`: the approved
+    #: key art, for a set whose hands match it (`video.video_frames`).
+    style_reference: Path
     scale: float
     motion: MotionSheet
     set_name: str

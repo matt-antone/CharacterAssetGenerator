@@ -72,7 +72,21 @@
       "image": "$image2"
     },
     "_meta": {
-      "title": "image 2: the set reference"
+      "title": "image 2: the style — the key art where the set's hands match it, else the set reference"
+    }
+  },
+  "up": {
+    "class_type": "ImageScaleBy",
+    "inputs": {
+      "image": [
+        "in1",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "scale_by": 1.5
+    },
+    "_meta": {
+      "title": "1.5x canvas: the restyle's blocks come out smaller and the face modelled, not blown out"
     }
   },
   "pos": {
@@ -88,7 +102,7 @@
       ],
       "prompt": "$prompt",
       "image1": [
-        "in1",
+        "up",
         0
       ],
       "image2": [
@@ -110,7 +124,7 @@
       ],
       "prompt": "",
       "image1": [
-        "in1",
+        "up",
         0
       ],
       "image2": [
@@ -123,7 +137,7 @@
     "class_type": "VAEEncode",
     "inputs": {
       "pixels": [
-        "in1",
+        "up",
         0
       ],
       "vae": [
@@ -175,11 +189,25 @@
       ]
     }
   },
+  "down": {
+    "class_type": "ImageScaleBy",
+    "inputs": {
+      "image": [
+        "V",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "scale_by": 0.6666667
+    },
+    "_meta": {
+      "title": "back to the SCAIL frame's size, which the cut-out assumes"
+    }
+  },
   "O": {
     "class_type": "SaveImage",
     "inputs": {
       "images": [
-        "V",
+        "down",
         0
       ],
       "filename_prefix": "cag-restyle"

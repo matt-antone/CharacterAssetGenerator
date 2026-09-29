@@ -138,6 +138,18 @@ the hardware and the bill.
   255). A profile names a stage's own graph with `"workflow"`; `cloud` keeps
   the shared Qwen-Image-2.1 restyle, which is what its verified runs used. The
   environment variable and the CLI flag still beat the profile.
+  Then, judged on the face (the first thing anyone looks at), two changes the
+  user chose (2026-09-29): the restyle is drawn on a **1.5x canvas** inside the
+  graph and scaled back (smaller blocks, a modelled face instead of a flat
+  blown-out one; 76 s a frame, about 23 minutes for a 15-frame set; 2x drew
+  finer still at 132 s), and it takes its art from the **approved key art**
+  rather than the turned set reference (`style_reference`), which kept the key
+  art's shading. Only where the set's hands match the key art's: a restyle
+  copies what it is shown, and the key art does not hold a set's own props.
+  Ruled out on the same frame: a 256-colour finish (no visible change: the
+  flatness was the restyle's), denoise 0.85 (none), and asking in the prompt
+  for fine pixels or a detailed face (the jacket drifted to magenta and was cut
+  out, or a dithered checkerboard came back).
 - **Every set's cells get the cell finish** (`cag/finish.py`), restyled or
   `--no-restyle`, unless the build says `--no-finish` (with `--machine` only;
   without it the build refuses). It runs on the cells, after the shrink: the

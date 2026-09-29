@@ -201,13 +201,14 @@ def video_frames(
         # The restyles: one per traced frame, of the SCAIL frame at its traced time.
         restyle_graph = Path(graphs["restyle"])
         restyle_extra = machine.placeholders("restyle")
+        style = Path(state.get("style_reference") or reference)
         claim_frames(
             state,
             "video\t"
             + _sha(
                 VIDEO_VERSION, motion_digest(motion), video_key, json.dumps(list(made.index)),
                 restyle_graph.read_bytes(), RESTYLE, json.dumps(restyle_extra, sort_keys=True),
-                str(machine.seed),
+                str(machine.seed), style.read_bytes(),
             ),
         )
         for frame, pick in zip(motion.frames, made.index, strict=True):
@@ -215,7 +216,7 @@ def video_frames(
                 sources[frame.index] = draw_fn(
                     RESTYLE,
                     frame_path(state, "source", frame.index),
-                    references=[picked(pick), reference],
+                    references=[picked(pick), style],
                     workflow=restyle_graph,
                     timeout=machine.restyle_timeout,
                     seed=machine.seed,

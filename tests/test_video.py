@@ -444,3 +444,17 @@ def test_no_finish_leaves_the_cells_as_cut_out_and_forgets_the_finish(world, cap
     assert "cell finish" not in capsys.readouterr().err
     world["build"]()
     assert "cell finish: 16 cells" in capsys.readouterr().err, "turned back on, it finishes again"
+
+
+def test_a_restyle_takes_its_art_from_the_style_reference_and_a_new_one_redraws(world, tmp_path):
+    """Against the turned set reference Belter's restyled dance came back flat, her
+    face blown out; against the approved key art it kept its shading."""
+    key = tmp_path / "approved-key.png"
+    Image.new("RGB", (64, 96), (255, 0, 255)).save(key)
+    _, restyle = world["build"](style_reference=key)
+    assert restyle.calls and all(call["refs"][1] == key for call in restyle.calls)
+    _, again = world["build"](style_reference=key)
+    assert again.calls == [], "the same style is cached"
+    Image.new("RGB", (64, 96), (250, 0, 250)).save(key)
+    _, redrawn = world["build"](style_reference=key)
+    assert len(redrawn.calls) == len(restyle.calls), "a new style image redraws every restyle"

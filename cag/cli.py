@@ -213,11 +213,17 @@ def render_set(
         motion.view, detail_after_key=backend == "codex", view_draw_fn=view_draw_fn,
     )
     log(f"[{set_name}] reference: {key_art.name}")
+    # A restyle drawn against the approved key art keeps its shading: against the
+    # turned set reference Belter's dance came back flatter, her face blown out
+    # (2026-09-29). Only where the hands match, since a restyle copies what it is
+    # shown and the key art does not hold a set's own props.
+    style = static["sources"][KEY_VIEW] if spec.animation_props.get(set_name, ()) == spec.props else None
     animated = build_animation_graph(text_model(work_dir), draw_fn=draw_fn, frame_sheet_mode=frame_sheet_mode).invoke(
         {
             "spec": spec,
             "bible": static["bible"],
             "key_art": key_art,
+            **({"style_reference": style} if style else {}),
             "scale": static["scale"],
             "motion": motion,
             "set_name": set_name,
