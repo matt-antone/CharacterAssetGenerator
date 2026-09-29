@@ -254,9 +254,9 @@ title, so whoever starts it names it.
 
 Keep the names in `bin/agent` and this table in step.
 
-## Real renders happen on main
+## Production renders happen on main
 
-A render that counts is drawn on `main`, from the committed code, into the
+A production render is drawn on `main`, from the committed code, into the
 repo's own `work/`. A branch or a worktree renders only to try something out:
 its art is scratch, it is never the version anyone ships, and a package built
 there is not a package the roster has. Land the code first, then render.
