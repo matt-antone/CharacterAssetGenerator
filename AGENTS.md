@@ -281,7 +281,10 @@ frame at 576x864, so its detail now reaches the cell instead of being shrunk
 away. The manifest records `cell` and `detail_level`, and `cag edit` sizes its
 canvas from the manifest. The model is still asked for its level in words and
 shown the level's sample, and on `local` the words do nothing: the cell is
-where the level is made.
+where the level is made. Belter's `club-01` dance at level 8 on `local16`, `--no-restyle`, was
+approved by the user against the same frame at the old 560 px cell
+(2026-09-29): one set, judged by eye, approved as the look, not measured as a
+floor.
 
 Views are cached like any render: a source drawn before this is kept until it
 is deleted (`work/<slug>/source/{front,back,profile}.png`, and a set's
