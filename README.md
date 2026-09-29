@@ -1,7 +1,7 @@
 # CharacterAssetGenerator
 
-Turns a short character brief into game-ready sprite assets: a projection sheet
-of static views, and a masked animation set per animation the brief names.
+Turns a character brief into static views, animated frame sheets, GIF proofs,
+and a manifest for playback.
 
 ```bash
 uv run cag build specs/default/belter.json --draw-backend codex
@@ -13,121 +13,112 @@ again for a redraw:
 
 ```bash
 uv run cag approve specs/default/belter.json
+uv run cag build specs/default/belter.json --draw-backend codex
 ```
 
-Once approved, that writes `outputs/default/belter/`: four projection cells under `views/`,
-`location.png` if the brief names a location, then a
-sprite sheet and a GIF proof for each of the brief's seven sets, a gallery page
-tying them together, and a `manifest.json` for the front end: cell size, view
-paths, and per set the frame count, columns, fps, playback and file names. Play
-from the manifest's fps and playback — `cag edit` rewrites the fps when a save
-rebuilds the proof at another rate, so it always matches the GIF beside it.
-`playback` is `loop`, `pingpong` or `once`; a pingpong sheet holds its frames
-once and is played down and back up. Sets render in order, each drawn from the key art and
-from the last frame of the set before it, and one that fails does not take the others down with it.
+After approval, the build writes `outputs/default/belter/`: the enabled
+projection cells and portraits under `views/`, `location.png` if the brief
+names a location, a frame sheet and GIF proof for each completed animation set,
+a gallery page, and `manifest.json`. `enabled.json` controls which views and
+sets run; an explicit `--set` overrides the animation switches.
 
-By default a set writes its own sheet from the brief's prose, and nothing below
-is needed. A brief that wants a traced
-[MotionArtist](https://github.com/matt-antone/MotionArtist) sheet instead names
-one, and every build picks it up:
+Play from the manifest's fps and playback. `playback` is `loop`, `pingpong` or
+`once`; a pingpong frame sheet holds its frames once, and the player walks them
+forward and back. Sets run in order. The frame-sheet path carries the previous
+set's last frame as a reference; the video path animates each set reference
+from its own drive video. A failed set is logged and later sets can continue.
+Rebuilding retries missing renders and reuses completed work.
+
+Keep `index.html` beside its assets: send the complete package folder or the
+images themselves. The HTML alone has broken relative image links. A `--set`
+build rewrites the gallery and manifest to the sets that ran; follow it with a
+full build to restore the complete package listing.
+
+## Motion bundles and written motion sheets
+
+A set can name a traced [MotionArtist](https://github.com/matt-antone/MotionArtist)
+motion bundle:
 
 ```json
-"dance": { "motion": "shuffle-1" }
+"dance": { "motion": "club-01" }
 ```
 
-A set names a sheet *instead of* prose, never beside it: one set is driven by
-one prompt, and the traced sheet is a prompt — its arc and its per-frame cues
-are what the keyframer reads. A brief that writes both is refused rather than
-asked which of the two to follow.
-
-`"motion": "auto"` has one chosen instead, spread across the roster so a cast
-does not all dance the same and stable so a character keeps its dance between
-runs. See what there is to name with:
-
-```bash
-uv run cag motions
-```
-
-A set with no traced sheet writes its own, and the brief is where that
-character's loop rule goes:
+Or it can ask the session to write a motion sheet from prose:
 
 ```json
 "dance": { "intent": "Refined lounge sway loop...", "playback": "pingpong" }
 ```
 
-`playback` is `loop`, `pingpong` or `once`. It is exclusive with `motion`: a
-traced sheet already carries how it plays, so a brief that sets both is refused
-rather than asked which to believe. Left out, the set plan decides.
+A set chooses one source: `motion` cannot be combined with prose intent or a
+playback override. A traced motion sheet already carries its rate, facing,
+frames and playback. For a written motion sheet, the brief can specify
+`playback` as `loop`, `pingpong` or `once`; otherwise `cag/sets.py` supplies the
+default. The defaults are sixteen frames, six fps for dance and eight for the
+other sets; dance and sing loop, and the others run once.
 
-It names the sheet, never the file. Sheets live in `motions/<name>/` in this
-repo, so a brief is portable and a sheet cannot be cleaned away from under the
-roster by the checkout that traced it. Each one is a MotionArtist bundle, and
-its `manifest.json` is what makes it one: the layout it declares, the header a
-brief picks it by, and the files it contains, including which one holds the
-motion. Adding a sheet is copying the bundle:
+`"motion": "auto"` chooses from the installed library using the character slug
+and set name. The choice stays stable while the library stays the same.
+
+Install bundles through the checked pull command, which reads
+`MOTION_ARTIST_REMOTE` (normally `kadrive:MotionArtist`):
 
 ```bash
-cp -R ../MotionArtist/work/shuffle motions/shuffle-1
+uv run cag motions pull --list
+uv run cag motions pull club/club-01
+uv run cag motions
 ```
 
-`--motion-root` reads them from somewhere else, and `--motion` points one run at
-one file, overriding whatever the brief names:
+A bundle lands unrenamed at `motions/<set>/<name>/`. Pull checks the manifest,
+file hashes, motion sheet, source clip and any bundle mask or head boxes before
+replacing an installed copy. A re-cut with a new name lands beside the old one:
+repoint briefs and remove the superseded bundle explicitly. Source clips and
+bundle masks are git-ignored, so pull again on a fresh clone.
+
+`cag motions` reports clip, mask and head-box status as `ok`, `missing`, `stale`
+or `none`. Read playback before seam quality: a pingpong returns along the same
+frames and never needs a last-to-first blend. `cag clips` only backfills old
+bundles; a missing or stale tracer-supplied clip must be pulled again.
+
+`--motion-root` reads another library. `--motion` overrides a single set's
+motion source for one build, loading the bundle manifest when present:
 
 ```bash
-uv run cag build specs/default/crooner.json --draw-backend codex --set dance --motion ../MotionArtist/work/shuffle/motion.json
+uv run cag build specs/default/crooner.json --draw-backend codex --set dance --motion motions/club/club-01/motion.json
 ```
 
 ## How it runs
 
-Two LangGraph runs. The static one goes first, because everything downstream
-references what it locks:
+Two LangGraph runs: the static graph first, then one animation graph per set.
 
 | Step | What it does |
 | --- | --- |
-| `bible` | One model call turns the brief into a locked visual description. Every later prompt quotes it verbatim, so identity cannot drift. Saved to `work/<slug>/bible.txt`, so a later run can pin the same identity instead of writing a fresh description and accepting the drift. |
-| `key_art` | Draws the front-left three-quarter reference on a magenta backdrop. |
-| `approval` | Stops the run until `uv run cag approve` signs off on that key art. Every other render quotes it, so a wrong one is a whole wrong character. The record in `work/<slug>/key-approved.txt` holds the art's digest, so a redraw revokes the approval rather than inheriting it. |
-| `scale` | Measures the character's crown-to-heel span off the key art. Read once, reused forever. |
-| `projection` | Draws front, back and profile, each with the key art attached as a reference image. |
-| `mask` | Cuts every view out and registers it into the cell. |
+| `bible` | Assembles identity text from the brief's `build`, `face`, `hair`, `outfit` and `palette` fields. Edit the brief to change it. Only a brief with none of those fields requests session-written text and caches it in `work/<slug>/bible.txt`. |
+| `key_art` | Draws the front-left three-quarter reference on a magenta backdrop. Local builds use material swatches as the detail reference. |
+| `approval` | Stops until a human approves this exact key art. The approval stores the image digest, so replacing the image revokes it. |
+| `scale` | Measures the approved key art's crown-to-heel span to scale the static views. |
+| `projection` | Draws enabled front, back and profile views from the key art. Local builds turn it with a dedicated view graph. |
+| `mask` | Cuts the views out and registers them into cells. |
 
-Each set needs a motion sheet first. MotionArtist traces those from real
-footage, but only some sets have footage — so for the rest a motion director
-writes the frame plan from the brief's prose intent (`cag/motion_writer.py`),
-in the same shape MotionArtist emits. Dance is the set worth tracing: a written
-one reads as a character standing still with the arms moving, because prose
-flattens a pose back towards neutral and only a traced sheet carries the
-landmarks `poses` needs. The graph below cannot tell where a
-sheet came from, with one exception noted in `poses`.
+Each animation gets a set reference with its own facing and held props. A set
+whose hands and facing match the key art can reuse it. Traced motion bundles
+supply photographs; written motion sheets have no photographic pose reference.
 
-Then each animation set, drawn the way a studio draws one:
+The animation route depends on the backend and whether a machine is selected:
 
-| Role | What it does |
+| Route | How it draws |
 | --- | --- |
-| `poses` | Draws each frame's pose as a stick figure from the sheet's landmarks. A generator flattens a written pose back towards neutral; it cannot argue with a picture. Only traced sheets carry landmarks, so a written set gets no skeleton — the one real quality difference between the two. |
-| `direct` | The motion director binds the motion source to this character: prop hand, how the costume moves, what must not change. |
-| `sheet` | One render of the whole set: eight figures on one canvas, in reading order, with the pose skeletons composed into a matching grid. The generator cannot follow a measurement, but it keeps figures it can see side by side the same size unasked — so the prompt names no size at all. Figures are found afterwards by the backdrop between them, never by a fixed grid; a render with the wrong count is kept as `sheet-NN.rejected-*.png` and drawn again. |
-| `mask` | Every frame cut out and registered at one scale per sheet: the median of what each pose reads, or the median figure height where a written set has no landmarks. |
+| Frame-sheet path | Draws chunks of up to eight figures, then finds and slices the figures by their backdrop. Traced photographs become pose cards tiled into a matching pose grid. Photographic prompts omit the bible, director note and per-frame cues. Written motion sheets use prose direction. A wrong figure count is rejected and retried once. |
+| Pose-edit path | Under `comfy` or `local`, a traced set without a machine profile re-poses its set reference into each photograph, one render per frame. |
+| Video path | Under `comfy` or `local` with `--machine`, a traced set animates its set reference along a drive video through SCAIL-2, then optionally restyles the selected frames. |
 
-That is two image calls per sixteen-frame set instead of sixteen, and identity
-cannot drift between frames the generator drew in one go. `--per-frame` keeps
-the older path — the keyframer draws `key` and `pilot` frames first, the tweener
-fills each in-between from the frame before it — which pays for per-frame
-outlines twice as thick with sixteen chances for the costume to wander.
-
-Frame count, fps, view and playback come from the set's plan in `cag/sets.py`,
-not from the brief: `dance` and `sing` loop, `flinch`, `guard`, `entrance`,
-`victory` and `ko` run once. All seven are sixteen frames: `dance` plays at six
-fps, the rest at eight. The plan only decides for a set nobody traced: a traced
-bundle carries its own rate and playback and those win, because the frames were
-cut off footage at that speed and another rate is the dance at the wrong tempo.
-So how a set repeats is written down once, in whichever of the three places owns
-it: the trace, or this character's brief, or the plan. Belter's dance can
-pingpong while the crooner's loops without either of them touching `sets.py`.
+`--per-frame` selects the older keyframe/tween graph instead of the default
+frame-sheet graph. Use the default graph for the pose-edit and video routes.
+Frames are cut out and registered before assembly. Video-path cells also get
+the cell finish described below.
 
 ## Who draws
 
-Every render goes through one backend, picked per build:
+Choose a draw backend for each build:
 
 ```bash
 uv run cag build specs/default/belter.json --draw-backend codex   # OpenAI, via codex
@@ -136,8 +127,8 @@ uv run cag build specs/default/belter.json --draw-backend local   # your own Com
 ```
 
 There is no default: a build that names none, by flag or `CAG_DRAW_BACKEND`,
-stops before drawing anything. The rest of a build — briefs, prompts, the
-key art gate, the mask, assembly, and the text — is the same whichever draws.
+stops before drawing anything. The backend determines the render workflows;
+the approval gate, package format and session-written text remain shared.
 
 **codex** is an agent with an image tool: it is handed the prompt plus
 instructions to save the file and to redraw until the backdrop is magenta.
@@ -166,10 +157,11 @@ A render with fewer references than there are slots drops the unused
 through, and one left with none goes, so batched references shrink on their own.
 A render with more references than slots fails before anything is uploaded.
 
-Every reference is uploaded letterboxed onto a 1536 square, in its own border
-colour. ComfyUI batches images as one tensor and crops each to the first one's
-size to do it, which would cut the outer pose cards off a landscape pose grid
-batched behind portrait key art.
+Ordinary image references are uploaded letterboxed onto a 1536 square, in
+their own border colour; video inputs preserve their frames. ComfyUI batches
+images as one tensor and crops each to the first one's size to do it, which
+would cut the outer pose cards off a landscape pose grid batched behind
+portrait key art.
 
 The magenta check still applies: a render with scenery behind the character is
 drawn again, the same as under codex.
@@ -181,16 +173,91 @@ no partner nodes: Nano Banana does not exist on a local server. Its default
 workflow is `comfy/qwen-image-2.1.json` (`--comfy-workflow` or
 `CAG_LOCAL_COMFY_WORKFLOW` names another). Qwen-Image-2.1's weights are under
 the Qwen Research License, research and evaluation only, so a package meant for
-anything else draws with an Apache-licensed workflow instead.
+anything else requires a suitable licence for every model contributing to it.
 
-A traced set under either workflow backend is drawn a frame at a time by
-`comfy/pose-edit.json` (`--comfy-pose-workflow` or `CAG_COMFY_POSE_WORKFLOW`):
+Without a machine profile, a traced set under either workflow backend is drawn
+a frame at a time by `comfy/pose-edit.json` (`--comfy-pose-workflow` or
+`CAG_COMFY_POSE_WORKFLOW`):
 Qwen-Image-Edit-2511 at fp8 with the AnyPose LoRAs and the Lightning 4-step
 LoRA, which re-poses the set's reference into each traced photograph. Every file
 it loads runs on a 16 GB card, so Comfy Cloud and a local server draw the same
 dance. Each frame is then snapped back onto the reference's pixel grid and
 palette, with a black outline, on exact magenta (`cag.snap`): the workflow keeps
 the character, not the pixel art. The render as drawn is kept as `NN.raw.png`.
+
+### Local views
+
+Local key art uses material swatches from `cag/references/detail-level-10-tiles.png`
+instead of a full character detail sample, which the key-art model tended to
+copy. A detail level with no swatch sample uses words alone.
+
+Other local views turn the approved key art using `comfy/view-edit-2511.json`
+(`CAG_LOCAL_VIEW_WORKFLOW`): Qwen-Image-Edit 2511 with Lightning and
+Multiple-Angles LoRAs. The prompt supplies facing, stance and hands; the image
+supplies identity. The build checks the view graph's models before drawing.
+Existing projection views and set references remain cached until their source
+images are removed; changing a prompt alone does not replace them.
+
+### The video path
+
+A machine profile selects hardware settings and model files separately from
+the draw backend:
+
+```bash
+uv run cag machines
+uv run cag machines --check cloud
+uv run cag build specs/default/belter.json --draw-backend comfy --machine cloud
+```
+
+`CAG_MACHINE` supplies a profile by default; `--no-machine` disables it for one
+build. Profiles live in `comfy/machines/`. `cloud` is the verified cloud profile;
+`local16` describes the RX 9070 setup; `smoke4` is a wiring check, never an art
+quality reference. Local builds preflight the video and required restyle models.
+The mask pass's SAM3 checkpoint warns if missing, since not all footage uses it.
+
+A traced set needs its declared source clip. Missing or stale footage fails the
+set with a recovery command; it never silently switches to pose editing.
+
+The drive video is cropped and resampled from the clip. Its drive mask comes
+from a valid bundle mask, a threshold on a light backdrop, or a SAM3 mask pass.
+Face blur uses bundle head boxes where available and mask-based head detection
+otherwise. Frames where a head cannot be found are reported. SCAIL animates the
+set reference along this drive; each traced frame then selects the SCAIL frame
+at its trace index. By default Qwen-Image-2.1 restyles each selection.
+
+`--no-restyle` copies those SCAIL frames back to the set reference's dimensions
+instead. Both modes finish the cells after shrinking: remove magenta fringe,
+quantize to one 64-colour palette per set without dithering, and add a 1px black
+outline inside the silhouette. Cut-outs live in `cells-cut/<set>/`; finished
+cells in `cells/<set>/`. `--no-finish` skips that step. Both flags require a
+machine profile.
+
+The caches follow their dependencies:
+
+- `work/drive/` shares drive videos across characters and locks cutting so
+  parallel builds do the work once. Clip, bundle-mask and head-box changes
+  invalidate the drive. A changed SAM3 graph or prompt rebuilds a drive that
+  used the mask pass and invalidates its SCAIL video and selected frames too.
+  An unused mask-pass change leaves threshold and bundle-mask builds cached.
+- `work/<slug>/video/<set>/` caches SCAIL output and records submitted job IDs
+  in `pending.json`, so an interrupted build resumes the job. A changed set
+  reference, SCAIL graph or seed selects another video. `CAG_VIDEO_SEED` sets
+  the seed for another roll.
+- `source/<set>/` caches selected frames with a `drawn.sha` stamp. Changing the
+  restyle graph or prompt preserves the SCAIL video but moves the old frames
+  into `superseded/`. Switching `--no-restyle` does the same. Failed restyles
+  are retried individually. The cell finish has its own content digest.
+
+SCAIL caches created before the mask-pass dependency was included are replaced
+on the next build that uses a SAM3 drive. Existing threshold and bundle-mask
+cache keys are unchanged.
+
+**The shipped Qwen-Image-2.1 workflow is research-only.** `--no-restyle` does
+not clear that restriction for a local build: its key art, and therefore its
+set reference and animation, still derive from Qwen-Image-2.1. Do not ship those
+packages until the licensing is cleared. See [AGENTS.md](AGENTS.md) for measured
+runs and their limits: there is no established pose-fidelity floor, and one
+character's successful render is not evidence for the whole cast.
 
 ## Who writes
 
@@ -214,13 +281,14 @@ instead.
 
 ## Every set needs a hand pass
 
-Expect to nudge frames after a build. The generator draws a set's figures
-side by side, but never at fixed positions: each figure is found by the
-backdrop around it, cut out and registered into its cell on its own. Scale holds
-across a sheet; placement does not. So a figure can sit a few pixels left, right,
-high or low of its neighbours, and a loop that should stand still will jitter or
-slide. The mask cannot tell a drift from a deliberate step, so it leaves both
-alone. Deciding which is which is a person's job.
+Review the GIF proofs after a build. On the frame-sheet path, the generator
+draws figures side by side without fixed positions: each is found by its
+backdrop and registered into a cell. Scale holds across a frame sheet; placement
+can drift. Pose-edit and video frames share a canvas and registration transform,
+but still need visual review. A figure can sit a few pixels left, right, high
+or low of its neighbours, making a stationary loop jitter or slide. The mask
+cannot tell drift from a deliberate step, so it leaves both alone. Deciding
+which is which is a person's job.
 
 `uv run cag edit` serves a small editor over the outputs, or one character's
 folder:
@@ -230,10 +298,10 @@ uv run cag edit
 ```
 
 Open `http://127.0.0.1:8765/` (`--port` to change it) and pick a
-`<set>-sheet.png` from under that folder. Every character's sheets share the
+`<set>-sheet.png` from under that folder. Every character's frame sheets share the
 same names, so the editor matches the one you open to its folder by contents:
 that folder's brief (found anywhere under `specs/` by slug) sets the height guide, and Save
-writes back there. A sheet that isn't under the folder won't save.
+writes back there. A frame sheet that isn't under the folder won't save.
 
 1. **Play** to watch the loop. Changing fps while it plays takes effect at once.
 2. Pause, then pick the frame that jumps: click it in the filmstrip, drag the
@@ -246,10 +314,11 @@ writes back there. A sheet that isn't under the folder won't save.
    If a frame reads bigger or smaller than its neighbours, scale it with `[` and
    `]` (`Shift` for 10%) or type a %. It scales about the floor point on the
    centre line, so feet stay planted.
-4. **Save sheet** overwrites the sheet in place and rebuilds `<set>-proof.gif`
-   beside it at the fps in the box, then closes the sheet and shows the result
-   on the stage. If the save fails, the sheet stays open with your edits. Frames
-   you moved carry a dot in the filmstrip. With `CAG_OUTPUT_REMOTE` set (or
+4. The **Save sheet** button overwrites the frame sheet and rebuilds
+   `<set>-proof.gif` beside it at the fps in the box, then closes the frame sheet
+   and shows the result on the stage. If the save fails, the frame sheet stays
+   open with your edits. Frames you moved carry a dot in the filmstrip.
+   With `CAG_OUTPUT_REMOTE` set (or
    `--output-remote`), Save then publishes that character's package, so the
    shared copy gets the edit too; `--no-publish` turns that off.
 
@@ -266,8 +335,28 @@ writes back there. A sheet that isn't under the folder won't save.
 Frames are clipped to their own cell, so a nudge can push art off the edge but
 never into a neighbour. The editor changes pixels only: the fps box does not
 write back to the set's plan, and **a later `uv run cag build` of that set overwrites
-the sheet and loses the edits**. Opened straight from disk instead of through
-`uv run cag edit`, Save downloads the sheet and leaves the proof alone.
+the frame sheet and loses the edits**. Opened straight from disk instead of through
+`uv run cag edit`, Save downloads the frame sheet and leaves the proof alone.
+
+## Publishing
+
+Set `CAG_OUTPUT_REMOTE=kadrive:CharacterAssetGenerator/outputs`, or pass
+`--output-remote`, to copy each package after a build or editor save. Publishing
+uses `rclone copy --checksum`, never sync or remote deletion. `--no-publish`
+disables it. Builds stopped for key-art approval publish nothing; failed sets
+can leave a partial package, and publish failures warn without failing a build.
+
+To publish existing packages without rendering:
+
+```bash
+uv run cag publish specs/default/belter.json
+uv run cag publish --all
+```
+
+The remote must include its colon, and rclone must already be configured.
+Encrypted configs need `RCLONE_CONFIG_PASS` because publishing is noninteractive.
+Google Drive previews HTML as text: share the images or download the whole
+package folder before opening its gallery locally.
 
 ## Constraints this was built under
 
@@ -329,11 +418,11 @@ so a character renders slightly larger there than on the static sheet, and the
 floor sits six inches off the bottom edge so a trailing foot or a shadow has
 somewhere to go. The editor's floor line is that `527` row.
 
-Static views take their scale from the key art. Animation frames take one scale
-per sheet, read off that set's own poses (see `mask` above), because a frame is
-neither standing nor drawn at the key art's size. Either way the scale is
-applied unchanged to every figure, so a crouch renders shorter instead of being
-stretched back to standing height.
+Static views take their scale from the key art. Animation frames drawn together
+take one scale per frame sheet, read from the poses or figure heights. Pose-edit
+and video frames use one shared canvas transform across the set. Either way,
+the scale is applied unchanged to every figure, so a crouch renders shorter
+instead of being stretched back to standing height.
 
 `character-left` and `character-right` name the character's own sides.
 `screen-left` and `screen-right` name position in the image. A prop is locked to
