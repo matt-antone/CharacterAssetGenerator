@@ -128,6 +128,22 @@ class Clip:
         return 0 <= self.frame_at(t) < self.frame_count
 
 
+#: How far below the ears the nose sits, as a share of the ears' spread, past
+#: which a traced head is bowed. Upright heads on club-01 and emote-02 measured
+#: 0.02-0.31; emote-01's KO bows to 0.57-0.85 from its fifth frame on.
+BOWED_PITCH = 0.45
+
+
+def head_bowed(pts: dict[str, list[float]]) -> bool:
+    """Whether a traced pose's head is bowed, read off its landmarks."""
+    try:
+        ear_y = (pts["earL"][1] + pts["earR"][1]) / 2
+        spread = abs(pts["earL"][0] - pts["earR"][0])
+        return spread > 0 and (pts["nose"][1] - ear_y) / spread > BOWED_PITCH
+    except (KeyError, IndexError, TypeError):
+        return False
+
+
 @dataclass(frozen=True)
 class Frame:
     index: int

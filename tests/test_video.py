@@ -81,7 +81,7 @@ class Restyle:
         out_path = Path(out_path)
         if out_path.exists():
             return out_path
-        index = int(out_path.stem)
+        index = int(out_path.stem.split(".")[0])
         if index in self.fail:
             raise DrawError(f"could not draw {out_path.name}: the backdrop is not flat")
         self.calls.append({"prompt": prompt, "out": out_path, "refs": list(references), **kwargs})
@@ -458,3 +458,34 @@ def test_a_restyle_takes_its_art_from_the_style_reference_and_a_new_one_redraws(
     Image.new("RGB", (64, 96), (250, 0, 250)).save(key)
     _, redrawn = world["build"](style_reference=key)
     assert len(redrawn.calls) == len(restyle.calls), "a new style image redraws every restyle"
+
+
+
+def test_a_frame_whose_traced_head_is_bowed_is_restyled_keeping_the_tilt(world):
+    """Told to keep "the face and expression", a restyle of a bowed head with the
+    face under the hair painted the key art's face back on and lifted the head."""
+    from dataclasses import replace
+    from cag.prompts import RESTYLE_BOWED
+    motion = world["state"]["motion"]
+    frames = list(motion.frames)
+    bow = {"earL": [0.45, 0.20], "earR": [0.55, 0.20], "nose": [0.50, 0.27]}
+    frames[3] = replace(frames[3], pts=frames[3].pts | bow)
+    upright = {"earL": [0.45, 0.20], "earR": [0.55, 0.20], "nose": [0.50, 0.21]}
+    frames = [f if f.index == 3 else replace(f, pts=f.pts | upright) for f in frames]
+    _, restyle = world["build"](motion=replace(motion, frames=tuple(frames)))
+    prompts = {call["out"].stem: call["prompt"] for call in restyle.calls}
+    assert prompts["03"] == RESTYLE_BOWED
+    assert all(p == RESTYLE for stem, p in prompts.items() if stem != "03")
+
+
+def test_a_restyle_that_lifts_the_head_is_drawn_again_on_the_next_seed(world, monkeypatch):
+    """Belter's KO frames 12 and 13 came back looking out, the crown +0.14 and
+    +0.16 above the SCAIL frame's; a restyle never moves the head."""
+    rises = iter([0.16, 0.02])
+    monkeypatch.setattr(video, "crown_rise", lambda scail, out: next(rises) if "02" in Path(out).stem else 0.0)
+    _, restyle = world["build"]()
+    frame2 = [call for call in restyle.calls if call["out"].name.startswith("02")]
+    assert [call["seed"] for call in frame2] == [1234, 2234]
+    folder = frame2[0]["out"].parent
+    assert (folder / "02.png").exists() and (folder / "02.lifted-0.png").exists()
+    assert len([c for c in restyle.calls if not c["out"].name.startswith("02")]) == len(restyle.calls) - 2

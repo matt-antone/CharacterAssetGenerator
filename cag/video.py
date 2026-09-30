@@ -35,7 +35,8 @@ from PIL import Image
 from . import comfy, drive
 from .animation import AnimationState, claim_frames, frame_path, motion_digest, motion_stamp
 from .draw import DrawError
-from .prompts import MASK_PASS_PROMPT, RESTYLE, scail_prompt
+from .motion import head_bowed
+from .prompts import MASK_PASS_PROMPT, RESTYLE, RESTYLE_BOWED, scail_prompt
 
 #: Bumped whenever the way a restyle is asked for changes outside the graph and
 #: the prompt, so every set drawn the old way is superseded at once.
@@ -49,6 +50,27 @@ TRACE_INDEX = "trace-index.json"
 
 def _log(state: AnimationState, message: str) -> None:
     print(f"[{state['set_name']}] {message}", file=sys.stderr, flush=True)
+
+
+#: How far a restyle may raise the figure's crown above the SCAIL frame it
+#: redraws, as a share of the figure's height. The head never moves in a
+#: restyle, so a crown that rose is a head it lifted: Belter's KO frames 12 and
+#: 13 came back looking out at +0.14 and +0.16, where every kept frame of her
+#: dance, KO and victory measured +0.06 or less (2026-09-30).
+MAX_CROWN_RISE = 0.10
+
+#: Restyles drawn per frame before the lowest-crowned one is kept.
+RESTYLE_TRIES = 3
+
+
+def crown_rise(scail: Path, restyled: Path) -> float:
+    """How far `restyled`'s crown sits above `scail`'s, as a share of `scail`'s figure height."""
+    from .mask import cutout
+
+    before, after = cutout(scail).getbbox(), cutout(restyled).getbbox()
+    if not before or not after or before[3] <= before[1]:
+        return 0.0
+    return (before[1] - after[1]) / (before[3] - before[1])
 
 
 def _sha(*parts: bytes | str) -> str:
@@ -202,6 +224,9 @@ def video_frames(
         restyle_graph = Path(graphs["restyle"])
         restyle_extra = machine.placeholders("restyle")
         style = Path(state.get("style_reference") or reference)
+        # The trace says which frames bow the head (`RESTYLE_BOWED`). A set with
+        # none keeps the stamp it had before bowed frames were told apart.
+        bowed = [frame.index for frame in motion.frames if head_bowed(frame.pts)]
         claim_frames(
             state,
             "video\t"
@@ -209,23 +234,52 @@ def video_frames(
                 VIDEO_VERSION, motion_digest(motion), video_key, json.dumps(list(made.index)),
                 restyle_graph.read_bytes(), RESTYLE, json.dumps(restyle_extra, sort_keys=True),
                 str(machine.seed), style.read_bytes(),
+                *((RESTYLE_BOWED, json.dumps(bowed)) if bowed else ()),
             ),
         )
+        if bowed:
+            _log(state, f"head bowed in frames {', '.join(f'{i:02d}' for i in bowed)}: "
+                        "their restyles keep the head's tilt")
         for frame, pick in zip(motion.frames, made.index, strict=True):
+            dst = frame_path(state, "source", frame.index)
+            cached = dst.exists()
+            tries: list[tuple[float, Path]] = []
             try:
-                sources[frame.index] = draw_fn(
-                    RESTYLE,
-                    frame_path(state, "source", frame.index),
-                    references=[picked(pick), style],
-                    workflow=restyle_graph,
-                    timeout=machine.restyle_timeout,
-                    seed=machine.seed,
-                    extra=restyle_extra,
-                )
+                for attempt in range(RESTYLE_TRIES):
+                    out = dst if attempt == 0 else dst.with_name(f"{dst.stem}.try-{attempt}.png")
+                    draw_fn(
+                        RESTYLE_BOWED if frame.index in bowed else RESTYLE,
+                        out,
+                        references=[picked(pick), style],
+                        workflow=restyle_graph,
+                        timeout=machine.restyle_timeout,
+                        seed=machine.seed + 1000 * attempt,
+                        extra=restyle_extra,
+                    )
+                    if cached:
+                        break  # drawn and kept by an earlier build
+                    rise = crown_rise(picked(pick), out)
+                    tries.append((rise, out))
+                    if rise <= MAX_CROWN_RISE:
+                        break
+                    _log(state, f"restyle {frame.index:02d} lifted the head (crown +{rise:.2f}); "
+                                "drawing it again")
             except DrawError as error:
                 failed.append(frame.index)
                 _log(state, f"restyle {frame.index:02d} failed: {error}")
                 continue
+            if tries:
+                rise, best = min(tries)
+                if rise > MAX_CROWN_RISE:
+                    _log(state, f"restyle {frame.index:02d} kept at crown +{rise:.2f}: "
+                                f"every one of {RESTYLE_TRIES} tries lifted the head")
+                if best != dst:
+                    dst.rename(dst.with_name(f"{dst.stem}.lifted-0.png"))
+                    best.rename(dst)
+                for _, other in tries:
+                    if other != best and other.exists() and ".try-" in other.name:
+                        other.rename(other.with_name(other.name.replace(".try-", ".lifted-")))
+            sources[frame.index] = dst
             # Kept as drawn: snapping to the key art's grid (`cag.snap`) made the
             # faces blocky and the set was judged better without it (2026-09-26).
 

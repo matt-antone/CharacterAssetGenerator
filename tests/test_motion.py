@@ -499,3 +499,11 @@ def test_a_mask_block_with_no_file_is_refused(tmp_path):
     (root / "manifest.json").write_text(json.dumps(manifest))
     with pytest.raises(MotionError, match="mask names no file"):
         read_bundle(root)
+
+
+def test_a_bowed_head_is_read_off_the_landmarks():
+    from cag.motion import head_bowed
+    upright = {"earL": [0.45, 0.20], "earR": [0.55, 0.20], "nose": [0.50, 0.22]}
+    bowed = {"earL": [0.45, 0.20], "earR": [0.55, 0.20], "nose": [0.50, 0.27]}
+    assert not head_bowed(upright) and head_bowed(bowed)
+    assert not head_bowed({}), "a pose with no head says nothing"
