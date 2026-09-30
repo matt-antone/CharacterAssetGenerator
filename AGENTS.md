@@ -4,39 +4,47 @@ Instructions for agents working in this repo.
 
 ## The canonical local method
 
-Approved by the user on 2026-09-29 as the standard way a character is drawn
-locally, each step on Belter and chosen by eye. Every other section keeps the
-evidence; this is the method in one place.
+Approved by the user as the standard way a character is drawn locally
+(2026-09-29, revised 2026-09-30 on Belter), each step chosen by eye. Every other
+section keeps the evidence; this is the method in one place.
 
 ```bash
 uv run cag build specs/<theme>/<slug>.json --draw-backend local --machine local16
 ```
 
-(`CAG_LOCAL_COMFY_WORKFLOW=comfy/qwen-image-2.1-fp8.json` on the RX 9070.) The
-backend and the machine are still the user's call; this is what they called.
+with `CAG_LOCAL_COMFY_WORKFLOW` **unset**: local drawing is Qwen-Image-Edit 2511
+(`comfy/qwen-image-edit-2511.json`, Apache-2.0). Qwen-Image-2.1 (research
+licence) draws nothing on this path. The backend and the machine are still the
+user's call; this is what they called.
 
 1. **Brief:** a prop on the key art only when it is carried through most sets
    (Iris's rules, `.claude/agents/character-creator.md`).
-2. **Key art:** Qwen-Image-2.1, shown the detail ladder's material swatches,
-   never a character (see "Local views"). Stops for the user's approval.
-3. **Turnaround:** the key art turned by Qwen-Image-Edit 2511 and fal's
-   Multiple-Angles LoRA; the front by way of the profile (`FRONT_FROM`), with
-   the brief's recognition cues. Cut to the character's height.
-4. **Dance and every traced set:** the video path. SCAIL-2 from the source
-   clip, then a Qwen-Image-Edit 2511 restyle per frame on a 1.5x canvas against
-   the approved key art, seed 1234 (see "The video path").
+2. **Key art: supplied by the user,** full body on flat #FF00FF, 2:3, eye-level,
+   three-quarter facing screen-left, hands empty, in the target style. Copied
+   in byte for byte as `work/<slug>/source/key.png` and approved with `cag
+   approve`: never preprocessed, restyled or redrawn. 2511 cannot draw a key art
+   from words (it drew photographs on checkerboard, and Belter as a man).
+3. **Turnaround:** the key art turned by 2511 and fal's Multiple-Angles LoRA;
+   the front by way of the profile (`FRONT_FROM`), shown the key art as a second
+   image and told the brief's recognition cues and costume (`front_clause`).
+   Cut to the character's height.
+4. **Every set with footage** (dance, and ko and victory from `emote-01` and
+   `emote-02` for the whole cast): the video path. SCAIL-2 from the source clip,
+   then a 2511 restyle per frame on a 1.5x canvas against the approved key art,
+   seed 1234. A frame whose traced head is bowed gets `RESTYLE_BOWED`, and a
+   restyle that raises the crown past `MAX_CROWN_RISE` is drawn again on the
+   next seed (see "The video path").
 5. **Cells:** drawn at the brief's detail level, level 8 by default: 1342 px
    cells, the finish on a 161-colour palette with a 1 px inner outline, for the
    sets and the turnaround alike (see "The detail ladder").
 6. **Copies for review** in the folder the user named; approval is `cag
    approve` alone.
 
-About 2 minutes of key art, 2 of turnaround and 23 of dance a character on
-the RX 9070. **Sets with no footage are not part of it yet:** they still take
-the whole-set Qwen-Image-2.1 path, which copies its reference rather than
-re-posing it. Per-frame 2511 edits of the set reference moved Belter through a
-written victory plan (13 of 16 frames right, the motion jumpy) but are not
-built into `cag`.
+About 2 minutes of turnaround, 23 of dance, 22 of ko and 10 of victory a
+character on the RX 9070. **Not part of it yet:** sets with no footage (sing,
+and the flinch, guard and entrance the config leaves off), which draw the whole
+set in one 2511 render that came back with scenery behind it; and the location,
+whose 2511 render put a silhouette on the stage.
 
 ## The photo pose path, and what its one real render showed
 
@@ -128,8 +136,10 @@ the hardware and the bill.
   else runs the mask pass (SAM3). One render has exercised it, on Comfy Cloud:
   `country-01`, portrait footage in a cluttered shop, gave one clean silhouette
   per frame (figure 10% of the frame, overlap 0.82-0.95 frame to frame).
-- **Qwen-Image-2.1 is licensed for research only.** Nothing the video path draws
-  ships until that is cleared.
+- **Qwen-Image-2.1 is licensed for research only.** Nothing drawn with it ships
+  until that is cleared. The canonical local method (top of this file) draws
+  nothing with it; `cloud` still restyles with it, and a local build pinned to
+  `comfy/qwen-image-2.1.json` still draws with it.
 - **The performer's face is blurred in every drive video** (the face blur,
   always on). SCAIL-2 copies the face it is shown in the drive onto the
   character; with the face blurred it draws the set reference's face and keeps
@@ -186,6 +196,28 @@ the hardware and the bill.
   flatness was the restyle's), denoise 0.85 (none), and asking in the prompt
   for fine pixels or a detailed face (the jacket drifted to magenta and was cut
   out, or a dithered checkerboard came back).
+- **A bowed head stays bowed.** Told to keep "the face and expression", a
+  restyle of a head bowed with the face under the hair painted the key art's
+  face back on and lifted the head: Belter's KO (`emote-01`) bowed, then stood
+  back up looking out, frames 8-14 (2026-09-30). Two layers, both automatic:
+  1. **The trace picks the wording.** `motion.head_bowed` reads a frame's
+     landmarks (the nose more than `BOWED_PITCH`, 0.45 of the ears' spread,
+     below the ears); those frames get `RESTYLE_BOWED`, which asks for the
+     head's exact position and tilt instead of the face. Upright heads on
+     `club-01` and `emote-02` measured 0.02-0.31, the KO 0.57-0.85. Given to
+     every frame, the same words bowed a dance frame that faced the viewer.
+     Alone it held 10 of the KO's 12 bowed frames.
+  2. **A measured check with a retry.** A restyle never moves the head, so one
+     whose crown rises more than `MAX_CROWN_RISE` (0.10 of the figure's height)
+     above its SCAIL frame is drawn again on `seed + 1000`, up to
+     `RESTYLE_TRIES` (3), and the lowest is kept; the others stay beside it as
+     `NN.lifted-N.png` and the log names them. Lifted frames measured
+     +0.14-0.18; every kept frame of Belter's dance, KO and victory +0.06 or
+     less. It caught frames 12 and 13 and both passed on a retry.
+
+  A set with no bowed frame keeps the stamp it had, so its restyles are not
+  redrawn. A frame drawn before the check existed is not re-checked: move it
+  aside to have it redrawn.
 - **Every set's cells get the cell finish** (`cag/finish.py`), restyled or
   `--no-restyle`, unless the build says `--no-finish` (with `--machine` only;
   without it the build refuses). It runs on the cells, after the shrink: the
@@ -293,7 +325,12 @@ Trooper came back a different, lighter-skinned man, his white plates orange;
 and a second pass handing the key art back as identity, which dragged the angle
 back or, for Frank, drew a different man in blue armour. The front carries the
 brief's `recognition_cues` (`recognition_clause`), which held Belter's hair
-fuller. A set reference facing front goes the same way, by a
+fuller. It is also shown the key art as a second image and told the costume in
+the brief's own words (`front_clause`): turned from the profile alone, which
+hides the costume's front, Belter's dark top came back white and her belt went,
+on two key arts. With both, the top and belt came back; the key art pulls the
+stance a little toward three-quarter, and the user chose that likeness over a
+squarer front drawn from the words alone (2026-09-29). A set reference facing front goes the same way, by a
 `<set>-key-profile-for-front.png`.
 
 A turned view is cut into its cell at the character's real height, measured
