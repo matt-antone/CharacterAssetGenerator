@@ -333,7 +333,11 @@ def test_a_view_draw_turns_the_key_art_rather_than_drawing_from_words(tmp_path, 
     key_art = tmp_path / "lou" / "source" / "key.png"
     profile = tmp_path / "lou" / "source" / "profile.png"
     by_view = {call["out"]: call for call in turned}
-    assert by_view["front"]["refs"] == [profile]
+    # ...and shown the key art too, for the face and costume the profile hides.
+    assert by_view["front"]["refs"] == [profile, key_art]
+    assert "Image 2 is the same character" in by_view["front"]["prompt"]
+    if spec.outfit:
+        assert f"The costume, exactly: {spec.outfit}" in by_view["front"]["prompt"]
     assert by_view["back"]["refs"] == by_view["profile"]["refs"] == [key_art]
     for call in turned:
         assert call["prompt"].startswith("<sks> "), "the angle LoRA reads the camera from <sks>"
@@ -379,16 +383,17 @@ def test_a_set_reference_is_turned_too_under_a_view_draw(tmp_path):
     via_prompt, via_refs = turned["dance-key-profile-for-front.png"]
     assert via_refs == [key_art] and via_prompt.startswith("<sks> right side view")
     prompt, references = turned["dance-key-front.png"]
-    assert references == [tmp_path / "source" / "dance-key-profile-for-front.png"]
+    assert references == [tmp_path / "source" / "dance-key-profile-for-front.png", key_art]
+    assert ("The costume, exactly:" in prompt) == bool(spec.outfit), "the brief's own costume words, if any"
     assert prompt.startswith("<sks> front view")
     assert "Both of their hands are empty" in prompt, "the set's own hands, not the key art's"
     assert "arms hanging" not in prompt, "a set reference keeps its stance, turned"
 
 
-def test_a_local_key_art_is_shown_swatches_never_a_character(tmp_path):
-    """Qwen-Image-2.1 copies its reference: with Belter's key art as the detail
-    sample, every local key art came back as that Belter, mic and all."""
-    from cag.style import DETAIL_FRAMES, LOCAL_DETAIL_FRAMES
+def test_a_local_key_art_is_shown_nothing(tmp_path):
+    """A local build draws with an edit model, which edits the image it is shown:
+    a sample would come back as the picture. Other backends get the ladder's."""
+    from cag.style import DETAIL_FRAMES
     spec = load_spec("tests/fixtures/velvet-lou.json")
     calls = []
 
@@ -401,12 +406,9 @@ def test_a_local_key_art_is_shown_swatches_never_a_character(tmp_path):
             {"spec": spec, "work_dir": tmp_path, "bible": BIBLE, "local": local}, fake
         )
     (local_prompt, local_refs), (other_prompt, other_refs) = calls
+    assert local_refs == []
+    assert "detail-level sample" not in local_prompt
     level = spec.detail_level
-    assert local_refs == ([LOCAL_DETAIL_FRAMES[level]] if level in LOCAL_DETAIL_FRAMES else [])
-    assert DETAIL_FRAMES.get(level) not in local_refs, "never the approved character"
-    if local_refs:
-        assert "squares of material, not a character" in local_prompt
-    assert "squares of material" not in other_prompt
     assert other_refs == ([DETAIL_FRAMES[level]] if level in DETAIL_FRAMES else [])
 
 

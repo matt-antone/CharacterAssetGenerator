@@ -346,6 +346,22 @@ def recognition_clause(cues: tuple[str, ...]) -> str:
     return "Unmistakably the same character: " + "; ".join(cues) + "." if cues else ""
 
 
+#: The front is turned from the profile, which hides the costume's front: turned
+#: with only the recognition cues, Belter's dark top came back white and her belt
+#: went, twice (2026-09-29). So the front is also shown the key art, for what the
+#: profile cannot see, and told the costume in the brief's own words.
+FRONT_FROM_KEY = (
+    "Image 2 is the same character from the three-quarter view: take the face, costume details and "
+    "colours from it, never its angle."
+)
+
+
+def front_clause(spec: CharacterSpec) -> str:
+    """What the front turn is told beyond the camera: the cues, the costume, image 2."""
+    costume = f"The costume, exactly: {spec.outfit}" if spec.outfit else ""
+    return "\n\n".join(p for p in (recognition_clause(spec.recognition_cues), costume, FRONT_FROM_KEY) if p)
+
+
 def angle_prompt(
     view: str, props: str = "", stance: str = PROJECTION_STANCE, cues: str = ""
 ) -> str:
@@ -681,6 +697,20 @@ RESTYLE = (
     "expression, the figure's size and place in the frame. Match <image2>'s colours and every "
     "costume detail."
 )
+
+#: The restyle for a frame whose traced head is bowed (`motion.head_bowed`). The
+#: plain one says to keep "the face and expression", and with the face hidden
+#: under the hair it painted the key art's face back on and lifted the head:
+#: Belter's KO bowed, then stood back up looking out, frames 8-14 (2026-09-30).
+#: Asked for the head's position and tilt instead, the bowed frames stayed bowed
+#: on both seeds tried. Only for bowed frames: given to every frame, the same
+#: words bowed a dance frame whose face was turned to the viewer.
+RESTYLE_BOWED = RESTYLE.replace(
+    "both hands, the face and expression,",
+    "both hands, the head's exact position, tilt and angle (a bowed head stays bowed, a face "
+    "hidden by the hair stays hidden),",
+)
+assert RESTYLE_BOWED != RESTYLE
 
 #: What the mask pass tracks: SAM3 reads it as a text query, not a prompt.
 MASK_PASS_PROMPT = "human"

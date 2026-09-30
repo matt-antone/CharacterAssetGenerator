@@ -31,8 +31,8 @@ from .prompts import (
     TURNED_STANCE,
     VIEWS,
     angle_prompt,
-    recognition_clause,
     assemble_bible,
+    front_clause,
     bible_request,
     location_prompt,
     view_prompt,
@@ -145,7 +145,9 @@ def write_bible(state: StaticState, model: BaseChatModel) -> StaticState:
 def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticState:
     spec = state["spec"]
     local = state.get("local", False)
-    detail = detail_frame(spec.detail_level, local=local)
+    # A local key art is drawn by an edit model (`comfy.LOCAL_WORKFLOW`), which
+    # edits the image it is shown: any sample would come back as the picture.
+    detail = None if local else detail_frame(spec.detail_level)
     path = draw_fn(
         view_prompt(
             spec,
@@ -154,7 +156,6 @@ def draw_key_art(state: StaticState, draw_fn: Callable[..., Path]) -> StaticStat
             detail_level=spec.detail_level,
             detail_reference=detail is not None,
             props=clauses(spec.props, None),
-            detail_swatches=local,
         ),
         source_path(state["work_dir"], KEY_VIEW),
         references=[detail] if detail else [],
@@ -212,8 +213,9 @@ def set_key_art(
             dst.with_name(f"{set_name}-key-{FRONT_FROM}-for-front.png"),
             references=[key_art],
         )
-        cues = recognition_clause(spec.recognition_cues)
-        return view_draw_fn(angle_prompt(view, hands, TURNED_STANCE, cues), dst, references=[via])
+        return view_draw_fn(
+            angle_prompt(view, hands, TURNED_STANCE, front_clause(spec)), dst, references=[via, key_art]
+        )
     hands = clauses(held, set_name) if held else EMPTY_HANDS
     detail = detail_frame(spec.detail_level) if detail_after_key else None
     return (draw_fn or draw)(
@@ -311,9 +313,10 @@ def turn_projection(state: StaticState, view_draw_fn: Callable[..., Path]) -> di
         if view == FRONT_FROM:
             turned[view] = via
         elif view == "front":
-            cues = recognition_clause(spec.recognition_cues)
             turned[view] = view_draw_fn(
-                angle_prompt(view, hands, cues=cues), source_path(work_dir, view), references=[via]
+                angle_prompt(view, hands, cues=front_clause(spec)),
+                source_path(work_dir, view),
+                references=[via, key_art],
             )
         else:
             turned[view] = view_draw_fn(

@@ -63,12 +63,14 @@ LOCAL_URL = "http://127.0.0.1:8188"
 #: `CAG_COMFY_WORKFLOW` says otherwise.
 DEFAULT_WORKFLOW = Path("comfy/workflow.json")
 
-#: What a `local` build draws with unless told otherwise: Qwen-Image-2.1 at full
-#: precision, the one open model whose key art has been checked against a brief
-#: (Belter's, 2026-09-25). Its weights are under the Qwen Research License —
-#: research and evaluation only — so a package meant for anything else names an
-#: Apache-licensed workflow instead.
-LOCAL_WORKFLOW = Path("comfy/qwen-image-2.1.json")
+#: What a `local` build draws with unless told otherwise: Qwen-Image-Edit 2511
+#: with the Lightning 4-step LoRA, Apache-2.0 — the key art, the location and a
+#: set drawn from words. The user moved local drawing off Qwen-Image-2.1, whose
+#: weights are under the Qwen Research License (research and evaluation only),
+#: on 2026-09-29. `comfy/qwen-image-2.1.json` and its fp8 copy stay for anyone
+#: who names them. An edit model edits what it is shown, so a local key art is
+#: shown nothing (`static_sheet.draw_key_art`).
+LOCAL_WORKFLOW = Path("comfy/qwen-image-edit-2511.json")
 
 #: The workflow that draws a traced set one frame at a time: Qwen-Image-Edit
 #: 2511 with the AnyPose LoRAs re-poses the set's approved reference (`$image1`)
