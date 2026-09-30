@@ -106,7 +106,13 @@ def backdrop_is_usable(image: Image.Image) -> tuple[bool, str]:
         ]
     )
     spread = numpy.percentile(band, 95, axis=0) - numpy.percentile(band, 5, axis=0)
-    if numpy.max(spread) > BACKDROP_SPREAD:
+    # A magenta that only darkens toward a corner is still one backdrop: the key
+    # scores a pixel by how far red and blue run ahead of green, not by how bright
+    # it is. Qwen-Image-Edit shown two images grades its magenta that way (a
+    # spread of 43 on Belter's front, every border pixel's gap 191 or more) and
+    # the cut-out took it cleanly. Scenery pulls the border off magenta.
+    magenta = numpy.minimum(band[:, 0], band[:, 2]) - band[:, 1]
+    if numpy.max(spread) > BACKDROP_SPREAD and numpy.percentile(magenta, 5) < MIN_MAGENTA_GAP:
         return False, "there is scenery behind the character, not a flat backdrop"
 
     backdrop = numpy.median(band, axis=0)

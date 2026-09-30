@@ -250,3 +250,14 @@ def test_a_workflows_own_placeholders_reach_the_render(monkeypatch, tmp_path):
     draw("a singer", tmp_path / "art.png", backend="comfy", workflow=workflow,
          extra={"$resolution": 512})
     assert sent == [{"$resolution": 512}]
+
+
+def test_a_magenta_that_darkens_toward_a_corner_is_still_one_backdrop():
+    """Qwen-Image-Edit grades its magenta when shown two images; the cut-out keys on
+    how far red and blue lead green, so a darker corner of it is still backdrop."""
+    from cag.draw import backdrop_is_usable
+    size = 64
+    ramp = numpy.linspace(250, 200, size)[None, :, None].repeat(size, 0)
+    graded = numpy.concatenate([ramp, numpy.zeros((size, size, 1)), ramp], axis=2).astype(numpy.uint8)
+    assert backdrop_is_usable(Image.fromarray(graded)) == (True, "")
+    assert not backdrop_is_usable(scenery())[0], "scenery still fails"
