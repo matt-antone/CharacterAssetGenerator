@@ -26,6 +26,26 @@
   "speed_factor": 0.98,
   "duration": 34.53
  },
+ "clip": {
+  "file": "clip.mp4",
+  "start": 20.6,
+  "fps": 30.0,
+  "frame_count": 76,
+  "size": [
+   720,
+   1280
+  ],
+  "box": [
+   0,
+   55,
+   706,
+   941
+  ],
+  "t_offset": 0.0,
+  "sha256": "3c5f03d00cd3338dd5dbc76c5fc9b5fba0977c66b3ace55ce984f18f330aed75",
+  "match": 0.9991,
+  "backfilled_by": "cag"
+ },
  "arc_written": true,
  "files": {
   "motion.json": "7ec8299141bc891976f38ec8dc4399104f76a70612b781da9966fd9fa529fb9f",
