@@ -1,0 +1,88 @@
+{
+ "bundle": "motion-source",
+ "schema": "motion-artist/2",
+ "name": "emote-02",
+ "title": "Emote 02",
+ "fps": 12,
+ "frame_count": 6,
+ "playback": "final-hold",
+ "view": "front",
+ "pingpong": false,
+ "seam": "n/a",
+ "seam_ratio": null,
+ "stabilized": false,
+ "exaggerate": 1.25,
+ "performer": null,
+ "view_frames": {
+  "front": 6
+ },
+ "missing_frames": [],
+ "source": {
+  "source_kind": "local",
+  "identity": "sha256:33078bf1b12dafbe325a6c4b1ecad01d980e1204146621b7faa59019b1419e2e",
+  "source_sha256": "33078bf1b12dafbe325a6c4b1ecad01d980e1204146621b7faa59019b1419e2e",
+  "title": "emotes",
+  "url": "",
+  "file": "work/local-emotes/source.mp4",
+  "start": 15.265,
+  "end": 15.782,
+  "speed_factor": 1.03,
+  "duration": 19.76
+ },
+ "arc_written": true,
+ "files": {
+  "motion.json": "163c72ad07980d215e43f839775528b101f192693c789bba97cdc9b1c364068b",
+  "emote-02-motion.html": "2ce0062583ec8e569b7f6791803d31468f0b7faa58c4702e1610b59f6f1c7cad",
+  "thumbs/f00.jpg": "177581030aa1f30ca5f0723f9690d1dd6668c53541df862865b9df45d955e7ab",
+  "thumbs/f01.jpg": "496c808ab521032eaa461560f25b30d54ea8cf16170766f7875bce4729806bbc",
+  "thumbs/f02.jpg": "97463bca933991b8f08c88e1d17fa003f26d1234ed985545bc3b932ce4e25e53",
+  "thumbs/f03.jpg": "e214f2ca6e3363b62c4a51175fcb2230b57e28317f546f67bcd36a5e266b907d",
+  "thumbs/f04.jpg": "e2b21fcdb1081bbd089709a1674148ff4061f9e9337211add16db7f9165ef265",
+  "thumbs/f05.jpg": "e9bd73af5286ba1d2882590d706c9f51d2afadcbe9a1b3fea07577ebe384d45f",
+  "emote-02-pose-grid.png": "e7bd649d3cc06aa5f26bab3dc1c790b330b52f782b28c239af30ad02e7073501"
+ },
+ "pose_grid": {
+  "cols": 4,
+  "rows": 2,
+  "frame_count": 6,
+  "scale": 1,
+  "tile_w": 392,
+  "tile_h": 542,
+  "cell_w": 384,
+  "cell_h": 512,
+  "label_h": 22,
+  "gap": 8,
+  "per_sheet": 12,
+  "sheets": 1,
+  "sheet_w": 1560,
+  "sheet_h": 1076,
+  "labeled": true,
+  "source": "thumbs"
+ },
+ "clip": {
+  "file": "clip.mp4",
+  "start": 14.76475,
+  "fps": 59.94005994005994,
+  "frame_count": 92,
+  "size": [
+   1080,
+   1920
+  ],
+  "box": [
+   58,
+   364,
+   986,
+   1316
+  ],
+  "t_offset": 0.0,
+  "sha256": "798724ddc397dab5a088a507de344548a7d5f67eefb90aeed010d18bf8a7b3c7",
+  "mask": {
+   "file": "mask.mp4",
+   "sha256": "8991cb771ccc467bd0ef5c4b46e80d8c96dc8566c28b35deba7cf0e71ffcd6ce"
+  },
+  "heads": {
+   "file": "heads.json",
+   "sha256": "cc60813af6a3a365d1b68ef1ca6e03d47e0ee2df904d796fe5cbdbadb947db3b"
+  }
+ }
+}

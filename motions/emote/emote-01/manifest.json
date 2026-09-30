@@ -1,0 +1,98 @@
+{
+ "bundle": "motion-source",
+ "schema": "motion-artist/2",
+ "name": "emote-01",
+ "title": "Emote 01",
+ "fps": 12,
+ "frame_count": 15,
+ "playback": "final-hold",
+ "view": "front",
+ "pingpong": false,
+ "seam": "n/a",
+ "seam_ratio": null,
+ "stabilized": false,
+ "exaggerate": 1.25,
+ "performer": null,
+ "view_frames": {
+  "front": 15
+ },
+ "missing_frames": [],
+ "source": {
+  "source_kind": "local",
+  "identity": "sha256:33078bf1b12dafbe325a6c4b1ecad01d980e1204146621b7faa59019b1419e2e",
+  "source_sha256": "33078bf1b12dafbe325a6c4b1ecad01d980e1204146621b7faa59019b1419e2e",
+  "title": "emotes",
+  "url": "",
+  "file": "work/local-emotes/source.mp4",
+  "start": 8.959,
+  "end": 10.177,
+  "speed_factor": 0.97,
+  "duration": 19.76
+ },
+ "arc_written": true,
+ "files": {
+  "motion.json": "95f8f03faa80e7f999e6cf0368a42e8210763bbdd4885b37e89131eecd29947c",
+  "emote-01-motion.html": "8e9c754c442b096a4f9ff477ad1d6cc6313632acd7de63dcce1e49268a4f5907",
+  "thumbs/f00.jpg": "7badcd07188a0d06eab43b8200e0b5704c176d39f9fc385f908e988a73c2e0ce",
+  "thumbs/f01.jpg": "2cb8c6ac33478ba3a7534967b37ecaddf4f4cdcce1abedfe3eb81059b3b3c196",
+  "thumbs/f02.jpg": "e49642a9e569280f1593f8d72ff89763e0d3614a77fa7a4075502b0290a6c5dd",
+  "thumbs/f03.jpg": "d974eb38daa5900a0c2c12efd96dfe18df765b0945d8b00ea8a35fb0a8e356c5",
+  "thumbs/f04.jpg": "d36d99484a70fe3097d3c7af85bc8eccc07094d901e16ff10726d014ec1f537c",
+  "thumbs/f05.jpg": "348927980dcbb318fdbe6554ef3fb00f3565db57d72df10051d1095e93ac2987",
+  "thumbs/f06.jpg": "a6f88e04a736d47d2dfc9071fca64cccd1afa125307bef7fd05fe9ed4cfef352",
+  "thumbs/f07.jpg": "932909c8a66967168aadc41fa7742ea96037b147f10f719c9973575666fc287c",
+  "thumbs/f08.jpg": "ef852aaae1776d8e9cc72762135cbc7ac725d9a3c0a6214626f2d67a8d409222",
+  "thumbs/f09.jpg": "62d1d1a53ac8512c377b32585e5978a2ff1b9f4aa0acc3b64e9dca2045d26512",
+  "thumbs/f10.jpg": "e8adc3d25df909b3af7335fac1dc1feb00f1365e2ad197c5007d6c3de764dd26",
+  "thumbs/f11.jpg": "f08b10fa5fb745946a247f884aa9f1a008b42daed7fb3bb38ac69618a13ef7cb",
+  "thumbs/f12.jpg": "b228149463a14c2ad79fbc91c26835e11ad9a7ef399cbf109872e3ceb511e9a7",
+  "thumbs/f13.jpg": "62626c625540aeb9a6286b3a7865b056d5a32ecc42827c883e51753184d9bb4f",
+  "thumbs/f14.jpg": "c66887f48b6716ffce6a5cf8a5e4fe664f3c3e367d748c48036a3aea807d4491",
+  "emote-01-pose-grid-00.png": "9d54cf6aa07f1685668bff3546012249f350cb52231034290924c92407bfed01",
+  "emote-01-pose-grid-01.png": "5f7aaf62ba4253fd5704f1aa9953a0341e7208d71c28fba86f9cbe35ec3ec79d"
+ },
+ "pose_grid": {
+  "cols": 4,
+  "rows": 3,
+  "frame_count": 15,
+  "scale": 1,
+  "tile_w": 392,
+  "tile_h": 542,
+  "cell_w": 384,
+  "cell_h": 512,
+  "label_h": 22,
+  "gap": 8,
+  "per_sheet": 12,
+  "sheets": 2,
+  "sheet_w": 1560,
+  "sheet_h": 1618,
+  "labeled": true,
+  "source": "thumbs"
+ },
+ "clip": {
+  "file": "clip.mp4",
+  "start": 8.45845,
+  "fps": 59.94005994005994,
+  "frame_count": 134,
+  "size": [
+   1080,
+   1920
+  ],
+  "box": [
+   162,
+   640,
+   760,
+   1012
+  ],
+  "t_offset": 0.0,
+  "sha256": "ada8e2d378dc189a081aa74b9fffa62cef6dd9c62005e125a9be01e34dcc67c0",
+  "mask": {
+   "file": "mask.mp4",
+   "sha256": "17af3192cf460a8253abe96b5663ab7e4e3cade7ac7f9f9cddcc77d6a71dc2ac"
+  },
+  "heads": {
+   "file": "heads.json",
+   "sha256": "026e1033723666435c2b6cde58357b01cf58da5c085c1b79bd09cdbfbc6fb071"
+  }
+ }
+}
