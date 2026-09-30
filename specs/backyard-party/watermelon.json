@@ -43,7 +43,11 @@
     "flinch": "Brief start at a loud backyard sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or contact.",
     "guard": "One-shot self-protection: set the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: waddle in cheerfully in the flip-flops, stop square to the front and settle into the stance.",
-    "victory": "One-shot win: lean back and spit a long arc upward, then raise both fists overhead in a champion's cheer with the mouth wide open, and hold.",
-    "ko": "Non-contact performance defeat. He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at his sides and the head hangs low. He remains standing on both planted feet in every frame, no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

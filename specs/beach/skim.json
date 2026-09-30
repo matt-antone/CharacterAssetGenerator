@@ -45,7 +45,11 @@
     "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then she settles back into the opening stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: she sprints in, skids on the wet sand with arms out for balance, and lands in the ready stance.",
-    "victory": "One-shot finish: she hops twice on quick feet, kicks one heel up behind, throws the character-left fist overhead with an open-mouthed yell and holds.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the energy drains out: the shoulders drop, both open hands hang limp at her sides, and her head hangs low with the chin toward the chest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

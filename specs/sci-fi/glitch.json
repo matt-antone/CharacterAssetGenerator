@@ -44,7 +44,11 @@
     "flinch": "Brief room-sound startle: jolt stiff like a frozen frame, eyes wide and shoulders up to the ears, hood LEDs flickering, then shake it off and slump back into the bouncy stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and yank the hood partly up with the character-left hand, hunching behind the sleeve, then hold a tense crouch-free upright stance. Not a combat pose.",
     "entrance": "One-shot entrance: skid in on the sneakers with a quick sideways slide, flick the visor up onto the head with one finger, then drop into his bouncy stance with the grin.",
-    "victory": "One-shot finish: jump with both sleeve-covered fists pumping overhead, land, then snap into a smug pose pointing both index fingers forward with the grin, and hold.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the energy crashes — the arms drop limp inside the long sleeves, the hood LEDs dim out, the shoulders sag and the head flops forward so the visor slips down crooked. He holds a standing, visibly crashed finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

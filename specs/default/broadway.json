@@ -46,7 +46,11 @@
     "flinch": "A theatrical startle at a loud room sound: both open hands clap to the cheeks, the eyebrows shoot up, then he recovers into the showman's pose. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn the character-left shoulder forward with that forearm across the chest, character-right hand open at the hip, and hold a poised finish. Not combat.",
     "entrance": "One-shot entrance: tap-step in with quick bright steps, spin once to the front, and land in the showman's pose with jazz hands.",
-    "victory": "One-shot celebration: drop into a deep lunge, both arms flung out wide in jazz hands, head up with a huge open-mouthed smile, and hold the finale pose.",
-    "ko": "Non-contact performance defeat: the jazz hands wilt, both open hands droop to hang at his sides, the chest caves and the head bows. He holds a standing, deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

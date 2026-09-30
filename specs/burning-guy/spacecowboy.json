@@ -46,7 +46,11 @@
     "flinch": "A sudden bang: he ducks the hat brim and both hands rise, then he straightens slowly. No opponent, strike or physical contact.",
     "guard": "One-shot: turn the character-left shoulder forward with the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: amble in with long bow-legged steps, touch the hat brim with the character-right hand, then settle into the easy stance.",
-    "victory": "One-shot finish: sweep the hat off with the character-right hand and hold it high, head tipped back in an open-mouthed whoop, then hold.",
-    "ko": "Non-contact performance defeat: the swagger leaks out — the shoulders drop, both open hands hang limp at his sides, and his head hangs low, the hat brim hiding the eyes. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

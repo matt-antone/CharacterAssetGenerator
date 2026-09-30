@@ -47,7 +47,11 @@
     "flinch": "Brief reaction to a sudden spark: the chin pulls in, the torso leans back and both open hands rise to chest height, then she steadies into her ready stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step into a low wide base, both forearms crossed in front of the chest with open hands, holding a steady finish. Not combat.",
     "entrance": "One-shot entrance: stride in with a springy step, spin once in place with both arms out, and land in the shoulder-width ready stance with both hands open.",
-    "victory": "One-shot song-finish celebration: sweep both open hands up in a wide circle over the head, throw the head back in an open-mouthed shout, and hold both arms high in a V.",
-    "ko": "Non-contact performance defeat: the focus drains out — the shoulders slump, both open hands hang limp at her sides, and her head drops with the chin toward the vest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

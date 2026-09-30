@@ -50,7 +50,11 @@
     "flinch": "Brief room-sound startle: the head clicks sharply to one side, both arms jerk up stiffly, then she resets with small ticks. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: both stiff arms rise and cross in front of the face in jerky ticks, and hold. Not combat.",
     "entrance": "One-shot entrance: walk in with small stiff wind-up steps, stop, turn the head in two clicks toward the front, and settle into the doll-like stance.",
-    "victory": "One-shot celebration: a stiff little twirl in place ending square to the front, both arms raised in a ballerina arc above the head, a sweet open-mouthed smile, and hold.",
-    "ko": "Non-contact performance defeat: she stays on her feet as she winds down like a spent music box — the arms sink slowly to hang limp, the head droops forward in small ticks, and she holds still. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -50,7 +50,11 @@
     "flinch": "Brief room-sound startle: the fin crest snaps flat, the gills flutter shut and a splash of drips flies off, then the crest springs back up and he resettles into his surfer stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left webbed hand spread wide in front of the face with the fin crest flattened, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: pad in with slapping wet webbed footsteps, stop, give a full-body shake that sprays drips off the fin crest, throw a two-finger shaka wave, then drop into his surfer stance.",
-    "victory": "One-shot song-finish celebration: throw both arms up in a wide stoked V with the fin crest and gill frills fanned full, then hold a proud upright pose with a shaka and the goofiest grin.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the stoke drains out — the fin crest wilts flat down the back of the head, the gills droop, the big eyes go heavy-lidded and the arms dangle. He holds a standing, visibly bummed finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, melting into a puddle or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

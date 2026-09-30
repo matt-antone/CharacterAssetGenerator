@@ -47,7 +47,11 @@
     "flinch": "A startled beat at a loud room sound: the shoulders jump, both open hands lift to chest height, then he laughs it off and settles back into the open welcoming stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet wider, raise the character-left forearm across the chest, the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: stride in with a proud chest, sweep the character-right hand to the hat brim in greeting, then land square to the front with both open hands spread at hip height.",
-    "victory": "One-shot celebration: plant the boots, fling both open arms wide above the shoulders, throw the head back in a huge open-mouthed laugh, and hold the grand pose.",
-    "ko": "Non-contact performance defeat: the barrel chest sags, both open hands drop limp at his sides and the head hangs so the sombrero brim tips forward. He holds a standing, deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

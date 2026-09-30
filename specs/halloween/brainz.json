@@ -54,7 +54,11 @@
     "flinch": "Brief room-sound startle: she jolts as if from a small static shock, shoulders snapping up, bob and lab coat flicking out, goggles staying on the forehead, then she shakes it off with a delighted grin and resettles. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder toward the room and pull the open lab coat across the torso with the gloved character-left hand like a shield, then hold a steady wary finish. Not a combat action.",
     "entrance": "One-shot entrance: stride in briskly with the lab coat flaring behind, stop, push the goggles firmly up onto the forehead with the gloved character-left hand, then strike the cocked-hip ready stance with a eureka gesture.",
-    "victory": "One-shot song-finish celebration: throw the character-left arm up in triumph, the lab coat flaring wide, tip the head back in a gleeful 'it's alive' laugh, then hold a proud, grinning pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the manic energy drains out of her — the shoulders slump, the lab coat hangs limp and straight, and her head hangs low with the chin toward the corset top, the bob falling forward and the goggles still on the forehead. She holds a standing, visibly deflated finish with weight even over both platform boots. She remains standing in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply a hit, injury, explosion or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

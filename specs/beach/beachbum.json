@@ -45,7 +45,11 @@
     "flinch": "A coconut thuds on the sand: he blinks and hunches, then shrugs it off. No opponent or contact.",
     "guard": "One-shot: raises both open palms at chest height, leaning back; hold. Not combat.",
     "entrance": "One-shot: shuffles in slowly in his flip-flops, stretches, settles into the mellow stance.",
-    "victory": "One-shot: raises both hands in a big shaka overhead, laughing with mouth open, holds.",
-    "ko": "Non-contact defeat: he sags, both open hands hang, the hat brim tips down over the eyes. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

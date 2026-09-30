@@ -41,7 +41,11 @@
     "flinch": "Brief room-sound startle: she draws her chin back with wide eyes and a hand to the collar, then laughs it off and settles back into her planted stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: bring the character-left arm across the chest, the wide sleeve covering it, and turn one shoulder forward, holding a steady grounded final pose. Not a fight pose.",
     "entrance": "One-shot entrance: stride in with a rolling unhurried walk, the robe swaying, smooth the stole flat with one hand, then plant into the canonical stance and lift the character-left arm.",
-    "victory": "One-shot finish: throw both arms up with palms open and head tipped back in delight, then hold the jubilant pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the joy drains away — the character-left arm drops, the wide shoulders slump, and her head hangs with the chin to her chest, the stole swinging still. She holds a standing, visibly weary finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground, and no legs shown. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

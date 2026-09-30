@@ -48,7 +48,11 @@
     "flinch": "Brief startle at a sudden bang: the shoulders tighten and both open hands rise to chest height, then he breathes out and settles back to his calm stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet wider and raise both open hands in front of the chest, palms out in a steady calm-down gesture, holding the finish. Not combat.",
     "entrance": "One-shot entrance: amble in with slow long strides, touch the hat brim with the character-right hand, then settle into the calm stance with both palms open at the hips.",
-    "victory": "One-shot song-finish celebration: lift the hat off with the character-right hand and raise it high, the character-left hand open wide, with a warm open-mouthed laugh, and hold the pose.",
-    "ko": "Non-contact performance defeat: the calm drains into weariness — the shoulders droop, both open hands hang limp at his sides, and his head hangs so the hat brim tips toward his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

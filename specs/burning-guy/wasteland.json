@@ -48,7 +48,11 @@
     "flinch": "Brief startle at a loud clang: the shoulder pads hunch up, both open gloved hands fly to her cheeks, then she giggles and settles back to her planted stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn a big shoulder pad forward, the character-left forearm across the chest, the character-right hand open at the hip, holding a solid finish. Not combat.",
     "entrance": "One-shot entrance: stomp in with heavy boots, give a small polite wave with the character-right hand, then plant her feet shoulder-width with both hands open at her sides.",
-    "victory": "One-shot song-finish celebration: raise both gloved fists high, throw the head back in an open-mouthed roar, then clasp both open hands together under the chin and hold a sweet pleased pose.",
-    "ko": "Non-contact performance defeat: the fierce show deflates — the big shoulder pads sag, both gloved hands hang limp at her sides, and her head drops with the chin toward the chest straps. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

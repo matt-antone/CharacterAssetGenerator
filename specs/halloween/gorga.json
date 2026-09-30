@@ -49,7 +49,11 @@
     "flinch": "Brief room-sound startle: the snakes all shoot straight up in surprise, the golden eyes widen and the character-left hand flutters to the chest, then the snakes curl back down and she resettles into her diva stance with a laugh. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the pleated gold sleeve across the lower face with the character-left arm while the snakes tuck in close around the head, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: strut in with long confident steps and the gown shimmering, stop with a hip shift, flip the pleated sleeves back off the arms, snakes perking up one by one, then point up into her diva stance.",
-    "victory": "One-shot song-finish celebration: throw both arms up in a wide V with the sleeves fanning like wings and every snake stretching up tall, then hold a proud upright pose with one hand on the hip and a warm golden-eyed smile.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the glitter goes out of her — the pointing arm drops, the shoulders slump, her head bows, and the little snakes droop down limp around her face like wilted flowers. She holds a standing, visibly downcast finish with weight even over both feet. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, turning to stone or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

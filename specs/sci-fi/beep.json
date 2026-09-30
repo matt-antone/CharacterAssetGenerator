@@ -35,12 +35,18 @@
     "dance": "Robotic synth-pop loop: stiff mechanical popping in sharp stops — the head ticks character-left then character-right, the character-left arm snaps from a right angle up to straight and back, the torso twists a quarter turn and back on the flat feet, then everything locks back into the opening stance.",
     "sing": {
       "intent": "Vocoder vocal loop: the head tilts up on a held note while the free arm slowly rises, then lowers back into the stance. The speaker-grille mouth visibly lights brighter and its glowing area opens tall, narrows and changes shape across the loop so Beep unmistakably reads as singing.",
-      "props": ["mic"]
+      "props": [
+        "mic"
+      ]
     },
     "flinch": "Brief glitch startle: the eye-lights flicker to small dots, the antenna bulb blinks and the whole body judders once, then the eyes reset round and Beep resumes the stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: pull both clamp arms up in front of the visor and turn the chest plate slightly away, then hold a locked upright finish. Not a fight pose.",
     "entrance": "One-shot entrance: stomp in on short stiff steps, stop with a little bounce, rotate the head to face forward, then lock into the performance stance.",
-    "victory": "One-shot finish: the eye-lights turn into upward arcs, both arms shoot straight up with clamps open and the antenna bulb glows, then Beep settles into a proud upright pose.",
-    "ko": "Non-contact performance defeat: Beep powers down on its feet — the eye-lights dim to faint dots, the grille mouth goes dark, the head droops forward on its neck joint and both arms hang limp. It holds a standing, switched-off finish. It remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit, sparks, smoke or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

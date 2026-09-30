@@ -47,7 +47,11 @@
     "flinch": "Brief surprise at a loud room sound: he flinches down, both open hands rising beside the ears, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: turn the hump slightly forward, raise both open hands at chest height, and hold. Not combat.",
     "entrance": "One-shot entrance: scuttle in eagerly, turn square to the front and stop with both hands open, beaming.",
-    "victory": "One-shot celebration: fling both open arms wide and high in a Broadway finale pose, chin up, mouth open, and hold.",
-    "ko": "Non-contact defeat: the shoulders slump, both open hands hang limp, the head hangs low under the bowl cut. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

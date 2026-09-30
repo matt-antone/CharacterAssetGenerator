@@ -45,7 +45,11 @@
     "flinch": "A small startle at a buzzing bug: shoulders lift, both open hands rise to the chin, then she drifts back to the dreamy stance. No opponent or contact.",
     "guard": "One-shot: fold both open hands over the pendant at her chest, shoulders turned in, then hold. Not combat.",
     "entrance": "One-shot: wander in barefoot on tiptoe, stop square to the front and settle into the dreamy stance.",
-    "victory": "One-shot: both open hands raised high and spread, head tipped back, mouth open in a delighted laugh, then hold.",
-    "ko": "The dreaminess fades: shoulders drop, both open hands hang limp and the head bows, the hair falling forward. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

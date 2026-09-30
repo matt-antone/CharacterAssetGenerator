@@ -49,7 +49,11 @@
     "flinch": "A big startle at a passing flame jet: he jumps, both open hands shoot up beside the head, eyes wide, then he recovers into the stiff nervous stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: hunch the shoulders and raise both open hands in front of the face, palms out, holding a timid finish. Not combat.",
     "entrance": "One-shot entrance: shuffle in hesitantly, looking all around, tug the fur coat closed with both hands, then let go into the stiff stance with both hands open.",
-    "victory": "One-shot song-finish celebration: throw both open hands overhead in surprised delight, mouth wide open in a whoop, and hold a loose wide-armed pose, finally relaxed.",
-    "ko": "Non-contact performance defeat: the overwhelm wins — the shoulders sag inside the fur coat, both open hands hang limp at his sides, and his head hangs with the chin toward the T-shirt. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

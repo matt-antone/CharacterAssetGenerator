@@ -46,7 +46,11 @@
     "flinch": "Brief startle at a loud room sound: the shoulders hunch, both open hands jump up to chest height, then he laughs it off and returns to the planted stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step back onto the heels and raise both open palms in front of the chest, then hold a sheepish steady finish. Not combat.",
     "entrance": "One-shot entrance: jog in with a slightly winded bounce, stop square to the front, hitch up the cargo shorts with both hands, then settle into the planted stance.",
-    "victory": "One-shot finish: a big air-guitar windmill: the character-left hand fingers an invisible neck out to the side while the character-right arm swings a full circle, both hands empty, then freeze with the character-right arm high and mouth open in a shout.",
-    "ko": "Non-contact performance defeat: the eager look collapses, the shoulders round, both open hands hang and the head drops with a winded sigh. He holds a standing, deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

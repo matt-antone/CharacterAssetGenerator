@@ -45,7 +45,11 @@
     "flinch": "A quick startle at a loud room sound: the shoulders tighten and the head pulls back, both open hands lift a little, then she shrugs it off and returns to the cocked-hip stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: square the feet, bring the character-left forearm up across the chest, character-right hand open at the hip, and hold a cool steady finish. Not combat.",
     "entrance": "One-shot entrance: stroll in with a slow rolling walk, tug the ponytail with the character-left hand, then land in the cocked-hip stance with the character-right hand on the hip.",
-    "victory": "One-shot celebration: raise the open character-left hand high, pop the hip, tip the chin up with an open-mouthed smile, and hold the pose.",
-    "ko": "Non-contact performance defeat: the swagger drains out — the hip straightens, both open hands hang at her sides and the head drops, the ponytail falling forward over one shoulder. She holds a standing, deflated finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

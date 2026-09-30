@@ -44,7 +44,11 @@
     "flinch": "A sharp start at a loud stereo: shoulders snap up, both open hands rise, then she smooths the bob back into place. No opponent or contact.",
     "guard": "One-shot: hold the character-left hand up palm-out, 'stop right there', feet together, then hold. Not combat.",
     "entrance": "One-shot: march in heel-toe, stop square to the front and hold up the pointing finger in the rigid stance.",
-    "victory": "One-shot: both open hands raised in a barbershop finish, head back, mouth open on the last chord, then hold.",
-    "ko": "The rigid posture fails: shoulders drop, both open hands hang limp, the chin sinks and the visor tips down. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

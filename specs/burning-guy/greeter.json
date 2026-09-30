@@ -44,7 +44,11 @@
     "flinch": "Brief startle at a loud horn: the shoulders jump, both open hands fly to the chest, then she laughs and opens her arms wide again. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet wider and cross both forearms in front of the chest with open hands, holding a steady finish. Not combat.",
     "entrance": "One-shot entrance: hurry in with bouncy steps and a big wave of the character-right hand, then open both arms wide at waist height in the welcoming stance.",
-    "victory": "One-shot song-finish celebration: throw both open hands high overhead, tip the head back in a huge open-mouthed hallelujah, then hold the pose with both arms high and the palms open to the sky.",
-    "ko": "Non-contact performance defeat: the welcome fades — the wide arms drop, both open hands hang limp at her sides, the shoulders slump, and her head hangs with the chin toward the sequin vest. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

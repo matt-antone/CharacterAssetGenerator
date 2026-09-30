@@ -43,7 +43,11 @@
     "flinch": "A startled beat at a loud room sound: both open hands fly up to shoulder height and the shoulders lift, then she smooths her hair with the character-left hand and returns to the diva stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet apart, raise the character-left forearm before the face, character-right hand open at the hip, and hold a poised finish. Not combat.",
     "entrance": "One-shot entrance: strut in on the platforms, toss the feathered hair with a flick of the head, and land in the diva stance with the character-right finger pointed high.",
-    "victory": "One-shot celebration: both arms thrown high overhead, palms open, head back in an open-mouthed laugh, hips cocked, holding the pose under the mirror ball.",
-    "ko": "Non-contact performance defeat: the pointing arm drops, both open hands hang at her sides, the shoulders fold and the head bows so the feathered hair falls forward. She holds a standing, deflated finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

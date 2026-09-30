@@ -41,7 +41,11 @@
     "flinch": "A loud clank of weights: he flinches, shoulders up, then flexes to recover. No opponent or contact.",
     "guard": "One-shot: crosses both forearms before the chest, fists closed; hold. Not combat.",
     "entrance": "One-shot: strides in pumping both arms, stops and hits the front flex.",
-    "victory": "One-shot: double-biceps pose, both arms high, head back roaring with mouth open, holds.",
-    "ko": "Non-contact defeat: the flex deflates, both open hands hang, the mullet falls forward with his head bowed. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

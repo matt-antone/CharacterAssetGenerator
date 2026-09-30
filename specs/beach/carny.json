@@ -46,7 +46,11 @@
     "flinch": "Brief startle at a loud beach sound: the shoulders jump, the torso draws back and both open hands rise to chest height, then he settles back into the opening stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: strut in with a bouncing step, tip the boater brim with the character-left hand, then land in the showman's stance.",
-    "victory": "One-shot finish: he sweeps the boater off with the character-left hand, bows deeply, rises and holds the hat high in the air with a wide open-mouthed laugh.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the energy drains out: the shoulders drop, both open hands hang limp at his sides, and his head hangs low with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

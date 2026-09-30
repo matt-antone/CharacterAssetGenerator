@@ -45,7 +45,11 @@
     "flinch": "A sudden bang nearby: the shoulders jump and both hands clutch the fur collar, then he preens and settles. No opponent, strike or physical contact.",
     "guard": "One-shot: pull the coat across the chest with the character-left hand, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: strut in with long swaggering steps, the coat swinging, then plant the platform boots in the strutting pose.",
-    "victory": "One-shot finish: both open hands thrown high and wide, the coat flared open, head back in a big open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: the strut drains out — the shoulders slump inside the coat, both open hands hang limp at his sides, and his head hangs low, the hat brim tipping down. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

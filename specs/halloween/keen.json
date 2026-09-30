@@ -49,7 +49,11 @@
     "flinch": "Brief room-sound startle: the shoulders jump, the silver eyes go wide and the character-left hand flies to her mouth as if she startled herself, the white hair bristling, then she lowers it with an apologetic smile and resettles into her gathered stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and draw the ragged bell sleeve up across the face with the character-left arm, silver eyes peeking over it, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: drift in with slow gliding steps under the gown with the mane streaming, stop, pull the green shawl snug with both hands, give a small shy nod, then settle into her gathered stance.",
-    "victory": "One-shot song-finish celebration: fling both arms wide and up with sleeves streaming and the mane flaring, face bright with happy tears, then hold a proud upright pose with both hands clasped over her heart.",
-    "ko": "Non-contact performance defeat: she stays on her feet while her voice fails her — the character-left hand goes to her throat, the shoulders fold in, the wild hair falls forward over the face and the ragged sleeves hang still. She holds a standing, visibly heartsore finish with weight even over both feet. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, fading away or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -43,7 +43,11 @@
     "flinch": "Brief room-sound reaction: both eyebrows shoot up over the spectacles and the shoulders tighten for a beat, then she pushes the spectacles back up with one finger and resumes her unimpressed stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and draw the lab-coat front across her body with the character-left hand, then hold a composed upright stance. Not a fight pose.",
     "entrance": "One-shot entrance: stride in briskly with short efficient steps, straighten the lab-coat collar, nudge the spectacles, and settle into her neat stance with the hand in the pocket.",
-    "victory": "One-shot finish: give a small dry bow of the head, then lower the spectacles with one finger for a knowing look over the rims and hold a satisfied smirk.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the dry composure gives out — the shoulders drop, the spectacles slip down the nose, the character-left hand hangs at her side and the head bows with a weary sigh. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

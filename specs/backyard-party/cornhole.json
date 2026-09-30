@@ -46,7 +46,11 @@
     "flinch": "A quick wince at a missed throw he hears: shoulders hunch, both open hands rise, then he shakes it off back to the ready stance. No opponent or contact.",
     "guard": "One-shot: square up, knees bent, both open hands forward at waist height like a goalkeeper, then hold. Not combat.",
     "entrance": "One-shot: jog in, stop square to the front, roll the shoulders and settle into the ready stance.",
-    "victory": "One-shot: the character-right fist punches high overhead, the character-left hand open at the chest, mouth wide in a shout, then hold.",
-    "ko": "The competitor's stance collapses: shoulders slump, both open hands hang limp and the head drops back to look at the sky in disbelief, then down. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

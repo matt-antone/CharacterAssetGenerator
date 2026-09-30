@@ -43,7 +43,11 @@
     "flinch": "Brief startle at a gust of sand: the head turns aside, the character-left forearm lifts before the face, then he lowers it. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn the plated shoulder forward and raise both open forearms, then hold. Not combat.",
     "entrance": "One-shot entrance: trudge in with slow heavy steps, touch the goggles with the character-right hand, then settle into the stance with both hands open.",
-    "victory": "One-shot finish: raise the character-right fist high, head tipped back, then hold a quiet proud pose.",
-    "ko": "Non-contact performance defeat: the shoulders slump, both open hands hang limp and his head bows with the scarf tail sliding forward. He holds a standing, weary finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

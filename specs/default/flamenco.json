@@ -42,7 +42,11 @@
     "flinch": "Brief startle at a room sound: the chin snaps up and both open hands lift sharply to chest height, then she recomposes the proud stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left forearm across the chest, hand open, then hold a fierce steady finish. Not combat.",
     "entrance": "One-shot entrance: walk in with sharp heel-strikes, stop square to the front, give two hard claps and settle into the upright stance.",
-    "victory": "One-shot finish: stamp once, sweep both open hands high overhead with the wrists curled, chin high, mouth open in a triumphant cry, then hold.",
-    "ko": "Non-contact performance defeat: the proud back softens, the shoulders drop, both open hands fall to her sides and the head turns down. She holds a standing, bitter finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

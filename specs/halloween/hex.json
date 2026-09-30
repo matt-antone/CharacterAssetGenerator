@@ -65,7 +65,11 @@
     "flinch": "Brief room-sound startle: the bony shoulders jump, the sunken eyes go round and the bent hat tip whips forward over the brim, the crooked character-left hand snaps open, then she rights the hat and resettles into her light ready stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward, duck the head so the wide brim shields the face and raise the character-left hand open in front of it, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: hobble in briskly with two quick light steps, stop, straighten the tall hat with the crooked character-left hand, flick the ratty braid back over the shoulder, then take her eager ready stance with the character-left hand rising into its flourish.",
-    "victory": "One-shot song-finish celebration: throw both arms overhead and bounce up onto the toes with the braid and hat tip flying and the gap-toothed grin at its widest, then settle into a proud, beaming upright pose with the character-left hand on the bony hip.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the spark goes out of her — the bony shoulders drop, the belled sleeves hang off the thin arms, and her head tips low so the wide brim hides the eyes while the ratty braid swings forward. She holds a standing, visibly crestfallen finish with weight even over both boots. She remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

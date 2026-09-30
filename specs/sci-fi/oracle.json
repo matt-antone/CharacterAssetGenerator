@@ -45,7 +45,11 @@
     "flinch": "Brief room-sound reaction: the gold eyes widen, the head draws back an inch and the sleeves flutter as the hands lift, then she lets out a calm breath and resettles into her serene stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left forearm so the wide sleeve drapes across the body like a curtain, then hold that calm, level stance. Not a combat pose.",
     "entrance": "One-shot entrance: glide in with small unseen steps beneath the pooled robe, stop, let the sleeves settle, then raise both hands to chest height into her opening stance.",
-    "victory": "One-shot finish: spread both arms wide and high so the sleeves fall open to show the full star-field lining, tip the face upward with a serene smile, then bring the palms together at the chest and hold a tall still pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while her calm dims — the arms sink to hang at her sides with the sleeves covering the hands, the long neck bows so the head drops forward, and the gold eyes close. She holds a standing, visibly drained finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

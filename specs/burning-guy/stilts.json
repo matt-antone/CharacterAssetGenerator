@@ -45,7 +45,11 @@
     "flinch": "Brief wobble at a sudden noise: the tall body sways, both gloved hands fly out wide for balance, then he steadies upright into the grand stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: bring the character-left gloved forearm across the chest and the character-right gloved hand open at the hat brim, the long legs planted apart, holding a steady finish. Not combat.",
     "entrance": "One-shot entrance: stride in on huge slow stilt steps, halt, tip the top hat with the character-right gloved hand, and settle into the tall grand stance.",
-    "victory": "One-shot song-finish celebration: sweep the top hat off with the character-right gloved hand into a deep theatrical bow from the waist, then rise tall with the hat held high and the mouth open in a laugh, holding the pose.",
-    "ko": "Non-contact performance defeat: the grandeur sags — the tall body stoops from the waist, both gloved hands dangle limp, the top hat tips askew and his head hangs with the chin toward the chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

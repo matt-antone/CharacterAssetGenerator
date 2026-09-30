@@ -44,7 +44,11 @@
     "flinch": "Brief surprise at a loud room sound: the shoulders lift, the torso draws back slightly and both open hands rise to chest height, then he settles back to the opening stance. No opponent, strike or physical contact.",
     "guard": "One-shot stage self-protection: step the feet a little wider, bring the character-left forearm across the chest with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: walk in with slow measured steps, stop square to the front, give a short bow from the waist, then rise into the still stance with both chrome hands open at his sides.",
-    "victory": "One-shot song-finish: plant both boots, raise the chrome character-left fist straight overhead, the character-right hand low with the mic, tip the head back into an open-mouthed shout, then hold a hard still pose.",
-    "ko": "He stays on his feet while the stance goes slack: the shoulders drop, both open hands hang limp at the sides and the head hangs low. He holds a standing, visibly deflated finish, on both planted feet in every frame: no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

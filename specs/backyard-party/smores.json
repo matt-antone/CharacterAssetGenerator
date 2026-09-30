@@ -45,7 +45,11 @@
     "flinch": "An ember pops: he blinks and draws back, both open hands lifting to chest height, then settles back to the mellow stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn the shoulders slightly and raise both open hands in front of the chest, holding a calm stance. Not combat.",
     "entrance": "One-shot entrance: amble in slowly, give a lazy wave with the character-right hand, then settle into the mellow stance.",
-    "victory": "One-shot celebration: raise both open hands wide overhead, head back in a big open-mouthed laugh, then hold with both feet planted.",
-    "ko": "Non-contact defeat: he deflates — shoulders sag, both open hands hang limp at his sides, head droops. He holds a standing, sleepy finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

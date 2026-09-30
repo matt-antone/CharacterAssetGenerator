@@ -41,7 +41,11 @@
     "flinch": "A glass smashes nearby: she starts, both hands rising, then rolls her eyes and settles. No opponent, strike or physical contact.",
     "guard": "One-shot: turn the character-left shoulder forward with the character-left forearm up, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: saunter in, tip the bowler brim with the character-right hand, then settle into the relaxed stance.",
-    "victory": "One-shot finish: sweep the bowler off with the character-right hand and hold it high, the character-left hand on the hip, head back in an open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: the cool slips — the shoulders slump, both open hands hang limp at her sides, and her head hangs low, the bowler brim tipping down. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

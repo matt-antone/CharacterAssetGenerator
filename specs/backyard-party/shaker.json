@@ -44,7 +44,11 @@
     "flinch": "A cold splash from the cooler startles him: the torso jerks back, both open hands lift to chest height, then he smooths his hair back and settles. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn the character-left shoulder forward and raise both open hands in front of the chest, holding a cool braced stance. Not combat.",
     "entrance": "One-shot entrance: stroll in with a little shoulder groove, snap the suspenders with both thumbs, then land in the smooth loose stance.",
-    "victory": "One-shot celebration: both open hands point up high on a disco beat, head tipped back in a broad open-mouthed grin, then hold the pose with both feet planted.",
-    "ko": "Non-contact defeat: the swagger drains out — the shoulders slump, both open hands hang limp at his sides, and his head hangs low. He holds a standing, deflated finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

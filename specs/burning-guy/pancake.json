@@ -45,7 +45,11 @@
     "flinch": "A pan clatters nearby: he starts, both hands up by the belly, then chuckles and settles. No opponent, strike or physical contact.",
     "guard": "One-shot: turn the character-left shoulder forward with the character-left forearm across the belly, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: waddle in cheerfully, straighten the chef's hat with both hands, then take the settled stance.",
-    "victory": "One-shot finish: both open arms spread wide for a hug, head tipped back in a big open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: the cheer goes out of him — the round shoulders slump, both open hands hang limp at his sides, and his head hangs low, the chef's hat tipping forward. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

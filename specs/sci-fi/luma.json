@@ -43,7 +43,11 @@
     "flinch": "Brief room-sound startle: the whole body glow flickers bright, the bell contracts slightly and the tendrils flare outward, then everything dims back and she resettles into her soft stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward, draw the tendrils around the body with the character-left arm like a veil and dim the glow, then hold a small upright stance. Not a combat pose.",
     "entrance": "One-shot entrance: walk in with slow soft steps, the tendrils trailing behind, pause, let the glow brighten, and settle into her soft stance with the hand floating up.",
-    "victory": "One-shot finish: spread both arms wide and glow brightest, the tendrils fanning out like a halo, then bring the hands together at the chest and hold a shy happy stance.",
-    "ko": "Non-contact performance defeat: she stays on her feet while her light fades — the glow dims to a faint flicker, the tendrils hang straight and limp, the arms droop at her sides and the head bows. She holds a standing, visibly dimmed finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

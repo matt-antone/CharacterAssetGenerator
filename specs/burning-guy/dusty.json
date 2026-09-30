@@ -48,7 +48,11 @@
     "flinch": "Brief startle at a sudden gust: he squints hard, the shoulders hunch and both open hands rise to shield the face, then he shrugs and settles back to his slouch. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn a shoulder forward, pull the goggles down over the eyes with the character-left hand and hold a braced, feet-apart finish. Not combat.",
     "entrance": "One-shot entrance: trudge in with long easy strides, beat a cloud of dust off the tunic with both open hands, then settle into the slouched hip-width stance.",
-    "victory": "One-shot song-finish celebration: throw both open hands up above the shoulders, tip the head back into a big open-mouthed laugh as dust shakes loose, then hold a loose wide-armed pose.",
-    "ko": "Non-contact performance defeat: the easy slouch caves in — the shoulders droop, both open hands hang limp at his sides, and his dusty head hangs with the chin toward the bandana. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

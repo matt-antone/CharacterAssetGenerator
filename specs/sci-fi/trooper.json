@@ -42,7 +42,11 @@
     "flinch": "Brief room-sound startle: the big pauldrons hitch up, the eyes snap sideways alert, then she rolls her neck and resettles into her power stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward so the dome pauldron leads and raise the character-left forearm gauntlet in front of the face, then hold a braced planted stance. Not a combat attack.",
     "entrance": "One-shot entrance: march in with heavy clanking strides, stop with a stomp, roll the armoured shoulders, and plant into her wide power stance.",
-    "victory": "One-shot finish: raise the character-left fist high overhead with a triumphant roar, then bring it down to thump the chest plate and hold a proud chest-out stance.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the fight drains out — the heavy pauldrons sag, the arms hang loose, and her head drops forward with the eyes shut. She holds a standing, visibly spent finish, braced upright by the heavy armour. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

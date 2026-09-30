@@ -44,7 +44,11 @@
     "flinch": "Brief shock at a splash from the kiddie pool: shoulders lift, both open hands fly up by the face, then she smooths back into the hip-cocked stance. No contact or opponent.",
     "guard": "One-shot: turn a shoulder forward and raise the character-left open hand, palm out, like refusing gossip, then hold. Not combat.",
     "entrance": "One-shot: sashay in with swinging hips, stop square to the front, and settle into the hip-cocked stance.",
-    "victory": "One-shot: throw both open hands high overhead, bangles sliding, head back in a big open laugh, then hold a glamorous pose.",
-    "ko": "The glamour deflates: shoulders droop, both open hands hang at her sides, the head drops and the hip straightens. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -49,7 +49,11 @@
     "flinch": "Brief room-sound startle: the box helmet jolts, both shoulders jump and both open hands fly up, then he shrugs it off. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn the cardboard chest toward the room and raise both forearms before the face, bucket swinging, and hold. Not combat.",
     "entrance": "One-shot entrance: skip in swinging the pumpkin bucket, stop square to the front, and land in the loose slouch.",
-    "victory": "One-shot celebration: jump up with both arms high, the pumpkin bucket held aloft on the character-left forearm, mouth open in a yell, landing into a held pose with the feet planted.",
-    "ko": "Non-contact performance defeat: he stays on his feet as he deflates — the box torso sags forward, the bucket arm drops, both open hands hang and the head in its box helmet droops. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

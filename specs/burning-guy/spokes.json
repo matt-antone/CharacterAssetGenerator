@@ -48,7 +48,11 @@
     "flinch": "A popping tyre nearby: she jumps a little, both hands flying up, then shakes it off. No opponent, strike or physical contact.",
     "guard": "One-shot: drop into a wide stance with the character-left forearm up in front of the chest, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: stride in fast with bouncy steps, push the headband back with the character-right hand, then land in the springy stance.",
-    "victory": "One-shot finish: both fists thrown straight up, one sneaker kicked out, head back yelling with the mouth wide open, then hold.",
-    "ko": "Non-contact performance defeat: the spring goes out of her — the shoulders drop, both open hands hang limp at her sides, and her head hangs low, chin toward her chest. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

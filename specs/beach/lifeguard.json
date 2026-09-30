@@ -44,7 +44,11 @@
     "flinch": "A sudden splash sound: shoulders snap up and the head jerks toward it, then she resettles. No opponent or contact.",
     "guard": "One-shot: feet widen, the character-left forearm comes across the chest, the character-right hand open at the hip; hold a steady ready stance. Not combat.",
     "entrance": "One-shot: jogs in along the sand, stops square to the front and plants into the watchful stance.",
-    "victory": "One-shot: plants both feet, raises both open hands high overhead, head back in an open-mouthed shout, holds a proud pose.",
-    "ko": "Non-contact defeat: her shoulders fall, both open hands hang limp, the ponytail droops and her head hangs low. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

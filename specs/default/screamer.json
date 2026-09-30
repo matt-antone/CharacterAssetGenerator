@@ -44,7 +44,11 @@
     "flinch": "Brief room-sound surprise: amber spikes and open character-left hand snap outward, the torso recoils slightly, then he regains his wiry planted performance pose. No opponent, strike, or contact.",
     "guard": "One-shot stage self-protection: tighten the vest-side torso line, bring the open character-left hand across the body, then hold a grounded final stance. Not combat.",
     "entrance": "One-shot entrance: stride in with heavy boots and wiry tension, flare the open character-left hand and hair spikes toward the room, then land in the canonical leaned-back performance stance.",
-    "victory": "One-shot performance finish: raise the open character-left hand in a theatrical acknowledgement, let the spikes and vest settle, then hold a loud proud balanced final pose.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the spring tension drops out of the wiry frame all at once — the thin bare arms go slack, the character-left hand opens and falls, and his head hangs low with the chin toward his chest. The amber hair spikes stay separate and angular as they tip forward He holds a standing, visibly defeated finish and remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply injury, impact, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

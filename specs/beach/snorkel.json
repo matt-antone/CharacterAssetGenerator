@@ -50,7 +50,11 @@
     "flinch": "Brief startle at a splash: the shoulders jump, both open hands fly up to chest height, eyes wide, then he settles back to the bouncy stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: widen the flippers, raise both open palms in front of the chest, then hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: waddle in on the big flippers with high comic steps, turn square to the front, and land in the bouncy open stance with both hands open.",
-    "victory": "One-shot celebration: plant both flippers wide, throw both open hands high above the head, tip the head back into a huge open-mouthed laugh, then hold the pose.",
-    "ko": "Non-contact performance defeat: the delight drains away — the shoulders drop, both open hands hang limp at his sides, the mask slides a little lower on the forehead and his head hangs with the chin toward the chest, then he holds a deflated standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

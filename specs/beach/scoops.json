@@ -45,7 +45,11 @@
     "flinch": "A car horn from the road: he jumps, hands to the chest, then chuckles and settles. No opponent or contact.",
     "guard": "One-shot: turns a shoulder forward and raises both open palms at chest height; hold. Not combat.",
     "entrance": "One-shot: strolls in with a jaunty waddle, tips the paper hat, spreads both hands in welcome.",
-    "victory": "One-shot: kisses the fingertips of the character-right hand and flings it wide, then both arms wide, head back laughing, holds.",
-    "ko": "Non-contact defeat: the belly sags, both open hands hang, the moustache droops with the head bowed. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

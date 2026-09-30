@@ -47,7 +47,11 @@
     "flinch": "A mower backfire startles him: shoulders jump, both open hands lift, then he settles back to the steady stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: square up and raise both open hands in front of the chest, holding a solid stance. Not combat.",
     "entrance": "One-shot entrance: walk in steadily, tug the ear protectors straight with both hands, then settle into the steady stance.",
-    "victory": "One-shot celebration: raise the character-right fist high, head back in an open-mouthed shout, then hold with both feet planted.",
-    "ko": "Non-contact defeat: exhaustion takes him — shoulders sag, both open hands hang at his sides, head bows. He holds a standing, worn-out finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

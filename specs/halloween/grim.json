@@ -39,7 +39,11 @@
     "flinch": "Brief surprise at a loud room sound: the shoulders jump, the jaw drops, both bony hands rise open to the chest, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: draw the character-left sleeve across the chest with the bony hand open, the character-right hand low at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: glide in with slow even steps, turn square to the front and settle with both bony hands open at the sides.",
-    "victory": "One-shot celebration: spread both bony arms wide at shoulder height, tip the skull back, jaw open in a joyful laugh, and hold.",
-    "ko": "Non-contact defeat: the shoulders sag, the hood falls forward, both bony hands hang limp and the eye glows dim. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

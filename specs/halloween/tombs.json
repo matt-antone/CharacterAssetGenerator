@@ -49,7 +49,11 @@
     "flinch": "Brief room-sound startle: the bushy brows shoot up, both open hands rise to the chest, then he chuckles. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: tug the flat cap down with the character-left hand, the character-right forearm across the waistcoat, and hold. Not combat.",
     "entrance": "One-shot entrance: amble in with a bow-legged gait, tip the flat cap with the character-left hand, and settle into the easy stance.",
-    "victory": "One-shot celebration: a little heel-click hop landing on both boots, both open hands raised high, head back with a big open-mouthed laugh under the moustache, and hold.",
-    "ko": "Non-contact performance defeat: he stays on his feet as he tuckers out — the shoulders droop, both open hands hang, and his head bows so the flat cap tips low. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

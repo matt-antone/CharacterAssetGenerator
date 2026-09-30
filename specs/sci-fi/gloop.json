@@ -43,7 +43,11 @@
     "flinch": "Brief startle at a loud pop: the whole dome jiggles and flattens, both hands fly up, then it firms back to shape. No contact or opponent.",
     "guard": "One-shot stage self-protection: the dome squashes lower and both stubby arms fold across the front, then holds. Not combat.",
     "entrance": "One-shot entrance: slides in with bouncy hops on the flat base, lands with a wobble, and settles into the open-armed pose.",
-    "victory": "One-shot finish: the dome stretches tall, both hands thrown up, eyes wide and mouth open in delight, then holds.",
-    "ko": "Non-contact performance defeat: the dome slumps wider and lower, both arms droop to the base and the eyes half-close. It holds a sagging but upright finish on its base — no melting, puddling or spreading across the floor. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

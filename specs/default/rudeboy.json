@@ -42,7 +42,11 @@
     "flinch": "Brief room-sound startle: he snaps his head back and slaps a hand to the hat to keep it on, then tugs the jacket straight and resumes his cool stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn side-on, raise the character-left forearm across the chest, and hold a sharp, composed final pose. Not a fight pose.",
     "entrance": "One-shot entrance: bop in with quick springy steps, tip the pork-pie hat, tug the jacket cuffs, then snap into the canonical stance.",
-    "victory": "One-shot finish: a quick spin on the spot, land with a finger-point at the crowd and the hat tipped low, and hold it.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the sharpness goes out of him — the hat tips down over his eyes, the tie hangs crooked, the shoulders drop and his head hangs low. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

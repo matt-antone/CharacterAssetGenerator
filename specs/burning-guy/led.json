@@ -46,7 +46,11 @@
     "flinch": "Brief startle at a sudden bass drop: the shoulders jerk up, both open hands rise to chest height and the head pulls back, then he bounces back into his ready stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet wider and raise both open hands in front of the glowing chest X, palms out, holding a steady finish. Not combat.",
     "entrance": "One-shot entrance: bounce in with quick light steps, tap the visor with the character-left hand, then settle into the hip-width stance with both hands open at his sides.",
-    "victory": "One-shot song-finish celebration: jump the knees up once, throw both open hands overhead in a wide V, mouth open in a joyous shout, and hold the pose with the arms high.",
-    "ko": "Non-contact performance defeat: the bounce dies out — the shoulders sag, both open hands hang limp at his sides, and his visored head hangs with the chin toward the chest X. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

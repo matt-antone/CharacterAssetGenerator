@@ -47,7 +47,11 @@
     "flinch": "Brief startle: the shoulders jump, both hands lift to chest height, the towel still on the forearm, then he smooths back into the attentive stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: step back a half pace, raise the towel-draped character-left forearm across the chest, open character-right hand at the hip, then hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: glide in with a smooth sliding step, turn square to the front, and settle into the attentive stance with the towel over the forearm.",
-    "victory": "One-shot celebration: sweep the towel off the forearm with the character-left hand and twirl it overhead, raise the open character-right hand, flash a broad open-mouthed grin, then hold the pose.",
-    "ko": "Non-contact performance defeat: the smoothness slips — the shoulders sag, both arms hang with the towel sliding down the character-left forearm, and his head drops, chin to the chest, holding a deflated standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

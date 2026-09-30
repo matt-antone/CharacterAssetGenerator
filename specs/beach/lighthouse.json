@@ -47,7 +47,11 @@
     "flinch": "Brief startle at a foghorn: the shoulders hunch, both open hands rise to chest height, then he settles back to the rooted stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: set the boots wider as if bracing on a pitching deck, raise both open hands in front of the chest, then hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: stomp in with a rolling sailor's gait, turn square to the front, and land in the rooted stance with both hands open at his sides.",
-    "victory": "One-shot celebration: plant both boots, raise both open hands high overhead, tip the head back into a big open-mouthed booming laugh, then hold the pose.",
-    "ko": "Non-contact performance defeat: the old man tires — the broad shoulders sag, both open hands hang heavy at his sides, and his head bows until the beard rests on the chest, holding a weary standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

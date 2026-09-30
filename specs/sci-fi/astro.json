@@ -35,12 +35,18 @@
     "dance": "Doo-wop loop: a smooth side-step character-left and back with a knee pop on each beat, shoulders rocking, the character-left hand snapping out palm-open and back, then close to the opening knee-popped stance.",
     "sing": {
       "intent": "Doo-wop crooning loop: tilt the helmeted head to one side on a sweet held note with the free hand drifting over the heart, then return to the stance. The mouth, visible through the glass, must visibly open and change shape across the loop so he unmistakably reads as singing.",
-      "props": ["mic"]
+      "props": [
+        "mic"
+      ]
     },
     "flinch": "Brief meteor-alarm startle: the eyes widen inside the helmet and the shoulders jerk up to the collar ring, then he gives a sheepish grin and resumes the stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left gauntlet in front of the helmet glass, then hold a steady heroic finish. Not a fight pose.",
     "entrance": "One-shot entrance: bound in with springy low-gravity steps, land lightly, give the helmet a tap with the character-left glove, then pop into the performance stance.",
-    "victory": "One-shot finish: fling the character-left arm up pointing to the stars with a huge grin, then settle into a fists-on-hips heroic pose.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the gallantry leaks away — the shoulders slump, the character-left arm hangs and his face inside the helmet droops with the pompadour tipping forward. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

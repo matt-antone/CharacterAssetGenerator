@@ -56,7 +56,11 @@
     "flinch": "Brief room-sound startle: the ears flatten back, the tail tucks and the shoulders hunch up for a beat like a surprised dog, then the ears pop back up and the tail lifts as he restores his upright eager stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and fold the character-left furry arm up in front of the muzzle, ears pressed back, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: bound in with springy upright strides, skid to a happy stop, give a quick full-body shake that ruffles the fur and flannel, then plant into the upright ready stance with the tail curled high.",
-    "victory": "One-shot song-finish celebration: throw the character-left fist overhead, tail wagging hard, let out one short triumphant howl with the muzzle up, then hold a proud upright pose with a big tongue-out grin.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the enthusiasm drains out of him — the tall ears droop flat to the sides, the tail sinks low between the legs, and his head hangs with the muzzle pointed toward the floor in a hangdog sulk. He holds a standing, visibly dejected finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, lying down, dropping to all fours or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

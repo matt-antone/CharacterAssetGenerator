@@ -45,7 +45,11 @@
     "flinch": "A shiver-jump at cold water: shoulders hunch, both open hands clutch at the arms, then he shakes it off to the bouncy stance. No opponent or contact.",
     "guard": "One-shot: turn the head aside and hold both open hands out in front, palms forward, as if blocking spray, then hold. Not combat.",
     "entrance": "One-shot: run in, skid to a stop square to the front, and fling both arms out into the bouncy stance.",
-    "victory": "One-shot: both open hands up over the head, mouth wide in a yell, knees bent in a happy bounce, then hold.",
-    "ko": "The bounce drains: shoulders sag, both open hands hang dripping, and the head drops so the wet hair falls forward. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

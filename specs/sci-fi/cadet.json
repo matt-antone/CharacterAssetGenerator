@@ -45,7 +45,11 @@
     "flinch": "Brief startle at a loud klaxon: the shoulders jump, both open hands fly up to chest height, then she snaps back to attention. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet apart and raise both open forearms in front of the chest, then hold a steady upright finish. Not combat.",
     "entrance": "One-shot entrance: march in with crisp high-kneed steps, turn square to the front, click the heels together and snap to attention with both open hands at her sides.",
-    "victory": "One-shot song-finish celebration: jump both fists up above the head, land on both boots, then hold a beaming pose with the character-right hand in a crisp open salute at the brow.",
-    "ko": "Non-contact performance defeat: the posture wilts — the shoulders round, both open hands hang limp and her head droops toward the collar in dejection. She holds a standing, crestfallen finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

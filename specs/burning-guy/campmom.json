@@ -48,7 +48,11 @@
     "flinch": "Brief startle at a sudden shout: both open hands fly to the fanny pack, the shoulders lift, then she pats it and settles back into her warm stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: step the feet wider and raise the character-left forearm across the chest, the character-right hand open over the fanny pack, holding a firm motherly finish. Not combat.",
     "entrance": "One-shot entrance: bustle in with quick short steps, give a big wave with the character-right hand, then settle into the stance with the character-left hand on her hip.",
-    "victory": "One-shot song-finish celebration: clasp both open hands to the heart, then fling them wide above the shoulders with a big open-mouthed laugh, and hold a proud beaming pose.",
-    "ko": "Non-contact performance defeat: the brisk warmth runs out — the shoulders sag, both open hands hang limp at her sides, and her head drops with the chin toward the tunic. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -51,7 +51,11 @@
     "flinch": "Brief room-sound startle: the long body jolts upright, the red eyes go wide and the character-left hand snaps the cape edge up to the chin like a scandalised aunt, then he lowers it with dignity and resettles into his still stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and sweep the character-left arm up so the cape drapes across the lower face with only the sorrowful eyes and widow's peak showing above it, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: glide in with slow long strides and the cape trailing, stop, sweep the cape back off one shoulder with a flourish, give a small deep courtly bow of the head, then rise into his tall still stance with the hand over the heart.",
-    "victory": "One-shot song-finish celebration: fling the character-left arm wide so the cape opens like a curtain showing the wine-red lining, tip the head back in tragic triumph, then settle into a deep satisfied bow of the head and hold a proud upright pose with the hand on the heart.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the drama collapses inward — the character-left hand goes limp to the brow in a swoon, the long body sags at the shoulders and the head droops to one side, the cape hanging straight. He holds a standing, theatrically heartbroken finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, fainting or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

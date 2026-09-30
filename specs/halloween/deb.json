@@ -100,13 +100,13 @@
       ]
     },
     "victory": {
-      "intent": "One-shot song-finish celebration: throw both arms overhead, rise onto the toes of the work boots with the head tipped back in a whoop, then settle into a proud, beaming upright pose with the free character-right hand on the hip.",
+      "motion": "emote-02",
       "props": [
         "pigeon"
       ]
     },
     "ko": {
-      "intent": "Non-contact performance defeat: she stays on her feet while the sparkle drains out of her — the square shoulders drop, the free character-right arm hangs limp, and her head tips low with the chin toward the buttoned collar while the thinning flip falls forward. She holds a standing, visibly crestfallen finish with weight even over both boots. She remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent.",
+      "motion": "emote-01",
       "props": [
         "pigeon"
       ]

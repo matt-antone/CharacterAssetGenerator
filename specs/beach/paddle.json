@@ -47,7 +47,11 @@
     "flinch": "Brief startle at a splash: the knees dip, both open hands lift out for balance at hip height, then she settles to the serene stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: sink into a wide balanced stance, raise both open palms in front of the chest, then hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: walk in barefoot with a light easy stride, turn square to the front, and settle into the serene stance with both hands open.",
-    "victory": "One-shot celebration: stretch both open hands high overhead, tip the head back under the big hat brim into a bright open-mouthed laugh, then hold a balanced pose.",
-    "ko": "Non-contact performance defeat: her calm drains — the shoulders drop, both open hands hang at her sides, and her head bows so the hat brim tips down, holding a deflated standing finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

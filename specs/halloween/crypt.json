@@ -47,7 +47,11 @@
     "flinch": "Brief room-sound startle: he jumps with both open hands up, the cape flaring, then smooths his hair back with the character-left hand. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: sweep the character-left arm up so the cape covers the lower face, eyes peeking over, and hold. Not combat.",
     "entrance": "One-shot entrance: creep in on tiptoe with long exaggerated steps, then plant both feet and spread both open hands wide as if introducing the show, and hold.",
-    "victory": "One-shot celebration: throw both open hands high, cape flaring, head back in a huge open-mouthed cackle, then hold a triumphant pose.",
-    "ko": "Non-contact performance defeat: he stays on his feet as the act falls flat — the shoulders slump, the cape hangs limp, both open hands dangle at his sides and his head hangs with the chin on the bow tie. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

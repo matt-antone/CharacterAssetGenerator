@@ -43,7 +43,11 @@
     "flinch": "Brief room-sound startle: the headlamp eyes flicker, the huge shoulders jerk up with a clank and the jaw-plate snaps shut, then he slowly settles back into his rooted stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one massive shoulder forward and bring the character-left forearm up in front of the chest vent, head sunk low, then hold a heavy braced stance. Not a combat pose.",
     "entrance": "One-shot entrance: lumber in with slow ground-shaking steps, stop, let out a puff of steam from the shoulder vents, and settle into his rooted stance with the jaw-plate half open.",
-    "victory": "One-shot finish: raise both huge arms slowly overhead with the headlamp eyes brightening and the jaw-plate open in a wide grin, then lower them and hold a proud, gentle stance.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the power runs down — the headlamp eyes dim, the jaw-plate hangs slack, the huge arms drop to hang limp and the head sags forward between the shoulders. He holds a standing, visibly powered-down finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

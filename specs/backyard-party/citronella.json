@@ -45,7 +45,11 @@
     "flinch": "A mosquito whine by the ear: she jerks the head aside and swats the air with the character-left open hand, then settles back. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: pull the bucket hat brim down with both hands and hunch, holding a wary stance. Not combat.",
     "entrance": "One-shot entrance: stomp in swatting the air with both open hands, then settle into the alert stance.",
-    "victory": "One-shot celebration: both open hands thrown up high, head back in an open-mouthed yell, then hold with both feet planted.",
-    "ko": "Non-contact defeat: the itch wins — shoulders slump, both open hands hang limp, head drops under the hat brim. She holds a standing, beaten finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

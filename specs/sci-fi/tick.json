@@ -47,7 +47,11 @@
     "flinch": "Brief startle at a chiming clock: both open hands fly up to the goggles, the hair bounces, then she shakes it off. No opponent or contact.",
     "guard": "One-shot stage self-protection: step back and raise both open forearms before the chest, then hold. Not combat.",
     "entrance": "One-shot entrance: stumble in with a hopping step as if just arrived, pat the tailcoat, then settle into the mid-step pose with both hands open.",
-    "victory": "One-shot finish: kick one heel up and throw both open hands high, head tipped back laughing, then hold.",
-    "ko": "Non-contact performance defeat: the shoulders droop, both open hands hang limp, and her head bows under the wild hair. She holds a standing, flustered finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

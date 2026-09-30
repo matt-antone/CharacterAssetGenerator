@@ -49,7 +49,11 @@
     "flinch": "A cloud covers the sun: she startles, both hands up at chest height, then settles. No opponent or contact.",
     "guard": "One-shot: lifts the reflector before her face like a shield in both hands; hold. Not combat.",
     "entrance": "One-shot: saunters in, tips the sunglasses down, and poses with the reflector.",
-    "victory": "One-shot: raises the reflector high overhead in both hands, head back laughing, holds.",
-    "ko": "Non-contact defeat: she wilts, the reflector hangs from both limp hands, the hat brim drooping over her face. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

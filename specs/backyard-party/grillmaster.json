@@ -45,7 +45,11 @@
     "flinch": "A startled hop back from a flare-up of the grill he cannot see: shoulders jump, both open hands rise to chest height, then he settles back to the planted stance. No opponent or contact.",
     "guard": "One-shot: widen the feet and hold both open hands out palm-forward at chest height like shielding the grill, then hold a steady finish. Not combat.",
     "entrance": "One-shot: stride in with a proud belly-first walk, stop square to the front and plant both sneakers, both open hands at his sides.",
-    "victory": "One-shot: raise both open hands high above the visor, tip the head back in a big open-mouthed laugh, then hold a proud wide-footed pose.",
-    "ko": "The planted stance sags: shoulders drop, both open hands hang limp, the belly slumps and the head hangs with the chin to the apron. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

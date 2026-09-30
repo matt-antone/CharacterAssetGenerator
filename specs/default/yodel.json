@@ -48,7 +48,11 @@
     "flinch": "A brief startle at a loud room sound: the shoulders lift and both open hands jump up to chest height, then she huffs and plants her hands back on her hips. No opponent or contact.",
     "guard": "One-shot stage self-protection: widen the boots, raise the character-left forearm across the chest, character-right hand open at the hip, and hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: march in with a hiker's firm stride, swinging both open arms, then plant the boots and set both hands on the hips.",
-    "victory": "One-shot celebration: fling both open arms high overhead, tip the head back with a huge open-mouthed whoop, and hold the pose.",
-    "ko": "Non-contact performance defeat: the chest empties, both open hands slide off the hips and hang limp, and the head bows. She holds a standing, deflated finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

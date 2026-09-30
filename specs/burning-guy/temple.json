@@ -42,7 +42,11 @@
     "flinch": "A plank falls nearby: he flinches, shoulders lifting, then settles quietly. No opponent, strike or physical contact.",
     "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: walk in slowly with long easy steps, pull the bandana loose with the character-right hand, then settle into the grounded stance.",
-    "victory": "One-shot finish: both open hands raised to shoulder height, head tipped back with an open-mouthed, relieved smile, then hold.",
-    "ko": "Non-contact performance defeat: the quiet turns to sorrow — the shoulders fold forward, both open hands hang limp at his sides, and his head hangs low, hair falling forward. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -45,7 +45,11 @@
     "flinch": "Brief startle at a crashing gong: the shoulders hunch, the head pulls back and both open hands lift to chest height, then he rolls the shoulders and settles. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn a pauldron forward and raise both open forearms before the chest, then hold a planted finish. Not combat.",
     "entrance": "One-shot entrance: stride in with heavy steps, raise both open hands to the crowd, then plant into the wide open-armed stance.",
-    "victory": "One-shot finish: thrust both fists high overhead, head tipped back in a roaring open-mouthed shout, then hold the pose.",
-    "ko": "Non-contact performance defeat: the big frame sags — the pauldrons drop, both open hands hang heavy and his head bows with the crest drooping forward. He holds a standing, beaten finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

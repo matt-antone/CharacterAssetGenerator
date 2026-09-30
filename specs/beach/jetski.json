@@ -49,7 +49,11 @@
     "flinch": "Brief startle at spray: the whole body jolts, both open hands fly up at chest height, then he bounces back to the wired stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: drop into a wide springy stance, raise both open palms at chest height, then hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: sprint in with big bounding steps, skid square to the front, and land in the wired stance with both hands pumped up.",
-    "victory": "One-shot celebration: jump the feet wide, throw both open hands straight up overhead, tip the head back into a huge open-mouthed whoop, then hold the pose.",
-    "ko": "Non-contact performance defeat: the adrenaline crashes — the shoulders sag inside the life vest, both open hands hang at his sides, and his head drops, chin on the vest, holding a drained standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

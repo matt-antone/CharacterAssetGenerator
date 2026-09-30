@@ -47,7 +47,11 @@
     "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then he settles back to his stance. No opponent, strike or physical contact.",
     "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: waddle in on the big shoes with exaggerated knee lifts, turn square to the front, then land in his opening stance with both open hands in full view.",
-    "victory": "One-shot finish: kick one big shoe forward, doff the tiny bowler high with the character-left hand, laugh with the mouth wide open, then hold a deep showman's pose with the hat raised.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the goofiness wilts — the shoulders droop, both open hands hang limp from the suspenders to his sides, and his head hangs so the red nose points at the ground. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

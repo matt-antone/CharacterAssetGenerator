@@ -46,7 +46,11 @@
     "flinch": "Brief room-sound startle: the shoulders jolt, the natural eye squeezes while the cyber-eye iris flares brighter, then he barks a laugh and resettles into his planted stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and sweep the coat's front skirt across his body with the character-left arm like a cape, then hold a wide planted stance. Not a fight pose.",
     "entrance": "One-shot entrance: swagger in with rolling heavy steps, flick the coat tails back with both hands, and plant into his wide stance with the fist to the hip and a grin.",
-    "victory": "One-shot finish: thrust the character-left fist high overhead, rock back on his heels with a roaring laugh so the braids swing, then settle into a proud chest-out pose with both fists on hips.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the swagger leaks out — the big chest caves, the shoulders roll forward, the coat hangs limp, the cyber-eye dims to a dull amber and the head hangs low with the beard on his chest. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

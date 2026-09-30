@@ -48,7 +48,11 @@
     "flinch": "Brief room-sound startle: the whole skeleton rattles in place, the jaw clacks open and the pinpoint glints shrink, the quiff wobbles, then he checks it with the character-left hand and resettles into his cocky stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left bony hand flat over the quiff to protect it, leather collar up, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: stroll in with a loose swaggering walk, stop, tug the jacket lapels straight with both hands, slide the character-left hand back along the quiff, then drop into his cocky stance with a grin.",
-    "victory": "One-shot song-finish celebration: point the character-left finger straight up overhead, give one sharp knee swivel, then hold a proud upright pose smoothing the quiff with a wink of one pinpoint glint.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the swagger leaves him — the shoulders droop inside the jacket, the jaw hangs slack and the proud quiff flops down over the eye sockets. He holds a standing, visibly deflated finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, falling apart into a pile of bones or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

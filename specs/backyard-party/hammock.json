@@ -44,7 +44,11 @@
     "flinch": "A slow-motion startle at a slammed cooler lid: brows rise, both open hands lift a little, then he sinks back into the easy stance. No opponent or contact.",
     "guard": "One-shot: raise both open hands palm-out at chest height in a peaceful 'easy, man', then hold. Not combat.",
     "entrance": "One-shot: amble in, stop square to the front, stretch both arms and settle into the easy stance.",
-    "victory": "One-shot: both open hands raised high in a slow wave, head back, mouth open in a big laugh, then hold.",
-    "ko": "The laid-back stance melts further: shoulders slump, both open hands hang limp and the head lolls forward. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

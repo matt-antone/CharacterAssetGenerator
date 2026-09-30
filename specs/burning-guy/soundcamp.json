@@ -44,7 +44,11 @@
     "flinch": "A sudden feedback squeal: shoulders lift, both hands jump to the headphone cups, then she settles back into the groove. No opponent, strike or physical contact.",
     "guard": "One-shot: step the feet wider and raise the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: walk in with a loose rolling step, the cape swinging, settle the headphones with both hands, then take the grooving stance.",
-    "victory": "One-shot finish: both open hands thrown straight up above the head, head tipped back, a wide open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: the groove stops — the shoulders drop, both open hands hang limp at her sides, and her head hangs low, chin toward her chest. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

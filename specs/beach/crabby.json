@@ -38,7 +38,11 @@
     "flinch": "A wave crashes: the eyestalks snap down flat, the claws jerk up, then they rise back. No opponent or contact.",
     "guard": "One-shot: both claws raise before the face, crossed like a shield; hold. Not combat.",
     "entrance": "One-shot: scuttles in sideways, turns square to the front and plants.",
-    "victory": "One-shot: both claws raised high snapping, eyestalks upright, mouth wide open, holds.",
-    "ko": "Non-contact defeat: both claws droop to the planks' level beside the legs, the eyestalks sag and the cap tilts. The legs stay planted. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

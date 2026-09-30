@@ -48,7 +48,11 @@
     "flinch": "Brief surprise at a loud room sound: the knees buckle comically, both gloved hands fly up open, the eyebrows jump, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: hunch the shoulders and raise both gloved hands open in front of the face, peeking between the fingers, then hold. Not combat.",
     "entrance": "One-shot entrance: waddle in on the long shoes, turn square to the front, tip the tiny top hat with the character-right gloved hand, and settle with both hands open at the sides.",
-    "victory": "One-shot celebration: kick up one long shoe, fling both gloved hands high, mouth wide in a laugh, then hold with the arms raised.",
-    "ko": "Non-contact defeat: the shoulders fall, both gloved hands hang limp, the head droops and the collar sags. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

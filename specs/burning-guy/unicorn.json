@@ -46,7 +46,11 @@
     "flinch": "A sudden horn blast: he jumps, both hands clutching the onesie zip, then settles. No opponent, strike or physical contact.",
     "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: skip in on the hoof slippers, straighten the horn with both hands, then settle into the open stance.",
-    "victory": "One-shot finish: both open arms thrown high in a wide V, head tipped back in a joyful open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: the hope drains away — the shoulders sag, both open hands hang limp at his sides, and his head hangs low, the horn tipping forward. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

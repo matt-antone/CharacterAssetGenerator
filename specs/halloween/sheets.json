@@ -44,7 +44,11 @@
     "flinch": "Brief room-sound startle: the whole sheet puffs up and ripples, the eyeholes go round and the character-left arm shape pulls the cloth up over the mouth-hole, then it settles and he resettles into his hushed stance, hem on the floor. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and lift the character-left arm shape so a fold of the sheet covers the eyeholes, peeking over its edge, then hold a steady upright finish with the hem on the floor. Not a combat action.",
     "entrance": "One-shot entrance: shuffle in with small gliding steps under the hem, stop, peek out at the crowd, give a tiny wave with the character-left arm shape, then settle into his hushed stance.",
-    "victory": "One-shot song-finish celebration: lift both arm shapes up in a small happy stretch so the sheet rises into a tall point at the dome, sway once with a pink blush showing through the cloth, then hold a proud upright pose with the hem on the floor.",
-    "ko": "Non-contact performance defeat: he stays upright while his nerve goes — the dome droops forward, both arm shapes drop so the sheet hangs limp and straight, and the eyeholes sag into sad downturned ovals. He holds a standing, visibly crestfallen finish with the hem resting on the floor. He remains upright in every frame — no kneeling, crouching, sitting, sinking, deflating into a flat pile of cloth or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

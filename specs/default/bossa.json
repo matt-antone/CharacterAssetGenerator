@@ -44,7 +44,11 @@
     "flinch": "Brief surprise at a room sound: the eyes widen, the shoulders rise a little and the character-left hand touches the collarbone, then she softens back into the relaxed stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: draw the feet together and fold both forearms loosely across the waist, hands open, then hold a calm poised finish. Not combat.",
     "entrance": "One-shot entrance: stroll in with a slow swaying step, stop square to the front and settle into the soft stance, both hands open at her hips.",
-    "victory": "One-shot finish: place the character-right open hand on the heart, open the character-left hand out low to the side, tip the head and give a warm closed-mouth smile, then hold.",
-    "ko": "Non-contact performance defeat: the sway stops, the shoulders sag, both open hands hang still and the head bows with the eyes closed. She holds a standing, quietly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

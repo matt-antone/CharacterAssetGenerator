@@ -42,7 +42,11 @@
     "flinch": "A sprinkler hiss startles him: the whole stout body stiffens, both open hands rise to the beard, then he settles. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: plant the short legs wide and raise both open hands in front of the belly, holding a stubborn stance. Not combat.",
     "entrance": "One-shot entrance: waddle in on short steps, tip the red hat with the character-right hand, then settle hands-on-belly into the proud stance.",
-    "victory": "One-shot celebration: a little hop with both open hands thrown up, head back in a big open-mouthed laugh through the beard, then hold with both feet planted.",
-    "ko": "Non-contact defeat: he goes stiff and still like a garden ornament — both open hands drop to his sides, the cone hat droops forward and his head bows. He holds a standing, glum finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

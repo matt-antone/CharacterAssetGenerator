@@ -44,7 +44,11 @@
     "flinch": "A burst of candy from a breaking piñata startles her: shoulders lift, both open hands rise to the face, then she laughs and settles. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: plant the feet wide, raise both open hands in front of the chest, holding a fierce stance. Not combat.",
     "entrance": "One-shot entrance: shimmy in with a skirt swish, set the character-right hand on the hip, then land in the bold stance.",
-    "victory": "One-shot celebration: a triumphant twirl ending square to the front with both open hands flung high, head back in an open-mouthed cheer, then hold with both feet planted.",
-    "ko": "Non-contact defeat: the fire goes out — shoulders drop, both open hands hang limp, head bows so the flower tilts forward. She holds a standing, deflated finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -49,7 +49,11 @@
     "flinch": "Brief startle: the brows lift, the shoulders stiffen and both open hands rise to the lapels, then he smooths back into the upright stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: step the feet apart, raise both open palms at chest height, then hold a composed finish. Not combat.",
     "entrance": "One-shot entrance: stroll in with an unhurried upright gait, turn square to the front, and settle into the upright stance with both hands open.",
-    "victory": "One-shot celebration: raise the open character-right hand in a crisp salute-like wave at head height, spread the open character-left hand wide, tip the chin up in an open-mouthed laugh, then hold the pose.",
-    "ko": "Non-contact performance defeat: his composure deflates — the square shoulders drop, both open hands hang at his sides, and his head bows so the cap peak points down, holding a crestfallen standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

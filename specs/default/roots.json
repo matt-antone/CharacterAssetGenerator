@@ -47,7 +47,11 @@
     "flinch": "Brief surprise at a room sound: the brows lift and the shoulders rise, both open hands lift a little, then he chuckles and settles back. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and raise the character-left open palm in front of the chest, then hold an unbothered steady finish. Not combat.",
     "entrance": "One-shot entrance: stroll in slow with a rocking step, stop square to the front and settle into the rooted stance, both hands open.",
-    "victory": "One-shot finish: raise both open hands high with the palms up, tip the head back with a wide open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: the calm goes heavy, the shoulders drop, both open hands hang and the head bows with a slow shake. He holds a standing, weary finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -54,7 +54,11 @@
     "flinch": "Brief room-sound startle: the tall shoulders jerk up and the heavy brow lifts in surprise, the character-left hand opens wide, then he carefully resettles into his tall square stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one broad shoulder forward and raise the large character-left hand as an open shield in front of the face, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: walk in with slow, heavy, deliberate steps, stop, straighten the too-small coat with the character-left hand, give the room a hopeful little wave, then take the tall square ready stance.",
-    "victory": "One-shot song-finish celebration: raise the character-left hand overhead in delighted disbelief, the whole tall frame lifting onto the balls of the heavy boots, then settle into a proud, beaming upright pose.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the hope drains out of him — the heavy shoulders drop, the long arms hang, and his flat-topped head tips low with the chin toward the buttoned collar. He holds a standing, visibly dejected finish with weight even over both heavy boots. He remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

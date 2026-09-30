@@ -45,7 +45,11 @@
     "flinch": "A log cracks in the fire: her shoulders lift and she draws the mug to her chest, then settles back into the calm stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: draw the shawl-covered shoulders in, hold the mug close at the chest in the character-left hand and raise the character-right open hand, holding a steady stance. Not combat.",
     "entrance": "One-shot entrance: amble in, lift the mug in a small toast, then settle into the calm stance.",
-    "victory": "One-shot celebration: raise the mug high in the character-left hand in a toast and the character-right open hand wide, head tipped back in an open-mouthed laugh, then hold with both feet planted.",
-    "ko": "Non-contact defeat: the storyteller's warmth drains out — the shoulders sag under the shawl, the mug hangs low in the character-left hand, and her head bows. She holds a standing, weary finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

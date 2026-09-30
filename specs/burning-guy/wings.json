@@ -42,7 +42,11 @@
     "flinch": "A sudden noise: her shoulders lift and both hands come to her chest, then she settles. No opponent, strike or physical contact.",
     "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the side, and hold. Not combat.",
     "entrance": "One-shot entrance: step in lightly on the toes, both arms floating out, then settle into the poised stance.",
-    "victory": "One-shot finish: both open arms lifted high, head tipped back in a joyful open-mouthed smile, then hold.",
-    "ko": "Non-contact performance defeat: the lightness leaves her — the shoulders droop, both open hands hang limp at her sides, and her head hangs low, curls falling forward. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -43,7 +43,11 @@
     "flinch": "Brief surprise at a loud room sound: he hops back a step, the tail goes stiff and upright, both open hands fly up beside the face, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot playful self-protection: crouch a touch lower, cross both forearms in front of the chest with the hands open, the tail curled round the character-left leg, then hold. Not combat.",
     "entrance": "One-shot entrance: skip in with small springy hops, turn square to the front and land on both bare feet, hands open at the hips, tail curling up.",
-    "victory": "One-shot celebration: jump straight up with both open hands flung above the head and the tail whipping up, land square on both feet and hold with both arms raised, mouth wide open in a cackle.",
-    "ko": "Non-contact defeat: the bounce drains out, the shoulders drop, both open hands hang limp, the head droops and the tail sags to the floor behind him. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

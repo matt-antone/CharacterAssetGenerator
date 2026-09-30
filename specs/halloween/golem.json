@@ -40,7 +40,11 @@
     "flinch": "Brief slow room-sound startle: the massive shoulders lift a little, both open hands rise slowly to chest height, then settle. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: raise both huge forearms slowly before the chest, open palms outward, and hold solidly. Not combat.",
     "entrance": "One-shot entrance: lumber in with slow heavy steps, stop square to the front, plant the feet wide and settle into the still stance.",
-    "victory": "One-shot celebration: raise both massive open hands slowly high above the head, head tipped back with a wide open-mouthed smile, the rune shining, and hold.",
-    "ko": "Non-contact performance defeat: he stays on his feet as he slowly powers down — the rune dims, the shoulders sag, both huge hands hang heavy and the head bows forward. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

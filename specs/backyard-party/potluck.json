@@ -44,7 +44,11 @@
     "flinch": "A sharp gasp at a dropped dish: both mitts fly to the chest, shoulders lift, then she recovers her commanding stance. No opponent or contact.",
     "guard": "One-shot: plant the feet and hold both mitts forward palm-out at chest height, like guarding the buffet, then hold. Not combat.",
     "entrance": "One-shot: march in, stop square to the front and spread both mitted hands into the commanding stance.",
-    "victory": "One-shot: raise both mitts high overhead in praise, head back, mouth open in a joyful shout, then hold.",
-    "ko": "The commanding stance sags: shoulders drop, both mitts hang limp at her sides, and her head shakes and bows. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

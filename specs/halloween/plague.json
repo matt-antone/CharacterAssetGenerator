@@ -42,7 +42,11 @@
     "flinch": "Brief surprise at a loud room sound: the beak jerks up, both gloved hands rise open at the chest, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: turn the hat brim down, raise the character-left gloved forearm across the chest, the character-right hand open at the hip, and hold. Not combat.",
     "entrance": "One-shot entrance: walk in with measured steps, turn square to the front and make a small courtly bow, then rise with both hands open at his sides.",
-    "victory": "One-shot celebration: sweep a deep courtly bow with the character-right gloved hand flourishing open, rise with both hands raised, and hold.",
-    "ko": "Non-contact defeat: the shoulders sag, both gloved hands hang limp, the beak droops toward the chest. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

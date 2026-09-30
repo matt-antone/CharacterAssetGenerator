@@ -51,7 +51,11 @@
     "flinch": "A quick startle at a loud street sound: the shoulders jump so the drum on his back bounces, both open hands lift, then he grins and settles. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn the character-left shoulder forward, forearm across the chest, character-right hand open at the hip, and hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: stroll in with a jaunty bouncing walk, the drum riding on his back, then face front in the bouncy stance with both hands open.",
-    "victory": "One-shot celebration: jump and click the heels, land with both open arms up wide, laughing open-mouthed, and hold the pose.",
-    "ko": "Non-contact performance defeat: the bounce goes out of him — the shoulders sag under the drum's weight, both open hands hang limp and the head drops. He holds a standing, deflated finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

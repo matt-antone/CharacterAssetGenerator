@@ -51,7 +51,11 @@
     "flinch": "Brief room-sound startle: the loose limbs jerk, straw puffs out of the cuffs, the glow in the carved eyes flares and the hat hops up off the pumpkin, then it lands back and he resettles into his folksy stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and pull the floppy hat brim down over the carved eyes with the character-left gloved hand, elbow raised, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: amble in with long gangly loose-kneed steps, stop, tip the straw hat politely, set it back on the pumpkin, then settle into his folksy stance with a thumb hooked in the bib.",
-    "victory": "One-shot song-finish celebration: wave the straw hat high overhead with the character-left hand, give one loose hop, then set the hat back and hold a proud upright pose with the carved grin glowing bright.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the stuffing goes out of him — the arms hang limp, the shoulders sag, the pumpkin head lolls to one side, the carved glow dims low and the hat brim flops down over the eyes. He holds a standing, visibly wilted finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, collapsing or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

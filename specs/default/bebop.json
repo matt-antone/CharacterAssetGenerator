@@ -42,7 +42,11 @@
     "flinch": "Brief room-sound startle: he pops up on his toes with eyebrows high and the spectacles slipping, pushes them back up with one finger, and chuckles back into his stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: tuck the character-left arm across the cardigan and turn one shoulder forward with a wry look, holding it. Not a fight pose.",
     "entrance": "One-shot entrance: shuffle in with quick light steps, snapping his fingers, tip the cap to the room, then settle into the canonical loose stance.",
-    "victory": "One-shot finish: a small spry spin on the spot, land with the cap doffed and held out to the crowd, and hold the twinkling grin.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the spark leaves him — the stoop deepens, the character-left hand drops, the spectacles slide down his nose, and his head hangs low. He holds a standing, visibly tired finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

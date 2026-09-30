@@ -42,7 +42,11 @@
     "flinch": "Brief surprise at a loud blast from a passing sound system: the shoulders lift, the torso draws back and both open hands rise to chest height, then she settles back to her stance. No opponent, strike or physical contact.",
     "guard": "One-shot stage self-protection against a gust of playa dust: step the feet wider, bring the character-left forearm across in front of the face with the character-right hand open at the hip, then hold a steady grounded finish. Not combat.",
     "entrance": "One-shot entrance: float in with slow gliding steps, palms together, turn square to the front, then land in her opening stance with both open hands in full view.",
-    "victory": "One-shot finish: leap into a wide star with both open hands flung high, hair flying, shout with the mouth wide open, then land and hold a blissful tree pose on one foot with palms pressed overhead.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the serenity collapses — the shoulders fall, both open hands hang limp at her sides, and her head bows with the hair falling forward. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

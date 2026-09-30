@@ -46,7 +46,11 @@
     "flinch": "Brief surprise at a loud room sound: she draws the shawl tighter with the character-left hand, the character-right hand rising open to the collar, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: draw the shawl across the chest with both hands, fingers visible, turn the chin aside and hold. Not combat.",
     "entrance": "One-shot entrance: walk in slowly and evenly, turn square to the front, and settle with the character-left hand at the brooch.",
-    "victory": "One-shot celebration: lift both open hands slowly to shoulder height, palms up, lift the chin with a small proud smile, and hold.",
-    "ko": "Non-contact defeat: the shoulders sink, both open hands fall to her sides, the head bows low. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

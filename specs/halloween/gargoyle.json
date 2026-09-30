@@ -40,7 +40,11 @@
     "flinch": "Brief surprise at a loud room sound: the shoulders hunch, the wings flick up, both stone hands rise open, then settle back to the resting stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: fold both thick forearms across the chest, hands open, the wings drawn in, and hold like a statue. Not combat.",
     "entrance": "One-shot entrance: stomp in heavily, turn square to the front and settle with both stone hands open at the sides.",
-    "victory": "One-shot celebration: raise both open stone hands high, wings flicked up, head tipped back with mouth open in a hallelujah, and hold.",
-    "ko": "Non-contact defeat: the shoulders drop, both stone hands hang heavy, the head bows and the wings droop. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

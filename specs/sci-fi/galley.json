@@ -40,7 +40,11 @@
     "flinch": "Brief startle at a pot boiling over: all four open hands fly up and the belly jumps, then he settles with a laugh. No opponent or contact.",
     "guard": "One-shot stage self-protection: cross the upper forearms before the chest and hold the lower hands open at the belly, then hold. Not combat.",
     "entrance": "One-shot entrance: stride in with a rolling gait, spread all four open arms in welcome, then settle into the stance.",
-    "victory": "One-shot finish: all four open hands thrown up high, head tipped back in a big open-mouthed laugh, then hold.",
-    "ko": "Non-contact performance defeat: all four arms hang limp, the shoulders round and his head bows so the toque tips forward. He holds a standing, sorrowful finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

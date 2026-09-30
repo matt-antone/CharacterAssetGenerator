@@ -41,7 +41,11 @@
     "flinch": "Brief room-sound startle: they jolt and pull the hoodie sleeves further over the hands, peek from behind the fringe, then slouch back into the stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn away, hunch the shoulders and pull the character-left forearm across the face with the sleeve over the hand, holding it. Not a fight pose.",
     "entrance": "One-shot entrance: shuffle in with hands in the hoodie pocket, flick the fringe with a head toss, then drop into the canonical hunched stance.",
-    "victory": "One-shot finish: a small shrug as if unimpressed, then the smile breaks through and they throw one fist up, holding it with a grin half-hidden by the fringe.",
-    "ko": "Non-contact performance defeat: they stay on their feet while it all becomes too much — the shoulders cave in, the arms hang, and the head drops so the fringe covers the whole face. They hold a standing, visibly defeated finish. They remain standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

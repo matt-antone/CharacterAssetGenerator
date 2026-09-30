@@ -41,7 +41,11 @@
     "flinch": "A splash nearby: she shrinks back on the rock, both open hands up, then settles. Stays seated. No opponent or contact.",
     "guard": "One-shot, seated: curls the tail up before her and raises the character-left forearm; hold. Not combat.",
     "entrance": "One-shot: she rises from behind the rock, settles onto it and curls her tail forward into the seated stance.",
-    "victory": "One-shot, seated: flings both open hands high, head back singing out, the fluke raised high, holds.",
-    "ko": "Non-contact defeat, seated: she slumps against the rock, both open hands limp in her lap, head bowed, the fluke drooping to the sand. No ground contact beyond her seat; no impact, injury or opponent. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -45,7 +45,11 @@
     "flinch": "A slow start at a firecracker: brows jump, both open hands lift to chest height, then he settles back, unimpressed. No opponent or contact.",
     "guard": "One-shot: raise the character-left open hand palm out like waving off nonsense, then hold. Not combat.",
     "entrance": "One-shot: shuffle in slowly, stop square to the front and settle into the unhurried stance.",
-    "victory": "One-shot: raise both open hands to shoulder height, head back in a wheezing open-mouthed laugh, then hold.",
-    "ko": "The shoulders round further, both open hands hang limp and the head drops forward, eyes closed as if dozing. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

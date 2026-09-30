@@ -44,7 +44,11 @@
     "flinch": "A popping balloon startles her: the shoulders jump, both open hands fly to chest height, then she laughs it off and settles back to the bouncy stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: step back, raise both open hands in front of the chest to shield the tiara, and hold a braced upright stance. Not combat.",
     "entrance": "One-shot entrance: skip in, straighten the tiara with the character-left hand, then land in the bouncy stance with both open hands up at shoulder height.",
-    "victory": "One-shot celebration: jump on the spot, throw both open hands high above the head, head tipped back in an open-mouthed cheer, then hold that pose with both feet planted.",
-    "ko": "Non-contact defeat: the birthday cheer drains out — the shoulders drop, both open hands hang limp at her sides, and her head droops forward so the tiara tilts. She holds a standing, deflated finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

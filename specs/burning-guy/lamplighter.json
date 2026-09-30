@@ -39,7 +39,11 @@
     "flinch": "A gust of dust: she turns the face a little aside and lifts the character-left hand before her eyes, then settles. No opponent, strike or physical contact.",
     "guard": "One-shot: bring the character-left forearm across the chest, the character-right hand open at the side, and hold still. Not combat.",
     "entrance": "One-shot entrance: walk in slowly with measured ceremonial steps, the robe swaying, then stop in the still stance.",
-    "victory": "One-shot finish: raise both open hands high and wide, head tipped back with a joyful open-mouthed smile, then hold.",
-    "ko": "Non-contact performance defeat: the calm drains away — the shoulders drop, both open hands hang limp at her sides, and her head hangs low, chin toward her chest. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

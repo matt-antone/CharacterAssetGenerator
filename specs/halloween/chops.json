@@ -77,13 +77,13 @@
       ]
     },
     "victory": {
-      "intent": "One-shot song-finish celebration: throw both arms overhead in delighted disbelief with the whole tall frame lifting onto the balls of the work boots and the stringy hair flying, then settle into a proud upright pose with the mask tipped a little to one side.",
+      "motion": "emote-02",
       "props": [
         "knife"
       ]
     },
     "ko": {
-      "intent": "Non-contact performance defeat: he stays on his feet while the nerve drains out of him — the heavy shoulders drop, the thick arms hang, and the masked head tips low toward the open collar with the stringy hair falling forward over the mask. He holds a standing, visibly dejected finish with weight even over both work boots. He remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent.",
+      "motion": "emote-01",
       "props": [
         "knife"
       ]

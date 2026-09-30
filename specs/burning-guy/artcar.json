@@ -48,7 +48,11 @@
     "flinch": "A startled jolt at a sudden flame roar: the shoulders jump up, both open hands rise to chest height, then she laughs it off and settles back into her helm stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: plant the boots wider and raise the character-left forearm across the brass coat front, the character-right hand open at the hip, holding a sturdy grounded finish. Not combat.",
     "entrance": "One-shot entrance: march in with a rolling captain's stride, snap a crisp two-finger salute with the character-right hand, then drop into the feet-apart helm stance with both hands open at her sides.",
-    "victory": "One-shot song-finish celebration: pull the goggles down to her eyes with both hands, throw both fists above her head and roar with the mouth wide, then hold a triumphant wide-legged pose.",
-    "ko": "Non-contact performance defeat: the captain's command drains away — the shoulders drop inside the brass coat, both open hands hang limp at her sides, and her head hangs with the chin toward the collar. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

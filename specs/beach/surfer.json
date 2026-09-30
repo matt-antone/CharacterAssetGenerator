@@ -43,7 +43,11 @@
     "flinch": "A gull squawks close: he ducks his head and hunches, then shakes it off and relaxes. No opponent or contact.",
     "guard": "One-shot: knees bend into a low surfer's stance, the character-left arm out forward and the character-right arm back, hands open; hold balanced. Not combat.",
     "entrance": "One-shot: ambles in barefoot, shakes the water from his hair, settles into the loose stance.",
-    "victory": "One-shot: throws both hands up with thumbs and little fingers out in a shaka, head back laughing, holds.",
-    "ko": "Non-contact defeat: his shoulders slump, both open hands dangle, and his head sags with the hair falling forward. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

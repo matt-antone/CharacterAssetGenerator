@@ -47,7 +47,11 @@
     "flinch": "Brief flinch at a loud room sound: the shoulders hunch up to the ears and both open hands rise to the chest, then he slumps back into the slouch. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn the shoulders in and raise both forearms loosely in front of the face, hands open, then hold a hunched steady finish. Not combat.",
     "entrance": "One-shot entrance: shamble in with a loose heavy step, stop square to the front and sink into the slouched stance with both hands open at his sides.",
-    "victory": "One-shot finish: fling both open hands wide overhead, tip the head back so the hair swings clear, mouth open in a yell, then hold.",
-    "ko": "Non-contact performance defeat: the slouch deepens, both open hands dangle, and the head drops so the hair hangs forward. He holds a standing, drained finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

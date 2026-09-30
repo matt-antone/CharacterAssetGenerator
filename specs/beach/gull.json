@@ -43,7 +43,11 @@
     "flinch": "Brief startle: every feather puffs out, both wings jerk half-open, then he smooths down to the cocky stance. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: fold both wings across the white chest, pull the head low, then hold a steady hunched-shoulder finish. Not combat.",
     "entrance": "One-shot entrance: strut in with jerky pigeon-toed steps and a head bob, turn square to the front, and land in the puffed-up stance with both wings half-open.",
-    "victory": "One-shot celebration: throw both wings wide open above the shoulders, puff the white chest, tip the head back with the beak wide open in a triumphant squawk, then hold the pose.",
-    "ko": "Non-contact performance defeat: the swagger collapses — the wings droop limp at the sides, the chest deflates and the head hangs, beak pointing at the ground, holding a sulking standing finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

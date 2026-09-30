@@ -41,7 +41,11 @@
     "flinch": "Brief feedback-squeal reaction: he recoils with a theatrical wince, the hair cloud bouncing, then smooths it with the character-left hand and resumes the swagger. No contact or opponent.",
     "guard": "One-shot stage self-protection: swing the character-left forearm up in front of the face in a dramatic pose, one flared leg turned in, and hold it like a photo call. Not a fight pose.",
     "entrance": "One-shot entrance: strut in on long platform steps with the hips swinging, stop, flick the hair back, and snap into the canonical cocky stance.",
-    "victory": "One-shot finish: fling both arms wide, drop the head back with a triumphant grin, then hold a star-shaped final pose.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the swagger collapses — the hips straighten, the shoulders sag, the character-left arm dangles, and the head hangs low with the teased hair drooping over his face. He holds a standing, visibly deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

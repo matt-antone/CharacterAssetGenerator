@@ -48,7 +48,11 @@
     "flinch": "A loud clang nearby: the heavy shoulders hunch and both gloved hands rise to chest height, then he settles. No opponent, strike or physical contact.",
     "guard": "One-shot: turn the character-left shoulder forward, character-left forearm across the apron, and hold a solid stance. Not combat.",
     "entrance": "One-shot entrance: lumber in with heavy unhurried steps, tug the apron straight with both gloved hands, then plant the feet.",
-    "victory": "One-shot finish: raise both gloved fists to shoulder height, head tipped back in a big open-mouthed laugh through the beard, then hold.",
-    "ko": "Non-contact performance defeat: the big shoulders sag, both gloved hands hang limp at his sides, and his head hangs low, the beard on his chest. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. Do not imply impact, injury or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

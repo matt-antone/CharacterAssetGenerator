@@ -44,7 +44,11 @@
     "flinch": "Brief startle at a siren: the shoulders tighten, the head turns aside and both open hands lift slightly, then he settles. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn a shoulder forward and raise the character-left forearm before the chest, then hold. Not combat.",
     "entrance": "One-shot entrance: walk in slowly, tip the fedora brim with the character-right hand, then settle into the loose stance with both hands open at his sides.",
-    "victory": "One-shot finish: tip the fedora back with the character-right hand, the cyber eye flaring bright, and hold a small knowing grin.",
-    "ko": "Non-contact performance defeat: the shoulders slump, both open hands hang limp and his head drops so the brim shades the face, the cyber eye dimmed. He holds a standing, weary finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

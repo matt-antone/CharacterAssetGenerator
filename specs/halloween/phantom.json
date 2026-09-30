@@ -47,7 +47,11 @@
     "flinch": "Brief room-sound startle: the head snaps toward the sound, the character-left hand flies to the mask, then he recovers proudly. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: sweep the cape across the body with the character-left arm, crimson lining showing, and hold behind it. Not combat.",
     "entrance": "One-shot entrance: stride in with the cape billowing, stop square to the front and fling the character-left arm out wide, then hold the grand stance.",
-    "victory": "One-shot celebration: swirl the cape open with both arms raised high, gloved hands open, head back, a triumphant open-mouthed roar, and hold.",
-    "ko": "Non-contact performance defeat: he stays on his feet as the grandeur collapses — the cape hangs limp, the shoulders fall, the character-left hand drops, and his head bows low. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

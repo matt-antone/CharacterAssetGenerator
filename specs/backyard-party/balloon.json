@@ -46,7 +46,11 @@
     "flinch": "A splash of cold water from off frame: she squeals, hunches with both open hands up by the shoulders, then shakes it off and grins. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: duck the head and raise both open hands in front of the face, knees bent, holding a braced stance. Not combat.",
     "entrance": "One-shot entrance: sneak in on tiptoe, pop up and settle into the coiled stance.",
-    "victory": "One-shot celebration: jump with both open hands flung up, head back in an open-mouthed whoop, then hold with both feet planted.",
-    "ko": "Non-contact defeat: her energy drains — shoulders drop, both open hands hang dripping at her sides, head hangs. She holds a standing, bedraggled finish. She stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

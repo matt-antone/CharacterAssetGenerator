@@ -42,7 +42,11 @@
     "flinch": "Brief room-sound startle: the big frame jumps a little and he blinks with gentle surprise, a hand half-raised in apology, then he resettles into the heavy stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn the broad shoulder forward and bring the thick forearm up across the chest, holding a solid planted final pose. Not a fight pose.",
     "entrance": "One-shot entrance: lumber in with heavy steps, sweep the hair back with one hand, give a small shy nod, then plant into the canonical wide stance with the fist up.",
-    "victory": "One-shot finish: raise the character-left hand in the horns gesture high overhead and throw the head back with a huge roar, then hold it.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the fury leaves him — the fist opens and drops, the huge shoulders sag, and the head hangs so the hair and beard fall forward. He holds a standing, visibly spent finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

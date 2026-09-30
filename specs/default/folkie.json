@@ -42,7 +42,11 @@
     "flinch": "Brief room-sound startle: her shoulders draw up inside the cardigan and she blinks wide, the braid swinging, then she softens back into her warm stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: wrap the cardigan closed across her chest with the character-left arm and turn one shoulder forward, then hold a small, quiet protected stance. Not a fight pose.",
     "entrance": "One-shot entrance: walk in with small unhurried steps, tuck a strand of hair behind her ear, give a shy little wave, then settle into the canonical planted stance.",
-    "victory": "One-shot song finish: a small grateful bow with the character-left hand at her heart, then rise into a bright, open smile and hold it.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the warmth drains out — the cardigan slides off one shoulder, her shoulders round and her head hangs with the chin to her chest, the hair falling forward over her face. She holds a standing, visibly crestfallen finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -43,7 +43,11 @@
     "flinch": "A wave hisses in: he starts, hands flying up to chest height, then smooths himself back down. No opponent or contact.",
     "guard": "One-shot: steps the feet apart and spreads both open sandy hands low as if shielding a castle; hold. Not combat.",
     "entrance": "One-shot: steps in carefully on tiptoe, brushes sand from his palms, sets heels together.",
-    "victory": "One-shot: clasps both sandy hands at the chest, rises on his toes, head back beaming, holds.",
-    "ko": "Non-contact defeat: the shoulders cave, both open sandy hands droop, and his head bows under the hat brim. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

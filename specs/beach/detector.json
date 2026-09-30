@@ -46,7 +46,11 @@
     "flinch": "A loud beep in the headphones: she jolts and clutches the headphones with both hands, then recovers. No opponent or contact.",
     "guard": "One-shot: plants the feet, the character-left hand covers the pouch, the character-right hand out open; hold. Not combat.",
     "entrance": "One-shot: walks in sweeping her gaze over the sand, stops, straightens into the ready stance.",
-    "victory": "One-shot: raises both open hands high, hops once, whoops with an open mouth, holds.",
-    "ko": "Non-contact defeat: her stoop deepens, both open hands hang, her head droops under the visor. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -45,7 +45,11 @@
     "flinch": "Brief room-sound startle: the antennae snap back flat, the wing collar flares wider and the character-left hand flies to the chest, then she recomposes with a haughty tilt of the head. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward so the carapace pauldron leads and raise the character-left forearm across the body, antennae lowered, then hold a tall defiant stance. Not a combat pose.",
     "entrance": "One-shot entrance: sweep in with a slow gliding walk, the bell skirt swaying, stop, fan the wing collar open, and extend the character-left arm into her imperious stance.",
-    "victory": "One-shot finish: throw the character-left arm and head back in a grand diva flourish with antennae high and wing collar fully spread, then descend into a deep regal bow and rise to a tall proud hold.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the majesty drains away — the wing collar folds down, the antennae droop, the shoulders fall and the head bows with the arms hanging at her sides. She holds a standing, visibly deflated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

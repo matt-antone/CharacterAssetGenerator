@@ -41,7 +41,11 @@
     "flinch": "A startled flap: the neck jerks back, both open hands fly up, then she smooths back into the one-legged stance. No opponent or contact.",
     "guard": "One-shot: tuck the neck back and raise the character-left open hand palm-out, sassy, then hold. Not combat.",
     "entrance": "One-shot: hop in on one leg, stop square to the front and settle into the one-legged stance.",
-    "victory": "One-shot: both feet down, both open hands raised high, beak wide open and crest held high, then hold.",
-    "ko": "The sass drains: the long neck droops forward, both open hands hang limp and the crest tips down. She stands on both legs. She holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

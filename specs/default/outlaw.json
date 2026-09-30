@@ -60,7 +60,11 @@
     "flinch": "Brief room-sound surprise: shoulders and long hair react while the hat brim stays level, then she restores her calm hip-loaded stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: brace through the staggered boots, draw the character-left arm across the torso, then hold a steady final pose. Not combat.",
     "entrance": "One-shot entrance: walk in with slow purposeful boot steps, level hat brim and western yoke clear, acknowledge the room with the character-left hand, then settle into the relaxed rear-hip stance.",
-    "victory": "One-shot performance finish: tip the level hat brim only with a small respectful gesture while lifting the character-left hand, then settle into her level, easy standing finish.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the loaded hip levels out and the unhurried composure goes — her head hangs low with the chin toward her chest so the broad western-hat brim tips forward and shades her face while staying broad and readable. She holds a standing, visibly dejected finish with her boots staggered and planted. She remains standing in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

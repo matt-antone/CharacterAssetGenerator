@@ -55,7 +55,11 @@
     "flinch": "Brief room-sound startle: the head jerks back with a sharp bird-like twitch, the shoulders rise and the character-left hand flies up with fingers spread, then she recomposes herself with a haughty tilt of the chin. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder toward the room and draw the wide wrapped sleeve of the character-left arm across the torso like a shield, then hold a stiff, regal finish. Not a combat action.",
     "entrance": "One-shot entrance: glide in with small even steps beneath the gown, pause, turn the head sharply toward the room with the hair tower upright, then unfold into the tall poised ready stance with the character-left hand flourished.",
-    "victory": "One-shot song-finish celebration: sweep into a slow deep curtsy-like dip of the head and shoulders while staying upright, then rise and lift the character-left hand high in a triumphant diva flourish, holding a proud regal pose.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the drama drains out of her — the squared shoulders drop, the wrapped sleeves hang limp, and her head tips low with the chin toward the high neckline while the hair tower tilts forward with the head but keeps its tall cylindrical shape and white streaks. She holds a standing, visibly crestfallen finish with the gown an unbroken column. She remains standing in every frame — no kneeling, crouching, sitting, sinking, swooning or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

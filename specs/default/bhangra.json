@@ -45,7 +45,11 @@
     "flinch": "Brief startle at a loud room sound: both raised arms jerk in to the chest, hands open, then fling back up with a laugh. No opponent or contact.",
     "guard": "One-shot stage self-protection: bring both forearms in front of the chest, hands open, and plant the feet wide, then hold a sturdy grinning finish. Not combat.",
     "entrance": "One-shot entrance: bound in with high knee-lifting steps, stop square to the front and throw both open hands up into the open stance.",
-    "victory": "One-shot finish: one leg lifted at the knee, both arms thrust high overhead with the hands open and index fingers pointing up, mouth open in a shout, then land and hold.",
-    "ko": "Non-contact performance defeat: the raised arms sink slowly down to his sides, hands open and limp, the shoulders drop and the head bows. He holds a standing, deflated finish. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

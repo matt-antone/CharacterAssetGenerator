@@ -44,7 +44,11 @@
     "flinch": "A sharp startle at a loud room sound: the whole body jolts, both open hands fly to chest height, then he shakes it off and drops back into the coiled stance. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn the character-left shoulder forward, forearm across the chest, character-right hand open at the hip, and hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: burst in with quick shuffling steps, spin to face front with a slide of the feet, and land in the coiled stance with both palms up.",
-    "victory": "One-shot celebration: drop onto both knees, fling both open arms up and wide, throw the head back with an open-mouthed shout, and hold the pose.",
-    "ko": "Non-contact performance defeat: all the fire drains out — the shoulders sag, both open hands hang limp and the head drops to the chest. He holds a standing, spent finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

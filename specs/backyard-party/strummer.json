@@ -47,7 +47,11 @@
     "flinch": "A shriek from the kiddie pool startles him: the shoulders hunch, both open hands lift to chest height, then he slouches back. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: hunch the shoulders, raise both open hands in front of the chest, and hold a wary stance. Not combat.",
     "entrance": "One-shot entrance: slouch in with loose steps, tug the beanie down with the character-left hand, then settle into the slouched stance.",
-    "victory": "One-shot celebration: both open arms spread wide, head tipped back in an open-mouthed shout, then hold with both feet planted.",
-    "ko": "Non-contact defeat: he sags — the shoulders roll forward, both open hands hang limp at his sides, and his head hangs low under the beanie. He holds a standing, glum finish. He stays on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

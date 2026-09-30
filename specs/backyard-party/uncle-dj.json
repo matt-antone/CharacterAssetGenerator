@@ -46,7 +46,11 @@
     "flinch": "A jolt as the music cuts out: shoulders jump, both open hands spread in alarm, then he recovers to the hype stance. No opponent or contact.",
     "guard": "One-shot: turn the belly aside and cup both open hands over the speaker at the hip, protecting it, then hold. Not combat.",
     "entrance": "One-shot: bounce in on the beat, stop square to the front and throw both open hands up into the hype stance.",
-    "victory": "One-shot: both open hands raised high, the head thrown back in a big whooping shout, then hold a wide-footed pose.",
-    "ko": "The hype drains out: the arms fall, both open hands hang limp, the belly sags and the head bows. He holds a standing, visibly deflated finish, on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

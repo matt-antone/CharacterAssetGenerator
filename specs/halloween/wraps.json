@@ -45,7 +45,11 @@
     "flinch": "Brief room-sound startle: the whole body jolts, the glowing eyes pop extra round and a loose bandage end springs straight up from the crown, then it flops back down and he resettles into his pepped-up stance. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: turn one shoulder forward and fold the character-left wrapped forearm up in front of the eyes, gold cuff outward, then hold a steady upright finish. Not a combat action.",
     "entrance": "One-shot entrance: bound in with springy jogging steps, stop, give a two-handed wave, tug a loose bandage end tight at the wrist, then drop into his pepped-up stance with the fist up.",
-    "victory": "One-shot song-finish celebration: leap up with both arms overhead in a star so every loose bandage end flies out, land, then hold a proud upright pose with both fists pumped and eyes glowing.",
-    "ko": "Non-contact performance defeat: he stays on his feet while the pep drains away — the fist drops, the shoulders slump, the glowing eyes dim to half-lidded slits and a loose bandage end droops down over his face. He holds a standing, visibly deflated finish with weight even over both feet. He remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, unravelling or going to the ground. Do not imply a hit, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

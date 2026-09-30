@@ -51,7 +51,11 @@
     "flinch": "Brief startle: the shoulders tighten, both open hands rise to the collarbone with a jangle of bangles, then she recovers her poise. No opponent, strike or physical contact.",
     "guard": "One-shot self-protection: draw the shawl across the chest with the character-left hand, raise the open character-right hand palm-out, then hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: glide in with slow deliberate steps, turn square to the front, and settle into the poised stance with both hands hovering palm-down.",
-    "victory": "One-shot celebration: sweep both open hands out wide at shoulder height so the shawl spreads, tip the head back into a throaty open-mouthed laugh, then hold a grand pose.",
-    "ko": "Non-contact performance defeat: the mystique fades — the shoulders slump under the shawl, both open hands hang limp at her sides, and her head bows, chin toward the chest, holding a deflated standing finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

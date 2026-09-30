@@ -47,7 +47,11 @@
     "flinch": "Brief room-sound startle: the wings flutter half-open behind him, the shoulders jump and both open hands rise to the chest, then the wings fold down and he settles. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: draw both folded wings forward around the shoulders like a cloak while both open hands cross at the chest, then hold. Not combat.",
     "entrance": "One-shot entrance: flutter in with the wings half-spread, land softly on both sneakers, fold the wings down behind him and settle into the shy stance, hands open and empty.",
-    "victory": "One-shot celebration: spread both wings wide and upward, raise both open hands high toward the light, tip the head back with a big open-mouthed smile, and hold.",
-    "ko": "Non-contact performance defeat: he stays on his feet as the energy drains away — the wings droop low behind him, the antennae sag, both open hands hang limp and the head hangs forward. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -98,13 +98,13 @@
       ]
     },
     "victory": {
-      "intent": "One-shot song-finish celebration: sweep both arms wide and high in a delighted old-fashioned rise onto the toes of the taped boots, the hat staying on, then settle into a proud, beaming upright pose with the free hand pressed to the shirt pocket.",
+      "motion": "emote-02",
       "props": [
         "arm"
       ]
     },
     "ko": {
-      "intent": "Non-contact performance defeat: he stays on his feet while the charm drains out of him — the soft shoulders drop, the short arms hang at his sides, and his head tips low under the hat brim with the chin toward the collar while the loose lock falls over the forehead. He holds a standing, visibly dejected finish with weight even over both boots. He remains standing in every frame — no kneeling, crouching, sitting, sinking, toppling or going to the ground. Do not imply a hit, injury or opponent.",
+      "motion": "emote-01",
       "props": [
         "arm"
       ]

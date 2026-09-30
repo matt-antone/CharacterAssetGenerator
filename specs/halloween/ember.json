@@ -47,7 +47,11 @@
     "flinch": "Brief room-sound startle: the flame hair flares taller, the shoulders jump and both open hands rise, then she laughs it off. No opponent, strike or contact.",
     "guard": "One-shot stage self-protection: cross both forearms before the chest, hip cocked, and hold with attitude. Not combat.",
     "entrance": "One-shot entrance: strut in on the platform boots, stop square to the front with a hip pop, and land in the party-ready stance.",
-    "victory": "One-shot celebration: both open hands thrown high, the flame hair blazing taller, head back in a big open-mouthed laugh, and hold.",
-    "ko": "Non-contact performance defeat: she stays on her feet as the party dies — the flame hair shrinks low, the cracks dim, both open hands hang and the head drops forward. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -43,7 +43,11 @@
     "flinch": "Brief surprise at a room sound: the eyes widen and the character-left open hand rises to the collar, then she composes herself. No opponent or contact.",
     "guard": "One-shot stage self-protection: draw the long sleeves in and fold both open hands before the chest, then hold a calm dignified finish. Not combat.",
     "entrance": "One-shot entrance: glide in with small even steps, stop square to the front, give a slow bow and settle into the still stance.",
-    "victory": "One-shot finish: a deep gracious bow, then rise and open both hands low and wide, palms up, with a gentle open smile, then hold.",
-    "ko": "Non-contact performance defeat: the composure dims, the shoulders sink a little, both open hands fall to her sides and the head bows. She holds a standing, sorrowful finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

@@ -42,7 +42,11 @@
     "flinch": "Brief glitch startle: the figure jolts, both open hands lift, the scanline bands thicken for a moment, then she steadies. No opponent or contact.",
     "guard": "One-shot stage self-protection: cross both open forearms before the chest, then hold a steady pose. Not combat.",
     "entrance": "One-shot entrance: the figure snaps into place in a column of cyan light, spins once and lands in the idol pose.",
-    "victory": "One-shot finish: a sparkling jump with both open hands high overhead, landing in a two-handed wave, then hold a beaming pose.",
-    "ko": "Non-contact performance defeat: the rim glow dims, both open hands drop limp and her head bows so the twin tails swing forward. She holds a standing, flickering finish. She remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply impact, injury, or an opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

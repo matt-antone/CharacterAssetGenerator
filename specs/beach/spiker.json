@@ -42,7 +42,11 @@
     "flinch": "A whistle blast: she flinches, shoulders up, then snaps back to ready. No opponent or contact.",
     "guard": "One-shot: both forearms rise together before the face like a block at the net, hands open; hold. Not combat.",
     "entrance": "One-shot: sprints in, skids to a stop in the sand, drops into the ready stance.",
-    "victory": "One-shot: leaps with both fists up, lands with feet wide, roaring with mouth open, holds.",
-    "ko": "Non-contact defeat: she straightens slowly, both open hands hang limp, and her head drops with shoulders heaving. Stays standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

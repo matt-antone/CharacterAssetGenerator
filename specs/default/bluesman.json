@@ -47,7 +47,11 @@
     "flinch": "A slow wary startle at a loud room sound: the shoulders hunch, the head pulls back under the brim, both open hands rise to the waist, then he settles back. No opponent or contact.",
     "guard": "One-shot stage self-protection: turn the character-left shoulder forward with that forearm across the chest, the character-right hand open at the hip, and hold a steady finish. Not combat.",
     "entrance": "One-shot entrance: walk in slow and unhurried, touch the fedora brim with the character-right hand, then settle square to the front with both open hands loose at the thighs.",
-    "victory": "One-shot celebration: lift the open character-right hand high, tip the fedora back with the character-left hand, grin wide showing the gold tooth, and hold the pose.",
-    "ko": "Non-contact performance defeat: the stoop deepens, both open hands hang limp and the head drops so the fedora brim hides the eyes. He holds a standing, weary finish. He remains standing on both planted feet in every frame — no kneeling, crouching, sitting, sinking or going to the ground. No impact, injury or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }

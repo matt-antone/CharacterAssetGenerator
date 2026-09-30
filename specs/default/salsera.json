@@ -41,7 +41,11 @@
     "flinch": "Brief room-sound startle: she snaps her head toward the sound with a hard stare, the earrings swinging, then flicks her chin and returns to her stance. No contact or opponent.",
     "guard": "One-shot stage self-protection: turn a shoulder forward and sweep the character-left arm up across the body, holding a crisp defiant pose. Not a fight pose.",
     "entrance": "One-shot entrance: dance in with quick precise steps on the beat, a half-turn that swirls the skirt, then plant into the canonical stance with the hand on the hip.",
-    "victory": "One-shot finish: a fast double spin that sends the tiers flying, stop dead with the character-left arm flung high, and hold it.",
-    "ko": "Non-contact performance defeat: she stays on her feet while the fire goes out — the hand slides off the hip, the shoulders drop, the skirt hangs still, and her head hangs with the chin down. She holds a standing, visibly defeated finish. She remains standing on both feet in every frame — no kneeling, crouching, sitting, sinking, or going to the ground. Do not imply a hit or opponent."
+    "victory": {
+      "motion": "emote-02"
+    },
+    "ko": {
+      "motion": "emote-01"
+    }
   }
 }
