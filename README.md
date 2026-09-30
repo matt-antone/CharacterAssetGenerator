@@ -170,10 +170,10 @@ drawn again, the same as under codex.
 `http://127.0.0.1:8188` unless `CAG_LOCAL_COMFY_URL` says otherwise. It needs no
 key and bills nothing, but it can only run nodes and models installed there, so
 no partner nodes: Nano Banana does not exist on a local server. Its default
-workflow is `comfy/qwen-image-2.1.json` (`--comfy-workflow` or
-`CAG_LOCAL_COMFY_WORKFLOW` names another). Qwen-Image-2.1's weights are under
-the Qwen Research License, research and evaluation only, so a package meant for
-anything else requires a suitable licence for every model contributing to it.
+workflow is `comfy/qwen-image-edit-2511.json`, Qwen-Image-Edit 2511
+(Apache-2.0; `--comfy-workflow` or `CAG_LOCAL_COMFY_WORKFLOW` names another).
+A package meant for anything but research still needs a suitable licence for
+every model contributing to it.
 
 Without a machine profile, a traced set under either workflow backend is drawn
 a frame at a time by `comfy/pose-edit.json` (`--comfy-pose-workflow` or

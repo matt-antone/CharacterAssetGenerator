@@ -102,9 +102,9 @@ the hardware and the bill.
   (a file on disk that is not the one declared) fails only the video path's
   sets of that bundle; every other build reads the library as usual.
 - **Profiles** live in `comfy/machines/`. `cloud` is the only verified one — the
-  research run's settings. `local16` (RX 9070 over Thunderbolt) has drawn key art, at fp8 through
-  `comfy/qwen-image-2.1-fp8.json` (`CAG_LOCAL_COMFY_WORKFLOW`), but no SCAIL video
-  yet; its `about` holds the ComfyUI flags and the driver setting it needs. `smoke4`
+  research run's settings, and unverified since its restyle moved to 2511.
+  `local16` (the RX 9070) draws the canonical local method at the top of this
+  file; its `about` holds the ComfyUI flags and the driver setting it needs. `smoke4`
   (GTX 1050 Ti: 256x384, 9 frames, 2 steps) is wiring only, never art: nothing
   drawn on it is judged. `uv run cag machines --check <name>` lists every node
   and model file that machine's ComfyUI lacks, and a `local` build will not
@@ -137,10 +137,14 @@ the hardware and the bill.
   else runs the mask pass (SAM3). One render has exercised it, on Comfy Cloud:
   `country-01`, portrait footage in a cluttered shop, gave one clean silhouette
   per frame (figure 10% of the frame, overlap 0.82-0.95 frame to frame).
-- **Qwen-Image-2.1 is licensed for research only.** Nothing drawn with it ships
-  until that is cleared. The canonical local method (top of this file) draws
-  nothing with it; `cloud` still restyles with it, and a local build pinned to
-  `comfy/qwen-image-2.1.json` still draws with it.
+- **Qwen-Image-2.1 is gone.** Its weights are research-licence only, so it and
+  every graph that loaded it (`qwen-image-2.1.json`, its fp8 copy,
+  `qwen21-restyle.json`, `qwen21-mannequin-pose.json`) were removed on
+  2026-09-30. Every profile restyles with Qwen-Image-Edit 2511
+  (`comfy/restyle-2511.json`, Apache-2.0), which made `cloud` unverified again
+  until a cloud run draws with it. What is left from 2.1 is history: the Ellis
+  detail-ladder images, rendered with it, which only the codex and Comfy Cloud
+  backends show a model; and `research/qwen-image-2.1-local.md`.
 - **The performer's face is blurred in every drive video** (the face blur,
   always on). SCAIL-2 copies the face it is shown in the drive onto the
   character; with the face blurred it draws the set reference's face and keeps
@@ -164,12 +168,8 @@ the hardware and the bill.
   reference's size, is written as `source/<set>/NN.png` and nothing is
   restyled. Why: a restyle takes about 7.5 minutes a frame on the RX 9070,
   no prompt wording moved the face it draws, and SCAIL frames alone read as a
-  smooth illustration. It does **not** clear the Qwen-Image-2.1 licence above:
-  a `local` build draws the key art with Qwen-Image-2.1
-  (`comfy/qwen-image-2.1.json`, or the fp8 copy on `local16`), every set
-  reference is turned from it (see "Local views" below), and SCAIL-2 animates
-  that set reference, so every frame is still derived from a research-licensed
-  render.
+  smooth illustration. (Written when the restyle was Qwen-Image-2.1; it is
+  2511 now, about 76 s a frame, and the user chose its look.)
   The two modes are stamped apart in `drawn.sha` (`scail` and `video`), so
   switching moves the other mode's frames into `source/<set>/superseded/`, and
   both reuse the one SCAIL video. A local `--no-restyle` build starts with the

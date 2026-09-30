@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pytest
 
@@ -19,7 +20,8 @@ def links(workflow: dict) -> list[str]:
 def test_the_shipped_profiles_are_cloud_local16_and_smoke4():
     assert machine_names() == ["cloud", "local16", "smoke4"]
     cloud = load_machine("cloud")
-    assert cloud.verified and cloud.backend == "comfy"
+    # The restyle moved to 2511 on 2026-09-30: unverified until a cloud run draws it.
+    assert not cloud.verified and cloud.backend == "comfy"
     assert (cloud.width, cloud.height, cloud.rate, cloud.max_length, cloud.steps) == (576, 864, 16, 81, 6)
     assert (cloud.restyle_resolution, cloud.restyle_steps, cloud.seed) == (1248, 40, 1234)
     assert not any(cloud.patch(stage) for stage in machines.STAGES), "the graphs carry cloud's files"
@@ -72,7 +74,7 @@ def test_smoke4_loads_scail_as_a_gguf_with_only_its_file_name(tmp_path):
     }
     restyle = json.loads(materialise(load_machine("smoke4"), "restyle", tmp_path).read_text())
     assert restyle["clip"]["inputs"]["device"] == "cpu"
-    assert restyle["unet"]["inputs"]["weight_dtype"] == "fp8_e4m3fn"
+    assert restyle["unet"]["inputs"]["unet_name"] == "qwen_image_edit_2511_fp8mixed.safetensors"
 
 
 def test_local16_loads_the_q5_gguf():
@@ -130,16 +132,17 @@ def test_a_profile_the_graphs_cannot_take_is_refused(tmp_path):
         load_machine("short", root=tmp_path)
 
 
-def test_a_profile_can_name_a_stages_graph_and_the_environment_still_wins(tmp_path, monkeypatch):
-    """local16 restyles with Qwen-Image-Edit 2511 (six times faster, the look the
-    user chose); cloud keeps the shared Qwen-Image-2.1 restyle."""
-    local = machines.load_machine("local16")
-    assert local.graphs == {"restyle": "comfy/restyle-2511.json"}
-    assert machines.load_machine("cloud").graphs == {}
-    made = machines.materialise(local, "restyle", tmp_path)
-    classes = {node["class_type"] for node in json.loads(made.read_text()).values()}
-    assert "TextEncodeQwenImageEditPlus" in classes and "TextEncodeQwenImage21" not in classes
-    monkeypatch.setenv("CAG_COMFY_RESTYLE_WORKFLOW", "comfy/qwen21-restyle.json")
-    made = machines.materialise(local, "restyle", tmp_path)
-    classes = {node["class_type"] for node in json.loads(made.read_text()).values()}
-    assert "TextEncodeQwenImage21" in classes, "the environment beats the profile"
+def test_every_profile_restyles_with_2511_and_the_environment_still_wins(tmp_path, monkeypatch):
+    """Qwen-Image-2.1 (research licence) and its graphs were removed on 2026-09-30:
+    every profile restyles with Qwen-Image-Edit 2511."""
+    for name in ("cloud", "local16", "smoke4"):
+        made = machines.materialise(load_machine(name), "restyle", tmp_path)
+        graph = json.loads(made.read_text())
+        assert {n["class_type"] for n in graph.values()} >= {"TextEncodeQwenImageEditPlus"}, name
+        assert "2.1" not in json.dumps(graph), name
+    other = tmp_path / "other-restyle.json"
+    other.write_text(json.dumps({**json.loads(Path("comfy/restyle-2511.json").read_text()),
+                                 "extra": {"class_type": "Note", "inputs": {}}}))
+    monkeypatch.setenv("CAG_COMFY_RESTYLE_WORKFLOW", str(other))
+    made = machines.materialise(load_machine("local16"), "restyle", tmp_path / "env")
+    assert "extra" in json.loads(made.read_text()), "the environment beats the default"

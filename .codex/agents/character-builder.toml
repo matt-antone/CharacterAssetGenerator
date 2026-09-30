@@ -61,8 +61,8 @@ uv run cag build specs/<set>/<slug>.json --draw-backend local --machine local16 
   refuses it); an older bundle is cut with `uv run cag clips <bundle>` (it
   downloads the video once).
 - Local builds: ComfyUI must already be running with the flags in
-  `comfy/machines/local16.json`'s `about`, and key art locally needs
-  `CAG_LOCAL_COMFY_WORKFLOW=comfy/qwen-image-2.1-fp8.json`. Check a machine with
+  `comfy/machines/local16.json`'s `about`, with `CAG_LOCAL_COMFY_WORKFLOW`
+  unset, and the key art is supplied by the user. Check a machine with
   `uv run cag machines --check local16` before a long build.
 
 ## The key art gate

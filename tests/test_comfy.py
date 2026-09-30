@@ -393,8 +393,7 @@ def test_a_placeholder_nothing_fills_is_refused_before_it_is_sent():
 
 
 @pytest.mark.parametrize("path", [
-    comfy.DEFAULT_WORKFLOW, comfy.LOCAL_WORKFLOW, comfy.POSE_WORKFLOW,
-    Path("comfy/qwen21-mannequin-pose.json"),
+    comfy.DEFAULT_WORKFLOW, comfy.LOCAL_WORKFLOW, comfy.POSE_WORKFLOW, comfy.VIEW_WORKFLOW,
 ])
 def test_every_workflow_a_render_sends_today_fills_with_nothing_left_over(path):
     shipped = comfy.load_workflow(path)

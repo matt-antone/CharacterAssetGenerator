@@ -48,7 +48,7 @@ MACHINES = Path("comfy/machines")
 #: environment variable the way `CAG_COMFY_POSE_WORKFLOW` overrides the pose one.
 STAGES = {
     "video": ("CAG_COMFY_SCAIL_WORKFLOW", Path("comfy/scail2-animate.json")),
-    "restyle": ("CAG_COMFY_RESTYLE_WORKFLOW", Path("comfy/qwen21-restyle.json")),
+    "restyle": ("CAG_COMFY_RESTYLE_WORKFLOW", Path("comfy/restyle-2511.json")),
     "mask": ("CAG_COMFY_MASK_WORKFLOW", Path("comfy/sam3-drive-mask.json")),
 }
 
@@ -58,7 +58,7 @@ STAGES = {
 PLACEHOLDERS = {
     "video": frozenset({"$prompt", "$image1", "$image2", "$image3", "$image4",
                         "$width", "$height", "$length", "$seed", "$steps"}),
-    "restyle": frozenset({"$prompt", "$image1", "$image2", "$resolution", "$seed", "$steps"}),
+    "restyle": frozenset({"$prompt", "$image1", "$image2", "$seed"}),
     "mask": frozenset({"$prompt", "$image1"}),
 }
 
