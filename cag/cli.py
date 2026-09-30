@@ -37,6 +37,7 @@ from .motion import (
     PARTS,
     MotionError,
     clip_status,
+    fits,
     library,
     load_motion,
     part_status,
@@ -132,6 +133,10 @@ def motion_for(
                 f"{spec.name} names the {named!r} motion sheet for {set_name}, "
                 f"but no bundle under {motion_root} calls itself that"
             )
+        if not fits(found.gender, spec.gender):
+            # The brief's choice stands: a named motion is the user's call.
+            log(f"[{set_name}] WARNING: {spec.name} is {spec.gender} but the {named!r} motion "
+                f"is marked {found.gender}; drawing it as the brief asks")
         return found.load()
     intent = spec.animations.get(set_name)
     if not intent:
@@ -165,7 +170,11 @@ def auto_bundle(spec: CharacterSpec, set_name: str, motion_root: Path) -> tuple[
             f"{spec.name} asks for an automatic sheet for {set_name}, "
             f"but there are none under {motion_root}"
         )
-    names = sorted(sheets)
+    names = sorted(name for name, bundle in sheets.items() if fits(bundle.gender, spec.gender))
+    if not names:
+        log(f"[{set_name}] WARNING: no motion under {motion_root} is marked for a "
+            f"{spec.gender} character; choosing from all of them")
+        names = sorted(sheets)
     seed = hashlib.sha256(f"{spec.slug}\t{set_name}".encode()).hexdigest()
     name = names[int(seed, 16) % len(names)]
     return name, sheets[name]

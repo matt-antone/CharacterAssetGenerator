@@ -699,7 +699,7 @@ for n, b in sorted(library('motions').items()):
 ```
 
 which prints, per bundle, `<name>: <N>f @ <fps>fps <view> <playback>
-seam=<...> photos=<N> airborne=[...] travel=<...> clip=<...>`, plus `mask=` and
+seam=<...> photos=<N> airborne=[...] travel=<...> gender=<...> clip=<...>`, plus `mask=` and
 `heads=` for a bundle that declares them. One pass catches everything that
 matters. A manifest that disagrees with its motion sheet raises, and so does a
 source clip that does not span the traced frames. A short thumb set shows as
@@ -768,6 +768,29 @@ measured on.
 `motions/sample` is the worked example of the format and the only motion fixture
 the tests use. It is not a trace; leave it installed.
 
+## Motion gender
+
+Agreed with MotionArtist on 2026-09-30, meanings set by the user. A motion's
+`gender` (see Words) says which characters it suits, and a brief's `gender`
+says which motions suit the character. They fit when either is `any` or
+unset, and otherwise only when equal (`motion.fits`).
+
+- **A brief that names a motion always gets it.** A mismatch logs one
+  `WARNING` line naming the set, the motion and both genders, and the build
+  goes on. The user's existing assignments never change.
+- **`"motion": "auto"` picks only from motions that fit.** If none fit, it
+  picks from the whole library and says so. The pick stays stable per
+  character and set.
+- **A bundle with no `gender` loads as it always did:** unclassified. Any
+  value outside the three is refused by name, and so is a manifest that
+  disagrees with its `motion.json`. The install line shows
+  `gender=<value>` or `gender=unclassified`.
+
+MotionArtist owns marking, validating and republishing the field; cag owns
+reading it and the rules above. Every bundle is unclassified until the user
+marks it, and no brief sets `gender` yet: filling the cast in is a brief edit
+for Iris, only on the user's go-ahead.
+
 ## Words
 
 Agreed with the MotionArtist repo after one word for two things caused three
@@ -787,6 +810,7 @@ A new term is named here before it is used.
 | **clip frame** | the frame of `clip.mp4`, counted from 0, a traced frame was taken from: `clip_frame` in `motion.json` (`Frame.clip_frame`). When every frame has one, the video path times each traced frame as `start + t_offset + clip_frame / fps` of the clip, exactly, rather than by its `t` |
 | **bundle mask** | the performer's silhouette the tracer ships beside the clip, `mask.mp4`: white on black, frame for frame and pixel for pixel with `clip.mp4`. Declared under the `clip` block's `mask` (`Clip.mask`). The drive mask is cut from it when it passes the drive mask checks. Not the drive mask, which is always cag's |
 | **head boxes** | the performer's head per clip frame, as the tracer found it, `heads.json`: `[x0, y0, x1, y1]` in clip pixels, or null. Declared under the `clip` block's `heads` (`Clip.heads`). Places the face blur; a null falls back to the head search |
+| **gender** | which characters a motion suits: `male`, `female` or `any` in the manifest and `motion.json` (they must agree), absent for unclassified, which is not `any`. Marked by the user in MotionArtist, never read off the footage, and never the filmed performer (`performer`, which cag ignores). A brief may carry `gender` too (same values, absent for unspecified). See "Motion gender" |
 | **pull** | `cag motions pull <set>/<name>`: copy a bundle from `MOTION_ARTIST_REMOTE` into `motions/<set>/<name>/`, checked, replacing any copy already installed (`cag/pull.py`). The only way a bundle is installed |
 | **clip box** | the box, in source-clip pixels, that the traced frames were cut from (`Clip.box`): 3:4 for a backfilled clip, the whole frame for one the tracer shipped. Always inside the frame. The drive box is centred on it |
 | **pose card** | one traced frame letterboxed to 384x512, `work/<char>/poses/<set>/NN.png` (`write_photos`) |

@@ -45,6 +45,30 @@ PLAYBACKS = {
 }
 
 
+#: Which characters a motion suits, the one vocabulary for a motion and a brief.
+#: Agreed with MotionArtist on 2026-09-30: `gender` on a motion is character
+#: compatibility, marked by the user in MotionArtist, never read off the footage
+#: and never the filmed performer (that is `performer`, which cag ignores).
+#: Absent or null is unclassified, which is not the same as an explicit `any`.
+GENDERS = ("male", "female", "any")
+
+
+def gender_of(value: object, where: str) -> str | None:
+    """A declared gender, checked: one of `GENDERS`, or None for unclassified."""
+    if value is None:
+        return None
+    if value not in GENDERS:
+        raise MotionError(f"{where} gender is {value!r}; it is one of {', '.join(GENDERS)}, or absent")
+    return value
+
+
+def fits(motion_gender: str | None, character_gender: str | None) -> bool:
+    """Whether a motion suits a character. Either side `any` or unset fits all."""
+    if motion_gender in (None, "any") or character_gender in (None, "any"):
+        return True
+    return motion_gender == character_gender
+
+
 def playback_of(declared: str) -> str:
     """Normalise what a sheet says about repetition, rather than guess at it."""
     try:
@@ -203,6 +227,8 @@ class MotionSheet:
     #: How the last frame meets the first. "clean" cuts back; anything else is
     #: the tracer saying it does not, and the proof will show the jump.
     seam: str = ""
+    #: Which characters it suits (`GENDERS`), or None for unclassified.
+    gender: str | None = None
     #: The footage the frames were traced from, when the bundle carries it.
     clip: Clip | None = None
     #: Why a bundle that declares a clip has none to give: the file on disk is
@@ -347,6 +373,7 @@ def load_motion(path: Path | str) -> MotionSheet:
         floor_y=float(data.get("floor_y", 0.0)),
         body_h=float(data.get("body_h", 0.0)),
         seam=str(data.get("seam", "")).strip(),
+        gender=gender_of(data.get("gender"), str(path)),
     )
 
 
@@ -401,6 +428,8 @@ class Bundle:
     #: `clip.mp4` is not tracked, so on a fresh clone every bundle has this and
     #: no `clip` until it is pulled or cut again; see `clip_remedy`.
     declared_clip: Clip | None = None
+    #: Which characters it suits (`GENDERS`), or None for unclassified.
+    gender: str | None = None
 
     @property
     def clip_remedy(self) -> str:
@@ -410,6 +439,11 @@ class Bundle:
     def load(self) -> MotionSheet:
         """The sheet itself, checked against the header that advertised it."""
         motion = load_motion(self.sheet)
+        if motion.gender != self.gender:
+            raise MotionError(
+                f"{self.root / BUNDLE} says gender {self.gender!r}, but {self.sheet.name} "
+                f"says {motion.gender!r}"
+            )
         if (motion.fps, len(motion.frames)) != (self.fps, self.frame_count):
             raise MotionError(
                 f"{self.root / BUNDLE} advertises {self.frame_count} frames at {self.fps} fps, "
@@ -522,6 +556,7 @@ def read_bundle(path: Path | str) -> Bundle:
         clip=clip,
         clip_problem=problem,
         declared_clip=declared,
+        gender=gender_of(data.get("gender"), str(manifest)),
     )
 
 
@@ -680,7 +715,8 @@ def summary(name: str, bundle: Bundle) -> str:
         f"{name}: {bundle.frame_count}f @ {bundle.fps}fps {bundle.view} {motion.playback} "
         f"seam={bundle.seam!r} photos={len(motion.photos)} "
         f"airborne={[f.index for f in motion.frames if f.airborne]} "
-        f"travel={motion.travel:.3f} clip={clip_status(bundle)}"
+        f"travel={motion.travel:.3f} gender={bundle.gender or 'unclassified'} "
+        f"clip={clip_status(bundle)}"
         + "".join(
             f" {kind}={part_status(bundle, kind)}"
             for kind in PARTS

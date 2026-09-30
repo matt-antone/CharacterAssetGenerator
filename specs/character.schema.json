@@ -54,6 +54,11 @@
       "$ref": "#/$defs/text",
       "description": "Where this character performs, as prose. Their background plate is drawn from it at 2048x1152, with no character in it, and is shown cropped to the central 12:7 — name what identifies the place, and expect the far left and right edges to be cut. It is never quoted into a render of the character, so it may describe the room freely."
     },
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "any"],
+      "description": "Which motions suit this character: a motion marked with the other gender logs a warning when a brief names it, and is left out of automatic picks. Absent means unspecified, which every motion fits. Says nothing to the image models."
+    },
     "detail_level": {
       "type": "integer",
       "minimum": 1,

@@ -304,7 +304,8 @@ def test_the_pull_command_prints_the_install_line(tmp_path, monkeypatch, capsys)
     out, err = capsys.readouterr()
     assert out.strip() == (
         "shuffle-3: 16f @ 4fps front loop seam='clean' photos=16 airborne=[] travel="
-        f"{read_bundle(root / 'shuffle' / 'shuffle-3').load().travel:.3f} clip=ok mask=ok heads=ok"
+        f"{read_bundle(root / 'shuffle' / 'shuffle-3').load().travel:.3f} gender=unclassified "
+        "clip=ok mask=ok heads=ok"
     )
     assert "kadrive:MotionArtist/shuffle/shuffle-3 ->" in err and "replaced" not in err
     assert probed == ["clip.mp4", "mask.mp4"], "the clip and mask decode as declared"

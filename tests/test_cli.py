@@ -670,3 +670,43 @@ def test_a_local_build_whose_server_lacks_the_view_graph_stops_before_drawing(mo
     monkeypatch.setattr(cli.comfy, "preflight", lambda client, graphs: ["lora qwen-image-edit-2511-multiple-angles-lora.safetensors"])
     with pytest.raises(SystemExit, match="multiple-angles"):
         cli.view_draw_with("local", client=object())
+
+
+def _mark(bundle_dir, gender):
+    """Mark a bundle's gender in both places MotionArtist writes it."""
+    for name in ("manifest.json", "motion.json"):
+        data = json.loads((bundle_dir / name).read_text())
+        data["gender"] = gender
+        (bundle_dir / name).write_text(json.dumps(data))
+
+
+def test_auto_picks_only_motions_that_fit_the_character(tmp_path):
+    """Agreed with MotionArtist (2026-09-30): a motion's gender is which characters
+    it suits; unclassified and `any` fit everyone."""
+    root = _library(tmp_path, "a-loop", "b-loop", "c-loop", "d-loop")
+    _mark(root / "a-loop", "female")
+    _mark(root / "b-loop", "female")
+    _mark(root / "c-loop", "any")
+    base = load_spec("tests/fixtures/velvet-lou.json")
+    picks = {cli.auto_bundle(replace(base, name=f"Singer {n}", gender="male"), "dance", root)[0]
+             for n in range(24)}
+    assert picks <= {"c-loop", "d-loop"}, "a female-only motion is never picked for a male character"
+    unspecified = {cli.auto_bundle(replace(base, name=f"Singer {n}"), "dance", root)[0] for n in range(24)}
+    assert "a-loop" in unspecified or "b-loop" in unspecified, "an unspecified character fits every motion"
+
+
+def test_auto_with_nothing_that_fits_falls_back_to_the_library_and_says_so(tmp_path, capsys):
+    root = _library(tmp_path, "a-loop")
+    _mark(root / "a-loop", "female")
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), gender="male")
+    assert cli.auto_bundle(spec, "dance", root)[0] == "a-loop"
+    assert "WARNING: no motion" in capsys.readouterr().err
+
+
+def test_a_named_motion_of_the_other_gender_is_drawn_with_a_warning(tmp_path, capsys):
+    """The brief's choice is the user's call: a mismatch warns, it never refuses."""
+    root = _library(tmp_path, "a-loop")
+    _mark(root / "a-loop", "female")
+    spec = replace(load_spec("tests/fixtures/velvet-lou.json"), motions={"dance": "a-loop"}, gender="male")
+    assert cli.motion_for(spec, "dance", tmp_path / "w", None, root).gender == "female"
+    assert "WARNING" in capsys.readouterr().err

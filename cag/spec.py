@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from .geometry import parse_height
-from .motion import PLAYBACKS
+from .motion import GENDERS, PLAYBACKS
 from .style import DEFAULT_DETAIL_LEVEL, DETAIL_LEVELS
 
 HEIGHT_PATTERN = re.compile(r"^\d+'(\s*\d+\")?$")
@@ -87,6 +87,10 @@ class CharacterSpec:
     palette: tuple[str, ...] = ()
     recognition_cues: tuple[str, ...] = ()
     avoid: tuple[str, ...] = ()
+    #: Which motions suit this character (`motion.GENDERS`), or None for
+    #: unspecified, which every motion fits. Only ever checked against a
+    #: motion's own `gender`; it says nothing to the image models.
+    gender: str | None = None
 
     @property
     def sets(self) -> tuple[str, ...]:
@@ -120,6 +124,7 @@ def load_spec(path: Path | str) -> CharacterSpec:
         "detail_level",
         "props",
         "id",
+        "gender",
         *TEXT_FIELDS,
         *LIST_FIELDS,
     }
@@ -147,6 +152,10 @@ def load_spec(path: Path | str) -> CharacterSpec:
     if not isinstance(identifier, str) or (identifier and not ID_PATTERN.match(identifier.strip())):
         raise SpecError(f"{path} id must read like a slug, e.g. velvet-lou, not {identifier!r}")
 
+    gender = data.get("gender")
+    if gender is not None and gender not in GENDERS:
+        raise SpecError(f"{path} gender must be one of {', '.join(GENDERS)}, or absent; not {gender!r}")
+
     spec = CharacterSpec(
         data["name"].strip(),
         height,
@@ -160,6 +169,7 @@ def load_spec(path: Path | str) -> CharacterSpec:
         identifier.strip(),
         **{key: _text(path, key, data[key]) for key in TEXT_FIELDS if key in data},
         **{key: _text_list(path, key, data[key]) for key in LIST_FIELDS if key in data},
+        gender=gender,
     )
     if not spec.slug:
         raise SpecError(f"{path} name has no usable characters")

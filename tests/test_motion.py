@@ -507,3 +507,40 @@ def test_a_bowed_head_is_read_off_the_landmarks():
     bowed = {"earL": [0.45, 0.20], "earR": [0.55, 0.20], "nose": [0.50, 0.27]}
     assert not head_bowed(upright) and head_bowed(bowed)
     assert not head_bowed({}), "a pose with no head says nothing"
+
+
+def test_a_motions_gender_is_read_checked_and_agreed(tmp_path):
+    from cag.motion import BUNDLE, fits
+    bundle = tmp_path / "b"
+    shutil.copytree("motions/sample", bundle)
+    manifest = json.loads((bundle / BUNDLE).read_text())
+    assert read_bundle(bundle / BUNDLE).gender is None, "absent is unclassified"
+    sheet = bundle / "motion.json"
+    manifest["gender"] = "female"
+    (bundle / BUNDLE).write_text(json.dumps(manifest))
+    with pytest.raises(MotionError, match="gender"):
+        read_bundle(bundle / BUNDLE).load()  # the motion sheet does not say it
+    data = json.loads(sheet.read_text())
+    data["gender"] = "female"
+    sheet.write_text(json.dumps(data))
+    assert read_bundle(bundle / BUNDLE).load().gender == "female"
+    manifest["gender"] = "woman"
+    (bundle / BUNDLE).write_text(json.dumps(manifest))
+    with pytest.raises(MotionError, match="woman"):
+        read_bundle(bundle / BUNDLE)
+    assert fits(None, "male") and fits("any", "male") and fits("male", None) and fits("male", "any")
+    assert fits("male", "male") and not fits("female", "male")
+
+
+def test_a_brief_may_say_which_motions_suit_it(tmp_path):
+    from cag.spec import SpecError, load_spec
+    data = json.loads(Path("tests/fixtures/velvet-lou.json").read_text())
+    for gender, ok in (("female", True), ("any", True), ("woman", False)):
+        brief = tmp_path / f"{gender}.json"
+        brief.write_text(json.dumps({**data, "gender": gender}))
+        if ok:
+            assert load_spec(brief).gender == gender
+        else:
+            with pytest.raises(SpecError, match="gender"):
+                load_spec(brief)
+    assert load_spec("tests/fixtures/velvet-lou.json").gender is None
