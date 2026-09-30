@@ -481,11 +481,33 @@ def test_a_frame_whose_traced_head_is_bowed_is_restyled_keeping_the_tilt(world):
 def test_a_restyle_that_lifts_the_head_is_drawn_again_on_the_next_seed(world, monkeypatch):
     """Belter's KO frames 12 and 13 came back looking out, the crown +0.14 and
     +0.16 above the SCAIL frame's; a restyle never moves the head."""
-    rises = iter([0.16, 0.02])
-    monkeypatch.setattr(video, "crown_rise", lambda scail, out: next(rises) if "02" in Path(out).stem else 0.0)
+    drifts = iter([(0.16, 0.0, 1.0), (0.01, 0.0, 1.0)])
+    monkeypatch.setattr(video, "head_drift", lambda scail, out: next(drifts) if "02" in Path(out).stem else (0.0, 0.0, 1.0))
     _, restyle = world["build"]()
     frame2 = [call for call in restyle.calls if call["out"].name.startswith("02")]
     assert [call["seed"] for call in frame2] == [1234, 2234]
     folder = frame2[0]["out"].parent
     assert (folder / "02.png").exists() and (folder / "02.lifted-0.png").exists()
     assert len([c for c in restyle.calls if not c["out"].name.startswith("02")]) == len(restyle.calls) - 2
+
+
+
+def test_a_restyle_that_swings_or_swells_the_head_is_not_kept():
+    """KO frames 8, 10 and 14 kept the crown's height but swung the head 50-77 px
+    and swelled the head and hair 1.3x, so the bowed head bobbed and grew."""
+    assert video.head_kept((0.01, 0.005, 1.03))
+    assert not video.head_kept((0.01, 0.05, 1.03)), "swung sideways"
+    assert not video.head_kept((0.01, 0.005, 1.32)), "swelled"
+    assert not video.head_kept((0.12, 0.005, 1.0)), "lifted"
+
+
+
+def test_a_frame_no_seed_can_keep_the_head_repeats_its_nearest_kept_neighbour(world, monkeypatch):
+    """KO frame 10 swelled the head on all five seeds; in a held pose the frame
+    beside it does not show, a swollen head does."""
+    monkeypatch.setattr(video, "head_drift", lambda scail, out: (0.0, 0.0, 1.5) if Path(out).stem.startswith("05") else (0.0, 0.0, 1.0))
+    result, restyle = world["build"]()
+    assert len([c for c in restyle.calls if c["out"].name.startswith("05")]) == video.RESTYLE_TRIES
+    folder = world["state"]["work_dir"] / "source" / "dance"
+    assert (folder / "05.png").read_bytes() == (folder / "04.png").read_bytes()
+    assert (folder / "05.closest.png").exists()

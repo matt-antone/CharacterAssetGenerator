@@ -31,9 +31,10 @@ user's call; this is what they called.
 4. **Every set with footage** (dance, and ko and victory from `emote-01` and
    `emote-02` for the whole cast): the video path. SCAIL-2 from the source clip,
    then a 2511 restyle per frame on a 1.5x canvas against the approved key art,
-   seed 1234. A frame whose traced head is bowed gets `RESTYLE_BOWED`, and a
-   restyle that raises the crown past `MAX_CROWN_RISE` is drawn again on the
-   next seed (see "The video path").
+   seed 1234. A frame whose traced head is bowed gets `RESTYLE_BOWED`; every
+   restyle's head is measured against its SCAIL frame (height, sideways
+   position, size) and redrawn on the next seed until it matches, and a frame
+   no seed can draw repeats its nearest kept frame (see "The video path").
 5. **Cells:** drawn at the brief's detail level, level 8 by default: 1342 px
    cells, the finish on a 161-colour palette with a 1 px inner outline, for the
    sets and the turnaround alike (see "The detail ladder").
@@ -207,17 +208,35 @@ the hardware and the bill.
      `club-01` and `emote-02` measured 0.02-0.31, the KO 0.57-0.85. Given to
      every frame, the same words bowed a dance frame that faced the viewer.
      Alone it held 10 of the KO's 12 bowed frames.
-  2. **A measured check with a retry.** A restyle never moves the head, so one
-     whose crown rises more than `MAX_CROWN_RISE` (0.10 of the figure's height)
-     above its SCAIL frame is drawn again on `seed + 1000`, up to
-     `RESTYLE_TRIES` (3), and the lowest is kept; the others stay beside it as
-     `NN.lifted-N.png` and the log names them. Lifted frames measured
-     +0.14-0.18; every kept frame of Belter's dance, KO and victory +0.06 or
-     less. It caught frames 12 and 13 and both passed on a retry.
+  2. **The head is measured against SCAIL, and redrawn until it matches.** A
+     restyle never moves the head, so every restyle is compared with its SCAIL
+     frame on three measures (`video.head_drift`): the crown's rise, the head's
+     sideways shift (both as shares of the figure's height) and the growth of
+     the head-and-hair band, the top `HEAD_BAND` (22%) of the figure. A restyle
+     past any limit — `MAX_CROWN_RISE` 0.03, `MAX_HEAD_SHIFT` 0.02,
+     `MAX_HEAD_GROWTH` 1.10x — is drawn again on `seed + 1000·n`, up to
+     `RESTYLE_TRIES` (5); the others stay beside it as `NN.lifted-N.png` and
+     the log names each miss. Why each: frames 12 and 13 lifted the face (crown
+     +0.14-0.18); with the crown held at 0.10, frames 9-11 still bobbed
+     (+0.03-0.05); with it at 0.03, frames 7, 8, 10 and 14 kept the height but
+     swung the head 50-77 px and swelled the head and hair 1.30-1.34x, so the
+     bowed head grew and rocked while the body held still. Every frame of
+     Belter's dance and victory passes all three.
+  3. **A frame no seed can draw repeats its nearest kept frame.** KO frame 10
+     swelled the head 1.32-1.46x on all five seeds: its SCAIL frame, not the
+     roll. It takes frame 09's restyle, its closest try kept beside it as
+     `NN.closest.png`, and the log says so. In a held pose a repeated frame does
+     not show; a swollen head does.
+
+  Measured on the finished cells, Belter's KO crown then sinks 248 → 352 px and
+  holds (one 5 px reversal), the head drifts 20 px with SCAIL's own drift, and
+  the head band stays within 6% across all 15 frames (2026-09-30), approved by
+  the user. A frame drawn by an earlier build is measured too, never redrawn:
+  one that fails is replaced by its neighbour.
 
   A set with no bowed frame keeps the stamp it had, so its restyles are not
-  redrawn. A frame drawn before the check existed is not re-checked: move it
-  aside to have it redrawn.
+  redrawn. To give an old frame a fresh roll rather than a neighbour, move it
+  aside and build again.
 - **Every set's cells get the cell finish** (`cag/finish.py`), restyled or
   `--no-restyle`, unless the build says `--no-finish` (with `--machine` only;
   without it the build refuses). It runs on the cells, after the shrink: the
@@ -793,7 +812,8 @@ A new term is named here before it is used.
 | **SCAIL video** | every image one SCAIL-2 job returns: `work/<char>/video/<set>/<digest12>/NNN.png` |
 | **SCAIL frame** | one image of a SCAIL video |
 | **trace index** | for each traced frame, the SCAIL frame drawn at its traced time: `round((t_i − t_0) · drive_rate)` |
-| **restyle** | one Qwen-Image-2.1 edit render, SCAIL frame as `<image1>` and set reference as `<image2>`. Writes `source/<set>/NN.png`; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
+| **restyle** | one edit render of a SCAIL frame (`<image1>`) in the art of the style reference (`<image2>`): the approved key art where the set's hands match it, else the set reference. Qwen-Image-Edit 2511 on a 1.5x canvas on `local16` (`comfy/restyle-2511.json`), Qwen-Image-2.1 on `cloud`. Writes `source/<set>/NN.png`, checked by the head check; under `--no-restyle` that path holds the SCAIL frame instead, and is no restyle |
+| **head check** | every restyle's head measured against its SCAIL frame — crown rise, sideways shift, head-and-hair growth (`video.head_drift`, `head_kept`) — redrawn on the next seed until it passes, else the frame repeats its nearest kept frame. See "The video path" |
 | **cell finish** | the video path's last step on a set's cells (`cag/finish.py`, `finish_set`): defringe, one palette per set of its detail level's size, quantize with no dither, a 1px black outline inside the silhouette. Reads the set's cut-outs — the cells as `canvas_to_cells` registers them, kept under `work/<char>/cells-cut/<set>/` — and writes `cells/<set>/`, stamped in `cells/<set>/finish.sha`. `--no-finish` turns it off |
 | **output remote** | the rclone destination packages are published to: `CAG_OUTPUT_REMOTE` or `--output-remote`, e.g. `kadrive:CharacterAssetGenerator/outputs`. A package lands at its path under `outputs/` |
 | **publish** | `rclone copy` of one package folder to the output remote (`cag/publish.py`): at the end of every build, on each `cag edit` Save, or by `cag publish`. Never sync, never deletes, never fails a build. Not the same act as publishing an Artifact |

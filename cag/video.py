@@ -55,22 +55,70 @@ def _log(state: AnimationState, message: str) -> None:
 #: How far a restyle may raise the figure's crown above the SCAIL frame it
 #: redraws, as a share of the figure's height. The head never moves in a
 #: restyle, so a crown that rose is a head it lifted: Belter's KO frames 12 and
-#: 13 came back looking out at +0.14 and +0.16, where every kept frame of her
-#: dance, KO and victory measured +0.06 or less (2026-09-30).
-MAX_CROWN_RISE = 0.10
+#: 13 came back looking out at +0.14 and +0.16. At 0.10 that was caught, but
+#: frames 9-11 then rose +0.03 to +0.05 each on their own roll, and the bowed
+#: head bobbed up and down across the hold. Every frame of her dance and victory
+#: measured +0.008 or less (2026-09-30).
+MAX_CROWN_RISE = 0.03
 
-#: Restyles drawn per frame before the lowest-crowned one is kept.
-RESTYLE_TRIES = 3
+#: How far a restyle may move the head sideways from where the SCAIL frame put
+#: it, as a share of the figure's height. KO frames 8, 10 and 14 swung the head
+#: 50-77 px at a figure of about 1250 px, and every other frame kept within 12.
+MAX_HEAD_SHIFT = 0.02
+
+#: How much bigger a restyle may draw the head and hair than the SCAIL frame did.
+#: Those same KO frames swelled the head-and-hair band to 1.30-1.34x, so the
+#: bowed head grew and swung while the body held still; the rest measured 1.06x
+#: or less (2026-09-30).
+MAX_HEAD_GROWTH = 1.10
+
+#: The top of the figure measured as the head: the head and the hair around it.
+HEAD_BAND = 0.22
+
+#: Restyles drawn per frame before the one closest to its SCAIL frame is kept.
+RESTYLE_TRIES = 5
 
 
-def crown_rise(scail: Path, restyled: Path) -> float:
-    """How far `restyled`'s crown sits above `scail`'s, as a share of `scail`'s figure height."""
+def _head(path: Path) -> tuple[int, int, float, int] | None:
+    """The figure's top row and height, and its head band's centre column and area."""
+    import numpy as np
+
     from .mask import cutout
 
-    before, after = cutout(scail).getbbox(), cutout(restyled).getbbox()
-    if not before or not after or before[3] <= before[1]:
-        return 0.0
-    return (before[1] - after[1]) / (before[3] - before[1])
+    alpha = np.asarray(cutout(path))[..., 3] > 0
+    rows = np.flatnonzero(alpha.any(axis=1))
+    if not len(rows) or rows[-1] <= rows[0]:
+        return None
+    top, height = int(rows[0]), int(rows[-1] - rows[0])
+    band = alpha[top : top + max(1, int(height * HEAD_BAND))]
+    return top, height, float(np.flatnonzero(band.any(axis=0)).mean() if band.any() else 0), int(band.sum())
+
+
+def head_drift(scail: Path, restyled: Path) -> tuple[float, float, float]:
+    """How far `restyled`'s head moved from `scail`'s: crown rise and sideways
+    shift as shares of the SCAIL figure's height, and the head band's growth."""
+    before, after = _head(scail), _head(restyled)
+    if not before or not after or not before[3]:
+        return 0.0, 0.0, 1.0
+    height = before[1]
+    return (
+        (before[0] - after[0]) / height,
+        abs(after[2] - before[2]) / height,
+        after[3] / before[3],
+    )
+
+
+def head_kept(drift: tuple[float, float, float]) -> bool:
+    rise, shift, growth = drift
+    return rise <= MAX_CROWN_RISE and shift <= MAX_HEAD_SHIFT and growth <= MAX_HEAD_GROWTH
+
+
+def _miss(drift: tuple[float, float, float]) -> float:
+    """How far past the limits a drift is, for picking the closest try."""
+    rise, shift, growth = drift
+    return (max(0.0, rise - MAX_CROWN_RISE) / MAX_CROWN_RISE
+            + max(0.0, shift - MAX_HEAD_SHIFT) / MAX_HEAD_SHIFT
+            + max(0.0, growth - MAX_HEAD_GROWTH) / (MAX_HEAD_GROWTH - 1))
 
 
 def _sha(*parts: bytes | str) -> str:
@@ -240,10 +288,11 @@ def video_frames(
         if bowed:
             _log(state, f"head bowed in frames {', '.join(f'{i:02d}' for i in bowed)}: "
                         "their restyles keep the head's tilt")
+        unkept: list[int] = []
         for frame, pick in zip(motion.frames, made.index, strict=True):
             dst = frame_path(state, "source", frame.index)
             cached = dst.exists()
-            tries: list[tuple[float, Path]] = []
+            tries: list[tuple[float, tuple[float, float, float], Path]] = []
             try:
                 for attempt in range(RESTYLE_TRIES):
                     out = dst if attempt == 0 else dst.with_name(f"{dst.stem}.try-{attempt}.png")
@@ -257,29 +306,45 @@ def video_frames(
                         extra=restyle_extra,
                     )
                     if cached:
-                        break  # drawn and kept by an earlier build
-                    rise = crown_rise(picked(pick), out)
-                    tries.append((rise, out))
-                    if rise <= MAX_CROWN_RISE:
+                        # Drawn by an earlier build: measured, never redrawn.
+                        if not head_kept(head_drift(picked(pick), out)):
+                            unkept.append(frame.index)
                         break
-                    _log(state, f"restyle {frame.index:02d} lifted the head (crown +{rise:.2f}); "
-                                "drawing it again")
+                    drift = head_drift(picked(pick), out)
+                    tries.append((_miss(drift), drift, out))
+                    if head_kept(drift):
+                        break
+                    _log(state, f"restyle {frame.index:02d} moved the head (crown +{drift[0]:.2f}, "
+                                f"shift {drift[1]:.2f}, size {drift[2]:.2f}x); drawing it again")
             except DrawError as error:
                 failed.append(frame.index)
                 _log(state, f"restyle {frame.index:02d} failed: {error}")
                 continue
             if tries:
-                rise, best = min(tries)
-                if rise > MAX_CROWN_RISE:
-                    _log(state, f"restyle {frame.index:02d} kept at crown +{rise:.2f}: "
-                                f"every one of {RESTYLE_TRIES} tries lifted the head")
+                _, drift, best = min(tries, key=lambda t: t[0])
+                if not head_kept(drift):
+                    unkept.append(frame.index)
                 if best != dst:
                     dst.rename(dst.with_name(f"{dst.stem}.lifted-0.png"))
                     best.rename(dst)
-                for _, other in tries:
+                for _, _, other in tries:
                     if other != best and other.exists() and ".try-" in other.name:
                         other.rename(other.with_name(other.name.replace(".try-", ".lifted-")))
             sources[frame.index] = dst
+        # A frame no seed could draw with the head where SCAIL put it takes the
+        # nearest frame that could: KO frame 10 swelled the head 1.32-1.46x on
+        # all five seeds, and in a held pose a repeated frame does not show
+        # where a swollen head does. Its closest try is kept beside it.
+        kept = sorted(set(sources) - set(unkept) - set(failed))
+        for index in unkept:
+            if not kept:
+                break
+            near = min(kept, key=lambda k: (abs(k - index), k > index))
+            dst = sources[index]
+            shutil.copy2(dst, dst.with_name(f"{dst.stem}.closest.png"))
+            shutil.copy2(sources[near], dst)
+            _log(state, f"restyle {index:02d}: no try kept the head where SCAIL put it; "
+                        f"it repeats frame {near:02d}")
             # Kept as drawn: snapping to the key art's grid (`cag.snap`) made the
             # faces blocky and the set was judged better without it (2026-09-26).
 
